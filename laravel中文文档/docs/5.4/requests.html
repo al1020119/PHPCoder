@@ -1,0 +1,985 @@
+<!doctype html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<title>Laravel 的 HTTP 请求 Request | Laravel 5.4 中文文档
+</title>
+	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+	<meta name="author" content="Taylor Otwell">
+	<meta name="description" content="Laravel 的 HTTP 请求 Request,获取请求,请求路径 &amp; 方法,PSR-7 请求,输入数据的预处理和规范化,获取输入数据,旧输入数据,Cookies,文件资源,获取上传文件,储存上传文件,获取请求,要通过依赖注入的方式来获取当前...
+">
+	<meta name="keywords" content="laravel,laravel中国,laravel中文,laravel框架中文,laravel文档,laravel框架中国,laravel中文文档">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+			<link rel="canonical" href="../5.5/requests.html" />
+		<!--[if lte IE 9]>
+		<script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+	<![endif]-->
+	<link rel="stylesheet" href="../../build/assets/css/laravel-4bbf92d154.css">
+	<link rel="apple-touch-icon" href="../../favicon.png.jpeg">
+    <style>
+        .list-group-item img.media-object {
+            width: 20px;
+            border-radius: 2px;
+            margin-right: 4px;
+            display: inline-block;
+        }
+    </style>
+</head>
+<body class="docs language-php">
+
+	<span class="overlay"></span>
+
+	<nav class="main">
+		<a href="../../index.html" class="brand nav-block">
+			<svg version="1.1"
+	 xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:a="http://ns.adobe.com/AdobeSVGViewerExtensions/3.0/"
+	 x="0px" y="0px" width="84.1px" height="57.6px" viewBox="0 0 84.1 57.6" enable-background="new 0 0 84.1 57.6"
+	 xml:space="preserve">
+<defs>
+</defs>
+<path fill="#FB503B" d="M83.8,26.9c-0.6-0.6-8.3-10.3-9.6-11.9c-1.4-1.6-2-1.3-2.9-1.2s-10.6,1.8-11.7,1.9c-1.1,0.2-1.8,0.6-1.1,1.6
+	c0.6,0.9,7,9.9,8.4,12l-25.5,6.1L21.2,1.5c-0.8-1.2-1-1.6-2.8-1.5C16.6,0.1,2.5,1.3,1.5,1.3c-1,0.1-2.1,0.5-1.1,2.9
+	c1,2.4,17,36.8,17.4,37.8c0.4,1,1.6,2.6,4.3,2c2.8-0.7,12.4-3.2,17.7-4.6c2.8,5,8.4,15.2,9.5,16.7c1.4,2,2.4,1.6,4.5,1
+	c1.7-0.5,26.2-9.3,27.3-9.8c1.1-0.5,1.8-0.8,1-1.9c-0.6-0.8-7-9.5-10.4-14c2.3-0.6,10.6-2.8,11.5-3.1C84.2,28,84.4,27.5,83.8,26.9z
+	 M37.5,36.4c-0.3,0.1-14.6,3.5-15.3,3.7c-0.8,0.2-0.8,0.1-0.8-0.2C21.2,39.6,4.4,4.8,4.1,4.4c-0.2-0.4-0.2-0.8,0-0.8
+	c0.2,0,13.5-1.2,13.9-1.2c0.5,0,0.4,0.1,0.6,0.4c0,0,18.7,32.3,19,32.8C38,36.1,37.8,36.3,37.5,36.4z M77.7,43.9
+	c0.2,0.4,0.5,0.6-0.3,0.8c-0.7,0.3-24.1,8.2-24.6,8.4c-0.5,0.2-0.8,0.3-1.4-0.6s-8.2-14-8.2-14L68.1,32c0.6-0.2,0.8-0.3,1.2,0.3
+	C69.7,33,77.5,43.6,77.7,43.9z M79.3,26.3c-0.6,0.1-9.7,2.4-9.7,2.4l-7.5-10.2c-0.2-0.3-0.4-0.6,0.1-0.7c0.5-0.1,9-1.6,9.4-1.7
+	c0.4-0.1,0.7-0.2,1.2,0.5c0.5,0.6,6.9,8.8,7.2,9.1C80.3,26,79.9,26.2,79.3,26.3z"/>
+</svg>
+
+			<span>Laravel</span>
+		</a>
+
+        <div class="search nav-block">
+            <svg version="1.1"
+	 xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:a="http://ns.adobe.com/AdobeSVGViewerExtensions/3.0/"
+	 x="0px" y="0px" width="16px" height="16px" viewBox="0 0 16 16" enable-background="new 0 0 16 16" xml:space="preserve">
+<defs>
+</defs>
+<g>
+	<g>
+		<path fill="#A1A1A1" d="M5.8,11.7c-1.6,0-3-0.6-4.1-1.7S0,7.4,0,5.8s0.6-3,1.7-4.1C2.8,0.6,4.3,0,5.8,0s3,0.6,4.1,1.7
+			c2.3,2.3,2.3,6,0,8.3C8.9,11.1,7.4,11.7,5.8,11.7z M5.8,1C4.5,1,3.3,1.5,2.4,2.4C1.5,3.3,1,4.5,1,5.8s0.5,2.5,1.4,3.4
+			c0.9,0.9,2.1,1.4,3.4,1.4s2.5-0.5,3.4-1.4c1.9-1.9,1.9-5,0-6.9C8.4,1.5,7.1,1,5.8,1z"/>
+	</g>
+	<g>
+		<path fill="#A1A1A1" d="M15.5,16c-0.1,0-0.3,0-0.3-0.1L9.3,10c-0.2-0.2-0.2-0.5,0-0.7s0.5-0.2,0.7,0l5.9,5.9
+			c0.2,0.2,0.2,0.5,0,0.7C15.8,16,15.6,16,15.5,16z"/>
+	</g>
+</g>
+</svg>
+
+            <input placeholder="搜索文档" type="text" v-model="search" id="search-input" v-on:blur="reset" />
+        </div>
+
+		<ul class="main-nav" v-if="! search">
+			<li class="nav-docs"><a href="../5.4.html">文档</a></li>
+<li ><a href="https://laravel-china.org/news" class="no-pjax">Laravel 资讯</a></li>
+<li class="dropdown"><a href="https://laravel-china.org/">Laravel China 社区</a></li>
+<li class="nav-forge"><a href="https://laravel-china.org/categories/1">酷工作</a></li>
+<li class="nav-docs"><a href="http://lumen.laravel-china.org">Lumen</a></li>
+<li class="nav-forge"><a href="https://cs.laravel-china.org/">速查表</a></li>
+<li class="nav-forge"><a href="https://fsdhub.com/books/laravel-essential-training-5.5">《Laravel 入门教程》</a></li>
+		</ul>
+
+        			<div class="switcher">
+	<div class="dropdown">
+		<button class="btn dropdown-toggle btn-inverted" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-expanded="true">
+			<!--<span class="faint">v</span> -->
+			5.4
+			<span class="caret"></span>
+		</button>
+		<ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu1">
+							<li role="presentation">
+					<a role="menuitem" tabindex="-1" href="../5.5/requests.html">5.5</a>
+				</li>
+							<li role="presentation">
+					<a role="menuitem" tabindex="-1" href="requests.html">5.4</a>
+				</li>
+							<li role="presentation">
+					<a role="menuitem" tabindex="-1" href="../5.3/requests.html">5.3</a>
+				</li>
+							<li role="presentation">
+					<a role="menuitem" tabindex="-1" href="../5.2/requests.html">5.2</a>
+				</li>
+							<li role="presentation">
+					<a role="menuitem" tabindex="-1" href="../5.1/requests.html">5.1</a>
+				</li>
+					</ul>
+	</div>
+</div>
+		
+        <div class="responsive-sidebar-nav">
+			<a href="requests.html#" class="toggle-slide menu-link btn">&#9776;</a>
+		</div>
+	</nav>
+
+	<nav id="slide-menu" class="slide-menu" role="navigation">
+
+	<div class="brand">
+		<a href="../../index.html">
+			<img src="../../assets/img/laravel-logo-white.png" height="50">
+		</a>
+	</div>
+
+	<ul class="slide-main-nav">
+		<li><a href="../../index.html">Home</a></li>
+		<li class="nav-docs"><a href="../5.4.html">文档</a></li>
+<li ><a href="https://laravel-china.org/news" class="no-pjax">Laravel 资讯</a></li>
+<li class="dropdown"><a href="https://laravel-china.org/">Laravel China 社区</a></li>
+<li class="nav-forge"><a href="https://laravel-china.org/categories/1">酷工作</a></li>
+<li class="nav-docs"><a href="http://lumen.laravel-china.org">Lumen</a></li>
+<li class="nav-forge"><a href="https://cs.laravel-china.org/">速查表</a></li>
+<li class="nav-forge"><a href="https://fsdhub.com/books/laravel-essential-training-5.5">《Laravel 入门教程》</a></li>
+	</ul>
+
+	<div class="slide-docs-nav">
+		<h2>Documentation</h2>
+		<ul>
+<li>
+<h2>前言</h2>
+<ul>
+<li><a href="about.html">翻译说明</a></li>
+<li><a href="releases.html">发行说明</a></li>
+<li><a href="upgrade.html">升级说明</a></li>
+<li><a href="contributions.html">贡献导引</a></li>
+<li><a href="../../api/5.4/index.html">API 文档</a></li>
+</ul>
+</li>
+<li>
+<h2>入门指南</h2>
+<ul>
+<li><a href="installation.html">安装</a></li>
+<li><a href="configuration.html">配置信息</a></li>
+<li><a href="structure.html">文件夹结构</a></li>
+<li><a href="lifecycle.html">请求周期</a></li>
+</ul>
+</li>
+<li>
+<h2>开发环境部署</h2>
+<ul>
+<li><a href="homestead.html">Homestead</a></li>
+<li><a href="valet.html">Valet</a></li>
+</ul>
+</li>
+<li>
+<h2>核心概念</h2>
+<ul>
+<li><a href="container.html">服务容器</a></li>
+<li><a href="providers.html">服务提供者</a></li>
+<li><a href="facades.html">Facades</a></li>
+<li><a href="contracts.html">Contracts</a></li>
+</ul>
+</li>
+<li>
+<h2>HTTP 层</h2>
+<ul>
+<li><a href="routing.html">路由</a></li>
+<li><a href="middleware.html">中间件</a></li>
+<li><a href="csrf.html">CSRF 保护</a></li>
+<li><a href="controllers.html">控制器</a></li>
+<li><a href="requests.html">请求</a></li>
+<li><a href="responses.html">响应</a></li>
+<li><a href="views.html">视图</a></li>
+<li><a href="session.html">Session</a></li>
+<li><a href="validation.html">表单验证</a></li>
+</ul>
+</li>
+<li>
+<h2>前端</h2>
+<ul>
+<li><a href="blade.html">Blade 模板</a></li>
+<li><a href="localization.html">本地化</a></li>
+<li><a href="frontend.html">前端指南</a></li>
+<li><a href="mix.html">编辑资源 Mix</a></li>
+</ul>
+</li>
+<li>
+<h2>安全</h2>
+<ul>
+<li><a href="authentication.html">用户认证</a></li>
+<li><a href="passport.html">API 认证</a></li>
+<li><a href="authorization.html">用户授权</a></li>
+<li><a href="encryption.html">加密解密</a></li>
+<li><a href="hashing.html">哈希</a></li>
+<li><a href="passwords.html">重置密码</a></li>
+</ul>
+</li>
+<li>
+<h2>综合话题</h2>
+<ul>
+<li><a href="artisan.html">Artisan 命令行</a></li>
+<li><a href="broadcasting.html">广播系统</a></li>
+<li><a href="cache.html">缓存系统</a></li>
+<li><a href="collections.html">集合</a></li>
+<li><a href="errors.html">错误与日志</a></li>
+<li><a href="events.html">事件系统</a></li>
+<li><a href="filesystem.html">文件存储</a></li>
+<li><a href="helpers.html">辅助函数</a></li>
+<li><a href="mail.html">邮件发送</a></li>
+<li><a href="notifications.html">消息通知</a></li>
+<li><a href="packages.html">扩展包开发</a></li>
+<li><a href="queues.html">队列</a></li>
+<li><a href="scheduling.html">任务调度</a></li>
+</ul>
+</li>
+<li>
+<h2>数据库</h2>
+<ul>
+<li><a href="database.html">快速入门</a></li>
+<li><a href="queries.html">查询构造器</a></li>
+<li><a href="pagination.html">分页</a></li>
+<li><a href="migrations.html">数据库迁移</a></li>
+<li><a href="seeding.html">数据填充</a></li>
+<li><a href="redis.html">Redis</a></li>
+</ul>
+</li>
+<li>
+<h2>Eloquent ORM</h2>
+<ul>
+<li><a href="eloquent.html">快速入门</a></li>
+<li><a href="eloquent-relationships.html">模型关联</a></li>
+<li><a href="eloquent-collections.html">Eloquent 集合</a></li>
+<li><a href="eloquent-mutators.html">修改器</a></li>
+<li><a href="eloquent-serialization.html">序列化</a></li>
+</ul>
+</li>
+<li>
+<h2>测试</h2>
+<ul>
+<li><a href="testing.html">快速入门</a></li>
+<li><a href="http-tests.html">HTTP 测试</a></li>
+<li><a href="dusk.html">浏览器测试 Dusk</a></li>
+<li><a href="database-testing.html">数据库测试</a></li>
+<li><a href="mocking.html">测试模拟器</a></li>
+</ul>
+</li>
+<li>
+<h2>官方扩展包</h2>
+<ul>
+<li><a href="billing.html">Cashier 交易工具包</a></li>
+<li><a href="envoy.html">Envoy 部署工具</a></li>
+<li><a href="passport.html">Passport OAuth 认证</a></li>
+<li><a href="scout.html">Scout 全文搜索</a></li>
+<li><a href="socialite.html">Socialite 社会化登录</a></li>
+</ul>
+</li>
+</ul>
+	</div>
+
+</nav>
+
+<div class="docs-wrapper container">
+
+	<section class="sidebar">
+
+            <div class="header">
+              <a type="button" class="btn btn-primary btn-inverted btn-lg btn-block turnofflight"><i class="fa fa-lightbulb-o"></i> 夜间模式 </a>
+              <br>
+              <div class="versions text-center ">
+                <a class="doc-btn btn-inverted " href="../5.5.html" title="Laravel 5.5 中文文档">C5.5</a>
+                <a class="doc-btn btn-inverted active" href="../5.4.html" title="Laravel 5.4 中文文档">C5.4</a>
+                <a class="doc-btn btn-inverted " href="../5.1.html" title="Laravel 5.1 中文文档">C5.1</a>
+              </div>
+            </div>
+
+            <a href="https://laravel-china.org/topics/3383" target="_blank" rel="nofollow" title="" style="display: block;margin-bottom: 23px;">
+                <img src="https://dn-phphub.qbox.me/uploads/images/201612/10/1/k7wwMpJduq.jpg" style="width: 100%;border: 1px solid #d8d3d3;box-shadow: 0 0 30px #d4d4d4;-moz-box-shadow: 0 0 30px #ccc;-webkit-box-shadow: 0 0 30px #d4d4d4;margin-bottom: 30px;margin-top: 10px;border-radius: 4px;">
+            </a>
+
+            <small><a href="requests.html#" id="doc-expand" style="font-size: 9px; color: #525252;">▶</a></small>
+
+		<ul>
+<li>
+<h2>前言</h2>
+<ul>
+<li><a href="about.html">翻译说明</a></li>
+<li><a href="releases.html">发行说明</a></li>
+<li><a href="upgrade.html">升级说明</a></li>
+<li><a href="contributions.html">贡献导引</a></li>
+<li><a href="../../api/5.4/index.html">API 文档</a></li>
+</ul>
+</li>
+<li>
+<h2>入门指南</h2>
+<ul>
+<li><a href="installation.html">安装</a></li>
+<li><a href="configuration.html">配置信息</a></li>
+<li><a href="structure.html">文件夹结构</a></li>
+<li><a href="lifecycle.html">请求周期</a></li>
+</ul>
+</li>
+<li>
+<h2>开发环境部署</h2>
+<ul>
+<li><a href="homestead.html">Homestead</a></li>
+<li><a href="valet.html">Valet</a></li>
+</ul>
+</li>
+<li>
+<h2>核心概念</h2>
+<ul>
+<li><a href="container.html">服务容器</a></li>
+<li><a href="providers.html">服务提供者</a></li>
+<li><a href="facades.html">Facades</a></li>
+<li><a href="contracts.html">Contracts</a></li>
+</ul>
+</li>
+<li>
+<h2>HTTP 层</h2>
+<ul>
+<li><a href="routing.html">路由</a></li>
+<li><a href="middleware.html">中间件</a></li>
+<li><a href="csrf.html">CSRF 保护</a></li>
+<li><a href="controllers.html">控制器</a></li>
+<li><a href="requests.html">请求</a></li>
+<li><a href="responses.html">响应</a></li>
+<li><a href="views.html">视图</a></li>
+<li><a href="session.html">Session</a></li>
+<li><a href="validation.html">表单验证</a></li>
+</ul>
+</li>
+<li>
+<h2>前端</h2>
+<ul>
+<li><a href="blade.html">Blade 模板</a></li>
+<li><a href="localization.html">本地化</a></li>
+<li><a href="frontend.html">前端指南</a></li>
+<li><a href="mix.html">编辑资源 Mix</a></li>
+</ul>
+</li>
+<li>
+<h2>安全</h2>
+<ul>
+<li><a href="authentication.html">用户认证</a></li>
+<li><a href="passport.html">API 认证</a></li>
+<li><a href="authorization.html">用户授权</a></li>
+<li><a href="encryption.html">加密解密</a></li>
+<li><a href="hashing.html">哈希</a></li>
+<li><a href="passwords.html">重置密码</a></li>
+</ul>
+</li>
+<li>
+<h2>综合话题</h2>
+<ul>
+<li><a href="artisan.html">Artisan 命令行</a></li>
+<li><a href="broadcasting.html">广播系统</a></li>
+<li><a href="cache.html">缓存系统</a></li>
+<li><a href="collections.html">集合</a></li>
+<li><a href="errors.html">错误与日志</a></li>
+<li><a href="events.html">事件系统</a></li>
+<li><a href="filesystem.html">文件存储</a></li>
+<li><a href="helpers.html">辅助函数</a></li>
+<li><a href="mail.html">邮件发送</a></li>
+<li><a href="notifications.html">消息通知</a></li>
+<li><a href="packages.html">扩展包开发</a></li>
+<li><a href="queues.html">队列</a></li>
+<li><a href="scheduling.html">任务调度</a></li>
+</ul>
+</li>
+<li>
+<h2>数据库</h2>
+<ul>
+<li><a href="database.html">快速入门</a></li>
+<li><a href="queries.html">查询构造器</a></li>
+<li><a href="pagination.html">分页</a></li>
+<li><a href="migrations.html">数据库迁移</a></li>
+<li><a href="seeding.html">数据填充</a></li>
+<li><a href="redis.html">Redis</a></li>
+</ul>
+</li>
+<li>
+<h2>Eloquent ORM</h2>
+<ul>
+<li><a href="eloquent.html">快速入门</a></li>
+<li><a href="eloquent-relationships.html">模型关联</a></li>
+<li><a href="eloquent-collections.html">Eloquent 集合</a></li>
+<li><a href="eloquent-mutators.html">修改器</a></li>
+<li><a href="eloquent-serialization.html">序列化</a></li>
+</ul>
+</li>
+<li>
+<h2>测试</h2>
+<ul>
+<li><a href="testing.html">快速入门</a></li>
+<li><a href="http-tests.html">HTTP 测试</a></li>
+<li><a href="dusk.html">浏览器测试 Dusk</a></li>
+<li><a href="database-testing.html">数据库测试</a></li>
+<li><a href="mocking.html">测试模拟器</a></li>
+</ul>
+</li>
+<li>
+<h2>官方扩展包</h2>
+<ul>
+<li><a href="billing.html">Cashier 交易工具包</a></li>
+<li><a href="envoy.html">Envoy 部署工具</a></li>
+<li><a href="passport.html">Passport OAuth 认证</a></li>
+<li><a href="scout.html">Scout 全文搜索</a></li>
+<li><a href="socialite.html">Socialite 社会化登录</a></li>
+</ul>
+</li>
+</ul>
+
+		<hr>
+            <ul>
+              <li>社交账号</li>
+                <ul class="social-account">
+                  <li><a href="http://weibo.com/1837553744/profile?topnav=1&wvr=6&is_all=1">Summer 的微博</a></li>
+                  <li>新手 QQ 群：282196078</li>
+                </ul>
+
+            </ul>
+
+            <ul>
+              <li>
+              微信订阅号
+                <ul>
+                  <li>
+<img class="image-border popover-with-html" data-content="" src="https://dn-phphub.qbox.me/uploads/images/201708/06/1/4zgVR8dNCt.png" style="width: 148px;height: 148px;border:1px solid #ccc;padding:2px;border-radius:3px;margin-top:5px;" data-original-title="" title="">
+                  </li>
+                </ul>
+                </li>
+            </ul>
+
+            <ul>
+              <li>推荐资源
+              <ul class="list list-group resource-links">
+                    <li class="list-group-item ">
+                <a href="../../index.html" class="no-pjax" title="Laravel 中文文档">
+                    <img class="media-object inline-block " src="https://dn-phphub.qbox.me/uploads/banners/ql9XtosRhTe4v8HVC3TV.jpg">
+                    Laravel 中文文档
+                </a>
+            </li>
+                    <li class="list-group-item ">
+                <a href="https://lumen.laravel-china.org" class="no-pjax" title="Lumen 中文文档">
+                    <img class="media-object inline-block " src="https://dn-phphub.qbox.me/uploads/banners/bcMFkfsJZpetLgKFwWqY.jpg">
+                    Lumen 中文文档
+                </a>
+            </li>
+                    <li class="list-group-item ">
+                <a href="https://cs.laravel-china.org/" class="no-pjax" title="Laravel 速查表">
+                    <img class="media-object inline-block " src="https://dn-phphub.qbox.me/uploads/banners/cV55gsrH70qz6VdKr502.jpg">
+                    Laravel 速查表
+                </a>
+            </li>
+                    <li class="list-group-item ">
+                <a href="http://yousails.mikecrm.com/4Dh5uWU" class="no-pjax" title="Laravel 软件外包服务">
+                    <img class="media-object inline-block " src="https://dn-phphub.qbox.me/uploads/banners/v89tIQ6vjceA6g7JmrQB.png">
+                    Laravel 软件外包
+                </a>
+            </li>
+                    <li class="list-group-item ">
+                <a href="https://laravel-china.org/topics/3626" class="no-pjax" title="Laravel 远程工作 ">
+                    <img class="media-object inline-block " src="https://dn-phphub.qbox.me/uploads/banners/Xlq6s7wLxvX8FlTP4qZe.png">
+                    Laravel 远程工作
+                </a>
+            </li>
+                    <li class="list-group-item ">
+                <a href="https://laravel-china.github.io/php-the-right-way/" class="no-pjax" title="PHP 之道 - PHPer 必读">
+                    <img class="media-object inline-block " src="https://dn-phphub.qbox.me/uploads/banners/vA50AYuscu2RCMowq7ee.png">
+                    PHP 之道
+                </a>
+            </li>
+                    <li class="list-group-item ">
+                <a href="https://laravel-china.org/composer" class="no-pjax" title="Composer 中文全量镜像">
+                    <img class="media-object inline-block " src="https://dn-phphub.qbox.me/uploads/banners/KltcLb6leMa12dvTAxD7.png">
+                    Composer 镜像
+                </a>
+            </li>
+            </ul>
+              </li>
+            </ul>
+
+	</section>
+
+	
+
+	<article>
+
+		<div class="alert alert-warning" role="alert">
+			一小时同步一次，更多信息请查阅 <a href="https://laravel-china.org/topics/2095">文档导读</a>。
+			发现瑕疵？你也可以
+				<a href="https://github.com/laravel-china/laravel-docs/edit/5.4/requests.md"><i class="fa fa-pencil-square-o"></i> 改进本文</a>
+			。<a href="https://laravel-china.org/topics/4026" target="_blank"><i class="fa fa-cloud-download" aria-hidden="true"></i> 离线版本下载</a>
+		</div>
+
+		<div class="main-content">
+			<h1>Laravel 的 HTTP 请求 Request</h1>
+<ul>
+<li><a href="requests.html#accessing-the-request">获取请求</a>
+<ul>
+<li><a href="requests.html#request-path-and-method">请求路径 &amp; 方法</a></li>
+<li><a href="requests.html#psr7-requests">PSR-7 请求</a></li>
+</ul></li>
+<li><a href="requests.html#input-trimming-and-normaliation">输入数据的预处理和规范化</a></li>
+<li><a href="requests.html#retrieving-input">获取输入数据</a>
+<ul>
+<li><a href="requests.html#old-input">旧输入数据</a></li>
+<li><a href="requests.html#cookies">Cookies</a></li>
+</ul></li>
+<li><a href="requests.html#files">文件资源</a>
+<ul>
+<li><a href="requests.html#retrieving-uploaded-files">获取上传文件</a></li>
+<li><a href="requests.html#storing-uploaded-files">储存上传文件</a></li>
+</ul></li>
+</ul>
+<p><a name="accessing-the-request"></a></p>
+<h2>获取请求</h2>
+<p>要通过依赖注入的方式来获取当前 HTTP 请求的实例，你应该在控制器方法中使用 <code>Illuminate\Http\Request</code> 类型提示。当前的请求实例将通过 <a href="container.html">服务容器</a> 自动注入：</p>
+<pre><code>&lt;?php
+
+namespace App\Http\Controllers;
+
+use Illuminate\Http\Request;
+
+class UserController extends Controller
+{
+    /**
+     * 储存一个新用户。
+     *
+     * @param  Request  $request
+     * @return Response
+     */
+    public function store(Request $request)
+    {
+        $name = $request-&gt;input('name');
+
+        //
+    }
+}</code></pre>
+<h4>依赖注入 &amp; 路由参数</h4>
+<p>如果控制器方法也有输入数据是从路由参数中传入的，只需将路由参数置于其他依赖之后。
+例如，你的路由是这样定义的： </p>
+<pre><code>Route::put('user/{id}', 'UserController@update');</code></pre>
+<p>只要像下方一样定义控制器方法，你就可以使用 <code>Illuminate\Http\Request</code> 类型提示了，同时获取到路由参数 <code>id</code>：</p>
+<pre><code>&lt;?php
+
+namespace App\Http\Controllers;
+
+use Illuminate\Http\Request;
+
+class UserController extends Controller
+{
+    /**
+     * 更新指定的用户。
+     *
+     * @param  Request  $request
+     * @param  string  $id
+     * @return Response
+     */
+    public function update(Request $request, $id)
+    {
+        //
+    }
+}</code></pre>
+<h4>通过路由闭包获取请求</h4>
+<p>你也可以在一个路由闭包中使用 <code>Illuminate\Http\Request</code> 类型提示。当它执行时，服务容器会自动注入当前请求到闭包中：</p>
+<pre><code>use Illuminate\Http\Request;
+
+Route::get('/', function (Request $request) {
+    //
+});</code></pre>
+<p><a name="request-path-and-method"></a></p>
+<h3>请求路径 &amp; 方法</h3>
+<p><code>Illuminate\Http\Request</code> 的实例提供了多种方法去检查应用程序的 HTTP 请求，Laravel 的 <code>Illuminate\Http\Request</code> 继承了 <code>Symfony\Component\HttpFoundation\Request</code> 类。下面是该类几个有用的方法：</p>
+<h4>获取请求路径</h4>
+<p><code>path</code> 方法返回请求路径信息。所以，如果收到的请求目标地址是 <code>http://domain.com/foo/bar</code>，那么 <code>path</code> 将会返回 <code>foo/bar</code>：</p>
+<pre><code>$uri = $request-&gt;path();</code></pre>
+<p><code>is</code> 方法可以验证收到的请求路径和指定规则是否匹配。使用这个方法的时候你也可以传递一个 <code>*</code> 字符作为通配符：</p>
+<pre><code>if ($request-&gt;is('admin/*')) {
+    //
+}</code></pre>
+<h4>获取请求的 URL</h4>
+<p>你可以使用 <code>url</code> 或 <code>fullUrl</code> 方法去获取传入请求的完整 URL。<code>url</code> 方法返回不带有查询字符串的 URL，而 <code>fullUrl</code> 方法的返回值包含查询字符串：</p>
+<pre><code>// Without Query String...
+$url = $request-&gt;url();
+
+// With Query String...
+$url = $request-&gt;fullUrl();</code></pre>
+<h4>获取请求方法</h4>
+<p>对于传入的请求 <code>method</code> 方法将返回 HTTP 的请求方式。你也可以使用 <code>isMethod</code> 方法去验证 HTTP 的请求方式与指定规则是否相配：  </p>
+<pre><code>$method = $request-&gt;method();
+
+if ($request-&gt;isMethod('post')) {
+    //
+}</code></pre>
+<p><a name="psr7-requests"></a></p>
+<h3>PSR-7 请求</h3>
+<p><a href="http://www.php-fig.org/psr/psr-7/">PSR-7 标准</a>制定的 HTTP 消息接口包含了请求和响应。如果你想使用一个 PSR-7 请求来代替一个 Laravel 请求，那么你首先要安装几个函数库。Laravel 使用了 Symfony 的 HTTP 消息桥接组件，将原来的 Laravel 请求和响应转换到 PSR-7 所兼容的实现：</p>
+<pre><code>composer require symfony/psr-http-message-bridge
+composer require zendframework/zend-diactoros</code></pre>
+<p>安装完这些库后， 就可以在路由闭包或控制器中，简单的对请求类型使用类型提示来获取 PSR-7 的请求： </p>
+<pre><code>use Psr\Http\Message\ServerRequestInterface;
+
+Route::get('/', function (ServerRequestInterface $request) {
+    //
+});</code></pre>
+<blockquote>
+<p>{tip} 如果你从路由或者控制器返回了一个 PSR-7 响应实例，那么这个实例将被自动转换回一个 Laravel 响应实例，同时由框架显示。</p>
+</blockquote>
+<p><a name="input-trimming-and-normaliation"></a></p>
+<h2>输入数据的预处理和规范化</h2>
+<p>在 Laravel 的全局中间件中默认包含了 <code>TrimStrings</code> 和 <code>ConvertEmptyStringsToNull</code> 两个中间件。这些中间件被列在 <code>App\Http\Kernel</code> 类中。它们会自动处理所有请求中传入的字符串字段，比如将空的字符串字段转变成 <code>null</code> 值。你再也不用担心路由和控制器中数据规范化的问题。</p>
+<p>如果你想停用这些功能，你可以在 <code>App\Http\Kernel</code> 类的 <code>$middleware</code> 属性中移除这些中间件。</p>
+<p><a name="retrieving-input"></a></p>
+<h2>获取输入数据</h2>
+<h4>获取所有输入数据</h4>
+<p>你可以使用 <code>all</code> 方法以 <code>数组</code> 形式获取到所有输入数据:</p>
+<pre><code>$input = $request-&gt;all();</code></pre>
+<h4>获取指定输入值</h4>
+<p>你可以通过 <code>Illuminate\Http\Request</code> 的实例，借助几个简单的方法，就可以获取到用户输入的所有数据。而不需要担心发起请求时使用了哪一种请求方式，<code>input</code> 方法通常被用来获取用户输入数据：</p>
+<pre><code>$name = $request-&gt;input('name');</code></pre>
+<p>你可以给 <code>input</code> 方法的第二个参数传入一个默认值。当请求的输入数据不存在于此请求时，返回该默认值：</p>
+<pre><code>$name = $request-&gt;input('name', 'Sally');</code></pre>
+<p>如果传输表单数据中包含「数组」形式的数据，那么可以使用「点」语法来获取数组：</p>
+<pre><code>$name = $request-&gt;input('products.0.name');
+
+$names = $request-&gt;input('products.*.name');</code></pre>
+<h4>通过动态属性获取输入数据</h4>
+<p>你也可以通过 <code>Illuminate\Http\Request</code> 实例的动态属性来获取用户输入的数据。例如，如果你应用程序表单中包含 <code>name</code> 字段，那么可以像这样访问提交的值：</p>
+<pre><code>$name = $request-&gt;name;</code></pre>
+<p>Laravel 在处理动态属性的优先级是，先从请求的数据中查找，没有的话再到路由参数中找。</p>
+<h4>获取 JSON 输入信息</h4>
+<p>当你发送 JSON 请求到应用时，只要请求表头中设置了 <code>Content-Type</code> 为　<code>application/json</code>，你就可以直接从 <code>Input</code> 方法中获取 JSON 数据。你也可以通过 「点」语法来读取 JSON 数组：</p>
+<pre><code>$name = $request-&gt;input('user.name');</code></pre>
+<h4>获取部分输入数据</h4>
+<p>如果你需要获取输入数据的子集，则可以用 <code>only</code> 和 <code>except</code> 方法。这两个方法都接收单个 <code>数组</code> 或动态列表作为参数：</p>
+<pre><code>$input = $request-&gt;only(['username', 'password']);
+
+$input = $request-&gt;only('username', 'password');
+
+$input = $request-&gt;except(['credit_card']);
+
+$input = $request-&gt;except('credit_card');</code></pre>
+<p><code>only</code> 方法会返回所有你指定的键值对，即使这个键在输入数据中并不存在。如果一个键在输入数据中并不存在时，它对应的值是 <code>null</code> 。当你想要获取请求中实际存在的输入数据时，你可以使用 <code>intersect</code> 方法。</p>
+<pre><code>$input = $request-&gt;intersect(['username', 'password']);</code></pre>
+<h4>确定是否有输入值</h4>
+<p>要判断请求是否存在该数据，可以使用 <code>has</code> 方法。当数据存在　<strong>并且</strong>　字符串不为空时，<code>has</code> 方法就会返回 <code>true</code>：</p>
+<pre><code>if ($request-&gt;has('name')) {
+    //
+}</code></pre>
+<p><a name="old-input"></a></p>
+<h3>旧输入数据</h3>
+<p>Laravel 允许你将本次的输入数据保留到下一次请求发送前。这个特性在表单验证错误后重新填写表单相当有用。但是，如果你使用了 Laravel 的 <a href="validation.html">验证特性</a>，你就不需要在手动实现这些方法，因为 Laravel 内置的验证工具会自动调用他们。</p>
+<h4>将输入数据闪存至 Session</h4>
+<p><code>Illuminate\Http\Request</code> 的 <code>flash</code> 方法会将当前输入的数据存进 <a href="session.html">session</a> 中，因此下次用户发送请求到应用程序时就可以使用它们：</p>
+<pre><code>$request-&gt;flash();</code></pre>
+<p>你也可以使用 <code>flashOnly</code> 和 <code>flashExcept</code> 方法将当前请求数据的子集保存到 session。这些方法对敏感信息的保护非常有用：</p>
+<pre><code>$request-&gt;flashOnly(['username', 'email']);
+
+$request-&gt;flashExcept('password');</code></pre>
+<h4>闪存输入数据到 Session 后重定向</h4>
+<p>你可能需要把输入数据闪存到 session 并重定向到前一个页面，这时只需要在重定向方法后加上 <code>withInput</code> 即可：</p>
+<pre><code>return redirect('form')-&gt;withInput();
+
+return redirect('form')-&gt;withInput(
+    $request-&gt;except('password')
+);</code></pre>
+<h4>获取旧输入数据</h4>
+<p>若要获取上一次请求后所闪存的输入数据，则可以使用 <code>Request</code> 实例中的 <code>old</code> 方法。<code>old</code> 方法提供一个简便的方式从 <a href="session.html">Session</a> 取出被闪存的输入数据：</p>
+<pre><code>$username = $request-&gt;old('username');</code></pre>
+<p>Laravel 也提供了全局辅助函数 <code>old</code>。如果你要在 <a href="blade.html">Blade 模板</a> 中显示旧输入数据，可以使用更加方便的 <code>old</code> 辅助函数。如果旧数据不存在，则返回 <code>null</code>：</p>
+<pre><code>&lt;input type="text" name="username" value="{{ old('username') }}"&gt;</code></pre>
+<p><a name="cookies"></a></p>
+<h3>Cookies</h3>
+<h4>从请求中获取 Cookie 值</h4>
+<p>Laravel 框架创建的每个 cookie 都会被加密并且加上认证标识，这代表着用户擅自更改的 cookie 都会失效。若要从此次请求获取 cookie 值，你可以使用 <code>Illuminate\Http\Request</code> 实例中的 <code>cookie</code> 方法：</p>
+<pre><code>$value = $request-&gt;cookie('name');</code></pre>
+<h4>将 Cookies 附加到响应</h4>
+<p>你可以使用 <code>cookie</code> 方法附加一个 cookie 到 <code>Illuminate\Http\Response</code> 实例。有效 cookie 应该传递字段名称，字段值和过期时间给这个方法：</p>
+<pre><code>return response('Hello World')-&gt;cookie(
+    'name', 'value', $minutes
+);</code></pre>
+<p><code>cookie</code> 方法还可以接受更多参数，只是使用频率较低。通常作用是传递参数给 PHP 原生  <a href="http://php.net/manual/en/function.setcookie.php">设置 cookie</a> 方法：</p>
+<pre><code>return response('Hello World')-&gt;cookie(
+    'name', 'value', $minutes, $path, $domain, $secure, $httpOnly
+);</code></pre>
+<h4>生成 Cookie 实例</h4>
+<p>如果你想要在一段时间以后生成一个可以给定 <code>Symfony\Component\HttpFoundation\Cookie</code> 的响应实例，你可以先生成 $cookie 实例，然后再指定给 response 实例，否则这个 cookie 不会被发送回客户端：</p>
+<pre><code>$cookie = cookie('name', 'value', $minutes);
+
+return response('Hello World')-&gt;cookie($cookie);</code></pre>
+<blockquote>
+<p>译者注： 关于 Cookie，需要注意一点，默认 Laravel 创建的所有 Cookie 都是加密过的，创建未加密的 Cookie 的方法请见 <a href="https://laravel-china.org/topics/1758">【小技巧分享】在 Laravel 中设置没有加密的 cookie</a></p>
+</blockquote>
+<p><a name="files"></a></p>
+<h2>文件资源</h2>
+<p><a name="retrieving-uploaded-files"></a></p>
+<h3>获取上传文件</h3>
+<p>你可以使用 <code>Illuminate\Http\Request</code> 实例中的 <code>file</code> 方法获取上传的文件。file 方法返回的对象是 <code>Symfony\Component\HttpFoundation\File\UploadedFile</code> 类的实例，该类继承了 PHP 的 <code>SplFileInfo</code> 类，并提供了许多和文件交互的方法：</p>
+<pre><code>$file = $request-&gt;file('photo');
+
+$file = $request-&gt;photo;</code></pre>
+<p>你可以使用请求的 <code>hasFile</code> 方法确认上传的文件是否存在：</p>
+<pre><code>if ($request-&gt;hasFile('photo')) {
+    //
+}</code></pre>
+<h4>确认上传的文件是否有效</h4>
+<p>除了检查上传的文件是否存在外，你也可以通过 <code>isValid</code> 方法验证上传的文件是否有效：</p>
+<pre><code>if ($request-&gt;file('photo')-&gt;isValid()) {
+    //
+}</code></pre>
+<h4>文件路径 &amp; 扩展</h4>
+<p><code>UploadedFile</code> 这个类也包含了访问文件完整路径和扩展的方法。<code>extension</code> 方法会尝试根据文件内容猜测文件的扩展名。猜测结果可能不同于客户端原始的扩展名：　</p>
+<pre><code>$path = $request-&gt;photo-&gt;path();
+
+$extension = $request-&gt;photo-&gt;extension();</code></pre>
+<h4>其它上传文件的方法</h4>
+<p><code>UploadedFile</code> 的实例还有许多可用的方法，可以到该对象的 <a href="http://api.symfony.com/3.0/Symfony/Component/HttpFoundation/File/UploadedFile.html">API 文档</a> 了解这些方法的详细信息。</p>
+<p><a name="storing-uploaded-files"></a></p>
+<h3>储存上传文件</h3>
+<p>在设置好 <a href="filesystem.html">文件系统</a> 的配置信息后，你可以使用 <code>UploadedFile</code> 的 <code>store</code> 方法把上传文件储存到本地磁盘，或者是亚马逊 S3 云存储上。</p>
+<p><code>store</code> 方法允许存储文件到相对于文件系统根目录配置的路径。这个路径不能包含文件名，名称将使用 MD5 散列文件内容自动生成。</p>
+<p><code>store</code> 方法还接受一个可选的第二个参数，用于文件存储到磁盘的名称。这个方法会返回文件相对于磁盘根目录的路径：</p>
+<pre><code>$path = $request-&gt;photo-&gt;store('images');
+
+$path = $request-&gt;photo-&gt;store('images', 's3');</code></pre>
+<p>如果你不想自动生成文件名，那么可以使用 <code>storeAs</code> 方法去设置路径，文件名和磁盘名作为方法参数：</p>
+<pre><code>$path = $request-&gt;photo-&gt;storeAs('images', 'filename.jpg');
+
+$path = $request-&gt;photo-&gt;storeAs('images', 'filename.jpg', 's3');</code></pre>
+<hr />
+<blockquote>
+<p>{note} 欢迎任何形式的转载，但请务必注明出处，尊重他人劳动共创开源社区。</p>
+<p>转载请注明：本文档由 Laravel China 社区 [laravel-china.org] 组织翻译，详见 <a href="https://laravel-china.org/topics/3810/laravel-54-document-translation-come-and-join-the-translation">翻译召集帖</a>。</p>
+<p>文档永久地址： <a href="../../index.html">http://d.laravel-china.org</a></p>
+</blockquote>
+		</div>
+
+		<div class="main-footer" style="border-top:1px dashed rgba(0, 0, 0, 0.1);padding-top: 30px;margin-top:30px;margin-bottom: 20px;">
+			<div class="prev-next-wrap clearfix">
+
+				
+			    &nbsp;
+							</div>
+		</div>
+
+	</article>
+</div>
+
+	<footer class="main">
+		<ul>
+			<li class="nav-docs"><a href="../5.4.html">文档</a></li>
+<li ><a href="https://laravel-china.org/news" class="no-pjax">Laravel 资讯</a></li>
+<li class="dropdown"><a href="https://laravel-china.org/">Laravel China 社区</a></li>
+<li class="nav-forge"><a href="https://laravel-china.org/categories/1">酷工作</a></li>
+<li class="nav-docs"><a href="http://lumen.laravel-china.org">Lumen</a></li>
+<li class="nav-forge"><a href="https://cs.laravel-china.org/">速查表</a></li>
+<li class="nav-forge"><a href="https://fsdhub.com/books/laravel-essential-training-5.5">《Laravel 入门教程》</a></li>
+		</ul>
+		<p>Laravel is a trademark of Taylor Otwell. Copyright &copy; Taylor Otwell.</p>
+            <div style="margin-top: 32px;">
+                <a href="https://www.upyun.com/" title="Composer 镜像赞助商">
+                    <img src="https://dn-phphub.qbox.me/uploads/banners/XPtLlZmIN1cQbLuDFEON.png" style="width: 200px;">
+                </a>
+            </div>
+            <p class="less-significant">
+            <a href="http://jackmcdade.com">
+                Designed by<br>
+                <svg version="1.1"
+	 xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:a="http://ns.adobe.com/AdobeSVGViewerExtensions/3.0/"
+	 x="0px" y="0px" width="128.2px" height="28px" viewBox="0 0 128.2 28" enable-background="new 0 0 128.2 28" xml:space="preserve"
+	>
+<defs>
+</defs>
+<g>
+	<path fill="#c3c3c3" d="M14.2,0.4c0,0.2,0,0.5,0,0.7c0,0.2,0,0.5,0,0.7l-1.4-0.3C12.9,3,13,4.5,13.1,6c0.1,1.5,0,3-0.1,4.5
+		c0,0.4-0.1,0.8-0.1,1.2c-0.1,0.4-0.1,0.8-0.3,1.2c-0.1,0.4-0.3,0.7-0.5,1.1c-0.2,0.3-0.5,0.6-0.9,0.9c-0.4,0.2-0.9,0.4-1.5,0.6
+		c-0.6,0.2-1.1,0.3-1.6,0.3c-0.6,0-1.2-0.1-1.6-0.3c-0.5-0.2-0.9-0.6-1.1-1c-0.3-0.5-0.5-1-0.6-1.6c-0.1-0.6-0.1-1.3,0-2.1
+		c0-0.2,0.1-0.5,0.2-0.7C4.9,9.9,5,9.7,5.1,9.5c0.1-0.2,0.2-0.4,0.3-0.6l1.1,0.4C6.7,9.3,7,9.4,7.3,9.5c0.3,0.1,0.5,0.1,0.6,0.2
+		c0,0.2,0,0.4-0.1,0.5c-0.1,0.2-0.1,0.3-0.2,0.4c-0.1,0.1-0.2,0.3-0.2,0.4c-0.1,0.2-0.1,0.3-0.1,0.5l-1.3-0.7
+		c-0.1,0.3-0.2,0.7-0.2,1.1c0,0.4,0.1,0.8,0.2,1.2c0.2,0.4,0.4,0.7,0.6,1c0.3,0.3,0.6,0.4,1,0.3c0.6,0,1.1-0.3,1.4-0.6
+		c0.3-0.4,0.5-0.9,0.7-1.7c0.1-0.7,0.2-1.6,0.2-2.8c0-1.1,0-2.4,0-3.9c0-0.6-0.1-1.3-0.1-2C9.7,2.8,9.6,2.1,9.5,1.4
+		c-0.2,0-0.5,0-0.8,0c-0.3,0-0.6,0-0.8,0c-0.8,0-1.5,0-2.2,0c-0.7,0-1.5,0-2.2,0.2c-0.3,0.1-0.6,0.2-1,0.4C2.2,2.1,1.9,2.4,1.6,2.6
+		C1.4,2.9,1.2,3.2,1.1,3.6C1,3.9,1,4.3,1.1,4.6c0.1,0.5,0.3,0.8,0.4,0.9V5.4c0-0.4,0.1-0.8,0.4-1c0.3-0.2,0.6-0.3,0.9-0.3
+		c0.3,0,0.6,0.1,0.9,0.3C4,4.6,4.1,5,4.1,5.4c0,0.4-0.1,0.8-0.4,1c-0.3,0.2-0.6,0.3-1,0.3H2.7C1.9,6.7,1.3,6.5,0.9,6
+		C0.5,5.6,0.2,5.1,0.1,4.5C0,4,0,3.4,0.2,2.7c0.2-0.6,0.5-1.1,1-1.5c0.4-0.3,0.8-0.5,1.2-0.7c0.4-0.1,0.9-0.2,1.4-0.3
+		c0.5-0.1,0.9-0.1,1.4-0.1c0.5,0,0.9,0,1.4,0h1.5c0.6,0,1.1,0,1.6,0.1c0.5,0,1,0.1,1.5,0.1c0.5,0,1,0.1,1.5,0.1
+		C13.1,0.5,13.6,0.5,14.2,0.4z"/>
+	<path fill="#c3c3c3" d="M25.2,14.3c0,0.2,0.1,0.4,0.1,0.6c0,0.2,0.1,0.4,0.1,0.7c-1-0.1-2-0.2-3-0.1c-1.1,0.1-2.1,0.2-3,0.4
+		c0-0.2-0.1-0.4-0.1-0.5c0-0.2-0.1-0.4-0.1-0.5c0.2,0,0.5-0.1,0.7-0.1c0.2,0,0.4-0.1,0.6-0.1c-0.1-1.5-0.3-3.1-0.5-4.6
+		c-0.5,0.1-0.9,0.1-1.4,0.2c-0.5,0.1-0.9,0.1-1.4,0.2c-0.2,0.7-0.3,1.3-0.5,2c-0.2,0.7-0.3,1.3-0.5,2c0.2,0,0.4,0,0.6,0
+		c0.1,0,0.3,0,0.4,0.1c0,0.2,0,0.3,0,0.5c0,0.1,0,0.2,0,0.4c0,0.1,0,0.2-0.1,0.3H14v-1.2h1c0.2-0.5,0.3-1,0.4-1.5
+		c0.1-0.5,0.3-1,0.4-1.5c0.2-0.6,0.3-1.2,0.5-1.7c0.2-0.6,0.3-1.2,0.5-1.7c0.2-1.1,0.4-2.1,0.6-3.2c0.2-1.1,0.3-2.1,0.4-3.2
+		c-0.2,0-0.5,0-0.7,0c-0.2,0-0.4,0-0.7,0c0-0.2,0.1-0.4,0.1-0.6c0-0.2,0-0.4,0.1-0.6c0.9,0,1.9,0,2.9,0c1,0,2,0,2.9,0l0.2,1.2
+		c-0.2,0-0.3,0-0.5,0c-0.2,0-0.3,0-0.5,0c0.3,2.1,0.7,4.3,1,6.5c0.3,2.2,0.7,4.4,1,6.5H25.2z M17.5,9c0.4-0.1,0.7-0.1,1.1-0.2
+		c0.4-0.1,0.8-0.1,1.2-0.2c-0.2-1-0.3-2-0.5-2.9c-0.2-1-0.4-1.9-0.6-2.9c-0.2,1-0.4,2.1-0.5,3.1C17.9,6.9,17.7,8,17.5,9z"/>
+	<path fill="#c3c3c3" d="M36.7,10.4c-0.1,0-0.2,0-0.3,0c-0.1,0-0.2,0-0.3,0c0,0.6,0,1.2-0.2,1.9c-0.2,0.6-0.5,1.2-1,1.6
+		c-0.5,0.5-1,0.9-1.6,1.1c-0.6,0.3-1.3,0.4-2,0.5c-0.6,0.1-1.1,0.1-1.8,0c-0.6-0.1-1.1-0.4-1.6-0.7c-0.2-0.2-0.5-0.4-0.8-0.7
+		c-0.3-0.3-0.5-0.5-0.6-0.8c-0.3-0.5-0.5-1-0.6-1.5c-0.2-0.5-0.3-0.9-0.4-1.4c-0.1-0.5-0.2-1-0.2-1.5c0-0.5,0-1,0.1-1.6
+		c0.2-1,0.4-2,0.8-2.9c0.4-0.9,0.8-1.7,1.4-2.3c0.5-0.7,1.2-1.2,1.9-1.6C30.2,0.2,30.9,0,31.7,0c0.3,0,0.5,0,0.8,0.1
+		c0.3,0.1,0.5,0.2,0.7,0.4c0.3,0.3,0.7,0.7,1,1.2c0.3,0.5,0.6,1.2,0.7,1.9c0.1,0,0.2,0,0.3,0c0.1,0,0.2,0,0.3,0c0,0.1,0,0.2,0,0.3
+		c0,0.1,0,0.2,0,0.3L33,4.6c-0.3,0.1-0.5,0.1-0.6,0c-0.1,0-0.2-0.1-0.2-0.2c-0.1-0.1-0.1-0.2,0-0.3c0.1,0,0.2,0,0.2,0
+		c0.1,0,0.1,0,0.2,0c0.2-0.2,0.3-0.3,0.3-0.6c0-0.2,0-0.5,0-0.7c0-0.5-0.2-0.9-0.5-1.3c-0.2-0.2-0.3-0.3-0.4-0.4
+		C31.8,1,31.6,1,31.4,1.1c-0.2,0-0.4,0.2-0.6,0.4c-0.2,0.2-0.4,0.5-0.5,0.9C30,2.6,29.9,3,29.8,3.3c-0.1,0.3-0.2,0.5-0.2,0.7
+		c-0.6,2.6-0.7,5.3-0.2,8c0.1,0.3,0.2,0.7,0.3,1s0.3,0.6,0.5,0.9c0.2,0.3,0.5,0.5,0.8,0.7c0.3,0.2,0.6,0.2,1,0.1
+		c0.6-0.1,1-0.4,1.4-1c0.3-0.5,0.6-1.1,0.7-1.8c0.1-0.3,0.1-0.6,0.1-0.9v-0.5c-0.2,0-0.4,0-0.6-0.1c-0.1-0.1-0.2-0.2-0.2-0.3
+		c0-0.1,0-0.2,0.1-0.3c0.6,0,1.2,0,1.7,0c0.6,0,1.2,0,1.7,0c0,0.1,0,0.2-0.1,0.3C36.7,10.2,36.7,10.3,36.7,10.4z"/>
+	<path fill="#c3c3c3" d="M48,14.2c0.1,0.2,0.3,0.3,0.5,0.4c0.2,0.1,0.5,0.1,0.7,0c0.1,0.1,0.1,0.2,0.1,0.4c0,0.2-0.1,0.3-0.2,0.4
+		c-0.1,0.1-0.2,0.2-0.4,0.2c-0.2,0-0.3,0-0.4,0c-0.3,0-0.7,0-1,0c-0.3,0-0.7,0-1-0.1c-0.3-0.1-0.7-0.2-1-0.4
+		c-0.3-0.2-0.5-0.4-0.7-0.7c-0.2-0.3-0.3-0.6-0.3-1c0-0.3,0-0.7,0-1.1V9.9c0-0.1,0-0.3,0-0.4c0-0.2-0.1-0.3-0.2-0.5
+		c-0.1-0.2-0.3-0.3-0.4-0.4c-0.2-0.1-0.4-0.1-0.7-0.1c-0.1,0-0.2,0-0.5,0.1c-0.2,0.3-0.3,0.5-0.5,0.8c-0.2,0.3-0.3,0.5-0.5,0.7
+		c0,0.8,0,1.5-0.1,2.2c0,0.7-0.1,1.5-0.1,2.1h1.4v1.1c-0.5,0-0.9,0.1-1.3,0c-0.4,0-0.8,0-1.2-0.1c-0.4,0-0.8-0.1-1.2-0.1
+		c-0.4,0-0.8,0-1.3,0c-0.1,0-0.3,0-0.4,0c-0.1,0-0.2,0-0.3-0.1c-0.1,0-0.1-0.1-0.1-0.2c0-0.1-0.1-0.3-0.1-0.4c0-0.1,0-0.3,0-0.4
+		c0-0.1,0.1-0.2,0.1-0.2c0.2,0.1,0.4,0.2,0.6,0.1s0.4-0.2,0.5-0.4c0-0.1,0.1-0.3,0.1-0.7c0-0.4,0-0.9,0.1-1.6c0-0.6,0.1-1.3,0.1-2.1
+		c0-0.8,0-1.6,0.1-2.4c0-0.8,0-1.5,0.1-2.3c0-0.7,0.1-1.3,0.1-1.8c0-0.2,0-0.5,0-0.7c0-0.2-0.1-0.4-0.2-0.6
+		c-0.1-0.2-0.3-0.3-0.5-0.4c-0.2-0.1-0.4,0-0.6,0.1c0-0.2-0.1-0.5-0.1-0.7c0-0.2,0-0.4-0.1-0.7c1,0,2,0.1,3,0.1c0.9,0,1.9,0.1,3,0.1
+		c0,0.1,0,0.2,0,0.3c0,0.1,0,0.3,0.1,0.4c0,0.1,0,0.3,0,0.4c0,0.1,0,0.2-0.1,0.2c-0.1,0.1-0.2,0.1-0.3,0.1c-0.1,0-0.2,0-0.4-0.1
+		c-0.1-0.1-0.3-0.1-0.4-0.2c-0.1-0.1-0.3-0.1-0.3-0.1c-0.1,0.9-0.1,1.9-0.1,2.9c0,1-0.1,2-0.1,3.1c0.7-1.2,1.4-2.5,2-3.8
+		c0.2-0.3,0.3-0.6,0.4-0.9c0.1-0.3,0.3-0.6,0.5-0.9c0.2-0.3,0.4-0.5,0.7-0.7C45.4,1,45.7,0.9,46,0.8c0.3-0.1,0.7-0.1,1,0
+		c0.3,0.1,0.6,0.2,0.9,0.5c0.2,0.3,0.4,0.6,0.4,1c0,0.4,0.1,0.8,0,1.1c0,0.2,0,0.3,0,0.5c0,0.2-0.1,0.3-0.2,0.4
+		c-0.1,0.2-0.2,0.3-0.4,0.4c-0.2,0.1-0.4,0.1-0.5,0.2c-0.1,0-0.3,0.1-0.4,0.1c-0.1,0-0.3,0-0.4,0C46.2,4.7,46,4.6,46,4.4
+		c-0.1-0.2-0.1-0.4,0-0.5c0.1-0.2,0.2-0.3,0.3-0.3c0.1,0,0.2-0.1,0.4-0.1c0.2-0.1,0.3-0.2,0.3-0.3c0.1-0.2,0.1-0.3,0.1-0.5
+		C47.1,2.4,47,2.2,47,2c-0.1-0.2-0.2-0.3-0.3-0.3c-0.2,0-0.3,0-0.5,0.1C46,1.9,45.9,2,45.7,2.2c-0.2,0.2-0.3,0.4-0.4,0.6
+		C45.2,3,45,3.3,44.9,3.5c-0.1,0.3-0.3,0.6-0.4,0.8c-0.2,0.2-0.3,0.5-0.4,0.8c-0.4,0.9-0.8,1.7-1.2,2.5c0.3,0,0.6-0.1,1,0
+		c0.4,0,0.7,0,1,0c0.3,0,0.7,0.1,1,0.2c0.3,0.1,0.6,0.3,0.8,0.6c0.3,0.3,0.4,0.6,0.5,1c0.1,0.4,0.1,0.8,0.2,1.1l0.2,2.1
+		c0,0.2,0.1,0.5,0.1,0.7C47.7,13.7,47.8,14,48,14.2z"/>
+	<path fill="#c3c3c3" d="M71.7,13.9c0.2,0.2,0.4,0.4,0.7,0.5c0.3,0.1,0.5,0,0.8-0.1c0,0.2,0.1,0.3,0.1,0.6c0.1,0.2,0.1,0.4,0.1,0.6
+		c-0.3,0-0.7,0-1.1,0s-0.8,0-1.3,0.1c-0.4,0-0.9,0-1.3,0c-0.4,0-0.8,0-1,0c0-0.1,0-0.1,0-0.2c0-0.1,0.1-0.2,0.2-0.3
+		c0.1-0.1,0.2-0.2,0.4-0.3c0.2-0.1,0.3-0.1,0.6-0.1c0.1,0,0.1-0.2,0.1-0.7c0-0.4,0-1,0-1.6c0-0.6,0-1.2-0.1-1.9s0-1.1,0-1.5
+		c0-1,0-1.9,0-2.6c0-0.7,0.1-1.5,0.1-2.2c-0.6,1.3-1.1,2.7-1.6,4.1c-0.5,1.5-1,3-1.5,4.4c0,0,0.1,0.1,0.1,0.2c-0.2,0-0.4,0-0.7,0.1
+		c-0.3,0.1-0.5,0.1-0.7,0.1c-0.5-1.9-1.1-3.7-1.6-5.5c-0.5-1.8-1.1-3.6-1.6-5.5c-0.1,1-0.1,2-0.1,3c0,1.1-0.1,2.1-0.1,3.2
+		c0,1.1,0,2.1-0.1,3.2c0,1-0.1,2-0.1,3h1.4v1.1c-0.5,0-0.9,0.1-1.3,0c-0.4,0-0.8,0-1.2-0.1c-0.4,0-0.8-0.1-1.2-0.1
+		c-0.4,0-0.8,0-1.3,0c-0.1,0-0.3,0-0.4,0c-0.1,0-0.2,0-0.3-0.1c-0.1,0-0.1-0.1-0.1-0.2c0-0.1-0.1-0.3-0.1-0.4c0-0.1,0-0.3,0-0.4
+		c0-0.1,0.1-0.2,0.1-0.2c0.2,0.1,0.4,0.2,0.6,0.1s0.4-0.2,0.5-0.4c0-0.1,0.1-0.3,0.1-0.7c0-0.4,0-0.9,0.1-1.6c0-0.6,0.1-1.3,0.1-2.1
+		C59,8.8,59,8,59,7.2c0-0.8,0-1.5,0.1-2.3c0-0.7,0.1-1.3,0.1-1.8c0-0.2,0-0.5,0-0.7c0-0.2-0.1-0.4-0.2-0.6c-0.1-0.2-0.3-0.3-0.5-0.4
+		c-0.2-0.1-0.4,0-0.6,0.1c0-0.2-0.1-0.5-0.1-0.7c0-0.2,0-0.4-0.1-0.7c1,0,2,0.1,3,0.1c0.9,0,1.9,0.1,3,0.1c0,0.3-0.1,0.5-0.4,0.7
+		c0.3,1.3,0.6,2.6,1,3.9c0.4,1.3,0.8,2.6,1.2,3.9c0.2-0.6,0.4-1.3,0.6-1.9c0.2-0.6,0.4-1.2,0.6-1.8C67,4.6,67.2,4,67.5,3.4
+		c0.2-0.6,0.4-1.3,0.6-2c-0.1,0-0.3,0-0.4-0.1c-0.1,0-0.2,0-0.4-0.1c-0.1,0-0.1-0.1-0.1-0.3c0-0.1,0.1-0.2,0.1-0.3
+		c0.1-0.1,0.2-0.1,0.3-0.1c0.1,0,0.2,0,0.3,0c0.4,0,0.7,0,1,0s0.6,0,0.9,0c0.3,0,0.6,0,0.9,0c0.3,0,0.6,0,1,0c0.1,0,0.3,0,0.4,0
+		c0.1,0,0.3,0.1,0.4,0.2c0.1,0.1,0.2,0.2,0.2,0.4c0,0.2,0,0.3-0.2,0.3c-0.1-0.1-0.2-0.1-0.3-0.1c-0.1,0-0.2,0.1-0.3,0.1
+		c-0.2,0.4-0.3,0.8-0.4,1.3c-0.1,0.5-0.1,0.9-0.1,1.4c-0.2,2.8-0.2,5.6,0,8.4c0,0.3,0,0.5,0.1,0.7C71.4,13.5,71.5,13.7,71.7,13.9z"
+		/>
+	<path fill="#c3c3c3" d="M81.7,12c-0.1,0-0.1,0-0.2,0c-0.1,0-0.1,0-0.2,0c0,0.4,0,0.9-0.2,1.3c-0.1,0.4-0.4,0.8-0.7,1.1
+		c-0.3,0.3-0.7,0.6-1.1,0.8c-0.4,0.2-0.9,0.3-1.3,0.4c-0.4,0.1-0.8,0-1.2,0c-0.4-0.1-0.8-0.2-1.1-0.5c-0.2-0.1-0.3-0.3-0.5-0.5
+		c-0.2-0.2-0.3-0.4-0.4-0.6c-0.2-0.4-0.3-0.7-0.4-1c-0.1-0.3-0.2-0.6-0.3-1C74,11.7,74,11.4,74,11c0-0.3,0-0.7,0.1-1.1
+		c0.1-0.7,0.3-1.4,0.5-2c0.3-0.6,0.6-1.1,0.9-1.6s0.8-0.8,1.3-1.1c0.5-0.3,1-0.4,1.5-0.4c0.2,0,0.4,0,0.6,0.1
+		c0.2,0.1,0.3,0.1,0.5,0.3C79.6,5.4,79.8,5.6,80,6c0.2,0.4,0.4,0.8,0.5,1.3c0.1,0,0.1,0,0.2,0c0.1,0,0.1,0,0.2,0c0,0.1,0,0.1,0,0.2
+		c0,0.1,0,0.1,0,0.2L79.2,8c-0.2,0.1-0.3,0.1-0.4,0c-0.1,0-0.1-0.1-0.2-0.2c0-0.1,0-0.1,0-0.2c0.1,0,0.1,0,0.2,0c0,0,0.1,0,0.2,0
+		c0.1-0.1,0.2-0.2,0.2-0.4c0-0.2,0-0.3,0-0.5c0-0.3-0.1-0.6-0.3-0.9c-0.1-0.1-0.2-0.2-0.3-0.3c-0.1-0.1-0.2-0.1-0.4,0
+		c-0.1,0-0.3,0.1-0.4,0.3c-0.1,0.2-0.3,0.4-0.4,0.6c-0.1,0.2-0.2,0.4-0.3,0.6c-0.1,0.2-0.1,0.4-0.1,0.5c-0.4,1.8-0.5,3.6-0.1,5.5
+		c0.1,0.2,0.1,0.4,0.2,0.7c0.1,0.2,0.2,0.4,0.3,0.6c0.1,0.2,0.3,0.3,0.6,0.5c0.2,0.1,0.4,0.1,0.7,0.1c0.4-0.1,0.7-0.3,1-0.7
+		c0.2-0.4,0.4-0.8,0.5-1.2c0-0.2,0.1-0.4,0.1-0.6v-0.3c-0.2,0-0.3,0-0.4,0c-0.1,0-0.1-0.1-0.1-0.2c0-0.1,0-0.2,0.1-0.2
+		c0.4,0,0.8,0,1.2,0c0.4,0,0.8,0,1.2,0c0,0.1,0,0.1,0,0.2C81.8,11.8,81.8,11.9,81.7,12z"/>
+	<path fill="#c3c3c3" d="M83.5,14.2c0.2-4.3,0.3-8.5,0.2-12.8c-0.3,0-0.6,0-0.9,0c-0.3,0-0.6,0-0.9,0c0-0.2,0-0.3,0-0.5s0-0.3,0-0.5
+		c0.7,0,1.3,0,2-0.1c0.7,0,1.3,0,2-0.1c0.8-0.2,1.6-0.2,2.4-0.1c0.8,0.1,1.6,0.3,2.4,0.5c0.7,0.3,1.4,0.7,1.9,1.2
+		c0.5,0.5,0.9,1.1,1.1,1.8C94,4.9,94.1,6.1,94,7.4C94,8.6,93.8,9.8,93.7,11c0,0.4-0.1,0.8-0.2,1.2c-0.1,0.4-0.3,0.8-0.5,1.1
+		c-0.3,0.5-0.8,1-1.3,1.3c-0.5,0.3-1.1,0.5-1.7,0.6c-0.5,0.1-0.9,0.2-1.4,0.1c-0.5,0-0.9,0-1.4-0.1v0c-0.2,0-0.3,0-0.5,0
+		s-0.4,0-0.5,0l-0.1,0c0,0,0,0,0,0c-0.6,0-1.3,0-1.9,0c-0.6,0-1.3,0-1.9,0c-0.2-0.4-0.1-0.8,0.2-1.1c0.2-0.2,0.3-0.2,0.5-0.3
+		C83.2,14.1,83.4,14.1,83.5,14.2z M89.4,1.9c-0.4-0.3-0.8-0.5-1.3-0.6c-0.5-0.1-1-0.1-1.5-0.1c-0.3,4.5-0.2,9.1,0.4,13.6
+		c0.2,0,0.4,0,0.5-0.1c0.2,0,0.4-0.1,0.6-0.1c0.3-0.1,0.6-0.2,0.9-0.4c0.3-0.2,0.6-0.4,0.8-0.7c0.2-0.3,0.4-0.6,0.5-1
+		s0.2-0.7,0.2-1.1c0.4-2.1,0.4-4.2,0.2-6.3c-0.1-0.6-0.2-1.2-0.4-1.9C90.3,2.8,89.9,2.3,89.4,1.9z"/>
+	<path fill="#c3c3c3" d="M102.4,9.7c-0.6-0.1-1.3-0.1-2,0c-0.7,0.1-1.4,0.4-2,0.8l-0.2-1.4L99.1,9c0-0.4-0.1-0.7-0.1-1
+		c0-0.2-0.1-0.5-0.1-0.9c-0.3,0-0.6,0.1-0.9,0.1c-0.3,0-0.6,0.1-1,0.1c-0.2,0.7-0.3,1.3-0.4,1.8c-0.1,0.5-0.2,1.1-0.4,1.6l0.2-0.1
+		l0.7,0.6c-0.4,0.2-0.8,0.6-1.2,1.1c-0.4,0.5-0.7,1-0.9,1.5l-0.9-0.5c0-0.1,0.1-0.2,0.2-0.4c0.1-0.2,0.2-0.3,0.2-0.4
+		c0.1-0.2,0.2-0.5,0.3-1c0.1-0.4,0.2-0.9,0.4-1.3c0.1-0.5,0.2-0.9,0.3-1.3c0.1-0.4,0.2-0.7,0.2-0.9c0.1-0.4,0.2-0.8,0.3-1.2
+		c0.1-0.4,0.2-0.8,0.3-1.2c0.2-0.7,0.3-1.4,0.4-2.1c0.1-0.7,0.2-1.4,0.3-2.2c-0.1,0-0.2,0-0.3,0c-0.1,0-0.2,0-0.3,0l0.1-0.8l4-0.1
+		l0.1,0.8c-0.1,0-0.2,0-0.2,0c0,0-0.1,0-0.2,0c0.1,0.7,0.2,1.4,0.3,2c0.1,0.6,0.2,1.2,0.3,1.8c0.1,0.6,0.2,1.2,0.3,1.8
+		c0.1,0.6,0.2,1.3,0.4,2c0.2,0,0.3,0,0.3,0c0,0,0.1,0,0.3,0L102.4,9.7z M98.8,6.1c-0.1-0.7-0.2-1.3-0.3-2c-0.1-0.6-0.3-1.3-0.4-2
+		c-0.1,0.6-0.2,1.3-0.4,2.1c-0.1,0.7-0.3,1.5-0.5,2.2L98.8,6.1z"/>
+	<path fill="#c3c3c3" d="M124.9,20.1c0-0.3,0.1-0.6,0.3-0.8c0.2-0.2,0.4-0.3,0.7-0.4c0.3-0.1,0.5,0,0.8,0.1c0.3,0.1,0.5,0.3,0.6,0.5
+		c0.3,0.4,0.6,0.9,0.7,1.4c0.2,0.5,0.2,1,0.2,1.5c0,0.5-0.1,1-0.3,1.5c-0.2,0.5-0.4,1-0.7,1.4c-0.6,0.9-1.4,1.6-2.4,2
+		c-1,0.5-2,0.7-3,0.7c-1.5,0-2.8-0.3-3.9-1s-2.1-1.4-3-2.4c-0.9-1-1.8-2.1-2.5-3.2c-0.8-1.2-1.5-2.3-2.3-3.5c-1.1,1.2-2.4,2.2-3.9,3
+		c-1.5,0.8-3,1.1-4.5,1c-1.1,0-2.1-0.1-3-0.5c-0.9-0.3-1.6-0.8-2.2-1.4c-0.6-0.6-0.9-1.3-1.1-2.2c-0.2-0.8-0.1-1.7,0.2-2.7
+		c0.3-0.9,0.7-1.6,1.3-2.2c0.6-0.6,1.2-1.1,2-1.5c0.7-0.4,1.5-0.6,2.4-0.7c0.8-0.1,1.7,0,2.6,0.2c0-1.7,0-3.4,0-5c0-1.7,0-3.2,0-4.6
+		c-0.3,0-0.6,0-0.9,0c-0.3,0-0.6,0-0.9,0c0-0.2,0-0.3,0-0.5s0-0.3,0-0.5l3.7-0.1c0.8-0.2,1.6-0.2,2.4-0.1c0.8,0.1,1.6,0.3,2.4,0.5
+		c0.7,0.3,1.4,0.7,1.9,1.2c0.5,0.5,0.9,1.1,1.1,1.8c0.3,1.2,0.4,2.4,0.3,3.6c-0.1,1.2-0.2,2.5-0.4,3.7c-0.1,1-0.4,2-0.8,3
+		c-0.5,1-1,2-1.7,2.9c0.3,0.4,0.6,0.8,0.8,1.2c0.3,0.4,0.5,0.8,0.8,1.2c0.5,0.8,1.1,1.6,1.7,2.5c0.6,0.8,1.3,1.6,2,2.4
+		c0.7,0.7,1.5,1.3,2.4,1.8s1.8,0.7,2.9,0.8c1.1,0,2.1-0.2,3-0.7c0.9-0.5,1.6-1.2,2.1-2.2c0.2-0.4,0.3-0.8,0.4-1.3
+		c0.1-0.5,0-0.9-0.1-1.3c-0.2,0.1-0.4,0.2-0.6,0.2c-0.2,0-0.4,0-0.6-0.1c-0.2-0.1-0.4-0.2-0.5-0.4S124.9,20.4,124.9,20.1z M102.9,21
+		c1.5-0.4,2.8-1,3.7-1.8c0.9-0.8,1.7-1.7,2.3-2.8c-0.2-0.2-0.3-0.5-0.6-0.7c-0.6-0.7-1.2-1.4-1.9-1.9c0,0.6,0.1,1.2,0.1,1.8
+		c0,0.6,0.1,1.1,0.2,1.6h0v0.1c-0.5,0-0.9,0-1.3,0c-0.4,0-0.8,0-1.2,0c-0.3,0-0.6,0-0.9,0c-0.3,0-0.6,0-0.9,0
+		c-0.1-0.2-0.1-0.4,0-0.7c0-0.2,0.1-0.3,0.3-0.5c0.3-0.3,0.7-0.4,1.1-0.2l0.1-3.5c-0.5-0.2-1-0.3-1.5-0.3c-0.5,0-1.1,0-1.6,0.1
+		c-0.6,0.1-1.1,0.3-1.6,0.6c-0.5,0.3-0.9,0.7-1.3,1.1c-0.4,0.4-0.7,0.9-0.9,1.5c-0.2,0.5-0.3,1.1-0.3,1.6c0,0.7,0.2,1.3,0.6,1.8
+		c0.4,0.5,0.9,0.9,1.4,1.4c0.2,0.2,0.5,0.3,0.8,0.5c0.3,0.1,0.7,0.2,1.1,0.3c0.4,0.1,0.8,0.1,1.2,0.1
+		C102.1,21.1,102.5,21.1,102.9,21z M109.3,1.9c-0.4-0.3-0.8-0.5-1.2-0.6c-0.5-0.1-0.9-0.1-1.4-0.1c-0.1,1.7-0.2,3.4-0.3,5.3
+		c-0.1,1.9-0.1,3.7,0,5.6c0.6,0.4,1.2,0.8,1.7,1.4c0.5,0.5,1,1.1,1.5,1.6c0.2-0.6,0.4-1.2,0.6-1.9c0.2-0.6,0.3-1.2,0.3-1.7
+		c0.2-1.1,0.2-2.1,0.3-3.1c0-1,0-2.1-0.1-3.1c-0.1-0.6-0.2-1.2-0.4-1.9C110.1,2.8,109.8,2.3,109.3,1.9z"/>
+	<path fill="#c3c3c3" d="M116.5,1.2c-0.3,0-0.6,0-0.9,0c-0.3,0-0.6,0-0.9,0V0.4c0.5,0,0.9,0,1.2-0.1s0.7,0,1.1,0c0.4,0,0.7,0,1.1,0
+		s0.8,0,1.3-0.1c0.9,0,1.8,0,2.8-0.1c0.9,0,1.8,0,2.8-0.1c0,0.6,0,1.2,0,1.8c0,0.6,0,1.2,0,1.8c-0.2,0-0.3,0-0.5,0
+		c-0.2,0-0.3,0-0.5,0c-0.1,0-0.2,0-0.3,0c-0.1,0-0.1-0.1,0-0.1c0.1-0.2,0.1-0.4,0.1-0.6s0-0.4-0.1-0.6c-0.1-0.2-0.2-0.4-0.3-0.6
+		c-0.1-0.2-0.2-0.3-0.4-0.4c-0.2-0.1-0.4-0.2-0.6-0.2c-0.2,0-0.5,0-0.7,0c-0.3,0-0.5,0.1-0.8,0.1c-0.3,0.1-0.5,0.2-0.6,0.4
+		c-0.1,0.2-0.1,0.3-0.1,0.3c0,0.1,0,0.2,0,0.3c0,0.7-0.1,1.3-0.1,2c0,0.6-0.1,1.3-0.1,1.9c0,0.2,0,0.3,0,0.5c0,0.2,0,0.3,0,0.5
+		c0.6-0.2,1.2-0.3,1.9-0.4c0.6-0.1,1.2-0.3,1.9-0.4c0,0.1,0.1,0.2,0.1,0.3c0,0.1,0,0.3,0,0.4c0,0.2-0.1,0.3-0.1,0.4
+		c-0.1,0.1-0.1,0.2-0.1,0.3c-0.1,0.1-0.2,0.1-0.4,0.2c-0.1,0-0.3,0.1-0.4,0.1c-0.5,0.1-0.9,0.2-1.4,0.3c-0.5,0.1-0.9,0.1-1.4,0.2
+		c0,1-0.1,2-0.2,2.9c-0.1,1-0.1,1.9-0.2,2.9c0.8,0.2,1.5,0.3,2,0.1c0.6-0.2,1.2-0.5,1.9-1c0.2-0.1,0.2-0.3,0.2-0.5
+		c0-0.2,0-0.5,0-0.7c0-0.2,0.1-0.5,0.2-0.6c0.1-0.2,0.3-0.3,0.7-0.4c0.4,0,0.6,0.1,0.7,0.4c0.1,0.3,0.2,0.7,0.2,1.1
+		c0,0.5,0,0.9-0.1,1.4c-0.1,0.5-0.1,0.9,0,1.2c-0.5,0-1,0-1.4,0c-0.4,0-0.8,0-1.2,0.1c-0.4,0-0.8,0-1.2,0.1c-0.4,0-0.9,0-1.3,0
+		c-0.9,0-1.7,0-2.5,0.1c-0.7,0.1-1.6,0.1-2.4,0.1c-0.2-0.2-0.2-0.4-0.2-0.7c0-0.2,0.1-0.5,0.3-0.6c0.2-0.2,0.3-0.3,0.6-0.3
+		c0.2-0.1,0.5,0,0.7,0.1c0.1-2.1,0.2-4.3,0.1-6.5C116.3,5.5,116.3,3.4,116.5,1.2z"/>
+</g>
+</svg>
+
+            </a>
+        </p>
+	</footer>
+
+	<script>
+		var algolia_app_id      = 'FU55RWGNDN';
+		var algolia_search_key  = 'c41c5de31ca55044dbb0bde815d35121';
+				var version             = '5.4';
+			</script>
+
+	<script id="search_suggestion_template" type="text/template">
+	<div class="autocomplete-wrapper">
+		{{#_highlightResult.h1}}
+		<div class="h1">
+			{{{ _highlightResult.h1.value }}}
+		</div>
+		{{/_highlightResult.h1}}
+
+		<div class="sub-section">
+			{{#_highlightResult.h2}}
+			<div class="h2">
+				<span class="hash">#</span> {{{ _highlightResult.h2.value }}}
+			</div>
+			{{/_highlightResult.h2}}
+
+			{{#_highlightResult.h3}}
+			<div class="h3">
+				> {{{ _highlightResult.h3.value }}}
+			</div>
+			{{/_highlightResult.h3}}
+
+			{{#_highlightResult.h4}}
+			<div class="h4">
+				> {{{ _highlightResult.h4.value }}}
+			</div>
+			{{/_highlightResult.h4}}
+		</div>
+
+		{{#_highlightResult.content}}
+		<div class="content">
+			{{{ _highlightResult.content.value }}}
+		</div>
+		{{/_highlightResult.content}}
+	</div>
+</script>
+
+<script id="search_empty_template" type="text/template">
+	<div class="autocomplete-wrapper empty">
+		<div class="h2">We didn't find any result for "{{query}}". Sorry!</div>
+	</div>
+</script>
+
+<script id="search_footer_template" type="text/template">
+	<div class="footer">
+		<a target="_blank" href="https://www.algolia.com/referrals/5a08e6a4/join">
+			<img width="50" src="/docs/assets/img/algolia-logo.png">
+			<div class="powered">powered by</div>
+			<div style="clear: both"></div>
+		</a>
+	</div>
+</script>
+
+	<script src="../../build/assets/js/laravel-be3cb5d7de.js"></script>
+	<script src="../../assets/js/viewport-units-buggyfill.js"></script>
+
+	<script>window.viewportUnitsBuggyfill.init();</script>
+    <script>
+          ga('create', 'UA-53903425-7', 'auto');
+          ga('send', 'pageview');
+    </script>
+</body>
+</html>

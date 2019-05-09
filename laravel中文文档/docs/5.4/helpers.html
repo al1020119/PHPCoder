@@ -1,0 +1,1474 @@
+<!doctype html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<title>Laravel 的辅助函数列表 | Laravel 5.4 中文文档
+</title>
+	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+	<meta name="author" content="Taylor Otwell">
+	<meta name="description" content="Laravel 的辅助函数列表,简介,可用方法,简介,Laravel 包含有各种各样的 PHP 辅助函数，许多都是在 Laravel 自身框架中使用到。如果你觉得实用，也可以在你自己的应用中使用它们。,可用方法,    .collection-method-l...
+">
+	<meta name="keywords" content="laravel,laravel中国,laravel中文,laravel框架中文,laravel文档,laravel框架中国,laravel中文文档">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+			<link rel="canonical" href="../5.5/helpers.html" />
+		<!--[if lte IE 9]>
+		<script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+	<![endif]-->
+	<link rel="stylesheet" href="../../build/assets/css/laravel-4bbf92d154.css">
+	<link rel="apple-touch-icon" href="../../favicon.png.jpeg">
+    <style>
+        .list-group-item img.media-object {
+            width: 20px;
+            border-radius: 2px;
+            margin-right: 4px;
+            display: inline-block;
+        }
+    </style>
+</head>
+<body class="docs language-php">
+
+	<span class="overlay"></span>
+
+	<nav class="main">
+		<a href="../../index.html" class="brand nav-block">
+			<svg version="1.1"
+	 xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:a="http://ns.adobe.com/AdobeSVGViewerExtensions/3.0/"
+	 x="0px" y="0px" width="84.1px" height="57.6px" viewBox="0 0 84.1 57.6" enable-background="new 0 0 84.1 57.6"
+	 xml:space="preserve">
+<defs>
+</defs>
+<path fill="#FB503B" d="M83.8,26.9c-0.6-0.6-8.3-10.3-9.6-11.9c-1.4-1.6-2-1.3-2.9-1.2s-10.6,1.8-11.7,1.9c-1.1,0.2-1.8,0.6-1.1,1.6
+	c0.6,0.9,7,9.9,8.4,12l-25.5,6.1L21.2,1.5c-0.8-1.2-1-1.6-2.8-1.5C16.6,0.1,2.5,1.3,1.5,1.3c-1,0.1-2.1,0.5-1.1,2.9
+	c1,2.4,17,36.8,17.4,37.8c0.4,1,1.6,2.6,4.3,2c2.8-0.7,12.4-3.2,17.7-4.6c2.8,5,8.4,15.2,9.5,16.7c1.4,2,2.4,1.6,4.5,1
+	c1.7-0.5,26.2-9.3,27.3-9.8c1.1-0.5,1.8-0.8,1-1.9c-0.6-0.8-7-9.5-10.4-14c2.3-0.6,10.6-2.8,11.5-3.1C84.2,28,84.4,27.5,83.8,26.9z
+	 M37.5,36.4c-0.3,0.1-14.6,3.5-15.3,3.7c-0.8,0.2-0.8,0.1-0.8-0.2C21.2,39.6,4.4,4.8,4.1,4.4c-0.2-0.4-0.2-0.8,0-0.8
+	c0.2,0,13.5-1.2,13.9-1.2c0.5,0,0.4,0.1,0.6,0.4c0,0,18.7,32.3,19,32.8C38,36.1,37.8,36.3,37.5,36.4z M77.7,43.9
+	c0.2,0.4,0.5,0.6-0.3,0.8c-0.7,0.3-24.1,8.2-24.6,8.4c-0.5,0.2-0.8,0.3-1.4-0.6s-8.2-14-8.2-14L68.1,32c0.6-0.2,0.8-0.3,1.2,0.3
+	C69.7,33,77.5,43.6,77.7,43.9z M79.3,26.3c-0.6,0.1-9.7,2.4-9.7,2.4l-7.5-10.2c-0.2-0.3-0.4-0.6,0.1-0.7c0.5-0.1,9-1.6,9.4-1.7
+	c0.4-0.1,0.7-0.2,1.2,0.5c0.5,0.6,6.9,8.8,7.2,9.1C80.3,26,79.9,26.2,79.3,26.3z"/>
+</svg>
+
+			<span>Laravel</span>
+		</a>
+
+        <div class="search nav-block">
+            <svg version="1.1"
+	 xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:a="http://ns.adobe.com/AdobeSVGViewerExtensions/3.0/"
+	 x="0px" y="0px" width="16px" height="16px" viewBox="0 0 16 16" enable-background="new 0 0 16 16" xml:space="preserve">
+<defs>
+</defs>
+<g>
+	<g>
+		<path fill="#A1A1A1" d="M5.8,11.7c-1.6,0-3-0.6-4.1-1.7S0,7.4,0,5.8s0.6-3,1.7-4.1C2.8,0.6,4.3,0,5.8,0s3,0.6,4.1,1.7
+			c2.3,2.3,2.3,6,0,8.3C8.9,11.1,7.4,11.7,5.8,11.7z M5.8,1C4.5,1,3.3,1.5,2.4,2.4C1.5,3.3,1,4.5,1,5.8s0.5,2.5,1.4,3.4
+			c0.9,0.9,2.1,1.4,3.4,1.4s2.5-0.5,3.4-1.4c1.9-1.9,1.9-5,0-6.9C8.4,1.5,7.1,1,5.8,1z"/>
+	</g>
+	<g>
+		<path fill="#A1A1A1" d="M15.5,16c-0.1,0-0.3,0-0.3-0.1L9.3,10c-0.2-0.2-0.2-0.5,0-0.7s0.5-0.2,0.7,0l5.9,5.9
+			c0.2,0.2,0.2,0.5,0,0.7C15.8,16,15.6,16,15.5,16z"/>
+	</g>
+</g>
+</svg>
+
+            <input placeholder="搜索文档" type="text" v-model="search" id="search-input" v-on:blur="reset" />
+        </div>
+
+		<ul class="main-nav" v-if="! search">
+			<li class="nav-docs"><a href="../5.4.html">文档</a></li>
+<li ><a href="https://laravel-china.org/news" class="no-pjax">Laravel 资讯</a></li>
+<li class="dropdown"><a href="https://laravel-china.org/">Laravel China 社区</a></li>
+<li class="nav-forge"><a href="https://laravel-china.org/categories/1">酷工作</a></li>
+<li class="nav-docs"><a href="http://lumen.laravel-china.org">Lumen</a></li>
+<li class="nav-forge"><a href="https://cs.laravel-china.org/">速查表</a></li>
+<li class="nav-forge"><a href="https://fsdhub.com/books/laravel-essential-training-5.5">《Laravel 入门教程》</a></li>
+		</ul>
+
+        			<div class="switcher">
+	<div class="dropdown">
+		<button class="btn dropdown-toggle btn-inverted" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-expanded="true">
+			<!--<span class="faint">v</span> -->
+			5.4
+			<span class="caret"></span>
+		</button>
+		<ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu1">
+							<li role="presentation">
+					<a role="menuitem" tabindex="-1" href="../5.5/helpers.html">5.5</a>
+				</li>
+							<li role="presentation">
+					<a role="menuitem" tabindex="-1" href="helpers.html">5.4</a>
+				</li>
+							<li role="presentation">
+					<a role="menuitem" tabindex="-1" href="../5.3/helpers.html">5.3</a>
+				</li>
+							<li role="presentation">
+					<a role="menuitem" tabindex="-1" href="../5.2/helpers.html">5.2</a>
+				</li>
+							<li role="presentation">
+					<a role="menuitem" tabindex="-1" href="../5.1/helpers.html">5.1</a>
+				</li>
+					</ul>
+	</div>
+</div>
+		
+        <div class="responsive-sidebar-nav">
+			<a href="helpers.html#" class="toggle-slide menu-link btn">&#9776;</a>
+		</div>
+	</nav>
+
+	<nav id="slide-menu" class="slide-menu" role="navigation">
+
+	<div class="brand">
+		<a href="../../index.html">
+			<img src="../../assets/img/laravel-logo-white.png" height="50">
+		</a>
+	</div>
+
+	<ul class="slide-main-nav">
+		<li><a href="../../index.html">Home</a></li>
+		<li class="nav-docs"><a href="../5.4.html">文档</a></li>
+<li ><a href="https://laravel-china.org/news" class="no-pjax">Laravel 资讯</a></li>
+<li class="dropdown"><a href="https://laravel-china.org/">Laravel China 社区</a></li>
+<li class="nav-forge"><a href="https://laravel-china.org/categories/1">酷工作</a></li>
+<li class="nav-docs"><a href="http://lumen.laravel-china.org">Lumen</a></li>
+<li class="nav-forge"><a href="https://cs.laravel-china.org/">速查表</a></li>
+<li class="nav-forge"><a href="https://fsdhub.com/books/laravel-essential-training-5.5">《Laravel 入门教程》</a></li>
+	</ul>
+
+	<div class="slide-docs-nav">
+		<h2>Documentation</h2>
+		<ul>
+<li>
+<h2>前言</h2>
+<ul>
+<li><a href="about.html">翻译说明</a></li>
+<li><a href="releases.html">发行说明</a></li>
+<li><a href="upgrade.html">升级说明</a></li>
+<li><a href="contributions.html">贡献导引</a></li>
+<li><a href="../../api/5.4/index.html">API 文档</a></li>
+</ul>
+</li>
+<li>
+<h2>入门指南</h2>
+<ul>
+<li><a href="installation.html">安装</a></li>
+<li><a href="configuration.html">配置信息</a></li>
+<li><a href="structure.html">文件夹结构</a></li>
+<li><a href="lifecycle.html">请求周期</a></li>
+</ul>
+</li>
+<li>
+<h2>开发环境部署</h2>
+<ul>
+<li><a href="homestead.html">Homestead</a></li>
+<li><a href="valet.html">Valet</a></li>
+</ul>
+</li>
+<li>
+<h2>核心概念</h2>
+<ul>
+<li><a href="container.html">服务容器</a></li>
+<li><a href="providers.html">服务提供者</a></li>
+<li><a href="facades.html">Facades</a></li>
+<li><a href="contracts.html">Contracts</a></li>
+</ul>
+</li>
+<li>
+<h2>HTTP 层</h2>
+<ul>
+<li><a href="routing.html">路由</a></li>
+<li><a href="middleware.html">中间件</a></li>
+<li><a href="csrf.html">CSRF 保护</a></li>
+<li><a href="controllers.html">控制器</a></li>
+<li><a href="requests.html">请求</a></li>
+<li><a href="responses.html">响应</a></li>
+<li><a href="views.html">视图</a></li>
+<li><a href="session.html">Session</a></li>
+<li><a href="validation.html">表单验证</a></li>
+</ul>
+</li>
+<li>
+<h2>前端</h2>
+<ul>
+<li><a href="blade.html">Blade 模板</a></li>
+<li><a href="localization.html">本地化</a></li>
+<li><a href="frontend.html">前端指南</a></li>
+<li><a href="mix.html">编辑资源 Mix</a></li>
+</ul>
+</li>
+<li>
+<h2>安全</h2>
+<ul>
+<li><a href="authentication.html">用户认证</a></li>
+<li><a href="passport.html">API 认证</a></li>
+<li><a href="authorization.html">用户授权</a></li>
+<li><a href="encryption.html">加密解密</a></li>
+<li><a href="hashing.html">哈希</a></li>
+<li><a href="passwords.html">重置密码</a></li>
+</ul>
+</li>
+<li>
+<h2>综合话题</h2>
+<ul>
+<li><a href="artisan.html">Artisan 命令行</a></li>
+<li><a href="broadcasting.html">广播系统</a></li>
+<li><a href="cache.html">缓存系统</a></li>
+<li><a href="collections.html">集合</a></li>
+<li><a href="errors.html">错误与日志</a></li>
+<li><a href="events.html">事件系统</a></li>
+<li><a href="filesystem.html">文件存储</a></li>
+<li><a href="helpers.html">辅助函数</a></li>
+<li><a href="mail.html">邮件发送</a></li>
+<li><a href="notifications.html">消息通知</a></li>
+<li><a href="packages.html">扩展包开发</a></li>
+<li><a href="queues.html">队列</a></li>
+<li><a href="scheduling.html">任务调度</a></li>
+</ul>
+</li>
+<li>
+<h2>数据库</h2>
+<ul>
+<li><a href="database.html">快速入门</a></li>
+<li><a href="queries.html">查询构造器</a></li>
+<li><a href="pagination.html">分页</a></li>
+<li><a href="migrations.html">数据库迁移</a></li>
+<li><a href="seeding.html">数据填充</a></li>
+<li><a href="redis.html">Redis</a></li>
+</ul>
+</li>
+<li>
+<h2>Eloquent ORM</h2>
+<ul>
+<li><a href="eloquent.html">快速入门</a></li>
+<li><a href="eloquent-relationships.html">模型关联</a></li>
+<li><a href="eloquent-collections.html">Eloquent 集合</a></li>
+<li><a href="eloquent-mutators.html">修改器</a></li>
+<li><a href="eloquent-serialization.html">序列化</a></li>
+</ul>
+</li>
+<li>
+<h2>测试</h2>
+<ul>
+<li><a href="testing.html">快速入门</a></li>
+<li><a href="http-tests.html">HTTP 测试</a></li>
+<li><a href="dusk.html">浏览器测试 Dusk</a></li>
+<li><a href="database-testing.html">数据库测试</a></li>
+<li><a href="mocking.html">测试模拟器</a></li>
+</ul>
+</li>
+<li>
+<h2>官方扩展包</h2>
+<ul>
+<li><a href="billing.html">Cashier 交易工具包</a></li>
+<li><a href="envoy.html">Envoy 部署工具</a></li>
+<li><a href="passport.html">Passport OAuth 认证</a></li>
+<li><a href="scout.html">Scout 全文搜索</a></li>
+<li><a href="socialite.html">Socialite 社会化登录</a></li>
+</ul>
+</li>
+</ul>
+	</div>
+
+</nav>
+
+<div class="docs-wrapper container">
+
+	<section class="sidebar">
+
+            <div class="header">
+              <a type="button" class="btn btn-primary btn-inverted btn-lg btn-block turnofflight"><i class="fa fa-lightbulb-o"></i> 夜间模式 </a>
+              <br>
+              <div class="versions text-center ">
+                <a class="doc-btn btn-inverted " href="../5.5.html" title="Laravel 5.5 中文文档">C5.5</a>
+                <a class="doc-btn btn-inverted active" href="../5.4.html" title="Laravel 5.4 中文文档">C5.4</a>
+                <a class="doc-btn btn-inverted " href="../5.1.html" title="Laravel 5.1 中文文档">C5.1</a>
+              </div>
+            </div>
+
+            <a href="https://laravel-china.org/topics/3383" target="_blank" rel="nofollow" title="" style="display: block;margin-bottom: 23px;">
+                <img src="https://dn-phphub.qbox.me/uploads/images/201612/10/1/k7wwMpJduq.jpg" style="width: 100%;border: 1px solid #d8d3d3;box-shadow: 0 0 30px #d4d4d4;-moz-box-shadow: 0 0 30px #ccc;-webkit-box-shadow: 0 0 30px #d4d4d4;margin-bottom: 30px;margin-top: 10px;border-radius: 4px;">
+            </a>
+
+            <small><a href="helpers.html#" id="doc-expand" style="font-size: 9px; color: #525252;">▶</a></small>
+
+		<ul>
+<li>
+<h2>前言</h2>
+<ul>
+<li><a href="about.html">翻译说明</a></li>
+<li><a href="releases.html">发行说明</a></li>
+<li><a href="upgrade.html">升级说明</a></li>
+<li><a href="contributions.html">贡献导引</a></li>
+<li><a href="../../api/5.4/index.html">API 文档</a></li>
+</ul>
+</li>
+<li>
+<h2>入门指南</h2>
+<ul>
+<li><a href="installation.html">安装</a></li>
+<li><a href="configuration.html">配置信息</a></li>
+<li><a href="structure.html">文件夹结构</a></li>
+<li><a href="lifecycle.html">请求周期</a></li>
+</ul>
+</li>
+<li>
+<h2>开发环境部署</h2>
+<ul>
+<li><a href="homestead.html">Homestead</a></li>
+<li><a href="valet.html">Valet</a></li>
+</ul>
+</li>
+<li>
+<h2>核心概念</h2>
+<ul>
+<li><a href="container.html">服务容器</a></li>
+<li><a href="providers.html">服务提供者</a></li>
+<li><a href="facades.html">Facades</a></li>
+<li><a href="contracts.html">Contracts</a></li>
+</ul>
+</li>
+<li>
+<h2>HTTP 层</h2>
+<ul>
+<li><a href="routing.html">路由</a></li>
+<li><a href="middleware.html">中间件</a></li>
+<li><a href="csrf.html">CSRF 保护</a></li>
+<li><a href="controllers.html">控制器</a></li>
+<li><a href="requests.html">请求</a></li>
+<li><a href="responses.html">响应</a></li>
+<li><a href="views.html">视图</a></li>
+<li><a href="session.html">Session</a></li>
+<li><a href="validation.html">表单验证</a></li>
+</ul>
+</li>
+<li>
+<h2>前端</h2>
+<ul>
+<li><a href="blade.html">Blade 模板</a></li>
+<li><a href="localization.html">本地化</a></li>
+<li><a href="frontend.html">前端指南</a></li>
+<li><a href="mix.html">编辑资源 Mix</a></li>
+</ul>
+</li>
+<li>
+<h2>安全</h2>
+<ul>
+<li><a href="authentication.html">用户认证</a></li>
+<li><a href="passport.html">API 认证</a></li>
+<li><a href="authorization.html">用户授权</a></li>
+<li><a href="encryption.html">加密解密</a></li>
+<li><a href="hashing.html">哈希</a></li>
+<li><a href="passwords.html">重置密码</a></li>
+</ul>
+</li>
+<li>
+<h2>综合话题</h2>
+<ul>
+<li><a href="artisan.html">Artisan 命令行</a></li>
+<li><a href="broadcasting.html">广播系统</a></li>
+<li><a href="cache.html">缓存系统</a></li>
+<li><a href="collections.html">集合</a></li>
+<li><a href="errors.html">错误与日志</a></li>
+<li><a href="events.html">事件系统</a></li>
+<li><a href="filesystem.html">文件存储</a></li>
+<li><a href="helpers.html">辅助函数</a></li>
+<li><a href="mail.html">邮件发送</a></li>
+<li><a href="notifications.html">消息通知</a></li>
+<li><a href="packages.html">扩展包开发</a></li>
+<li><a href="queues.html">队列</a></li>
+<li><a href="scheduling.html">任务调度</a></li>
+</ul>
+</li>
+<li>
+<h2>数据库</h2>
+<ul>
+<li><a href="database.html">快速入门</a></li>
+<li><a href="queries.html">查询构造器</a></li>
+<li><a href="pagination.html">分页</a></li>
+<li><a href="migrations.html">数据库迁移</a></li>
+<li><a href="seeding.html">数据填充</a></li>
+<li><a href="redis.html">Redis</a></li>
+</ul>
+</li>
+<li>
+<h2>Eloquent ORM</h2>
+<ul>
+<li><a href="eloquent.html">快速入门</a></li>
+<li><a href="eloquent-relationships.html">模型关联</a></li>
+<li><a href="eloquent-collections.html">Eloquent 集合</a></li>
+<li><a href="eloquent-mutators.html">修改器</a></li>
+<li><a href="eloquent-serialization.html">序列化</a></li>
+</ul>
+</li>
+<li>
+<h2>测试</h2>
+<ul>
+<li><a href="testing.html">快速入门</a></li>
+<li><a href="http-tests.html">HTTP 测试</a></li>
+<li><a href="dusk.html">浏览器测试 Dusk</a></li>
+<li><a href="database-testing.html">数据库测试</a></li>
+<li><a href="mocking.html">测试模拟器</a></li>
+</ul>
+</li>
+<li>
+<h2>官方扩展包</h2>
+<ul>
+<li><a href="billing.html">Cashier 交易工具包</a></li>
+<li><a href="envoy.html">Envoy 部署工具</a></li>
+<li><a href="passport.html">Passport OAuth 认证</a></li>
+<li><a href="scout.html">Scout 全文搜索</a></li>
+<li><a href="socialite.html">Socialite 社会化登录</a></li>
+</ul>
+</li>
+</ul>
+
+		<hr>
+            <ul>
+              <li>社交账号</li>
+                <ul class="social-account">
+                  <li><a href="http://weibo.com/1837553744/profile?topnav=1&wvr=6&is_all=1">Summer 的微博</a></li>
+                  <li>新手 QQ 群：282196078</li>
+                </ul>
+
+            </ul>
+
+            <ul>
+              <li>
+              微信订阅号
+                <ul>
+                  <li>
+<img class="image-border popover-with-html" data-content="" src="https://dn-phphub.qbox.me/uploads/images/201708/06/1/4zgVR8dNCt.png" style="width: 148px;height: 148px;border:1px solid #ccc;padding:2px;border-radius:3px;margin-top:5px;" data-original-title="" title="">
+                  </li>
+                </ul>
+                </li>
+            </ul>
+
+            <ul>
+              <li>推荐资源
+              <ul class="list list-group resource-links">
+                    <li class="list-group-item ">
+                <a href="../../index.html" class="no-pjax" title="Laravel 中文文档">
+                    <img class="media-object inline-block " src="https://dn-phphub.qbox.me/uploads/banners/ql9XtosRhTe4v8HVC3TV.jpg">
+                    Laravel 中文文档
+                </a>
+            </li>
+                    <li class="list-group-item ">
+                <a href="https://lumen.laravel-china.org" class="no-pjax" title="Lumen 中文文档">
+                    <img class="media-object inline-block " src="https://dn-phphub.qbox.me/uploads/banners/bcMFkfsJZpetLgKFwWqY.jpg">
+                    Lumen 中文文档
+                </a>
+            </li>
+                    <li class="list-group-item ">
+                <a href="https://cs.laravel-china.org/" class="no-pjax" title="Laravel 速查表">
+                    <img class="media-object inline-block " src="https://dn-phphub.qbox.me/uploads/banners/cV55gsrH70qz6VdKr502.jpg">
+                    Laravel 速查表
+                </a>
+            </li>
+                    <li class="list-group-item ">
+                <a href="http://yousails.mikecrm.com/4Dh5uWU" class="no-pjax" title="Laravel 软件外包服务">
+                    <img class="media-object inline-block " src="https://dn-phphub.qbox.me/uploads/banners/v89tIQ6vjceA6g7JmrQB.png">
+                    Laravel 软件外包
+                </a>
+            </li>
+                    <li class="list-group-item ">
+                <a href="https://laravel-china.org/topics/3626" class="no-pjax" title="Laravel 远程工作 ">
+                    <img class="media-object inline-block " src="https://dn-phphub.qbox.me/uploads/banners/Xlq6s7wLxvX8FlTP4qZe.png">
+                    Laravel 远程工作
+                </a>
+            </li>
+                    <li class="list-group-item ">
+                <a href="https://laravel-china.github.io/php-the-right-way/" class="no-pjax" title="PHP 之道 - PHPer 必读">
+                    <img class="media-object inline-block " src="https://dn-phphub.qbox.me/uploads/banners/vA50AYuscu2RCMowq7ee.png">
+                    PHP 之道
+                </a>
+            </li>
+                    <li class="list-group-item ">
+                <a href="https://laravel-china.org/composer" class="no-pjax" title="Composer 中文全量镜像">
+                    <img class="media-object inline-block " src="https://dn-phphub.qbox.me/uploads/banners/KltcLb6leMa12dvTAxD7.png">
+                    Composer 镜像
+                </a>
+            </li>
+            </ul>
+              </li>
+            </ul>
+
+	</section>
+
+	
+
+	<article>
+
+		<div class="alert alert-warning" role="alert">
+			一小时同步一次，更多信息请查阅 <a href="https://laravel-china.org/topics/2095">文档导读</a>。
+			发现瑕疵？你也可以
+				<a href="https://github.com/laravel-china/laravel-docs/edit/5.4/helpers.md"><i class="fa fa-pencil-square-o"></i> 改进本文</a>
+			。<a href="https://laravel-china.org/topics/4026" target="_blank"><i class="fa fa-cloud-download" aria-hidden="true"></i> 离线版本下载</a>
+		</div>
+
+		<div class="main-content">
+			<h1>Laravel 的辅助函数列表</h1>
+<ul>
+<li><a href="helpers.html#introduction">简介</a></li>
+<li><a href="helpers.html#available-methods">可用方法</a></li>
+</ul>
+<p><a name="introduction"></a></p>
+<h2>简介</h2>
+<p>Laravel 包含有各种各样的 PHP 辅助函数，许多都是在 Laravel 自身框架中使用到。如果你觉得实用，也可以在你自己的应用中使用它们。</p>
+<p><a name="available-methods"></a></p>
+<h2>可用方法</h2>
+<style>
+    .collection-method-list > p {
+        column-count: 3; -moz-column-count: 3; -webkit-column-count: 3;
+        column-gap: 2em; -moz-column-gap: 2em; -webkit-column-gap: 2em;
+    }
+
+    .collection-method-list a {
+        display: block;
+    }
+</style>
+<h3>数组</h3>
+<div class="collection-method-list">
+<p><a href="helpers.html#method-array-add">array_add</a>
+<a href="helpers.html#method-array-collapse">array_collapse</a>
+<a href="helpers.html#method-array-divide">array_divide</a>
+<a href="helpers.html#method-array-dot">array_dot</a>
+<a href="helpers.html#method-array-except">array_except</a>
+<a href="helpers.html#method-array-first">array_first</a>
+<a href="helpers.html#method-array-flatten">array_flatten</a>
+<a href="helpers.html#method-array-forget">array_forget</a>
+<a href="helpers.html#method-array-get">array_get</a>
+<a href="helpers.html#method-array-has">array_has</a>
+<a href="helpers.html#method-array-last">array_last</a>
+<a href="helpers.html#method-array-only">array_only</a>
+<a href="helpers.html#method-array-pluck">array_pluck</a>
+<a href="helpers.html#method-array-prepend">array_prepend</a>
+<a href="helpers.html#method-array-pull">array_pull</a>
+<a href="helpers.html#method-array-set">array_set</a>
+<a href="helpers.html#method-array-sort">array_sort</a>
+<a href="helpers.html#method-array-sort-recursive">array_sort_recursive</a>
+<a href="helpers.html#method-array-where">array_where</a>
+<a href="helpers.html#method-head">head</a>
+<a href="helpers.html#method-last">last</a></p>
+</div>
+<h3>路径</h3>
+<div class="collection-method-list">
+<p><a href="helpers.html#method-app-path">app_path</a>
+<a href="helpers.html#method-base-path">base_path</a>
+<a href="helpers.html#method-config-path">config_path</a>
+<a href="helpers.html#method-database-path">database_path</a>
+<a href="helpers.html#method-mix">mix</a>
+<a href="helpers.html#method-public-path">public_path</a>
+<a href="helpers.html#method-resource-path">resource_path</a>
+<a href="helpers.html#method-storage-path">storage_path</a></p>
+</div>
+<h3>字符串</h3>
+<div class="collection-method-list">
+<p><a href="helpers.html#method-camel-case">camel_case</a>
+<a href="helpers.html#method-class-basename">class_basename</a>
+<a href="helpers.html#method-e">e</a>
+<a href="helpers.html#method-ends-with">ends_with</a>
+<a href="helpers.html#method-snake-case">snake_case</a>
+<a href="helpers.html#method-str-limit">str_limit</a>
+<a href="helpers.html#method-starts-with">starts_with</a>
+<a href="helpers.html#method-str-contains">str_contains</a>
+<a href="helpers.html#method-str-finish">str_finish</a>
+<a href="helpers.html#method-str-is">str_is</a>
+<a href="helpers.html#method-str-plural">str_plural</a>
+<a href="helpers.html#method-str-random">str_random</a>
+<a href="helpers.html#method-str-singular">str_singular</a>
+<a href="helpers.html#method-str-slug">str_slug</a>
+<a href="helpers.html#method-studly-case">studly_case</a>
+<a href="helpers.html#method-title-case">title_case</a>
+<a href="helpers.html#method-trans">trans</a>
+<a href="helpers.html#method-trans-choice">trans_choice</a></p>
+</div>
+<h3>URLs</h3>
+<div class="collection-method-list">
+<p><a href="helpers.html#method-action">action</a>
+<a href="helpers.html#method-asset">asset</a>
+<a href="helpers.html#method-secure-asset">secure_asset</a>
+<a href="helpers.html#method-secure-url">secure_url</a>
+<a href="helpers.html#method-route">route</a>
+<a href="helpers.html#method-url">url</a></p>
+</div>
+<h3>其他</h3>
+<div class="collection-method-list">
+<p><a href="helpers.html#method-abort">abort</a>
+<a href="helpers.html#method-abort-if">abort_if</a>
+<a href="helpers.html#method-abort-unless">abort_unless</a>
+<a href="helpers.html#method-auth">auth</a>
+<a href="helpers.html#method-back">back</a>
+<a href="helpers.html#method-bcrypt">bcrypt</a>
+<a href="helpers.html#method-cache">cache</a>
+<a href="helpers.html#method-collect">collect</a>
+<a href="helpers.html#method-config">config</a>
+<a href="helpers.html#method-csrf-field">csrf_field</a>
+<a href="helpers.html#method-csrf-token">csrf_token</a>
+<a href="helpers.html#method-dd">dd</a>
+<a href="helpers.html#method-dispatch">dispatch</a>
+<a href="helpers.html#method-env">env</a>
+<a href="helpers.html#method-event">event</a>
+<a href="helpers.html#method-factory">factory</a>
+<a href="helpers.html#method-info">info</a>
+<a href="helpers.html#method-logger">logger</a>
+<a href="helpers.html#method-method-field">method_field</a>
+<a href="helpers.html#method-old">old</a>
+<a href="helpers.html#method-redirect">redirect</a>
+<a href="helpers.html#method-request">request</a>
+<a href="helpers.html#method-response">response</a>
+<a href="helpers.html#method-retry">retry</a>
+<a href="helpers.html#method-session">session</a>
+<a href="helpers.html#method-value">value</a>
+<a href="helpers.html#method-view">view</a></p>
+</div>
+<p><a name="method-listing"></a></p>
+<h2>方法列表</h2>
+<style>
+    #collection-method code {
+        font-size: 14px;
+    }
+
+    #collection-method:not(.first-collection-method) {
+        margin-top: 50px;
+    }
+</style>
+<p><a name="arrays"></a></p>
+<h2>数组</h2>
+<p><a name="method-array-add"></a></p>
+<h4 id="collection-method" class="first-collection-method"><code>array_add()</code></h4>
+<p>如果给定的键不存在与数组中，<code>array_add</code> 就会把给定的键值对添加到数组中：</p>
+<pre><code>$array = array_add(['name' =&gt; 'Desk'], 'price', 100);
+
+// ['name' =&gt; 'Desk', 'price' =&gt; 100]</code></pre>
+<p><a name="method-array-collapse"></a></p>
+<h4 id="collection-method"><code>array_collapse()</code></h4>
+<p><code>array_collapse</code> 函数把数组里的每一个数组合并成单个数组：</p>
+<pre><code>$array = array_collapse([[1, 2, 3], [4, 5, 6], [7, 8, 9]]);
+
+// [1, 2, 3, 4, 5, 6, 7, 8, 9]</code></pre>
+<p><a name="method-array-divide"></a></p>
+<h4 id="collection-method"><code>array_divide()</code></h4>
+<p><code>array_divide</code> 函数返回两个数组，一个包含原本数组的键，另一个包含原本数组的值：</p>
+<pre><code>list($keys, $values) = array_divide(['name' =&gt; 'Desk']);
+
+// $keys: ['name']
+
+// $values: ['Desk']</code></pre>
+<p><a name="method-array-dot"></a></p>
+<h4 id="collection-method"><code>array_dot()</code></h4>
+<p><code>array_dot</code> 函数把多维数组压制成一维数组，并用「点」式语法表示深度：</p>
+<pre><code>$array = array_dot(['foo' =&gt; ['bar' =&gt; 'baz']]);
+
+// ['foo.bar' =&gt; 'baz'];</code></pre>
+<p><a name="method-array-except"></a></p>
+<h4 id="collection-method"><code>array_except()</code></h4>
+<p><code>array_except</code> 函数从数组移除指定的键值对：</p>
+<pre><code>$array = ['name' =&gt; 'Desk', 'price' =&gt; 100];
+
+$array = array_except($array, ['price']);
+
+// ['name' =&gt; 'Desk']</code></pre>
+<p><a name="method-array-first"></a></p>
+<h4 id="collection-method"><code>array_first()</code></h4>
+<p><code>array_first</code> 函数返回数组中第一个通过指定测试的元素：</p>
+<pre><code>$array = [100, 200, 300];
+
+$value = array_first($array, function ($value, $key) {
+    return $value &gt;= 150;
+});
+
+// 200</code></pre>
+<p>可传递第三个参数作为默认值。当没有元素通过测试时，将会返回该默认值：</p>
+<pre><code>$value = array_first($array, $callback, $default);</code></pre>
+<p><a name="method-array-flatten"></a></p>
+<h4 id="collection-method"><code>array_flatten()</code></h4>
+<p><code>array_flatten</code>  函数将多维数组压制成一维数组：</p>
+<pre><code>$array = ['name' =&gt; 'Joe', 'languages' =&gt; ['PHP', 'Ruby']];
+
+$array = array_flatten($array);
+
+// ['Joe', 'PHP', 'Ruby'];</code></pre>
+<p><a name="method-array-forget"></a></p>
+<h4 id="collection-method"><code>array_forget()</code></h4>
+<p><code>array_forget</code> 函数以「点」式语法从深度嵌套的数组中移除指定的键值对：</p>
+<pre><code>$array = ['products' =&gt; ['desk' =&gt; ['price' =&gt; 100]]];
+
+array_forget($array, 'products.desk');
+
+// ['products' =&gt; []]</code></pre>
+<p><a name="method-array-get"></a></p>
+<h4 id="collection-method"><code>array_get()</code></h4>
+<p><code>array_get</code> 函数使用「点」式语法从深度嵌套的数组中获取指定的值：</p>
+<pre><code>$array = ['products' =&gt; ['desk' =&gt; ['price' =&gt; 100]]];
+
+$value = array_get($array, 'products.desk');
+
+// ['price' =&gt; 100]</code></pre>
+<p><code>array_get</code> 函数同样也接受默认值，如果指定的键找不到时，则返回该默认值：</p>
+<pre><code>$value = array_get($array, 'names.john', 'default');</code></pre>
+<p><a name="method-array-has"></a></p>
+<h4 id="collection-method"><code>array_has()</code></h4>
+<p><code>array_has</code> 函数使用「点」式语法检查指定的项目是否存在于数组中：</p>
+<pre><code>$array = ['product' =&gt; ['name' =&gt; 'desk', 'price' =&gt; 100]];
+
+$hasItem = array_has($array, 'product.name');
+
+// true
+
+$hasItems = array_has($array, ['product.price', 'product.discount']);
+
+// false</code></pre>
+<p><a name="method-array-last"></a></p>
+<h4 id="collection-method"><code>array_last()</code></h4>
+<p><code>array_last</code> 函数返回数组中最后一个通过指定测试的元素：</p>
+<pre><code>$array = [100, 200, 300, 110];
+
+$value = array_last($array, function ($value, $key) {
+    return $value &gt;= 150;
+});
+
+// 300</code></pre>
+<p><a name="method-array-only"></a></p>
+<h4 id="collection-method"><code>array_only()</code></h4>
+<p><code>array_only</code> 函数从数组返回指定的键值对：</p>
+<pre><code>$array = ['name' =&gt; 'Desk', 'price' =&gt; 100, 'orders' =&gt; 10];
+
+$array = array_only($array, ['name', 'price']);
+
+// ['name' =&gt; 'Desk', 'price' =&gt; 100]</code></pre>
+<p><a name="method-array-pluck"></a></p>
+<h4 id="collection-method"><code>array_pluck()</code></h4>
+<p><code>array_pluck</code> 函数从数组拉出一列指定的键值对：</p>
+<pre><code>$array = [
+    ['developer' =&gt; ['id' =&gt; 1, 'name' =&gt; 'Taylor']],
+    ['developer' =&gt; ['id' =&gt; 2, 'name' =&gt; 'Abigail']],
+];
+
+$array = array_pluck($array, 'developer.name');
+
+// ['Taylor', 'Abigail'];</code></pre>
+<p>你也可以指定要以什么作为结果列的键名：</p>
+<pre><code>$array = array_pluck($array, 'developer.name', 'developer.id');
+
+// [1 =&gt; 'Taylor', 2 =&gt; 'Abigail'];</code></pre>
+<p><a name="method-array-prepend"></a></p>
+<h4 id="collection-method"><code>array_prepend()</code></h4>
+<p><code>array_prepend</code> 函数将元素加到数组的头部：</p>
+<pre><code>$array = ['one', 'two', 'three', 'four'];
+
+$array = array_prepend($array, 'zero');
+
+// $array: ['zero', 'one', 'two', 'three', 'four']</code></pre>
+<p><a name="method-array-pull"></a></p>
+<h4 id="collection-method"><code>array_pull()</code></h4>
+<p><code>array_pull</code> 函数从数组移除指定键值对并返回该键值对：</p>
+<pre><code>$array = ['name' =&gt; 'Desk', 'price' =&gt; 100];
+
+$name = array_pull($array, 'name');
+
+// $name: Desk
+
+// $array: ['price' =&gt; 100]</code></pre>
+<p><a name="method-array-set"></a></p>
+<h4 id="collection-method"><code>array_set()</code></h4>
+<p><code>array_set</code> 函数使用「点」式语法在深度嵌套的数组中写入值：</p>
+<pre><code>$array = ['products' =&gt; ['desk' =&gt; ['price' =&gt; 100]]];
+
+array_set($array, 'products.desk.price', 200);
+
+// ['products' =&gt; ['desk' =&gt; ['price' =&gt; 200]]]</code></pre>
+<p><a name="method-array-sort"></a></p>
+<h4 id="collection-method"><code>array_sort()</code></h4>
+<p><code>array_sort</code> 函数根据指定闭包的结果排序数组：</p>
+<pre><code>$array = [
+    ['name' =&gt; 'Desk'],
+    ['name' =&gt; 'Chair'],
+];
+
+$array = array_values(array_sort($array, function ($value) {
+    return $value['name'];
+}));
+
+/*
+    [
+        ['name' =&gt; 'Chair'],
+        ['name' =&gt; 'Desk'],
+    ]
+*/</code></pre>
+<p><a name="method-array-sort-recursive"></a></p>
+<h4 id="collection-method"><code>array_sort_recursive()</code></h4>
+<p><code>array_sort_recursive</code> 函数使用 sort 函数递归排序数组：</p>
+<pre><code>$array = [
+    [
+        'Roman',
+        'Taylor',
+        'Li',
+    ],
+    [
+        'PHP',
+        'Ruby',
+        'JavaScript',
+    ],
+];
+
+$array = array_sort_recursive($array);
+
+/*
+    [
+        [
+            'Li',
+            'Roman',
+            'Taylor',
+        ],
+        [
+            'JavaScript',
+            'PHP',
+            'Ruby',
+        ]
+    ];
+*/</code></pre>
+<p><a name="method-array-where"></a></p>
+<h4 id="collection-method"><code>array_where()</code></h4>
+<p><code>array_where</code> 函数使用指定的闭包过滤数组：</p>
+<pre><code>$array = [100, '200', 300, '400', 500];
+
+$array = array_where($array, function ($value, $key) {
+    return is_string($value);
+});
+
+// [1 =&gt; 200, 3 =&gt; 400]</code></pre>
+<p><a name="method-head"></a></p>
+<h4 id="collection-method"><code>head()</code></h4>
+<p><code>head</code> 函数返回指定数组的第一个元素：</p>
+<pre><code>$array = [100, 200, 300];
+
+$first = head($array);
+
+// 100</code></pre>
+<p><a name="method-last"></a></p>
+<h4 id="collection-method"><code>last()</code></h4>
+<p><code>last</code> 函数返回指定数组的最后一个元素：</p>
+<pre><code>$array = [100, 200, 300];
+
+$last = last($array);
+
+// 300</code></pre>
+<p><a name="paths"></a></p>
+<h2>路径</h2>
+<p><a name="method-app-path"></a></p>
+<h4 id="collection-method"><code>app_path()</code></h4>
+<p><code>app_path</code> 函数返回 <code>app</code> 文件夹的完整路径。你也可以使用 <code>app_path</code> 函数生成针对指定文件相对于 app 目录的完整路径：</p>
+<pre><code>$path = app_path();
+
+$path = app_path('Http/Controllers/Controller.php');</code></pre>
+<p><a name="method-base-path"></a></p>
+<h4 id="collection-method"><code>base_path()</code></h4>
+<p><code>base_path</code> 函数返回项目根目录的完整路径。你也可以使用 <code>base_path</code> 函数生成针对指定文件相对于项目根目录的完整路径：</p>
+<pre><code>$path = base_path();
+
+$path = base_path('vendor/bin');</code></pre>
+<p><a name="method-config-path"></a></p>
+<h4 id="collection-method"><code>config_path()</code></h4>
+<p><code>config_path</code> 函数返回 <code>config</code> 目录的完整路径：</p>
+<pre><code>$path = config_path();</code></pre>
+<p><a name="method-database-path"></a></p>
+<h4 id="collection-method"><code>database_path()</code></h4>
+<p><code>database_path</code> 函数返回 <code>database</code> 目录的完整路径：</p>
+<pre><code>$path = database_path();</code></pre>
+<p><a name="method-mix"></a></p>
+<h4 id="collection-method"><code>mix()</code></h4>
+<p><code>mix</code> 函数获取带有版本号的 <a href="mix.html">mix</a> 文件:</p>
+<pre><code>mix($file);</code></pre>
+<p><a name="method-public-path"></a></p>
+<h4 id="collection-method"><code>public_path()</code></h4>
+<p><code>public_path</code> 函数返回 <code>public</code> 目录的完整路径：</p>
+<pre><code>$path = public_path();</code></pre>
+<p><a name="method-resource-path"></a></p>
+<h4 id="collection-method"><code>resource_path()</code></h4>
+<p><code>resource_path</code> 函数返回 <code>resources</code> 目录的完整路径。你也可以使用 <code>resource_path</code> 函数生成针对指定文件相对于 <code>resources</code> 目录的完整路径：</p>
+<pre><code>$path = resource_path();
+
+$path = resource_path('assets/sass/app.scss');</code></pre>
+<p><a name="method-storage-path"></a></p>
+<h4 id="collection-method"><code>storage_path()</code></h4>
+<p><code>storage_path</code> 函数返回 <code>storage</code> 目录的完整路径。你也可以使用 <code>storage_path</code> 函数生成针对指定文件相对于 <code>storage</code> 目录的完整路径：</p>
+<pre><code>$path = storage_path();
+
+$path = storage_path('app/file.txt');</code></pre>
+<p><a name="strings"></a></p>
+<h2>字符串</h2>
+<p><a name="method-camel-case"></a></p>
+<h4 id="collection-method"><code>camel_case()</code></h4>
+<p><code>camel_case</code> 函数将指定的字符串转换成 <code>驼峰式命名</code>：</p>
+<pre><code>$camel = camel_case('foo_bar');
+
+// fooBar</code></pre>
+<p><a name="method-class-basename"></a></p>
+<h4 id="collection-method"><code>class_basename()</code></h4>
+<p><code>class_basename</code> 函数返回不包含命名空间的类名称：</p>
+<pre><code>$class = class_basename('Foo\Bar\Baz');
+
+// Baz</code></pre>
+<p><a name="method-e"></a></p>
+<h4 id="collection-method"><code>e()</code></h4>
+<p><code>e</code> 函数对指定字符串进行 <code>htmlentities</code>：</p>
+<pre><code>echo e('&lt;html&gt;foo&lt;/html&gt;');
+
+// &amp;lt;html&amp;gt;foo&amp;lt;/html&amp;gt;</code></pre>
+<p><a name="method-ends-with"></a></p>
+<h4 id="collection-method"><code>ends_with()</code></h4>
+<p><code>ends_with</code> 函数判断指定字符串结尾是否为指定内容：</p>
+<pre><code>$value = ends_with('This is my name', 'name');
+
+// true</code></pre>
+<p><a name="method-snake-case"></a></p>
+<h4 id="collection-method"><code>snake_case()</code></h4>
+<p><code>snake_case</code> 函数将指定的字符串转换成 <code>蛇形命名</code> ：</p>
+<pre><code>$snake = snake_case('fooBar');
+
+// foo_bar</code></pre>
+<p><a name="method-str-limit"></a></p>
+<h4 id="collection-method"><code>str_limit()</code></h4>
+<p><code>str_limit</code> 函数限制字符串的字符个数，该函数接受一个字符串作为第一个参数，第二个参数为允许的最大字符个数：</p>
+<pre><code>$value = str_limit('The PHP framework for web artisans.', 7);
+
+// The PHP...</code></pre>
+<p><a name="method-starts-with"></a></p>
+<h4 id="collection-method"><code>starts_with()</code></h4>
+<p><code>starts_with</code> 函数判断字符串开头是否为指定内容：</p>
+<pre><code>$value = starts_with('This is my name', 'This');
+
+// true</code></pre>
+<p><a name="method-str-contains"></a></p>
+<h4 id="collection-method"><code>str_contains()</code></h4>
+<p><code>str_contains</code> 函数判断字符串是否包含有指定内容：</p>
+<pre><code>$value = str_contains('This is my name', 'my');
+
+// true</code></pre>
+<p>你也可以传递数组，来判断字符串是否包任意指定内容:</p>
+<pre><code>$value = str_contains('This is my name', ['my', 'foo']);
+
+// true</code></pre>
+<p><a name="method-str-finish"></a></p>
+<h4 id="collection-method"><code>str_finish()</code></h4>
+<p><code>str_finish</code> 函数添加指定内容到字符串末尾：</p>
+<pre><code>$string = str_finish('this/string', '/');
+
+// this/string/</code></pre>
+<p><a name="method-str-is"></a></p>
+<h4 id="collection-method"><code>str_is()</code></h4>
+<p><code>str_is</code> 函数判断指定的字符串是否匹配指定的格式，星号可作为通配符使用：</p>
+<pre><code>$value = str_is('foo*', 'foobar');
+
+// true
+
+$value = str_is('baz*', 'foobar');
+
+// false</code></pre>
+<p><a name="method-str-plural"></a></p>
+<h4 id="collection-method"><code>str_plural()</code></h4>
+<p><code>str_plural</code> 函数把字符串转换成复数形式。该函数目前只支持英文：</p>
+<pre><code>$plural = str_plural('car');
+
+// cars
+
+$plural = str_plural('child');
+
+// children</code></pre>
+<p>你可以传入一个整数作为第二个参数，来获取字符串的单数或复数形式：</p>
+<pre><code>$plural = str_plural('child', 2);
+
+// children
+
+$plural = str_plural('child', 1);
+
+// child</code></pre>
+<p><a name="method-str-random"></a></p>
+<h4 id="collection-method"><code>str_random()</code></h4>
+<p><code>str_random</code> 函数生成指定长度的随机字符串。该函数使用了 PHP 自带的 <code>random_bytes</code> 函数：</p>
+<pre><code>$string = str_random(40);</code></pre>
+<p><a name="method-str-singular"></a></p>
+<h4 id="collection-method"><code>str_singular()</code></h4>
+<p><code>str_singular</code> 函数把字符串转换成单数形式。该函数目前只支持英文：</p>
+<pre><code>$singular = str_singular('cars');
+
+// car</code></pre>
+<p><a name="method-str-slug"></a></p>
+<h4 id="collection-method"><code>str_slug()</code></h4>
+<p><code>str_slug</code> 函数根据指定字符串生成 URL 友好的「slug」：</p>
+<pre><code>$title = str_slug('Laravel 5 Framework', '-');
+
+// laravel-5-framework</code></pre>
+<p><a name="method-studly-case"></a></p>
+<h4 id="collection-method"><code>studly_case()</code></h4>
+<p><code>studly_case</code> 函数把指定字符串转换成 <code>首字母大写</code>：</p>
+<pre><code>$value = studly_case('foo_bar');
+
+// FooBar</code></pre>
+<p><a name="method-title-case"></a></p>
+<h4 id="collection-method"><code>title_case()</code></h4>
+<p><code>title_case</code> 函数把指定字符串转换成 <code>每个单词首字母大写</code>：</p>
+<pre><code>$title = title_case('a nice title uses the correct case');
+
+// A Nice Title Uses The Correct Case</code></pre>
+<p><a name="method-trans"></a></p>
+<h4 id="collection-method"><code>trans()</code></h4>
+<p><code>trans</code> 函数根据你的 <a href="localization.html">本地化文件</a> 翻译指定的语句：</p>
+<pre><code>echo trans('validation.required'):</code></pre>
+<p><a name="method-trans-choice"></a></p>
+<h4 id="collection-method"><code>trans_choice()</code></h4>
+<p><code>trans_choice</code> 函数根据给定数量来决定翻译指定语句是复数形式还是单数形式：</p>
+<pre><code>$value = trans_choice('foo.bar', $count);</code></pre>
+<p><a name="urls"></a></p>
+<h2>URLs</h2>
+<p><a name="method-action"></a></p>
+<h4 id="collection-method"><code>action()</code></h4>
+<p><code>action</code> 函数根据指定控制器的方法生成 URL，你不需要传入该控制器的完整命名空间。只需要传入相对于 <code>App\Http\Controllers</code> 命名空间的控制器类名：</p>
+<pre><code>$url = action('HomeController@getIndex');</code></pre>
+<p>如果该方法接受路由参数，可以作为第二个参数传入：</p>
+<pre><code>$url = action('UserController@profile', ['id' =&gt; 1]);</code></pre>
+<p><a name="method-asset"></a></p>
+<h4 id="collection-method"><code>asset()</code></h4>
+<p>根据当前请求的协议（HTTP 或 HTTPS）生成资源文件的 URL：</p>
+<pre><code>$url = asset('img/photo.jpg');</code></pre>
+<p><a name="method-secure-asset"></a></p>
+<h4 id="collection-method"><code>secure_asset()</code></h4>
+<p>使用 HTTPS 协议生成资源文件的 URL：</p>
+<pre><code>echo secure_asset('foo/bar.zip', $title, $attributes = []);</code></pre>
+<p><a name="method-route"></a></p>
+<h4 id="collection-method"><code>route()</code></h4>
+<p><code>route</code> 函数生成指定路由名称的 URL：</p>
+<pre><code>$url = route('routeName');</code></pre>
+<p>如果该路由接受参数，可以作为第二个参数传入：</p>
+<pre><code>$url = route('routeName', ['id' =&gt; 1]);</code></pre>
+<p><a name="method-secure-url"></a></p>
+<h4 id="collection-method"><code>secure_url()</code></h4>
+<p><code>secure_url</code> 数使用 HTTPS 协议生成指定路径的完整 URL：</p>
+<pre><code>echo secure_url('user/profile');
+
+echo secure_url('user/profile', [1]);</code></pre>
+<p><a name="method-url"></a></p>
+<h4 id="collection-method"><code>url()</code></h4>
+<p><code>url</code> 函数生成指定路径的完整 URL：</p>
+<pre><code>echo url('user/profile');
+
+echo url('user/profile', [1]);</code></pre>
+<p>如果没有提供路径参数，将会返回一个 <code>Illuminate\Routing\UrlGenerator</code> 实例：</p>
+<pre><code>echo url()-&gt;current();
+echo url()-&gt;full();
+echo url()-&gt;previous();</code></pre>
+<p><a name="miscellaneous"></a></p>
+<h2>其他</h2>
+<p><a name="method-abort"></a></p>
+<h4 id="collection-method"><code>abort()</code></h4>
+<p><code>abort</code> 函数抛出一个将被异常处理句柄渲染的 HTTP 异常：</p>
+<pre><code>abort(401);</code></pre>
+<p>你也可以传入异常的响应消息：</p>
+<pre><code>abort(401, 'Unauthorized.');</code></pre>
+<p><a name="method-abort-if"></a></p>
+<h4 id="collection-method"><code>abort_if()</code></h4>
+<p><code>abort_if</code> 函数如果指定的布尔表达式值为 <code>true</code> 则抛出一个 HTTP 异常：</p>
+<pre><code>abort_if(! Auth::user()-&gt;isAdmin(), 403);</code></pre>
+<p><a name="method-abort-unless"></a></p>
+<h4 id="collection-method"><code>abort_unless()</code></h4>
+<p><code>abort_unless</code> 函数如果指定的布尔表达式值为 <code>false</code> 则抛出一个 HTTP 异常：</p>
+<pre><code>abort_unless(Auth::user()-&gt;isAdmin(), 403);</code></pre>
+<p><a name="method-auth"></a></p>
+<h4 id="collection-method"><code>auth()</code></h4>
+<p><code>auth</code> 函数返回一个 authenticator 实例，可以使用它来代替 Auth facade：</p>
+<pre><code>$user = auth()-&gt;user();</code></pre>
+<p><a name="method-back"></a></p>
+<h4 id="collection-method"><code>back()</code></h4>
+<p><code>back()</code> 函数生成一个重定向响应让用户返回到之前的位置：</p>
+<pre><code>return back();</code></pre>
+<p><a name="method-bcrypt"></a></p>
+<h4 id="collection-method"><code>bcrypt()</code></h4>
+<p><code>bcrypt</code> 函数使用 Bcrypt 算法哈希指定的数值。你可以使用它代替 <code>Hash</code> facade：</p>
+<pre><code>$password = bcrypt('my-secret-password');</code></pre>
+<p><a name="method-cache"></a></p>
+<h4 id="collection-method"><code>cache()</code></h4>
+<p><code>cache</code> 函数尝试从缓存获取给定 <code>key</code> 的值。如果 <code>key</code> 不存在则返回默认值：</p>
+<pre><code>$value = cache('key');
+
+$value = cache('key', 'default');</code></pre>
+<p>同时，你也可以传递键值对来设置缓存，第二个参数可以指定缓存的过期时间，单位分钟：</p>
+<pre><code>cache(['key' =&gt; 'value'], 5);
+
+cache(['key' =&gt; 'value'], Carbon::now()-&gt;addSeconds(10));</code></pre>
+<p><a name="method-collect"></a></p>
+<h4 id="collection-method"><code>collect()</code></h4>
+<p><code>collect</code> 函数根据指定的数组生成 <a href="collections.html">集合</a> 实例：</p>
+<pre><code>$collection = collect(['taylor', 'abigail']);</code></pre>
+<p><a name="method-config"></a></p>
+<h4 id="collection-method"><code>config()</code></h4>
+<p><code>config</code> 函数用于获取配置信息的值，配置信息的值可通过「点」式语法访问，其中包含要访问的文件名以及选项名。可传递一个默认值作为第二参数，当配置信息不存在时，则返回该默认值：</p>
+<pre><code>$value = config('app.timezone');
+
+$value = config('app.timezone', $default);</code></pre>
+<p><code>config</code> 辅助函数也可以在运行期间，根据指定的键值对设置指定的配置信息：</p>
+<pre><code>config(['app.debug' =&gt; true]);</code></pre>
+<p><a name="method-csrf-field"></a></p>
+<h4 id="collection-method"><code>csrf_field()</code></h4>
+<p><code>csrf_field</code> 函数生成包含 CSRF 令牌内容的 HTML 表单隐藏字段。例如，使用 <a href="blade.html">Blade 语法</a>：</p>
+<pre><code>{{ csrf_field() }}</code></pre>
+<p><a name="method-csrf-token"></a></p>
+<h4 id="collection-method"><code>csrf_token()</code></h4>
+<p><code>csrf_token</code> 函数获取当前 CSRF 令牌的内容：</p>
+<pre><code>$token = csrf_token();</code></pre>
+<p><a name="method-dd"></a></p>
+<h4 id="collection-method"><code>dd()</code></h4>
+<p><code>dd</code> 函数输出指定变量的值并终止脚本运行：</p>
+<pre><code>dd($value);
+
+dd($value1, $value2, $value3, ...);</code></pre>
+<p>如果你不想终止脚本运行，使用 <code>dump</code> 函数代替：</p>
+<pre><code>dump($value);</code></pre>
+<p><a name="method-dispatch"></a></p>
+<h4 id="collection-method"><code>dispatch()</code></h4>
+<p><code>dispatch</code> 函数把一个新任务推送到 Laravel 的 <a href="queues.html">任务队列</a>中：</p>
+<pre><code>dispatch(new App\Jobs\SendEmails);</code></pre>
+<p><a name="method-env"></a></p>
+<h4 id="collection-method"><code>env()</code></h4>
+<p><code>env</code> 函数获取环境变量值或返回默认值：</p>
+<pre><code>$env = env('APP_ENV');
+
+// Return a default value if the variable doesn't exist...
+$env = env('APP_ENV', 'production');</code></pre>
+<p><a name="method-event"></a></p>
+<h4 id="collection-method"><code>event()</code></h4>
+<p><code>event</code> 函数派发指定的 <a href="events.html">事件</a> 到所属的侦听器：</p>
+<pre><code>event(new UserRegistered($user));</code></pre>
+<p><a name="method-factory"></a></p>
+<h4 id="collection-method"><code>factory()</code></h4>
+<p><code>factory</code>  函数根据指定类、名称以及数量生成模型工厂构造器（model factory builder）。可用于 <a href="database-testing.html#writing-factories">测试</a> 或 <a href="seeding.html#using-model-factories">数据填充</a>：</p>
+<pre><code>$user = factory(App\User::class)-&gt;make();</code></pre>
+<p><a name="method-info"></a></p>
+<h4 id="collection-method"><code>info()</code></h4>
+<p><code>info</code> 函数以 <code>info</code> 级别写入日志:</p>
+<pre><code>info('Some helpful information!');</code></pre>
+<p>包含上下文数据的数组可以通过第二个参数传递给函数：</p>
+<pre><code>info('User login attempt failed.', ['id' =&gt; $user-&gt;id]);</code></pre>
+<p><a name="method-logger"></a></p>
+<h4 id="collection-method"><code>logger()</code></h4>
+<p><code>logger</code> 函数以 <code>debug</code> 级别写入日志:</p>
+<pre><code>logger('Debug message');</code></pre>
+<p>同时支持传入数组作为参数：</p>
+<pre><code>logger('User has logged in.', ['id' =&gt; $user-&gt;id]);</code></pre>
+<p>如果没有传入参数，则会返回一个 <a href="errors.html#logging">日志</a> 的实例：</p>
+<pre><code>logger()-&gt;error('You are not allowed here.');</code></pre>
+<p><a name="method-method-field"></a></p>
+<h4 id="collection-method"><code>method_field()</code></h4>
+<p><code>method_field</code> 函数生成模拟各种 HTTP 动作请求的 HTML 表单隐藏字段。例如，使用 <a href="blade.html">Blade 语法</a>：</p>
+<pre><code>&lt;form method="POST"&gt;
+    {{ method_field('DELETE') }}
+&lt;/form&gt;</code></pre>
+<p><a name="method-old"></a></p>
+<h4 id="collection-method"><code>old()</code></h4>
+<p><code>old</code> 函数 <a href="requests.html#retrieving-input">获取</a> session 内一次性的历史输入值：</p>
+<pre><code>$value = old('value');
+
+$value = old('value', 'default');</code></pre>
+<p><a name="method-redirect"></a></p>
+<h4 id="collection-method"><code>redirect()</code></h4>
+<p><code>redirect</code> 函数返回一个 HTTP 重定向响应，如果调用时没有传入参数则返回 redirector 实例：</p>
+<pre><code>return redirect('/home');
+
+return redirect()-&gt;route('route.name');</code></pre>
+<p><a name="method-request"></a></p>
+<h4 id="collection-method"><code>request()</code></h4>
+<p><code>request</code> 函数返回当前 <a href="requests.html">请求</a> 实例或获取输入的项目：</p>
+<pre><code>$request = request();
+
+$value = request('key', $default = null)</code></pre>
+<p><a name="method-response"></a></p>
+<h4 id="collection-method"><code>response()</code></h4>
+<p><code>response</code> 函数创建一个 <a href="responses.html">响应</a> 实例或获取一个 response 工厂实例：</p>
+<pre><code>return response('Hello World', 200, $headers);
+
+return response()-&gt;json(['foo' =&gt; 'bar'], 200, $headers);</code></pre>
+<p><a name="method-retry"></a></p>
+<h4 id="collection-method"><code>retry()</code></h4>
+<p><code>retry</code> 函数将会重复调用给定的回调函数，最多调用指定的次数。如果回调函数没有抛出异常并且有值返回，则 <code>retry</code> 函数返回该值。如果回调函数抛出异常，<code>retry</code> 函数将拦截异常并自动再次调用回调函数，直到调用给定的次数。如果重试次数超出给定次数，拦截的异常将会抛出：</p>
+<pre><code>return retry(5, function () {
+    // Attempt 5 times while resting 100ms in between attempts...
+}, 100);</code></pre>
+<p><a name="method-session"></a></p>
+<h4 id="collection-method"><code>session()</code></h4>
+<p><code>session</code> 函数可用于获取或设置单个 session 项：</p>
+<pre><code>$value = session('key');</code></pre>
+<p>你可以通过传递键值对数组给该函数设置 session 项：</p>
+<pre><code>session(['chairs' =&gt; 7, 'instruments' =&gt; 3]);</code></pre>
+<p>该函数在没有传递参数时，将返回 session 实例：</p>
+<pre><code>$value = session()-&gt;get('key');
+
+session()-&gt;put('key', $value);</code></pre>
+<p><a name="method-value"></a></p>
+<h4 id="collection-method"><code>value()</code></h4>
+<p><code>value</code> 函数返回指定数值。而当你传递一个 <code>闭包</code> 给该函数时，该 <code>闭包</code> 将被运行并返回该 <code>闭包</code> 的运行结果：</p>
+<pre><code>$value = value(function() { return 'bar'; });</code></pre>
+<p><a name="method-view"></a></p>
+<h4 id="collection-method"><code>view()</code></h4>
+<p><code>view</code> 函数获取 <a href="views.html">视图</a> 实例：</p>
+<pre><code>return view('auth.login');</code></pre>
+<h2>译者署名</h2>
+<table>
+<thead>
+<tr>
+<th>用户名</th>
+<th>头像</th>
+<th>职能</th>
+<th>签名</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><a href="https://github.com/cmzz">@zyxcba</a></td>
+<td><img class="avatar-66 rm-style" src="https://avatars3.githubusercontent.com/u/6111715?v=3&s=100"></td>
+<td>翻译</td>
+<td><a href="http://pigtk.com">小猪淘客</a> - 免费的淘宝客优惠券CMS</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<blockquote>
+<p>{note} 欢迎任何形式的转载，但请务必注明出处，尊重他人劳动共创开源社区。</p>
+<p>转载请注明：本文档由 Laravel China 社区 [laravel-china.org] 组织翻译，详见 <a href="https://laravel-china.org/topics/3810/laravel-54-document-translation-come-and-join-the-translation">翻译召集帖</a>。</p>
+<p>文档永久地址： <a href="../../index.html">http://d.laravel-china.org</a></p>
+</blockquote>
+		</div>
+
+		<div class="main-footer" style="border-top:1px dashed rgba(0, 0, 0, 0.1);padding-top: 30px;margin-top:30px;margin-bottom: 20px;">
+			<div class="prev-next-wrap clearfix">
+
+				
+			    &nbsp;
+							</div>
+		</div>
+
+	</article>
+</div>
+
+	<footer class="main">
+		<ul>
+			<li class="nav-docs"><a href="../5.4.html">文档</a></li>
+<li ><a href="https://laravel-china.org/news" class="no-pjax">Laravel 资讯</a></li>
+<li class="dropdown"><a href="https://laravel-china.org/">Laravel China 社区</a></li>
+<li class="nav-forge"><a href="https://laravel-china.org/categories/1">酷工作</a></li>
+<li class="nav-docs"><a href="http://lumen.laravel-china.org">Lumen</a></li>
+<li class="nav-forge"><a href="https://cs.laravel-china.org/">速查表</a></li>
+<li class="nav-forge"><a href="https://fsdhub.com/books/laravel-essential-training-5.5">《Laravel 入门教程》</a></li>
+		</ul>
+		<p>Laravel is a trademark of Taylor Otwell. Copyright &copy; Taylor Otwell.</p>
+            <div style="margin-top: 32px;">
+                <a href="https://www.upyun.com/" title="Composer 镜像赞助商">
+                    <img src="https://dn-phphub.qbox.me/uploads/banners/XPtLlZmIN1cQbLuDFEON.png" style="width: 200px;">
+                </a>
+            </div>
+            <p class="less-significant">
+            <a href="http://jackmcdade.com">
+                Designed by<br>
+                <svg version="1.1"
+	 xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:a="http://ns.adobe.com/AdobeSVGViewerExtensions/3.0/"
+	 x="0px" y="0px" width="128.2px" height="28px" viewBox="0 0 128.2 28" enable-background="new 0 0 128.2 28" xml:space="preserve"
+	>
+<defs>
+</defs>
+<g>
+	<path fill="#c3c3c3" d="M14.2,0.4c0,0.2,0,0.5,0,0.7c0,0.2,0,0.5,0,0.7l-1.4-0.3C12.9,3,13,4.5,13.1,6c0.1,1.5,0,3-0.1,4.5
+		c0,0.4-0.1,0.8-0.1,1.2c-0.1,0.4-0.1,0.8-0.3,1.2c-0.1,0.4-0.3,0.7-0.5,1.1c-0.2,0.3-0.5,0.6-0.9,0.9c-0.4,0.2-0.9,0.4-1.5,0.6
+		c-0.6,0.2-1.1,0.3-1.6,0.3c-0.6,0-1.2-0.1-1.6-0.3c-0.5-0.2-0.9-0.6-1.1-1c-0.3-0.5-0.5-1-0.6-1.6c-0.1-0.6-0.1-1.3,0-2.1
+		c0-0.2,0.1-0.5,0.2-0.7C4.9,9.9,5,9.7,5.1,9.5c0.1-0.2,0.2-0.4,0.3-0.6l1.1,0.4C6.7,9.3,7,9.4,7.3,9.5c0.3,0.1,0.5,0.1,0.6,0.2
+		c0,0.2,0,0.4-0.1,0.5c-0.1,0.2-0.1,0.3-0.2,0.4c-0.1,0.1-0.2,0.3-0.2,0.4c-0.1,0.2-0.1,0.3-0.1,0.5l-1.3-0.7
+		c-0.1,0.3-0.2,0.7-0.2,1.1c0,0.4,0.1,0.8,0.2,1.2c0.2,0.4,0.4,0.7,0.6,1c0.3,0.3,0.6,0.4,1,0.3c0.6,0,1.1-0.3,1.4-0.6
+		c0.3-0.4,0.5-0.9,0.7-1.7c0.1-0.7,0.2-1.6,0.2-2.8c0-1.1,0-2.4,0-3.9c0-0.6-0.1-1.3-0.1-2C9.7,2.8,9.6,2.1,9.5,1.4
+		c-0.2,0-0.5,0-0.8,0c-0.3,0-0.6,0-0.8,0c-0.8,0-1.5,0-2.2,0c-0.7,0-1.5,0-2.2,0.2c-0.3,0.1-0.6,0.2-1,0.4C2.2,2.1,1.9,2.4,1.6,2.6
+		C1.4,2.9,1.2,3.2,1.1,3.6C1,3.9,1,4.3,1.1,4.6c0.1,0.5,0.3,0.8,0.4,0.9V5.4c0-0.4,0.1-0.8,0.4-1c0.3-0.2,0.6-0.3,0.9-0.3
+		c0.3,0,0.6,0.1,0.9,0.3C4,4.6,4.1,5,4.1,5.4c0,0.4-0.1,0.8-0.4,1c-0.3,0.2-0.6,0.3-1,0.3H2.7C1.9,6.7,1.3,6.5,0.9,6
+		C0.5,5.6,0.2,5.1,0.1,4.5C0,4,0,3.4,0.2,2.7c0.2-0.6,0.5-1.1,1-1.5c0.4-0.3,0.8-0.5,1.2-0.7c0.4-0.1,0.9-0.2,1.4-0.3
+		c0.5-0.1,0.9-0.1,1.4-0.1c0.5,0,0.9,0,1.4,0h1.5c0.6,0,1.1,0,1.6,0.1c0.5,0,1,0.1,1.5,0.1c0.5,0,1,0.1,1.5,0.1
+		C13.1,0.5,13.6,0.5,14.2,0.4z"/>
+	<path fill="#c3c3c3" d="M25.2,14.3c0,0.2,0.1,0.4,0.1,0.6c0,0.2,0.1,0.4,0.1,0.7c-1-0.1-2-0.2-3-0.1c-1.1,0.1-2.1,0.2-3,0.4
+		c0-0.2-0.1-0.4-0.1-0.5c0-0.2-0.1-0.4-0.1-0.5c0.2,0,0.5-0.1,0.7-0.1c0.2,0,0.4-0.1,0.6-0.1c-0.1-1.5-0.3-3.1-0.5-4.6
+		c-0.5,0.1-0.9,0.1-1.4,0.2c-0.5,0.1-0.9,0.1-1.4,0.2c-0.2,0.7-0.3,1.3-0.5,2c-0.2,0.7-0.3,1.3-0.5,2c0.2,0,0.4,0,0.6,0
+		c0.1,0,0.3,0,0.4,0.1c0,0.2,0,0.3,0,0.5c0,0.1,0,0.2,0,0.4c0,0.1,0,0.2-0.1,0.3H14v-1.2h1c0.2-0.5,0.3-1,0.4-1.5
+		c0.1-0.5,0.3-1,0.4-1.5c0.2-0.6,0.3-1.2,0.5-1.7c0.2-0.6,0.3-1.2,0.5-1.7c0.2-1.1,0.4-2.1,0.6-3.2c0.2-1.1,0.3-2.1,0.4-3.2
+		c-0.2,0-0.5,0-0.7,0c-0.2,0-0.4,0-0.7,0c0-0.2,0.1-0.4,0.1-0.6c0-0.2,0-0.4,0.1-0.6c0.9,0,1.9,0,2.9,0c1,0,2,0,2.9,0l0.2,1.2
+		c-0.2,0-0.3,0-0.5,0c-0.2,0-0.3,0-0.5,0c0.3,2.1,0.7,4.3,1,6.5c0.3,2.2,0.7,4.4,1,6.5H25.2z M17.5,9c0.4-0.1,0.7-0.1,1.1-0.2
+		c0.4-0.1,0.8-0.1,1.2-0.2c-0.2-1-0.3-2-0.5-2.9c-0.2-1-0.4-1.9-0.6-2.9c-0.2,1-0.4,2.1-0.5,3.1C17.9,6.9,17.7,8,17.5,9z"/>
+	<path fill="#c3c3c3" d="M36.7,10.4c-0.1,0-0.2,0-0.3,0c-0.1,0-0.2,0-0.3,0c0,0.6,0,1.2-0.2,1.9c-0.2,0.6-0.5,1.2-1,1.6
+		c-0.5,0.5-1,0.9-1.6,1.1c-0.6,0.3-1.3,0.4-2,0.5c-0.6,0.1-1.1,0.1-1.8,0c-0.6-0.1-1.1-0.4-1.6-0.7c-0.2-0.2-0.5-0.4-0.8-0.7
+		c-0.3-0.3-0.5-0.5-0.6-0.8c-0.3-0.5-0.5-1-0.6-1.5c-0.2-0.5-0.3-0.9-0.4-1.4c-0.1-0.5-0.2-1-0.2-1.5c0-0.5,0-1,0.1-1.6
+		c0.2-1,0.4-2,0.8-2.9c0.4-0.9,0.8-1.7,1.4-2.3c0.5-0.7,1.2-1.2,1.9-1.6C30.2,0.2,30.9,0,31.7,0c0.3,0,0.5,0,0.8,0.1
+		c0.3,0.1,0.5,0.2,0.7,0.4c0.3,0.3,0.7,0.7,1,1.2c0.3,0.5,0.6,1.2,0.7,1.9c0.1,0,0.2,0,0.3,0c0.1,0,0.2,0,0.3,0c0,0.1,0,0.2,0,0.3
+		c0,0.1,0,0.2,0,0.3L33,4.6c-0.3,0.1-0.5,0.1-0.6,0c-0.1,0-0.2-0.1-0.2-0.2c-0.1-0.1-0.1-0.2,0-0.3c0.1,0,0.2,0,0.2,0
+		c0.1,0,0.1,0,0.2,0c0.2-0.2,0.3-0.3,0.3-0.6c0-0.2,0-0.5,0-0.7c0-0.5-0.2-0.9-0.5-1.3c-0.2-0.2-0.3-0.3-0.4-0.4
+		C31.8,1,31.6,1,31.4,1.1c-0.2,0-0.4,0.2-0.6,0.4c-0.2,0.2-0.4,0.5-0.5,0.9C30,2.6,29.9,3,29.8,3.3c-0.1,0.3-0.2,0.5-0.2,0.7
+		c-0.6,2.6-0.7,5.3-0.2,8c0.1,0.3,0.2,0.7,0.3,1s0.3,0.6,0.5,0.9c0.2,0.3,0.5,0.5,0.8,0.7c0.3,0.2,0.6,0.2,1,0.1
+		c0.6-0.1,1-0.4,1.4-1c0.3-0.5,0.6-1.1,0.7-1.8c0.1-0.3,0.1-0.6,0.1-0.9v-0.5c-0.2,0-0.4,0-0.6-0.1c-0.1-0.1-0.2-0.2-0.2-0.3
+		c0-0.1,0-0.2,0.1-0.3c0.6,0,1.2,0,1.7,0c0.6,0,1.2,0,1.7,0c0,0.1,0,0.2-0.1,0.3C36.7,10.2,36.7,10.3,36.7,10.4z"/>
+	<path fill="#c3c3c3" d="M48,14.2c0.1,0.2,0.3,0.3,0.5,0.4c0.2,0.1,0.5,0.1,0.7,0c0.1,0.1,0.1,0.2,0.1,0.4c0,0.2-0.1,0.3-0.2,0.4
+		c-0.1,0.1-0.2,0.2-0.4,0.2c-0.2,0-0.3,0-0.4,0c-0.3,0-0.7,0-1,0c-0.3,0-0.7,0-1-0.1c-0.3-0.1-0.7-0.2-1-0.4
+		c-0.3-0.2-0.5-0.4-0.7-0.7c-0.2-0.3-0.3-0.6-0.3-1c0-0.3,0-0.7,0-1.1V9.9c0-0.1,0-0.3,0-0.4c0-0.2-0.1-0.3-0.2-0.5
+		c-0.1-0.2-0.3-0.3-0.4-0.4c-0.2-0.1-0.4-0.1-0.7-0.1c-0.1,0-0.2,0-0.5,0.1c-0.2,0.3-0.3,0.5-0.5,0.8c-0.2,0.3-0.3,0.5-0.5,0.7
+		c0,0.8,0,1.5-0.1,2.2c0,0.7-0.1,1.5-0.1,2.1h1.4v1.1c-0.5,0-0.9,0.1-1.3,0c-0.4,0-0.8,0-1.2-0.1c-0.4,0-0.8-0.1-1.2-0.1
+		c-0.4,0-0.8,0-1.3,0c-0.1,0-0.3,0-0.4,0c-0.1,0-0.2,0-0.3-0.1c-0.1,0-0.1-0.1-0.1-0.2c0-0.1-0.1-0.3-0.1-0.4c0-0.1,0-0.3,0-0.4
+		c0-0.1,0.1-0.2,0.1-0.2c0.2,0.1,0.4,0.2,0.6,0.1s0.4-0.2,0.5-0.4c0-0.1,0.1-0.3,0.1-0.7c0-0.4,0-0.9,0.1-1.6c0-0.6,0.1-1.3,0.1-2.1
+		c0-0.8,0-1.6,0.1-2.4c0-0.8,0-1.5,0.1-2.3c0-0.7,0.1-1.3,0.1-1.8c0-0.2,0-0.5,0-0.7c0-0.2-0.1-0.4-0.2-0.6
+		c-0.1-0.2-0.3-0.3-0.5-0.4c-0.2-0.1-0.4,0-0.6,0.1c0-0.2-0.1-0.5-0.1-0.7c0-0.2,0-0.4-0.1-0.7c1,0,2,0.1,3,0.1c0.9,0,1.9,0.1,3,0.1
+		c0,0.1,0,0.2,0,0.3c0,0.1,0,0.3,0.1,0.4c0,0.1,0,0.3,0,0.4c0,0.1,0,0.2-0.1,0.2c-0.1,0.1-0.2,0.1-0.3,0.1c-0.1,0-0.2,0-0.4-0.1
+		c-0.1-0.1-0.3-0.1-0.4-0.2c-0.1-0.1-0.3-0.1-0.3-0.1c-0.1,0.9-0.1,1.9-0.1,2.9c0,1-0.1,2-0.1,3.1c0.7-1.2,1.4-2.5,2-3.8
+		c0.2-0.3,0.3-0.6,0.4-0.9c0.1-0.3,0.3-0.6,0.5-0.9c0.2-0.3,0.4-0.5,0.7-0.7C45.4,1,45.7,0.9,46,0.8c0.3-0.1,0.7-0.1,1,0
+		c0.3,0.1,0.6,0.2,0.9,0.5c0.2,0.3,0.4,0.6,0.4,1c0,0.4,0.1,0.8,0,1.1c0,0.2,0,0.3,0,0.5c0,0.2-0.1,0.3-0.2,0.4
+		c-0.1,0.2-0.2,0.3-0.4,0.4c-0.2,0.1-0.4,0.1-0.5,0.2c-0.1,0-0.3,0.1-0.4,0.1c-0.1,0-0.3,0-0.4,0C46.2,4.7,46,4.6,46,4.4
+		c-0.1-0.2-0.1-0.4,0-0.5c0.1-0.2,0.2-0.3,0.3-0.3c0.1,0,0.2-0.1,0.4-0.1c0.2-0.1,0.3-0.2,0.3-0.3c0.1-0.2,0.1-0.3,0.1-0.5
+		C47.1,2.4,47,2.2,47,2c-0.1-0.2-0.2-0.3-0.3-0.3c-0.2,0-0.3,0-0.5,0.1C46,1.9,45.9,2,45.7,2.2c-0.2,0.2-0.3,0.4-0.4,0.6
+		C45.2,3,45,3.3,44.9,3.5c-0.1,0.3-0.3,0.6-0.4,0.8c-0.2,0.2-0.3,0.5-0.4,0.8c-0.4,0.9-0.8,1.7-1.2,2.5c0.3,0,0.6-0.1,1,0
+		c0.4,0,0.7,0,1,0c0.3,0,0.7,0.1,1,0.2c0.3,0.1,0.6,0.3,0.8,0.6c0.3,0.3,0.4,0.6,0.5,1c0.1,0.4,0.1,0.8,0.2,1.1l0.2,2.1
+		c0,0.2,0.1,0.5,0.1,0.7C47.7,13.7,47.8,14,48,14.2z"/>
+	<path fill="#c3c3c3" d="M71.7,13.9c0.2,0.2,0.4,0.4,0.7,0.5c0.3,0.1,0.5,0,0.8-0.1c0,0.2,0.1,0.3,0.1,0.6c0.1,0.2,0.1,0.4,0.1,0.6
+		c-0.3,0-0.7,0-1.1,0s-0.8,0-1.3,0.1c-0.4,0-0.9,0-1.3,0c-0.4,0-0.8,0-1,0c0-0.1,0-0.1,0-0.2c0-0.1,0.1-0.2,0.2-0.3
+		c0.1-0.1,0.2-0.2,0.4-0.3c0.2-0.1,0.3-0.1,0.6-0.1c0.1,0,0.1-0.2,0.1-0.7c0-0.4,0-1,0-1.6c0-0.6,0-1.2-0.1-1.9s0-1.1,0-1.5
+		c0-1,0-1.9,0-2.6c0-0.7,0.1-1.5,0.1-2.2c-0.6,1.3-1.1,2.7-1.6,4.1c-0.5,1.5-1,3-1.5,4.4c0,0,0.1,0.1,0.1,0.2c-0.2,0-0.4,0-0.7,0.1
+		c-0.3,0.1-0.5,0.1-0.7,0.1c-0.5-1.9-1.1-3.7-1.6-5.5c-0.5-1.8-1.1-3.6-1.6-5.5c-0.1,1-0.1,2-0.1,3c0,1.1-0.1,2.1-0.1,3.2
+		c0,1.1,0,2.1-0.1,3.2c0,1-0.1,2-0.1,3h1.4v1.1c-0.5,0-0.9,0.1-1.3,0c-0.4,0-0.8,0-1.2-0.1c-0.4,0-0.8-0.1-1.2-0.1
+		c-0.4,0-0.8,0-1.3,0c-0.1,0-0.3,0-0.4,0c-0.1,0-0.2,0-0.3-0.1c-0.1,0-0.1-0.1-0.1-0.2c0-0.1-0.1-0.3-0.1-0.4c0-0.1,0-0.3,0-0.4
+		c0-0.1,0.1-0.2,0.1-0.2c0.2,0.1,0.4,0.2,0.6,0.1s0.4-0.2,0.5-0.4c0-0.1,0.1-0.3,0.1-0.7c0-0.4,0-0.9,0.1-1.6c0-0.6,0.1-1.3,0.1-2.1
+		C59,8.8,59,8,59,7.2c0-0.8,0-1.5,0.1-2.3c0-0.7,0.1-1.3,0.1-1.8c0-0.2,0-0.5,0-0.7c0-0.2-0.1-0.4-0.2-0.6c-0.1-0.2-0.3-0.3-0.5-0.4
+		c-0.2-0.1-0.4,0-0.6,0.1c0-0.2-0.1-0.5-0.1-0.7c0-0.2,0-0.4-0.1-0.7c1,0,2,0.1,3,0.1c0.9,0,1.9,0.1,3,0.1c0,0.3-0.1,0.5-0.4,0.7
+		c0.3,1.3,0.6,2.6,1,3.9c0.4,1.3,0.8,2.6,1.2,3.9c0.2-0.6,0.4-1.3,0.6-1.9c0.2-0.6,0.4-1.2,0.6-1.8C67,4.6,67.2,4,67.5,3.4
+		c0.2-0.6,0.4-1.3,0.6-2c-0.1,0-0.3,0-0.4-0.1c-0.1,0-0.2,0-0.4-0.1c-0.1,0-0.1-0.1-0.1-0.3c0-0.1,0.1-0.2,0.1-0.3
+		c0.1-0.1,0.2-0.1,0.3-0.1c0.1,0,0.2,0,0.3,0c0.4,0,0.7,0,1,0s0.6,0,0.9,0c0.3,0,0.6,0,0.9,0c0.3,0,0.6,0,1,0c0.1,0,0.3,0,0.4,0
+		c0.1,0,0.3,0.1,0.4,0.2c0.1,0.1,0.2,0.2,0.2,0.4c0,0.2,0,0.3-0.2,0.3c-0.1-0.1-0.2-0.1-0.3-0.1c-0.1,0-0.2,0.1-0.3,0.1
+		c-0.2,0.4-0.3,0.8-0.4,1.3c-0.1,0.5-0.1,0.9-0.1,1.4c-0.2,2.8-0.2,5.6,0,8.4c0,0.3,0,0.5,0.1,0.7C71.4,13.5,71.5,13.7,71.7,13.9z"
+		/>
+	<path fill="#c3c3c3" d="M81.7,12c-0.1,0-0.1,0-0.2,0c-0.1,0-0.1,0-0.2,0c0,0.4,0,0.9-0.2,1.3c-0.1,0.4-0.4,0.8-0.7,1.1
+		c-0.3,0.3-0.7,0.6-1.1,0.8c-0.4,0.2-0.9,0.3-1.3,0.4c-0.4,0.1-0.8,0-1.2,0c-0.4-0.1-0.8-0.2-1.1-0.5c-0.2-0.1-0.3-0.3-0.5-0.5
+		c-0.2-0.2-0.3-0.4-0.4-0.6c-0.2-0.4-0.3-0.7-0.4-1c-0.1-0.3-0.2-0.6-0.3-1C74,11.7,74,11.4,74,11c0-0.3,0-0.7,0.1-1.1
+		c0.1-0.7,0.3-1.4,0.5-2c0.3-0.6,0.6-1.1,0.9-1.6s0.8-0.8,1.3-1.1c0.5-0.3,1-0.4,1.5-0.4c0.2,0,0.4,0,0.6,0.1
+		c0.2,0.1,0.3,0.1,0.5,0.3C79.6,5.4,79.8,5.6,80,6c0.2,0.4,0.4,0.8,0.5,1.3c0.1,0,0.1,0,0.2,0c0.1,0,0.1,0,0.2,0c0,0.1,0,0.1,0,0.2
+		c0,0.1,0,0.1,0,0.2L79.2,8c-0.2,0.1-0.3,0.1-0.4,0c-0.1,0-0.1-0.1-0.2-0.2c0-0.1,0-0.1,0-0.2c0.1,0,0.1,0,0.2,0c0,0,0.1,0,0.2,0
+		c0.1-0.1,0.2-0.2,0.2-0.4c0-0.2,0-0.3,0-0.5c0-0.3-0.1-0.6-0.3-0.9c-0.1-0.1-0.2-0.2-0.3-0.3c-0.1-0.1-0.2-0.1-0.4,0
+		c-0.1,0-0.3,0.1-0.4,0.3c-0.1,0.2-0.3,0.4-0.4,0.6c-0.1,0.2-0.2,0.4-0.3,0.6c-0.1,0.2-0.1,0.4-0.1,0.5c-0.4,1.8-0.5,3.6-0.1,5.5
+		c0.1,0.2,0.1,0.4,0.2,0.7c0.1,0.2,0.2,0.4,0.3,0.6c0.1,0.2,0.3,0.3,0.6,0.5c0.2,0.1,0.4,0.1,0.7,0.1c0.4-0.1,0.7-0.3,1-0.7
+		c0.2-0.4,0.4-0.8,0.5-1.2c0-0.2,0.1-0.4,0.1-0.6v-0.3c-0.2,0-0.3,0-0.4,0c-0.1,0-0.1-0.1-0.1-0.2c0-0.1,0-0.2,0.1-0.2
+		c0.4,0,0.8,0,1.2,0c0.4,0,0.8,0,1.2,0c0,0.1,0,0.1,0,0.2C81.8,11.8,81.8,11.9,81.7,12z"/>
+	<path fill="#c3c3c3" d="M83.5,14.2c0.2-4.3,0.3-8.5,0.2-12.8c-0.3,0-0.6,0-0.9,0c-0.3,0-0.6,0-0.9,0c0-0.2,0-0.3,0-0.5s0-0.3,0-0.5
+		c0.7,0,1.3,0,2-0.1c0.7,0,1.3,0,2-0.1c0.8-0.2,1.6-0.2,2.4-0.1c0.8,0.1,1.6,0.3,2.4,0.5c0.7,0.3,1.4,0.7,1.9,1.2
+		c0.5,0.5,0.9,1.1,1.1,1.8C94,4.9,94.1,6.1,94,7.4C94,8.6,93.8,9.8,93.7,11c0,0.4-0.1,0.8-0.2,1.2c-0.1,0.4-0.3,0.8-0.5,1.1
+		c-0.3,0.5-0.8,1-1.3,1.3c-0.5,0.3-1.1,0.5-1.7,0.6c-0.5,0.1-0.9,0.2-1.4,0.1c-0.5,0-0.9,0-1.4-0.1v0c-0.2,0-0.3,0-0.5,0
+		s-0.4,0-0.5,0l-0.1,0c0,0,0,0,0,0c-0.6,0-1.3,0-1.9,0c-0.6,0-1.3,0-1.9,0c-0.2-0.4-0.1-0.8,0.2-1.1c0.2-0.2,0.3-0.2,0.5-0.3
+		C83.2,14.1,83.4,14.1,83.5,14.2z M89.4,1.9c-0.4-0.3-0.8-0.5-1.3-0.6c-0.5-0.1-1-0.1-1.5-0.1c-0.3,4.5-0.2,9.1,0.4,13.6
+		c0.2,0,0.4,0,0.5-0.1c0.2,0,0.4-0.1,0.6-0.1c0.3-0.1,0.6-0.2,0.9-0.4c0.3-0.2,0.6-0.4,0.8-0.7c0.2-0.3,0.4-0.6,0.5-1
+		s0.2-0.7,0.2-1.1c0.4-2.1,0.4-4.2,0.2-6.3c-0.1-0.6-0.2-1.2-0.4-1.9C90.3,2.8,89.9,2.3,89.4,1.9z"/>
+	<path fill="#c3c3c3" d="M102.4,9.7c-0.6-0.1-1.3-0.1-2,0c-0.7,0.1-1.4,0.4-2,0.8l-0.2-1.4L99.1,9c0-0.4-0.1-0.7-0.1-1
+		c0-0.2-0.1-0.5-0.1-0.9c-0.3,0-0.6,0.1-0.9,0.1c-0.3,0-0.6,0.1-1,0.1c-0.2,0.7-0.3,1.3-0.4,1.8c-0.1,0.5-0.2,1.1-0.4,1.6l0.2-0.1
+		l0.7,0.6c-0.4,0.2-0.8,0.6-1.2,1.1c-0.4,0.5-0.7,1-0.9,1.5l-0.9-0.5c0-0.1,0.1-0.2,0.2-0.4c0.1-0.2,0.2-0.3,0.2-0.4
+		c0.1-0.2,0.2-0.5,0.3-1c0.1-0.4,0.2-0.9,0.4-1.3c0.1-0.5,0.2-0.9,0.3-1.3c0.1-0.4,0.2-0.7,0.2-0.9c0.1-0.4,0.2-0.8,0.3-1.2
+		c0.1-0.4,0.2-0.8,0.3-1.2c0.2-0.7,0.3-1.4,0.4-2.1c0.1-0.7,0.2-1.4,0.3-2.2c-0.1,0-0.2,0-0.3,0c-0.1,0-0.2,0-0.3,0l0.1-0.8l4-0.1
+		l0.1,0.8c-0.1,0-0.2,0-0.2,0c0,0-0.1,0-0.2,0c0.1,0.7,0.2,1.4,0.3,2c0.1,0.6,0.2,1.2,0.3,1.8c0.1,0.6,0.2,1.2,0.3,1.8
+		c0.1,0.6,0.2,1.3,0.4,2c0.2,0,0.3,0,0.3,0c0,0,0.1,0,0.3,0L102.4,9.7z M98.8,6.1c-0.1-0.7-0.2-1.3-0.3-2c-0.1-0.6-0.3-1.3-0.4-2
+		c-0.1,0.6-0.2,1.3-0.4,2.1c-0.1,0.7-0.3,1.5-0.5,2.2L98.8,6.1z"/>
+	<path fill="#c3c3c3" d="M124.9,20.1c0-0.3,0.1-0.6,0.3-0.8c0.2-0.2,0.4-0.3,0.7-0.4c0.3-0.1,0.5,0,0.8,0.1c0.3,0.1,0.5,0.3,0.6,0.5
+		c0.3,0.4,0.6,0.9,0.7,1.4c0.2,0.5,0.2,1,0.2,1.5c0,0.5-0.1,1-0.3,1.5c-0.2,0.5-0.4,1-0.7,1.4c-0.6,0.9-1.4,1.6-2.4,2
+		c-1,0.5-2,0.7-3,0.7c-1.5,0-2.8-0.3-3.9-1s-2.1-1.4-3-2.4c-0.9-1-1.8-2.1-2.5-3.2c-0.8-1.2-1.5-2.3-2.3-3.5c-1.1,1.2-2.4,2.2-3.9,3
+		c-1.5,0.8-3,1.1-4.5,1c-1.1,0-2.1-0.1-3-0.5c-0.9-0.3-1.6-0.8-2.2-1.4c-0.6-0.6-0.9-1.3-1.1-2.2c-0.2-0.8-0.1-1.7,0.2-2.7
+		c0.3-0.9,0.7-1.6,1.3-2.2c0.6-0.6,1.2-1.1,2-1.5c0.7-0.4,1.5-0.6,2.4-0.7c0.8-0.1,1.7,0,2.6,0.2c0-1.7,0-3.4,0-5c0-1.7,0-3.2,0-4.6
+		c-0.3,0-0.6,0-0.9,0c-0.3,0-0.6,0-0.9,0c0-0.2,0-0.3,0-0.5s0-0.3,0-0.5l3.7-0.1c0.8-0.2,1.6-0.2,2.4-0.1c0.8,0.1,1.6,0.3,2.4,0.5
+		c0.7,0.3,1.4,0.7,1.9,1.2c0.5,0.5,0.9,1.1,1.1,1.8c0.3,1.2,0.4,2.4,0.3,3.6c-0.1,1.2-0.2,2.5-0.4,3.7c-0.1,1-0.4,2-0.8,3
+		c-0.5,1-1,2-1.7,2.9c0.3,0.4,0.6,0.8,0.8,1.2c0.3,0.4,0.5,0.8,0.8,1.2c0.5,0.8,1.1,1.6,1.7,2.5c0.6,0.8,1.3,1.6,2,2.4
+		c0.7,0.7,1.5,1.3,2.4,1.8s1.8,0.7,2.9,0.8c1.1,0,2.1-0.2,3-0.7c0.9-0.5,1.6-1.2,2.1-2.2c0.2-0.4,0.3-0.8,0.4-1.3
+		c0.1-0.5,0-0.9-0.1-1.3c-0.2,0.1-0.4,0.2-0.6,0.2c-0.2,0-0.4,0-0.6-0.1c-0.2-0.1-0.4-0.2-0.5-0.4S124.9,20.4,124.9,20.1z M102.9,21
+		c1.5-0.4,2.8-1,3.7-1.8c0.9-0.8,1.7-1.7,2.3-2.8c-0.2-0.2-0.3-0.5-0.6-0.7c-0.6-0.7-1.2-1.4-1.9-1.9c0,0.6,0.1,1.2,0.1,1.8
+		c0,0.6,0.1,1.1,0.2,1.6h0v0.1c-0.5,0-0.9,0-1.3,0c-0.4,0-0.8,0-1.2,0c-0.3,0-0.6,0-0.9,0c-0.3,0-0.6,0-0.9,0
+		c-0.1-0.2-0.1-0.4,0-0.7c0-0.2,0.1-0.3,0.3-0.5c0.3-0.3,0.7-0.4,1.1-0.2l0.1-3.5c-0.5-0.2-1-0.3-1.5-0.3c-0.5,0-1.1,0-1.6,0.1
+		c-0.6,0.1-1.1,0.3-1.6,0.6c-0.5,0.3-0.9,0.7-1.3,1.1c-0.4,0.4-0.7,0.9-0.9,1.5c-0.2,0.5-0.3,1.1-0.3,1.6c0,0.7,0.2,1.3,0.6,1.8
+		c0.4,0.5,0.9,0.9,1.4,1.4c0.2,0.2,0.5,0.3,0.8,0.5c0.3,0.1,0.7,0.2,1.1,0.3c0.4,0.1,0.8,0.1,1.2,0.1
+		C102.1,21.1,102.5,21.1,102.9,21z M109.3,1.9c-0.4-0.3-0.8-0.5-1.2-0.6c-0.5-0.1-0.9-0.1-1.4-0.1c-0.1,1.7-0.2,3.4-0.3,5.3
+		c-0.1,1.9-0.1,3.7,0,5.6c0.6,0.4,1.2,0.8,1.7,1.4c0.5,0.5,1,1.1,1.5,1.6c0.2-0.6,0.4-1.2,0.6-1.9c0.2-0.6,0.3-1.2,0.3-1.7
+		c0.2-1.1,0.2-2.1,0.3-3.1c0-1,0-2.1-0.1-3.1c-0.1-0.6-0.2-1.2-0.4-1.9C110.1,2.8,109.8,2.3,109.3,1.9z"/>
+	<path fill="#c3c3c3" d="M116.5,1.2c-0.3,0-0.6,0-0.9,0c-0.3,0-0.6,0-0.9,0V0.4c0.5,0,0.9,0,1.2-0.1s0.7,0,1.1,0c0.4,0,0.7,0,1.1,0
+		s0.8,0,1.3-0.1c0.9,0,1.8,0,2.8-0.1c0.9,0,1.8,0,2.8-0.1c0,0.6,0,1.2,0,1.8c0,0.6,0,1.2,0,1.8c-0.2,0-0.3,0-0.5,0
+		c-0.2,0-0.3,0-0.5,0c-0.1,0-0.2,0-0.3,0c-0.1,0-0.1-0.1,0-0.1c0.1-0.2,0.1-0.4,0.1-0.6s0-0.4-0.1-0.6c-0.1-0.2-0.2-0.4-0.3-0.6
+		c-0.1-0.2-0.2-0.3-0.4-0.4c-0.2-0.1-0.4-0.2-0.6-0.2c-0.2,0-0.5,0-0.7,0c-0.3,0-0.5,0.1-0.8,0.1c-0.3,0.1-0.5,0.2-0.6,0.4
+		c-0.1,0.2-0.1,0.3-0.1,0.3c0,0.1,0,0.2,0,0.3c0,0.7-0.1,1.3-0.1,2c0,0.6-0.1,1.3-0.1,1.9c0,0.2,0,0.3,0,0.5c0,0.2,0,0.3,0,0.5
+		c0.6-0.2,1.2-0.3,1.9-0.4c0.6-0.1,1.2-0.3,1.9-0.4c0,0.1,0.1,0.2,0.1,0.3c0,0.1,0,0.3,0,0.4c0,0.2-0.1,0.3-0.1,0.4
+		c-0.1,0.1-0.1,0.2-0.1,0.3c-0.1,0.1-0.2,0.1-0.4,0.2c-0.1,0-0.3,0.1-0.4,0.1c-0.5,0.1-0.9,0.2-1.4,0.3c-0.5,0.1-0.9,0.1-1.4,0.2
+		c0,1-0.1,2-0.2,2.9c-0.1,1-0.1,1.9-0.2,2.9c0.8,0.2,1.5,0.3,2,0.1c0.6-0.2,1.2-0.5,1.9-1c0.2-0.1,0.2-0.3,0.2-0.5
+		c0-0.2,0-0.5,0-0.7c0-0.2,0.1-0.5,0.2-0.6c0.1-0.2,0.3-0.3,0.7-0.4c0.4,0,0.6,0.1,0.7,0.4c0.1,0.3,0.2,0.7,0.2,1.1
+		c0,0.5,0,0.9-0.1,1.4c-0.1,0.5-0.1,0.9,0,1.2c-0.5,0-1,0-1.4,0c-0.4,0-0.8,0-1.2,0.1c-0.4,0-0.8,0-1.2,0.1c-0.4,0-0.9,0-1.3,0
+		c-0.9,0-1.7,0-2.5,0.1c-0.7,0.1-1.6,0.1-2.4,0.1c-0.2-0.2-0.2-0.4-0.2-0.7c0-0.2,0.1-0.5,0.3-0.6c0.2-0.2,0.3-0.3,0.6-0.3
+		c0.2-0.1,0.5,0,0.7,0.1c0.1-2.1,0.2-4.3,0.1-6.5C116.3,5.5,116.3,3.4,116.5,1.2z"/>
+</g>
+</svg>
+
+            </a>
+        </p>
+	</footer>
+
+	<script>
+		var algolia_app_id      = 'FU55RWGNDN';
+		var algolia_search_key  = 'c41c5de31ca55044dbb0bde815d35121';
+				var version             = '5.4';
+			</script>
+
+	<script id="search_suggestion_template" type="text/template">
+	<div class="autocomplete-wrapper">
+		{{#_highlightResult.h1}}
+		<div class="h1">
+			{{{ _highlightResult.h1.value }}}
+		</div>
+		{{/_highlightResult.h1}}
+
+		<div class="sub-section">
+			{{#_highlightResult.h2}}
+			<div class="h2">
+				<span class="hash">#</span> {{{ _highlightResult.h2.value }}}
+			</div>
+			{{/_highlightResult.h2}}
+
+			{{#_highlightResult.h3}}
+			<div class="h3">
+				> {{{ _highlightResult.h3.value }}}
+			</div>
+			{{/_highlightResult.h3}}
+
+			{{#_highlightResult.h4}}
+			<div class="h4">
+				> {{{ _highlightResult.h4.value }}}
+			</div>
+			{{/_highlightResult.h4}}
+		</div>
+
+		{{#_highlightResult.content}}
+		<div class="content">
+			{{{ _highlightResult.content.value }}}
+		</div>
+		{{/_highlightResult.content}}
+	</div>
+</script>
+
+<script id="search_empty_template" type="text/template">
+	<div class="autocomplete-wrapper empty">
+		<div class="h2">We didn't find any result for "{{query}}". Sorry!</div>
+	</div>
+</script>
+
+<script id="search_footer_template" type="text/template">
+	<div class="footer">
+		<a target="_blank" href="https://www.algolia.com/referrals/5a08e6a4/join">
+			<img width="50" src="/docs/assets/img/algolia-logo.png">
+			<div class="powered">powered by</div>
+			<div style="clear: both"></div>
+		</a>
+	</div>
+</script>
+
+	<script src="../../build/assets/js/laravel-be3cb5d7de.js"></script>
+	<script src="../../assets/js/viewport-units-buggyfill.js"></script>
+
+	<script>window.viewportUnitsBuggyfill.init();</script>
+    <script>
+          ga('create', 'UA-53903425-7', 'auto');
+          ga('send', 'pageview');
+    </script>
+</body>
+</html>

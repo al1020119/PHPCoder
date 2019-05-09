@@ -1,0 +1,1138 @@
+<!doctype html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<title>事件广播 | Laravel 5.3 中文文档
+</title>
+	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+	<meta name="author" content="Taylor Otwell">
+	<meta name="description" content="事件广播,简介,配置,对驱动器的要求,概念综述,使用示例程序,定义广播事件,广播数据,广播队列,频道授权,定义授权路由,定义授权回调,对事件进行广播,只广播给他人,接收广播,安装 Laravel Echo,对事件进行监听,命名空间...
+">
+	<meta name="keywords" content="laravel,laravel中国,laravel中文,laravel框架中文,laravel文档,laravel框架中国,laravel中文文档">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+			<link rel="canonical" href="../5.5/broadcasting.html" />
+		<!--[if lte IE 9]>
+		<script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+	<![endif]-->
+	<link rel="stylesheet" href="../../build/assets/css/laravel-4bbf92d154.css">
+	<link rel="apple-touch-icon" href="../../favicon.png.jpeg">
+    <style>
+        .list-group-item img.media-object {
+            width: 20px;
+            border-radius: 2px;
+            margin-right: 4px;
+            display: inline-block;
+        }
+    </style>
+</head>
+<body class="docs language-php">
+
+	<span class="overlay"></span>
+
+	<nav class="main">
+		<a href="../../index.html" class="brand nav-block">
+			<svg version="1.1"
+	 xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:a="http://ns.adobe.com/AdobeSVGViewerExtensions/3.0/"
+	 x="0px" y="0px" width="84.1px" height="57.6px" viewBox="0 0 84.1 57.6" enable-background="new 0 0 84.1 57.6"
+	 xml:space="preserve">
+<defs>
+</defs>
+<path fill="#FB503B" d="M83.8,26.9c-0.6-0.6-8.3-10.3-9.6-11.9c-1.4-1.6-2-1.3-2.9-1.2s-10.6,1.8-11.7,1.9c-1.1,0.2-1.8,0.6-1.1,1.6
+	c0.6,0.9,7,9.9,8.4,12l-25.5,6.1L21.2,1.5c-0.8-1.2-1-1.6-2.8-1.5C16.6,0.1,2.5,1.3,1.5,1.3c-1,0.1-2.1,0.5-1.1,2.9
+	c1,2.4,17,36.8,17.4,37.8c0.4,1,1.6,2.6,4.3,2c2.8-0.7,12.4-3.2,17.7-4.6c2.8,5,8.4,15.2,9.5,16.7c1.4,2,2.4,1.6,4.5,1
+	c1.7-0.5,26.2-9.3,27.3-9.8c1.1-0.5,1.8-0.8,1-1.9c-0.6-0.8-7-9.5-10.4-14c2.3-0.6,10.6-2.8,11.5-3.1C84.2,28,84.4,27.5,83.8,26.9z
+	 M37.5,36.4c-0.3,0.1-14.6,3.5-15.3,3.7c-0.8,0.2-0.8,0.1-0.8-0.2C21.2,39.6,4.4,4.8,4.1,4.4c-0.2-0.4-0.2-0.8,0-0.8
+	c0.2,0,13.5-1.2,13.9-1.2c0.5,0,0.4,0.1,0.6,0.4c0,0,18.7,32.3,19,32.8C38,36.1,37.8,36.3,37.5,36.4z M77.7,43.9
+	c0.2,0.4,0.5,0.6-0.3,0.8c-0.7,0.3-24.1,8.2-24.6,8.4c-0.5,0.2-0.8,0.3-1.4-0.6s-8.2-14-8.2-14L68.1,32c0.6-0.2,0.8-0.3,1.2,0.3
+	C69.7,33,77.5,43.6,77.7,43.9z M79.3,26.3c-0.6,0.1-9.7,2.4-9.7,2.4l-7.5-10.2c-0.2-0.3-0.4-0.6,0.1-0.7c0.5-0.1,9-1.6,9.4-1.7
+	c0.4-0.1,0.7-0.2,1.2,0.5c0.5,0.6,6.9,8.8,7.2,9.1C80.3,26,79.9,26.2,79.3,26.3z"/>
+</svg>
+
+			<span>Laravel</span>
+		</a>
+
+        <div class="search nav-block">
+            <svg version="1.1"
+	 xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:a="http://ns.adobe.com/AdobeSVGViewerExtensions/3.0/"
+	 x="0px" y="0px" width="16px" height="16px" viewBox="0 0 16 16" enable-background="new 0 0 16 16" xml:space="preserve">
+<defs>
+</defs>
+<g>
+	<g>
+		<path fill="#A1A1A1" d="M5.8,11.7c-1.6,0-3-0.6-4.1-1.7S0,7.4,0,5.8s0.6-3,1.7-4.1C2.8,0.6,4.3,0,5.8,0s3,0.6,4.1,1.7
+			c2.3,2.3,2.3,6,0,8.3C8.9,11.1,7.4,11.7,5.8,11.7z M5.8,1C4.5,1,3.3,1.5,2.4,2.4C1.5,3.3,1,4.5,1,5.8s0.5,2.5,1.4,3.4
+			c0.9,0.9,2.1,1.4,3.4,1.4s2.5-0.5,3.4-1.4c1.9-1.9,1.9-5,0-6.9C8.4,1.5,7.1,1,5.8,1z"/>
+	</g>
+	<g>
+		<path fill="#A1A1A1" d="M15.5,16c-0.1,0-0.3,0-0.3-0.1L9.3,10c-0.2-0.2-0.2-0.5,0-0.7s0.5-0.2,0.7,0l5.9,5.9
+			c0.2,0.2,0.2,0.5,0,0.7C15.8,16,15.6,16,15.5,16z"/>
+	</g>
+</g>
+</svg>
+
+            <input placeholder="搜索文档" type="text" v-model="search" id="search-input" v-on:blur="reset" />
+        </div>
+
+		<ul class="main-nav" v-if="! search">
+			<li class="nav-docs"><a href="../5.4.html">文档</a></li>
+<li ><a href="https://laravel-china.org/news" class="no-pjax">Laravel 资讯</a></li>
+<li class="dropdown"><a href="https://laravel-china.org/">Laravel China 社区</a></li>
+<li class="nav-forge"><a href="https://laravel-china.org/categories/1">酷工作</a></li>
+<li class="nav-docs"><a href="http://lumen.laravel-china.org">Lumen</a></li>
+<li class="nav-forge"><a href="https://cs.laravel-china.org/">速查表</a></li>
+<li class="nav-forge"><a href="https://fsdhub.com/books/laravel-essential-training-5.5">《Laravel 入门教程》</a></li>
+		</ul>
+
+        			<div class="switcher">
+	<div class="dropdown">
+		<button class="btn dropdown-toggle btn-inverted" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-expanded="true">
+			<!--<span class="faint">v</span> -->
+			5.3
+			<span class="caret"></span>
+		</button>
+		<ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu1">
+							<li role="presentation">
+					<a role="menuitem" tabindex="-1" href="../5.5/broadcasting.html">5.5</a>
+				</li>
+							<li role="presentation">
+					<a role="menuitem" tabindex="-1" href="../5.4/broadcasting.html">5.4</a>
+				</li>
+							<li role="presentation">
+					<a role="menuitem" tabindex="-1" href="broadcasting.html">5.3</a>
+				</li>
+							<li role="presentation">
+					<a role="menuitem" tabindex="-1" href="http://d.laravel-china.org/docs/5.2/broadcasting">5.2</a>
+				</li>
+							<li role="presentation">
+					<a role="menuitem" tabindex="-1" href="http://d.laravel-china.org/docs/5.1/broadcasting">5.1</a>
+				</li>
+					</ul>
+	</div>
+</div>
+		
+        <div class="responsive-sidebar-nav">
+			<a href="broadcasting.html#" class="toggle-slide menu-link btn">&#9776;</a>
+		</div>
+	</nav>
+
+	<nav id="slide-menu" class="slide-menu" role="navigation">
+
+	<div class="brand">
+		<a href="../../index.html">
+			<img src="../../assets/img/laravel-logo-white.png" height="50">
+		</a>
+	</div>
+
+	<ul class="slide-main-nav">
+		<li><a href="../../index.html">Home</a></li>
+		<li class="nav-docs"><a href="../5.4.html">文档</a></li>
+<li ><a href="https://laravel-china.org/news" class="no-pjax">Laravel 资讯</a></li>
+<li class="dropdown"><a href="https://laravel-china.org/">Laravel China 社区</a></li>
+<li class="nav-forge"><a href="https://laravel-china.org/categories/1">酷工作</a></li>
+<li class="nav-docs"><a href="http://lumen.laravel-china.org">Lumen</a></li>
+<li class="nav-forge"><a href="https://cs.laravel-china.org/">速查表</a></li>
+<li class="nav-forge"><a href="https://fsdhub.com/books/laravel-essential-training-5.5">《Laravel 入门教程》</a></li>
+	</ul>
+
+	<div class="slide-docs-nav">
+		<h2>Documentation</h2>
+		<ul>
+<li>
+<h2>前言</h2>
+<ul>
+<li><a href="about.html">翻译说明</a></li>
+<li><a href="releases.html">发行说明</a></li>
+<li><a href="upgrade.html">升级说明</a></li>
+<li><a href="contributions.html">贡献导引</a></li>
+<li><a href="../../api/5.3/index.html">API 文档</a></li>
+</ul>
+</li>
+<li>
+<h2>入门指南</h2>
+<ul>
+<li><a href="installation.html">安装</a></li>
+<li><a href="configuration.html">配置信息</a></li>
+<li><a href="structure.html">文件夹结构</a></li>
+<li><a href="errors.html">错误与日志</a></li>
+</ul>
+</li>
+<li>
+<h2>开发环境部署</h2>
+<ul>
+<li><a href="homestead.html">Homestead</a></li>
+<li><a href="valet.html">Valet</a></li>
+</ul>
+</li>
+<li>
+<h2>核心概念</h2>
+<ul>
+<li><a href="container.html">服务容器</a></li>
+<li><a href="providers.html">服务提供者</a></li>
+<li><a href="facades.html">Facades</a></li>
+<li><a href="contracts.html">Contracts</a></li>
+</ul>
+</li>
+<li>
+<h2>HTTP 层</h2>
+<ul>
+<li><a href="routing.html">路由</a></li>
+<li><a href="middleware.html">中间件</a></li>
+<li><a href="csrf.html">CSRF 保护</a></li>
+<li><a href="controllers.html">控制器</a></li>
+<li><a href="requests.html">请求</a></li>
+<li><a href="responses.html">响应</a></li>
+<li><a href="session.html">Session</a></li>
+<li><a href="validation.html">表单验证</a></li>
+</ul>
+</li>
+<li>
+<h2>视图和模板</h2>
+<ul>
+<li><a href="views.html">视图</a></li>
+<li><a href="blade.html">Blade 模板</a></li>
+<li><a href="localization.html">本地化</a></li>
+</ul>
+</li>
+<li>
+<h2>JavaScript 与 CSS</h2>
+<ul>
+<li><a href="frontend.html">入门指南</a></li>
+<li><a href="elixir.html">Elixir</a></li>
+</ul>
+</li>
+<li>
+<h2>安全</h2>
+<ul>
+<li><a href="authentication.html">用户认证</a></li>
+<li><a href="authorization.html">用户授权</a></li>
+<li><a href="passwords.html">重置密码</a></li>
+<li><a href="passport.html">API 认证</a></li>
+<li><a href="encryption.html">加密解密</a></li>
+<li><a href="hashing.html">哈希</a></li>
+</ul>
+</li>
+<li>
+<h2>综合话题</h2>
+<ul>
+<li><a href="broadcasting.html">广播系统</a></li>
+<li><a href="cache.html">缓存系统</a></li>
+<li><a href="events.html">事件系统</a></li>
+<li><a href="filesystem.html">文件存储</a></li>
+<li><a href="mail.html">邮件发送</a></li>
+<li><a href="notifications.html">消息通知</a></li>
+<li><a href="queues.html">队列</a></li>
+</ul>
+</li>
+<li>
+<h2>数据库</h2>
+<ul>
+<li><a href="database.html">快速入门</a></li>
+<li><a href="queries.html">查询构造器</a></li>
+<li><a href="pagination.html">分页</a></li>
+<li><a href="migrations.html">数据库迁移</a></li>
+<li><a href="seeding.html">数据填充</a></li>
+<li><a href="redis.html">Redis</a></li>
+</ul>
+</li>
+<li>
+<h2>Eloquent ORM</h2>
+<ul>
+<li><a href="eloquent.html">快速入门</a></li>
+<li><a href="eloquent-relationships.html">模型关联</a></li>
+<li><a href="eloquent-collections.html">Eloquent 集合</a></li>
+<li><a href="eloquent-mutators.html">修改器</a></li>
+<li><a href="eloquent-serialization.html">序列化</a></li>
+</ul>
+</li>
+<li>
+<h2>Artisan 控制台</h2>
+<ul>
+<li><a href="artisan.html">Artisan 命令行</a></li>
+<li><a href="scheduling.html">任务调度</a></li>
+</ul>
+</li>
+<li>
+<h2>测试</h2>
+<ul>
+<li><a href="testing.html">快速入门</a></li>
+<li><a href="application-testing.html">应用程序测试</a></li>
+<li><a href="database-testing.html">数据库</a></li>
+<li><a href="mocking.html">模拟器</a></li>
+</ul>
+</li>
+<li>
+<h2>官方扩展包</h2>
+<ul>
+<li><a href="billing.html">Cashier 交易工具包</a></li>
+<li><a href="envoy.html">Envoy 部署工具</a></li>
+<li><a href="passport.html">Passport OAuth 认证</a></li>
+<li><a href="scout.html">Scout 全文搜索</a></li>
+<li><a href="https://github.com/laravel/socialite">Socialite 社会化登录</a></li>
+</ul>
+</li>
+<li>
+<h2>附录</h2>
+<ul>
+<li><a href="collections.html">集合</a></li>
+<li><a href="helpers.html">辅助函数</a></li>
+<li><a href="packages.html">扩展包开发</a></li>
+</ul>
+</li>
+</ul>
+	</div>
+
+</nav>
+
+<div class="docs-wrapper container">
+
+	<section class="sidebar">
+
+            <div class="header">
+              <a type="button" class="btn btn-primary btn-inverted btn-lg btn-block turnofflight"><i class="fa fa-lightbulb-o"></i> 夜间模式 </a>
+              <br>
+              <div class="versions text-center ">
+                <a class="doc-btn btn-inverted " href="../5.5.html" title="Laravel 5.5 中文文档">C5.5</a>
+                <a class="doc-btn btn-inverted " href="../5.4.html" title="Laravel 5.4 中文文档">C5.4</a>
+                <a class="doc-btn btn-inverted " href="../5.1.html" title="Laravel 5.1 中文文档">C5.1</a>
+              </div>
+            </div>
+
+            <a href="https://laravel-china.org/topics/3383" target="_blank" rel="nofollow" title="" style="display: block;margin-bottom: 23px;">
+                <img src="https://dn-phphub.qbox.me/uploads/images/201612/10/1/k7wwMpJduq.jpg" style="width: 100%;border: 1px solid #d8d3d3;box-shadow: 0 0 30px #d4d4d4;-moz-box-shadow: 0 0 30px #ccc;-webkit-box-shadow: 0 0 30px #d4d4d4;margin-bottom: 30px;margin-top: 10px;border-radius: 4px;">
+            </a>
+
+            <small><a href="broadcasting.html#" id="doc-expand" style="font-size: 9px; color: #525252;">▶</a></small>
+
+		<ul>
+<li>
+<h2>前言</h2>
+<ul>
+<li><a href="about.html">翻译说明</a></li>
+<li><a href="releases.html">发行说明</a></li>
+<li><a href="upgrade.html">升级说明</a></li>
+<li><a href="contributions.html">贡献导引</a></li>
+<li><a href="../../api/5.3/index.html">API 文档</a></li>
+</ul>
+</li>
+<li>
+<h2>入门指南</h2>
+<ul>
+<li><a href="installation.html">安装</a></li>
+<li><a href="configuration.html">配置信息</a></li>
+<li><a href="structure.html">文件夹结构</a></li>
+<li><a href="errors.html">错误与日志</a></li>
+</ul>
+</li>
+<li>
+<h2>开发环境部署</h2>
+<ul>
+<li><a href="homestead.html">Homestead</a></li>
+<li><a href="valet.html">Valet</a></li>
+</ul>
+</li>
+<li>
+<h2>核心概念</h2>
+<ul>
+<li><a href="container.html">服务容器</a></li>
+<li><a href="providers.html">服务提供者</a></li>
+<li><a href="facades.html">Facades</a></li>
+<li><a href="contracts.html">Contracts</a></li>
+</ul>
+</li>
+<li>
+<h2>HTTP 层</h2>
+<ul>
+<li><a href="routing.html">路由</a></li>
+<li><a href="middleware.html">中间件</a></li>
+<li><a href="csrf.html">CSRF 保护</a></li>
+<li><a href="controllers.html">控制器</a></li>
+<li><a href="requests.html">请求</a></li>
+<li><a href="responses.html">响应</a></li>
+<li><a href="session.html">Session</a></li>
+<li><a href="validation.html">表单验证</a></li>
+</ul>
+</li>
+<li>
+<h2>视图和模板</h2>
+<ul>
+<li><a href="views.html">视图</a></li>
+<li><a href="blade.html">Blade 模板</a></li>
+<li><a href="localization.html">本地化</a></li>
+</ul>
+</li>
+<li>
+<h2>JavaScript 与 CSS</h2>
+<ul>
+<li><a href="frontend.html">入门指南</a></li>
+<li><a href="elixir.html">Elixir</a></li>
+</ul>
+</li>
+<li>
+<h2>安全</h2>
+<ul>
+<li><a href="authentication.html">用户认证</a></li>
+<li><a href="authorization.html">用户授权</a></li>
+<li><a href="passwords.html">重置密码</a></li>
+<li><a href="passport.html">API 认证</a></li>
+<li><a href="encryption.html">加密解密</a></li>
+<li><a href="hashing.html">哈希</a></li>
+</ul>
+</li>
+<li>
+<h2>综合话题</h2>
+<ul>
+<li><a href="broadcasting.html">广播系统</a></li>
+<li><a href="cache.html">缓存系统</a></li>
+<li><a href="events.html">事件系统</a></li>
+<li><a href="filesystem.html">文件存储</a></li>
+<li><a href="mail.html">邮件发送</a></li>
+<li><a href="notifications.html">消息通知</a></li>
+<li><a href="queues.html">队列</a></li>
+</ul>
+</li>
+<li>
+<h2>数据库</h2>
+<ul>
+<li><a href="database.html">快速入门</a></li>
+<li><a href="queries.html">查询构造器</a></li>
+<li><a href="pagination.html">分页</a></li>
+<li><a href="migrations.html">数据库迁移</a></li>
+<li><a href="seeding.html">数据填充</a></li>
+<li><a href="redis.html">Redis</a></li>
+</ul>
+</li>
+<li>
+<h2>Eloquent ORM</h2>
+<ul>
+<li><a href="eloquent.html">快速入门</a></li>
+<li><a href="eloquent-relationships.html">模型关联</a></li>
+<li><a href="eloquent-collections.html">Eloquent 集合</a></li>
+<li><a href="eloquent-mutators.html">修改器</a></li>
+<li><a href="eloquent-serialization.html">序列化</a></li>
+</ul>
+</li>
+<li>
+<h2>Artisan 控制台</h2>
+<ul>
+<li><a href="artisan.html">Artisan 命令行</a></li>
+<li><a href="scheduling.html">任务调度</a></li>
+</ul>
+</li>
+<li>
+<h2>测试</h2>
+<ul>
+<li><a href="testing.html">快速入门</a></li>
+<li><a href="application-testing.html">应用程序测试</a></li>
+<li><a href="database-testing.html">数据库</a></li>
+<li><a href="mocking.html">模拟器</a></li>
+</ul>
+</li>
+<li>
+<h2>官方扩展包</h2>
+<ul>
+<li><a href="billing.html">Cashier 交易工具包</a></li>
+<li><a href="envoy.html">Envoy 部署工具</a></li>
+<li><a href="passport.html">Passport OAuth 认证</a></li>
+<li><a href="scout.html">Scout 全文搜索</a></li>
+<li><a href="https://github.com/laravel/socialite">Socialite 社会化登录</a></li>
+</ul>
+</li>
+<li>
+<h2>附录</h2>
+<ul>
+<li><a href="collections.html">集合</a></li>
+<li><a href="helpers.html">辅助函数</a></li>
+<li><a href="packages.html">扩展包开发</a></li>
+</ul>
+</li>
+</ul>
+
+		<hr>
+            <ul>
+              <li>社交账号</li>
+                <ul class="social-account">
+                  <li><a href="http://weibo.com/1837553744/profile?topnav=1&wvr=6&is_all=1">Summer 的微博</a></li>
+                  <li>新手 QQ 群：282196078</li>
+                </ul>
+
+            </ul>
+
+            <ul>
+              <li>
+              微信订阅号
+                <ul>
+                  <li>
+<img class="image-border popover-with-html" data-content="" src="https://dn-phphub.qbox.me/uploads/images/201708/06/1/4zgVR8dNCt.png" style="width: 148px;height: 148px;border:1px solid #ccc;padding:2px;border-radius:3px;margin-top:5px;" data-original-title="" title="">
+                  </li>
+                </ul>
+                </li>
+            </ul>
+
+            <ul>
+              <li>推荐资源
+              <ul class="list list-group resource-links">
+                    <li class="list-group-item ">
+                <a href="../../index.html" class="no-pjax" title="Laravel 中文文档">
+                    <img class="media-object inline-block " src="https://dn-phphub.qbox.me/uploads/banners/ql9XtosRhTe4v8HVC3TV.jpg">
+                    Laravel 中文文档
+                </a>
+            </li>
+                    <li class="list-group-item ">
+                <a href="https://lumen.laravel-china.org" class="no-pjax" title="Lumen 中文文档">
+                    <img class="media-object inline-block " src="https://dn-phphub.qbox.me/uploads/banners/bcMFkfsJZpetLgKFwWqY.jpg">
+                    Lumen 中文文档
+                </a>
+            </li>
+                    <li class="list-group-item ">
+                <a href="https://cs.laravel-china.org/" class="no-pjax" title="Laravel 速查表">
+                    <img class="media-object inline-block " src="https://dn-phphub.qbox.me/uploads/banners/cV55gsrH70qz6VdKr502.jpg">
+                    Laravel 速查表
+                </a>
+            </li>
+                    <li class="list-group-item ">
+                <a href="http://yousails.mikecrm.com/4Dh5uWU" class="no-pjax" title="Laravel 软件外包服务">
+                    <img class="media-object inline-block " src="https://dn-phphub.qbox.me/uploads/banners/v89tIQ6vjceA6g7JmrQB.png">
+                    Laravel 软件外包
+                </a>
+            </li>
+                    <li class="list-group-item ">
+                <a href="https://laravel-china.org/topics/3626" class="no-pjax" title="Laravel 远程工作 ">
+                    <img class="media-object inline-block " src="https://dn-phphub.qbox.me/uploads/banners/Xlq6s7wLxvX8FlTP4qZe.png">
+                    Laravel 远程工作
+                </a>
+            </li>
+                    <li class="list-group-item ">
+                <a href="https://laravel-china.github.io/php-the-right-way/" class="no-pjax" title="PHP 之道 - PHPer 必读">
+                    <img class="media-object inline-block " src="https://dn-phphub.qbox.me/uploads/banners/vA50AYuscu2RCMowq7ee.png">
+                    PHP 之道
+                </a>
+            </li>
+                    <li class="list-group-item ">
+                <a href="https://laravel-china.org/composer" class="no-pjax" title="Composer 中文全量镜像">
+                    <img class="media-object inline-block " src="https://dn-phphub.qbox.me/uploads/banners/KltcLb6leMa12dvTAxD7.png">
+                    Composer 镜像
+                </a>
+            </li>
+            </ul>
+              </li>
+            </ul>
+
+	</section>
+
+	
+
+	<article>
+
+		<div class="alert alert-warning" role="alert">
+			一小时同步一次，更多信息请查阅 <a href="https://laravel-china.org/topics/2095">文档导读</a>。
+			发现瑕疵？你也可以
+				<a href="https://github.com/laravel-china/laravel-docs/edit/5.3/broadcasting.md"><i class="fa fa-pencil-square-o"></i> 改进本文</a>
+			。<a href="https://laravel-china.org/topics/4026" target="_blank"><i class="fa fa-cloud-download" aria-hidden="true"></i> 离线版本下载</a>
+		</div>
+
+		<div class="main-content">
+			<h1>事件广播</h1>
+<ul>
+<li><a href="broadcasting.html#introduction">简介</a>
+<ul>
+<li><a href="broadcasting.html#configuration">配置</a></li>
+<li><a href="broadcasting.html#driver-prerequisites">对驱动器的要求</a></li>
+</ul></li>
+<li><a href="broadcasting.html#concept-overview">概念综述</a>
+<ul>
+<li><a href="broadcasting.html#using-example-application">使用示例程序</a></li>
+</ul></li>
+<li><a href="broadcasting.html#defining-broadcast-events">定义广播事件</a>
+<ul>
+<li><a href="broadcasting.html#broadcast-data">广播数据</a></li>
+<li><a href="broadcasting.html#broadcast-queue">广播队列</a></li>
+</ul></li>
+<li><a href="broadcasting.html#authorizing-channels">频道授权</a>
+<ul>
+<li><a href="broadcasting.html#defining-authorization-routes">定义授权路由</a></li>
+<li><a href="broadcasting.html#defining-authorization-callbacks">定义授权回调</a></li>
+</ul></li>
+<li><a href="broadcasting.html#broadcasting-events">对事件进行广播</a>
+<ul>
+<li><a href="broadcasting.html#only-to-others">只广播给他人</a></li>
+</ul></li>
+<li><a href="broadcasting.html#receiving-broadcasts">接收广播</a>
+<ul>
+<li><a href="broadcasting.html#installing-laravel-echo">安装 Laravel Echo</a></li>
+<li><a href="broadcasting.html#listening-for-events">对事件进行监听</a></li>
+<li><a href="broadcasting.html#namespaces">命名空间</a></li>
+</ul></li>
+<li><a href="broadcasting.html#presence-channels">Presence 频道</a>
+<ul>
+<li><a href="broadcasting.html#authorizing-presence-channels">授权 Presence 频道</a></li>
+<li><a href="broadcasting.html#joining-presence-channels">加入 Presence 频道</a></li>
+<li><a href="broadcasting.html#broadcasting-to-presence-channels">广播到 Presence 频道</a></li>
+</ul></li>
+<li><a href="broadcasting.html#notifications">消息通知</a></li>
+</ul>
+<p><a name="introduction"></a></p>
+<h2>简介</h2>
+<p>在现代的 web 应用程序中，WebSockets 被用来实现需要实时、即时更新的接口。当服务器上的数据被更新后，更新信息将通过 WebSocket 连接发送到客户端等待处理。相比于不停地轮询应用程序，WebSocket 是一种更加可靠和高效的选择。</p>
+<p>为了帮助你建立这类应用，Laravel 将通过 WebSocket 连接来使「广播」<a href="events.html">事件</a> 变得更加轻松。广播事件允许你在服务端代码和客户端 JavaScript 应用之间共享相同的事件名。</p>
+<blockquote>
+<p>{tip} 在深入了解事件广播之前，请确认你已阅读所有关于 Laravel <a href="events.html">事件和侦听器</a> 的文档。</p>
+</blockquote>
+<p><a name="configuration"></a></p>
+<h3>配置</h3>
+<p>所有关于事件广播的配置都被保存在 <code>config/broadcasting.php</code> 文件中。Laravel 自带了几个广播驱动器：<a href="https://pusher.com">Pusher</a>， <a href="redis.html">Redis</a>， 和一个用于本地开发与调试的 <code>log</code> 驱动器。另外，还有一个 <code>null</code> 驱动器可以让你完全关闭广播功能。每一个驱动的示例配置都可以在 <code>config/broadcasting.php</code> 文件中被找到。</p>
+<h4>广播服务提供者</h4>
+<p>在对事件进行广播之前，你必须先注册 <code>App\Providers\BroadcastServiceProvider</code>。对于一个全新安装的 Laravel 应用程序，你只需在 <code>config/app.php</code> 配置文件的 <code>providers</code> 数组中取消对该提供者的注释即可。该提供者将允许你注册广播授权路由和回调。</p>
+<h4>CSRF 令牌</h4>
+<p><a href="broadcasting.html#installing-laravel-echo">Laravel Echo</a> 会需要访问当前会话的 CSRF 令牌。如果可用，Echo 会从 <code>Laravel.csrfToken</code> JavaScript 对象中获取该令牌。如果你运行了 <code>make:auth</code> Artisan 命令，该对象会在 <code>resources/views/layouts/app.blade.php</code> 布局文件中被定义。如果你未使用该布局文件，可以在应用程序的 <code>head</code> HTML 元素中定义一个 <code>meta</code> 标签：</p>
+<pre><code class="language-html">&lt;meta name="csrf-token" content="{{ csrf_token() }}"&gt;</code></pre>
+<p><a name="driver-prerequisites"></a></p>
+<h3>对驱动器的要求</h3>
+<h4>Pusher</h4>
+<p>如果你使用 <a href="https://pusher.com">Pusher</a> 对事件进行广播，请用 Composer 包管理器来安装 Pusher PHP SDK：</p>
+<pre><code class="language-bash">composer require pusher/pusher-php-server</code></pre>
+<p>然后，你需要在 <code>config/broadcasting.php</code> 配置文件中填写你的 Pusher 证书。该文件中已经包含了一个 Pusher 示例配置，你只需指定 Pusher key、secret 和 application ID 即可。</p>
+<p>当把 Pusher 与 <a href="broadcasting.html#installing-laravel-echo">Laravel Echo</a> 一起使用时，你应该在实例化 Echo 对象时指定 broadcaster 为 <code>pusher</code>：</p>
+<pre><code class="language-js">import Echo from "laravel-echo"
+
+window.Echo = new Echo({
+    broadcaster: 'pusher',
+    key: 'your-pusher-key'
+});</code></pre>
+<h4>Redis</h4>
+<p>如果你使用 Redis 广播器，请安装 Predis 库：</p>
+<pre><code class="language-bash">composer require predis/predis</code></pre>
+<p>Redis 广播器会使用 Redis 的「生产者/消费者」特性来广播消息；尽管如此，你仍需将它与 WebSocket 服务器一起使用。WebSocket 服务器会从 Redis 接收消息，然后再将消息广播到你的 WebSocket 频道上去。</p>
+<p>当 Redis 广播器发布一个事件时，该事件会被发布到它指定的频道上去，传输的数据是一个采用 JSON 编码的字符串。该字符串包含了事件名、<code>data</code> 数据和生成该事件套接字 ID 的用户（如果可用的话）。</p>
+<h4>Socket.IO</h4>
+<p>如果你想把 Redis 广播器和 Socket.IO 服务器一起使用，你需要将 Socket.IO JavaScript 客户端库文件包含到应用程序的 <code>head</code> HTML 元素中：</p>
+<pre><code class="language-js">&lt;script src="https://cdn.socket.io/socket.io-1.4.5.js"&gt;&lt;/script&gt;</code></pre>
+<p>接着，你需要在实例化 Echo 时指定 <code>socket.io</code> 连接器和 <code>host</code> 。例如，如果你的应用程序和套接字服务器运行在 <code>app.dev</code> 域名上，你应该像这样实例化 Echo：</p>
+<pre><code class="language-js">import Echo from "laravel-echo"
+
+window.Echo = new Echo({
+    broadcaster: 'socket.io',
+    host: 'http://app.dev:6001'
+});</code></pre>
+<p>最后，你需要运行一个与 Laravel 兼容的 Socket.IO 服务器。Laravel 官方并没有实现 Socket.IO 服务器；不过，可以选择一个由社区驱动维护的项目 <a href="https://github.com/tlaverdure/laravel-echo-server">tlaverdure/laravel-echo-server</a>，目前托管在 GitHub。</p>
+<h4>对队列的要求</h4>
+<p>在开始广播事件之前，你还需要配置和运行 <a href="queues.html">队列侦听器</a>。所有的事件广播都是通过队列任务来完成的，因此应用程序的响应时间不会受到明显影响。</p>
+<p><a name="concept-overview"></a></p>
+<h2>概念综述</h2>
+<p>Laravel 的事件广播允许你使用基于驱动的 WebSockets 将服务端的 Larevel 事件广播到客户端的 JavaScript 应用程序。当前的 Laravel 自带了 <a href="http://pusher.com">Pusher</a> and Redis 驱动。通过使用 <a href="broadcasting.html#installing-laravel-echo">Laravel Echo</a> 的 Javascript 包，我们可以很方便地在客户端消费事件。</p>
+<p>事件通过「频道」来广播，这些频道可以被指定为公开的或私有的。任何访客都可以订阅一个不需要认证和授权的公开频道；然而，如果想订阅一个私有频道，那么该用户必须通过认证，并获得该频道的授权。</p>
+<p><a name="using-example-application"></a></p>
+<h3>使用示例程序</h3>
+<p>让我们先用一个电子商务网站作为例子来概览一下事件广播。我们不会讨论如何配置 <a href="http://pusher.com">Pusher</a> 和 <a href="broadcasting.html#echo">Laravel Echo</a> 的细节，因为这些会在本文档的其他章节被详细介绍。</p>
+<p>在我们的应用程序中，让我们假设有一个允许用户查看订单配送状态的页面。有一个 <code>ShippingStatusUpdated</code> 事件会在配送状态更新时被触发：</p>
+<pre><code class="language-php">event(new ShippingStatusUpdated($update));</code></pre>
+<h4><code>ShouldBroadcast</code> 接口</h4>
+<p>当用户在查看自己的订单时，我们不希望他们必须通过刷新页面才能看到状态更新。我们希望一旦有更新时就主动将更新信息广播到客户端。所以，我们必须让 <code>ShippingStatusUpdated</code> 事件实现 <code>ShouldBroadcast</code> 接口。这会让 Laravel 在事件被触发时广播该事件：</p>
+<pre><code class="language-php">&lt;?php
+
+namespace App\Events;
+
+use Illuminate\Broadcasting\Channel;
+use Illuminate\Queue\SerializesModels;
+use Illuminate\Broadcasting\PrivateChannel;
+use Illuminate\Broadcasting\PresenceChannel;
+use Illuminate\Broadcasting\InteractsWithSockets;
+use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
+
+class ShippingStatusUpdated implements ShouldBroadcast
+{
+    //
+}</code></pre>
+<p><code>ShouldBroadcast</code> 接口要求事件实现 <code>broadcastOn</code> 方法。该方法负责指定事件被广播到哪些频道。在通过 Artisan 命令生成的事件类中，一个空的 <code>broadcastOn</code> 方法已经被预定义好了，所以我们要做的仅仅是指定频道。我们希望只有订单的创建者能够看到状态更新，所以我们要把该事件广播到与这个订单绑定的私有频道上去：</p>
+<pre><code class="language-php">/**
+ * 指定事件在哪些频道上进行广播
+ *
+ * @return array
+ */
+public function broadcastOn()
+{
+    return new PrivateChannel('order.'.$this-&gt;update-&gt;order_id);
+}</code></pre>
+<h4>频道授权</h4>
+<p>记住，用户只有在被授权后才能监听私有频道。我们可以在 <code>BroadcastServiceProvider</code> 文件的 <code>boot</code> 方法中定义频道的授权规则。在本例中，我们需要对试图监听私有 <code>order.1</code> 频道的所有用户进行验证，确保只有订单的创建者才能进行监听：</p>
+<pre><code class="language-php">Broadcast::channel('order.*', function ($user, $orderId) {
+    return $user-&gt;id === Order::findOrNew($orderId)-&gt;user_id;
+});</code></pre>
+<p><code>channel</code> 方法接收两个参数：频道名称和一个回调函数，该回调通过返回 <code>true</code> 或 <code>false</code> 来表示用户是否被授权监听该频道。</p>
+<p>所有的授权回调接收当前被认证的用户作为第一个参数，任何额外的通配符参数作为后续参数。在本例中，我们使用 <code>*</code> 符号来表示频道名称的「ID」部分是通配符。</p>
+<h4>对事件广播进行监听</h4>
+<p>接下来，就只剩下在 JavaScript 应用程序中监听事件了。我们可以使用 Laravel Echo 来实现。首先，使用 <code>private</code> 方法来订阅私有频道。然后，使用 <code>listen</code> 方法来监听 <code>ShippingStatusUpdated</code> 事件。默认情况下，事件的所有公有属性会被包括在广播事件中：</p>
+<pre><code class="language-js">Echo.private('order.' + orderId)
+    .listen('ShippingStatusUpdated', (e) =&gt; {
+        console.log(e.update);
+    });</code></pre>
+<p><a name="defining-broadcast-events"></a></p>
+<h2>定义广播事件</h2>
+<p>要告知 Laravel 一个给定的事件是广播类型，只需在事件类中实现 <code>Illuminate\Contracts\Broadcasting\ShouldBroadcast</code> 接口即可。该接口已经被导入到所有由框架生成的事件类中，所以你可以很方便地将它添加到你自己的事件中。</p>
+<p><code>ShouldBroadcast</code> 接口要求你实现一个方法：<code>broadcastOn</code>。<code>broadcastOn</code> 方法返回一个频道或一个频道数组，事件会被广播到这些频道。频道必须是 <code>Channel</code>、<code>PrivateChannel</code> 或 <code>PresenceChannel</code> 的实例。<code>Channel</code> 实例表示任何用户都可以订阅的公开频道，而 <code>PrivateChannels</code> 和 <code>PresenceChannels</code> 则表示需要 <a href="broadcasting.html#authorizing-channels">频道授权</a> 的私有频道：</p>
+<pre><code class="language-php">&lt;?php
+
+namespace App\Events;
+
+use Illuminate\Broadcasting\Channel;
+use Illuminate\Queue\SerializesModels;
+use Illuminate\Broadcasting\PrivateChannel;
+use Illuminate\Broadcasting\PresenceChannel;
+use Illuminate\Broadcasting\InteractsWithSockets;
+use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
+
+class ServerCreated implements ShouldBroadcast
+{
+    use SerializesModels;
+
+    public $user;
+
+    /**
+     * 创建一个新的事件实例
+     *
+     * @return void
+     */
+    public function __construct(User $user)
+    {
+        $this-&gt;user = $user;
+    }
+
+    /**
+     * 指定事件在哪些频道上进行广播
+     *
+     * @return Channel|array
+     */
+    public function broadcastOn()
+    {
+        return new PrivateChannel('user.'.$this-&gt;user-&gt;id);
+    }
+}</code></pre>
+<p>然后，你只需要像你平时那样 <a href="events.html">触发事件</a>。一旦事件被触发，一个 <a href="queues.html">队列任务</a> 会自动广播事件到你指定的广播驱动器上。</p>
+<p><a name="broadcast-data"></a></p>
+<h3>广播数据</h3>
+<p>当一个事件被广播时，它所有的 <code>public</code> 属性会自动被序列化为广播数据，这允许你在你的 JavaScript 应用中访问事件的公有数据。因此，举个例子，如果你的事件有一个公有的 <code>$user</code> 属性，它包含了一个 Elouqent 模型，那么事件的广播数据会是：</p>
+<pre><code class="language-json">{
+    "user": {
+        "id": 1,
+        "name": "Patrick Stewart"
+        ...
+    }
+}</code></pre>
+<p>然而，如果你想更细粒度地控制你的广播数据，你可以添加一个 <code>broadcastWith</code> 方法到你的事件中。这个方法应该返回一个数组，该数组中的数据会被添加到广播数据中：</p>
+<pre><code class="language-php">  /**
+   * 指定广播数据
+   *
+   * @return array
+   */
+  public function broadcastWith()
+  {
+      return ['id' =&gt; $this-&gt;user-&gt;id];
+  }</code></pre>
+<p><a name="broadcast-queue"></a></p>
+<h3>广播队列</h3>
+<p>默认情况下，每一个广播事件都被添加到默认的队列上，默认的队列连接在 <code>queue.php</code> 配置文件中指定。你可以通过在事件类中定义一个 <code>broadcastQueue</code> 属性来自定义广播器使用的队列。该属性用于指定广播使用的队列名称：</p>
+<pre><code class="language-php">/**
+ * 指定事件被放置在哪个队列上
+ *
+ * @var string
+ */
+public $broadcastQueue = 'your-queue-name';</code></pre>
+<p><a name="authorizing-channels"></a></p>
+<h2>频道授权</h2>
+<p>对于私有频道，用户只有被授权后才能监听。实现过程是用户向你的 Laravel 应用程序发起一个携带频道名称的 HTTP 请求，你的应用程序判断该用户是否能够监听该频道。在使用 <a href="broadcasting.html#installing-laravel-echo">Laravel Echo</a> 时，上述 HTTP 请求会被自动发送；尽管如此，你仍然需要定义适当的路由来响应这些请求。</p>
+<p><a name="defining-authorization-routes"></a></p>
+<h3>定义授权路由</h3>
+<p>幸运的是，我们可以在 Laravel 里很容易地定义路由来响应频道授权请求。在 <code>BroadcastServiceProvider</code> 中，你会看到一个对 <code>Broadcast::routes</code> 方法的调用。该方法会注册 <code>/broadcasting/auth</code> 路由来处理授权请求：</p>
+<pre><code class="language-php">Broadcast::routes();</code></pre>
+<p><code>Broadcast::routes</code> 方法会自动把它的路由放进 <code>web</code> 中间件组中；另外，如果你想对一些属性自定义，可以向该方法传递一个包含路由属性的数组：</p>
+<pre><code class="language-php">Broadcast::routes($attributes);</code></pre>
+<p><a name="defining-authorization-callbacks"></a></p>
+<h3>定义授权回调</h3>
+<p>接下来，我们需要定义真正用于处理频道授权的逻辑。和定义授权路由一样，这也是在 <code>BroadcastServiceProvider</code> 的 <code>boot</code> 方法中完成。在该方法中，你可以用 <code>Broadcast::channel</code> 方法来注册频道授权回调函数：</p>
+<pre><code class="language-php">Broadcast::channel('order.*', function ($user, $orderId) {
+    return $user-&gt;id === Order::findOrNew($orderId)-&gt;user_id;
+});</code></pre>
+<p><code>channel</code> 方法接收两个参数：频道名称和一个回调函数，该回调通过返回 <code>true</code> 或 <code>false</code> 来表示用户是否被授权监听该频道。</p>
+<p>所有的授权回调接收当前被认证的用户作为第一个参数，任何额外的通配符参数作为后续参数。在本例中，我们使用 <code>*</code> 符号来表示频道名称的「ID」部分是通配符。</p>
+<p><a name="broadcasting-events"></a></p>
+<h2>对事件进行广播</h2>
+<p>一旦你已经定义好了一个事件并实现了 <code>ShouldBroadcast</code> 接口，剩下的就是使用 <code>event</code> 函数来触发该事件。事件分发器会识别出实现了 <code>ShouldBroadcast</code> 接口的事件并将它们加入到队列进行广播：</p>
+<pre><code class="language-php">event(new ShippingStatusUpdated($update));</code></pre>
+<p><a name="only-to-others"></a></p>
+<h3>只广播给他人</h3>
+<p>当创建一个使用到事件广播的应用程序时，你可以用 <code>broadcast</code> 函数来替代 <code>event</code> 函数。和 <code>event</code> 函数一样，<code>broadcast</code> 函数将事件分发到服务端侦听器：</p>
+<pre><code class="language-php">broadcast(new ShippingStatusUpdated($update));</code></pre>
+<p>不同的是 <code>broadcast</code> 函数有一个 <code>toOthers</code> 方法允许你将当前用户从广播接收者中排除：</p>
+<pre><code class="language-php">broadcast(new ShippingStatusUpdated($update))-&gt;toOthers();</code></pre>
+<p>为了更好地理解什么时候使用 <code>toOthers</code> 方法，让我们假设有一个任务列表的应用程序，用户可以通过输入任务名称来新建任务。为了新建任务，你的应用程序需要发起一个请求到 <code>/task</code> 路由，该路由在接收到请求并成功创建新任务后会触发一个任务被新建的事件广播，并返回新任务的 JSON 响应。当你的 JavaScript 应用程序接收到来自该路由的响应时，它会直接将新任务插入到任务列表，就像这样：</p>
+<pre><code class="language-js">this.$http.post('/task', task)
+    .then((response) =&gt; {
+        this.tasks.push(response.data);
+    });</code></pre>
+<p>然而，别忘了我们还将接收到一个事件广播。如果你的 JavaScript 应用程序同时监听该事件以便添加新任务到任务列表，你将会在你的列表中看到重复的任务：一份来自路由响应，另一份来自广播。</p>
+<p>你可以通过使用 <code>toOthers</code> 方法让广播器只广播事件到其他用户来解决该问题。</p>
+<h4>配置</h4>
+<p>当你实例化 Laravel Echo 实例时，一个套接字 ID 会被指定到该连接。如果你使用 <a href="https://vuejs.org">Vue</a> 和 Vue Resource，套接字 ID 会自动被添加到每一个请求的 <code>X-Socket-ID</code> 头中。然后，当你调用 <code>toOthers</code> 方法时，Laravel 会从头中提取出套接字 ID，并告诉广播器不要广播任何消息到该套接字 ID 的连接上。</p>
+<p>如果你没有使用 Vue 和 Vue Resource，则需要手动配置 JavaScript 应用程序来发送 <code>X-Socket-ID</code> 头。你可以用 <code>Echo.socketId</code> 方法来获取套接字 ID：</p>
+<pre><code class="language-js">var socketId = Echo.socketId();</code></pre>
+<p><a name="receiving-broadcasts"></a></p>
+<h2>接收广播</h2>
+<p><a name="installing-laravel-echo"></a></p>
+<h3>安装 Laravel Echo</h3>
+<p>Laravel Echo 是一个 JavaScript 库，它使得订阅频道和监听由 Laravel 广播的事件变得非常容易。你可以通过 NPM 包管理器来安装 Echo。在本例中，因为我们将使用 Pusher 广播器，请安装 <code>pusher-js</code> 包：</p>
+<pre><code class="language-bash">npm install --save laravel-echo pusher-js</code></pre>
+<p>一旦 Echo 被安装好，你就可以在你应用程序的 JavaScript 中创建一个全新的 Echo 实例。做这件事的一个理想地方是在 <code>resources/assets/js/bootstrap.js</code> 文件的底部，Laravel 框架自带了该文件：</p>
+<pre><code class="language-js">import Echo from "laravel-echo"
+
+window.Echo = new Echo({
+    broadcaster: 'pusher',
+    key: 'your-pusher-key'
+});</code></pre>
+<p><a name="listening-for-events"></a></p>
+<h3>对事件进行监听</h3>
+<p>一旦你安装好并实例化了 Echo，你就可以开始监听事件广播了。首先，使用 <code>chennel</code> 方法来获取一个频道实例，然后调用 <code>listen</code> 方法来监听指定的事件：</p>
+<pre><code class="language-js">Echo.channel('orders')
+    .listen('OrderShipped', (e) =&gt; {
+        console.log(e.order.name);
+    });</code></pre>
+<p>如果你想监听私有频道上的事件，请使用 <code>private</code> 方法。你可以通过链式调用 <code>listen</code> 方法来监听一个频道上的多个事件：</p>
+<pre><code class="language-js">Echo.private('orders')
+    .listen(...)
+    .listen(...)
+    .listen(...);</code></pre>
+<p><a name="namespaces"></a></p>
+<h3>命名空间</h3>
+<p>你可能注意到了在上面的例子中我们没有为事件类指定完整的命名空间。这是因为 Echo 会自动认为事件在 <code>App\Events</code> 命名空间下。你可以在实例化 Echo 的时候传递一个 <code>namespace</code> 配置选项来指定根命名空间：</p>
+<pre><code class="language-js">window.Echo = new Echo({
+    broadcaster: 'pusher',
+    key: 'your-pusher-key',
+    namespace: 'App.Other.Namespace'
+});</code></pre>
+<p>另外，你也可以在使用 Echo 订阅事件的时候为事件类加上 <code>.</code> 前缀。这时需要填写完全限定名称的类名：</p>
+<pre><code class="language-js">Echo.channel('orders')
+    .listen('.Namespace.Event.Class', (e) =&gt; {
+        //
+    });</code></pre>
+<p><a name="presence-channels"></a></p>
+<h2>Presence 频道</h2>
+<p>Presence 频道是在私有频道的安全性基础上，额外暴露出有哪些人订阅了该频道。这使得它可以很容易地建立强大的、协同的应用，如当有一个用户在浏览页面时，通知其他正在浏览相同页面的用户。</p>
+<p><a name="joining-a-presence-channel"></a></p>
+<h3>授权 Presence 频道</h3>
+<p>Presence 频道也是私有频道；因此，用户必须 <a href="broadcasting.html#authorizing-channels">获得授权后才能访问他们</a>。与私有频道不同的是，在给 presence 频道定义授权回调函数时，如果一个用户已经加入了该频道，那么不应该返回 <code>true</code>，而应该返回一个关于该用户信息的数组。</p>
+<p>由授权回调函数返回的数据能够在你的 JavaScript 应用程序中被 presence 频道事件侦听器所使用。如果用户没有获得加入该 presence 频道的授权，那么你应该返回 <code>false</code> 或 <code>null</code>：</p>
+<pre><code class="language-php">Broadcast::channel('chat.*', function ($user, $roomId) {
+    if ($user-&gt;canJoinRoom($roomId)) {
+        return ['id' =&gt; $user-&gt;id, 'name' =&gt; $user-&gt;name];
+    }
+});</code></pre>
+<p><a name="joining-presence-channels"></a></p>
+<h3>加入 Presence 频道</h3>
+<p>你可以用 Echo 的 <code>join</code> 方法来加入 presence 频道。<code>join</code> 方法会返回一个实现了 <code>PresenceChannel</code> 的对象，它通过暴露 <code>listen</code> 方法，允许你订阅 <code>here</code>、<code>joining</code> 和 <code>leaving</code> 事件。</p>
+<pre><code class="language-js">Echo.join('chat.' + roomId)
+    .here((users) =&gt; {
+        //
+    })
+    .joining((user) =&gt; {
+        console.log(user.name);
+    })
+    .leaving((user) =&gt; {
+        console.log(user.name);
+    });</code></pre>
+<p><code>here</code> 回调函数会在你成功加入频道后被立即执行，它接收一个包含用户信息的数组，用来告知当前订阅在该频道上的其他用户。<code>joining</code> 方法会在其他新用户加入到频道时被执行，<code>leaving</code> 会在其他用户退出频道时被执行。</p>
+<p><a name="broadcasting-to-presence-channels"></a></p>
+<h3>广播到 Presence 频道</h3>
+<p>Presence 频道可以像公开和私有频道一样接收事件。使用一个聊天室的例子，我们要把 <code>NewMessage</code> 事件广播到聊天室的 presence 频道。要实现它，我们将从事件的 <code>broadcastOn</code> 方法中返回一个 <code>PresenceChannel</code> 实例：</p>
+<pre><code class="language-php">/**
+ * 指定事件在哪些频道上进行广播
+ *
+ * @return Channel|array
+ */
+public function broadcastOn()
+{
+    return new PresenceChannel('room.'.$this-&gt;message-&gt;room_id);
+}</code></pre>
+<p>和公开或私有事件一样，presence 频道事件也能使用 <code>broadcast</code> 函数来广播。同样的，你还能用 <code>toOthers</code> 方法将当前用户从广播接收者中排除：</p>
+<pre><code class="language-php">broadcast(new NewMessage($message));
+
+broadcast(new NewMessage($message))-&gt;toOthers();</code></pre>
+<p>你可以通过 Echo 的 <code>listen</code> 方法来监听 join 事件：</p>
+<pre><code class="language-js">Echo.join('chat.' + roomId)
+    .here(...)
+    .joining(...)
+    .leaving(...)
+    .listen('NewMessage', (e) =&gt; {
+        //
+    });</code></pre>
+<p><a name="notifications"></a></p>
+<h2>消息通知</h2>
+<p>将 <a href="notifications.html">消息通知</a> 和事件广播一同使用，你的 JavaScript 应用程序可以在不刷新页面的情况下接收新的消息通知。首先，请先阅读关于如何使用 <a href="notifications.html#broadcast-notifications">广播消息通知频道</a> 的文档。</p>
+<p>一旦你将一个消息通知配置为使用广播频道，你需要使用 Echo 的 <code>notification</code> 方法来监听广播事件。频道名称应该和接收消息通知的实体类名相匹配：</p>
+<pre><code class="language-js">Echo.private('App.User.' + userId)
+    .notification((notification) =&gt; {
+        console.log(notification.type);
+    });</code></pre>
+<p>在本例中，所有通过 <code>broadcast</code> 频道发送到 <code>App\User</code> 实例的消息通知都会被该回调接收到。一个针对 <code>App.User.*</code> 频道的授权回调函数已经被包含在 Laravel 的 <code>BroadcastServiceProvider</code> 中了。</p>
+<h2>译者署名</h2>
+<table>
+<thead>
+<tr>
+<th>用户名</th>
+<th>头像</th>
+<th>职能</th>
+<th>签名</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><a href="http://yudu.tech">@鱼肚</a></td>
+<td><img class="avatar-66 rm-style" src="https://dn-phphub.qbox.me/uploads/avatars/2613_1473692997.jpg?imageView2/1/w/100/h/100"></td>
+<td>翻译</td>
+<td>PHPer of <a href="http://www.webei.cn/">微贝</a></td>
+</tr>
+</tbody>
+</table>
+<hr />
+<blockquote>
+<p>{note} 欢迎任何形式的转载，但请务必注明出处，尊重他人劳动共创开源社区。</p>
+<p>转载请注明：本文档由 Laravel China 社区 [laravel-china.org] 组织翻译，详见 <a href="https://laravel-china.org/topics/2752/laravel-53-document-translation-completed">翻译召集帖</a>。</p>
+<p>文档永久地址： <a href="../../index.html">http://d.laravel-china.org</a></p>
+</blockquote>
+		</div>
+
+		<div class="main-footer" style="border-top:1px dashed rgba(0, 0, 0, 0.1);padding-top: 30px;margin-top:30px;margin-bottom: 20px;">
+			<div class="prev-next-wrap clearfix">
+
+									<a class="btn btn-primary pull-left btn-inverted" href="hashing.html"><i class="fa fa-arrow-left"></i> 哈希</a>
+				
+			    &nbsp;
+								    <a class="btn btn-primary pull-right btn-inverted" href="cache.html">缓存系统 <i class="fa fa-arrow-right"></i></a>
+							</div>
+		</div>
+
+	</article>
+</div>
+
+	<footer class="main">
+		<ul>
+			<li class="nav-docs"><a href="../5.4.html">文档</a></li>
+<li ><a href="https://laravel-china.org/news" class="no-pjax">Laravel 资讯</a></li>
+<li class="dropdown"><a href="https://laravel-china.org/">Laravel China 社区</a></li>
+<li class="nav-forge"><a href="https://laravel-china.org/categories/1">酷工作</a></li>
+<li class="nav-docs"><a href="http://lumen.laravel-china.org">Lumen</a></li>
+<li class="nav-forge"><a href="https://cs.laravel-china.org/">速查表</a></li>
+<li class="nav-forge"><a href="https://fsdhub.com/books/laravel-essential-training-5.5">《Laravel 入门教程》</a></li>
+		</ul>
+		<p>Laravel is a trademark of Taylor Otwell. Copyright &copy; Taylor Otwell.</p>
+            <div style="margin-top: 32px;">
+                <a href="https://www.upyun.com/" title="Composer 镜像赞助商">
+                    <img src="https://dn-phphub.qbox.me/uploads/banners/XPtLlZmIN1cQbLuDFEON.png" style="width: 200px;">
+                </a>
+            </div>
+            <p class="less-significant">
+            <a href="http://jackmcdade.com">
+                Designed by<br>
+                <svg version="1.1"
+	 xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:a="http://ns.adobe.com/AdobeSVGViewerExtensions/3.0/"
+	 x="0px" y="0px" width="128.2px" height="28px" viewBox="0 0 128.2 28" enable-background="new 0 0 128.2 28" xml:space="preserve"
+	>
+<defs>
+</defs>
+<g>
+	<path fill="#c3c3c3" d="M14.2,0.4c0,0.2,0,0.5,0,0.7c0,0.2,0,0.5,0,0.7l-1.4-0.3C12.9,3,13,4.5,13.1,6c0.1,1.5,0,3-0.1,4.5
+		c0,0.4-0.1,0.8-0.1,1.2c-0.1,0.4-0.1,0.8-0.3,1.2c-0.1,0.4-0.3,0.7-0.5,1.1c-0.2,0.3-0.5,0.6-0.9,0.9c-0.4,0.2-0.9,0.4-1.5,0.6
+		c-0.6,0.2-1.1,0.3-1.6,0.3c-0.6,0-1.2-0.1-1.6-0.3c-0.5-0.2-0.9-0.6-1.1-1c-0.3-0.5-0.5-1-0.6-1.6c-0.1-0.6-0.1-1.3,0-2.1
+		c0-0.2,0.1-0.5,0.2-0.7C4.9,9.9,5,9.7,5.1,9.5c0.1-0.2,0.2-0.4,0.3-0.6l1.1,0.4C6.7,9.3,7,9.4,7.3,9.5c0.3,0.1,0.5,0.1,0.6,0.2
+		c0,0.2,0,0.4-0.1,0.5c-0.1,0.2-0.1,0.3-0.2,0.4c-0.1,0.1-0.2,0.3-0.2,0.4c-0.1,0.2-0.1,0.3-0.1,0.5l-1.3-0.7
+		c-0.1,0.3-0.2,0.7-0.2,1.1c0,0.4,0.1,0.8,0.2,1.2c0.2,0.4,0.4,0.7,0.6,1c0.3,0.3,0.6,0.4,1,0.3c0.6,0,1.1-0.3,1.4-0.6
+		c0.3-0.4,0.5-0.9,0.7-1.7c0.1-0.7,0.2-1.6,0.2-2.8c0-1.1,0-2.4,0-3.9c0-0.6-0.1-1.3-0.1-2C9.7,2.8,9.6,2.1,9.5,1.4
+		c-0.2,0-0.5,0-0.8,0c-0.3,0-0.6,0-0.8,0c-0.8,0-1.5,0-2.2,0c-0.7,0-1.5,0-2.2,0.2c-0.3,0.1-0.6,0.2-1,0.4C2.2,2.1,1.9,2.4,1.6,2.6
+		C1.4,2.9,1.2,3.2,1.1,3.6C1,3.9,1,4.3,1.1,4.6c0.1,0.5,0.3,0.8,0.4,0.9V5.4c0-0.4,0.1-0.8,0.4-1c0.3-0.2,0.6-0.3,0.9-0.3
+		c0.3,0,0.6,0.1,0.9,0.3C4,4.6,4.1,5,4.1,5.4c0,0.4-0.1,0.8-0.4,1c-0.3,0.2-0.6,0.3-1,0.3H2.7C1.9,6.7,1.3,6.5,0.9,6
+		C0.5,5.6,0.2,5.1,0.1,4.5C0,4,0,3.4,0.2,2.7c0.2-0.6,0.5-1.1,1-1.5c0.4-0.3,0.8-0.5,1.2-0.7c0.4-0.1,0.9-0.2,1.4-0.3
+		c0.5-0.1,0.9-0.1,1.4-0.1c0.5,0,0.9,0,1.4,0h1.5c0.6,0,1.1,0,1.6,0.1c0.5,0,1,0.1,1.5,0.1c0.5,0,1,0.1,1.5,0.1
+		C13.1,0.5,13.6,0.5,14.2,0.4z"/>
+	<path fill="#c3c3c3" d="M25.2,14.3c0,0.2,0.1,0.4,0.1,0.6c0,0.2,0.1,0.4,0.1,0.7c-1-0.1-2-0.2-3-0.1c-1.1,0.1-2.1,0.2-3,0.4
+		c0-0.2-0.1-0.4-0.1-0.5c0-0.2-0.1-0.4-0.1-0.5c0.2,0,0.5-0.1,0.7-0.1c0.2,0,0.4-0.1,0.6-0.1c-0.1-1.5-0.3-3.1-0.5-4.6
+		c-0.5,0.1-0.9,0.1-1.4,0.2c-0.5,0.1-0.9,0.1-1.4,0.2c-0.2,0.7-0.3,1.3-0.5,2c-0.2,0.7-0.3,1.3-0.5,2c0.2,0,0.4,0,0.6,0
+		c0.1,0,0.3,0,0.4,0.1c0,0.2,0,0.3,0,0.5c0,0.1,0,0.2,0,0.4c0,0.1,0,0.2-0.1,0.3H14v-1.2h1c0.2-0.5,0.3-1,0.4-1.5
+		c0.1-0.5,0.3-1,0.4-1.5c0.2-0.6,0.3-1.2,0.5-1.7c0.2-0.6,0.3-1.2,0.5-1.7c0.2-1.1,0.4-2.1,0.6-3.2c0.2-1.1,0.3-2.1,0.4-3.2
+		c-0.2,0-0.5,0-0.7,0c-0.2,0-0.4,0-0.7,0c0-0.2,0.1-0.4,0.1-0.6c0-0.2,0-0.4,0.1-0.6c0.9,0,1.9,0,2.9,0c1,0,2,0,2.9,0l0.2,1.2
+		c-0.2,0-0.3,0-0.5,0c-0.2,0-0.3,0-0.5,0c0.3,2.1,0.7,4.3,1,6.5c0.3,2.2,0.7,4.4,1,6.5H25.2z M17.5,9c0.4-0.1,0.7-0.1,1.1-0.2
+		c0.4-0.1,0.8-0.1,1.2-0.2c-0.2-1-0.3-2-0.5-2.9c-0.2-1-0.4-1.9-0.6-2.9c-0.2,1-0.4,2.1-0.5,3.1C17.9,6.9,17.7,8,17.5,9z"/>
+	<path fill="#c3c3c3" d="M36.7,10.4c-0.1,0-0.2,0-0.3,0c-0.1,0-0.2,0-0.3,0c0,0.6,0,1.2-0.2,1.9c-0.2,0.6-0.5,1.2-1,1.6
+		c-0.5,0.5-1,0.9-1.6,1.1c-0.6,0.3-1.3,0.4-2,0.5c-0.6,0.1-1.1,0.1-1.8,0c-0.6-0.1-1.1-0.4-1.6-0.7c-0.2-0.2-0.5-0.4-0.8-0.7
+		c-0.3-0.3-0.5-0.5-0.6-0.8c-0.3-0.5-0.5-1-0.6-1.5c-0.2-0.5-0.3-0.9-0.4-1.4c-0.1-0.5-0.2-1-0.2-1.5c0-0.5,0-1,0.1-1.6
+		c0.2-1,0.4-2,0.8-2.9c0.4-0.9,0.8-1.7,1.4-2.3c0.5-0.7,1.2-1.2,1.9-1.6C30.2,0.2,30.9,0,31.7,0c0.3,0,0.5,0,0.8,0.1
+		c0.3,0.1,0.5,0.2,0.7,0.4c0.3,0.3,0.7,0.7,1,1.2c0.3,0.5,0.6,1.2,0.7,1.9c0.1,0,0.2,0,0.3,0c0.1,0,0.2,0,0.3,0c0,0.1,0,0.2,0,0.3
+		c0,0.1,0,0.2,0,0.3L33,4.6c-0.3,0.1-0.5,0.1-0.6,0c-0.1,0-0.2-0.1-0.2-0.2c-0.1-0.1-0.1-0.2,0-0.3c0.1,0,0.2,0,0.2,0
+		c0.1,0,0.1,0,0.2,0c0.2-0.2,0.3-0.3,0.3-0.6c0-0.2,0-0.5,0-0.7c0-0.5-0.2-0.9-0.5-1.3c-0.2-0.2-0.3-0.3-0.4-0.4
+		C31.8,1,31.6,1,31.4,1.1c-0.2,0-0.4,0.2-0.6,0.4c-0.2,0.2-0.4,0.5-0.5,0.9C30,2.6,29.9,3,29.8,3.3c-0.1,0.3-0.2,0.5-0.2,0.7
+		c-0.6,2.6-0.7,5.3-0.2,8c0.1,0.3,0.2,0.7,0.3,1s0.3,0.6,0.5,0.9c0.2,0.3,0.5,0.5,0.8,0.7c0.3,0.2,0.6,0.2,1,0.1
+		c0.6-0.1,1-0.4,1.4-1c0.3-0.5,0.6-1.1,0.7-1.8c0.1-0.3,0.1-0.6,0.1-0.9v-0.5c-0.2,0-0.4,0-0.6-0.1c-0.1-0.1-0.2-0.2-0.2-0.3
+		c0-0.1,0-0.2,0.1-0.3c0.6,0,1.2,0,1.7,0c0.6,0,1.2,0,1.7,0c0,0.1,0,0.2-0.1,0.3C36.7,10.2,36.7,10.3,36.7,10.4z"/>
+	<path fill="#c3c3c3" d="M48,14.2c0.1,0.2,0.3,0.3,0.5,0.4c0.2,0.1,0.5,0.1,0.7,0c0.1,0.1,0.1,0.2,0.1,0.4c0,0.2-0.1,0.3-0.2,0.4
+		c-0.1,0.1-0.2,0.2-0.4,0.2c-0.2,0-0.3,0-0.4,0c-0.3,0-0.7,0-1,0c-0.3,0-0.7,0-1-0.1c-0.3-0.1-0.7-0.2-1-0.4
+		c-0.3-0.2-0.5-0.4-0.7-0.7c-0.2-0.3-0.3-0.6-0.3-1c0-0.3,0-0.7,0-1.1V9.9c0-0.1,0-0.3,0-0.4c0-0.2-0.1-0.3-0.2-0.5
+		c-0.1-0.2-0.3-0.3-0.4-0.4c-0.2-0.1-0.4-0.1-0.7-0.1c-0.1,0-0.2,0-0.5,0.1c-0.2,0.3-0.3,0.5-0.5,0.8c-0.2,0.3-0.3,0.5-0.5,0.7
+		c0,0.8,0,1.5-0.1,2.2c0,0.7-0.1,1.5-0.1,2.1h1.4v1.1c-0.5,0-0.9,0.1-1.3,0c-0.4,0-0.8,0-1.2-0.1c-0.4,0-0.8-0.1-1.2-0.1
+		c-0.4,0-0.8,0-1.3,0c-0.1,0-0.3,0-0.4,0c-0.1,0-0.2,0-0.3-0.1c-0.1,0-0.1-0.1-0.1-0.2c0-0.1-0.1-0.3-0.1-0.4c0-0.1,0-0.3,0-0.4
+		c0-0.1,0.1-0.2,0.1-0.2c0.2,0.1,0.4,0.2,0.6,0.1s0.4-0.2,0.5-0.4c0-0.1,0.1-0.3,0.1-0.7c0-0.4,0-0.9,0.1-1.6c0-0.6,0.1-1.3,0.1-2.1
+		c0-0.8,0-1.6,0.1-2.4c0-0.8,0-1.5,0.1-2.3c0-0.7,0.1-1.3,0.1-1.8c0-0.2,0-0.5,0-0.7c0-0.2-0.1-0.4-0.2-0.6
+		c-0.1-0.2-0.3-0.3-0.5-0.4c-0.2-0.1-0.4,0-0.6,0.1c0-0.2-0.1-0.5-0.1-0.7c0-0.2,0-0.4-0.1-0.7c1,0,2,0.1,3,0.1c0.9,0,1.9,0.1,3,0.1
+		c0,0.1,0,0.2,0,0.3c0,0.1,0,0.3,0.1,0.4c0,0.1,0,0.3,0,0.4c0,0.1,0,0.2-0.1,0.2c-0.1,0.1-0.2,0.1-0.3,0.1c-0.1,0-0.2,0-0.4-0.1
+		c-0.1-0.1-0.3-0.1-0.4-0.2c-0.1-0.1-0.3-0.1-0.3-0.1c-0.1,0.9-0.1,1.9-0.1,2.9c0,1-0.1,2-0.1,3.1c0.7-1.2,1.4-2.5,2-3.8
+		c0.2-0.3,0.3-0.6,0.4-0.9c0.1-0.3,0.3-0.6,0.5-0.9c0.2-0.3,0.4-0.5,0.7-0.7C45.4,1,45.7,0.9,46,0.8c0.3-0.1,0.7-0.1,1,0
+		c0.3,0.1,0.6,0.2,0.9,0.5c0.2,0.3,0.4,0.6,0.4,1c0,0.4,0.1,0.8,0,1.1c0,0.2,0,0.3,0,0.5c0,0.2-0.1,0.3-0.2,0.4
+		c-0.1,0.2-0.2,0.3-0.4,0.4c-0.2,0.1-0.4,0.1-0.5,0.2c-0.1,0-0.3,0.1-0.4,0.1c-0.1,0-0.3,0-0.4,0C46.2,4.7,46,4.6,46,4.4
+		c-0.1-0.2-0.1-0.4,0-0.5c0.1-0.2,0.2-0.3,0.3-0.3c0.1,0,0.2-0.1,0.4-0.1c0.2-0.1,0.3-0.2,0.3-0.3c0.1-0.2,0.1-0.3,0.1-0.5
+		C47.1,2.4,47,2.2,47,2c-0.1-0.2-0.2-0.3-0.3-0.3c-0.2,0-0.3,0-0.5,0.1C46,1.9,45.9,2,45.7,2.2c-0.2,0.2-0.3,0.4-0.4,0.6
+		C45.2,3,45,3.3,44.9,3.5c-0.1,0.3-0.3,0.6-0.4,0.8c-0.2,0.2-0.3,0.5-0.4,0.8c-0.4,0.9-0.8,1.7-1.2,2.5c0.3,0,0.6-0.1,1,0
+		c0.4,0,0.7,0,1,0c0.3,0,0.7,0.1,1,0.2c0.3,0.1,0.6,0.3,0.8,0.6c0.3,0.3,0.4,0.6,0.5,1c0.1,0.4,0.1,0.8,0.2,1.1l0.2,2.1
+		c0,0.2,0.1,0.5,0.1,0.7C47.7,13.7,47.8,14,48,14.2z"/>
+	<path fill="#c3c3c3" d="M71.7,13.9c0.2,0.2,0.4,0.4,0.7,0.5c0.3,0.1,0.5,0,0.8-0.1c0,0.2,0.1,0.3,0.1,0.6c0.1,0.2,0.1,0.4,0.1,0.6
+		c-0.3,0-0.7,0-1.1,0s-0.8,0-1.3,0.1c-0.4,0-0.9,0-1.3,0c-0.4,0-0.8,0-1,0c0-0.1,0-0.1,0-0.2c0-0.1,0.1-0.2,0.2-0.3
+		c0.1-0.1,0.2-0.2,0.4-0.3c0.2-0.1,0.3-0.1,0.6-0.1c0.1,0,0.1-0.2,0.1-0.7c0-0.4,0-1,0-1.6c0-0.6,0-1.2-0.1-1.9s0-1.1,0-1.5
+		c0-1,0-1.9,0-2.6c0-0.7,0.1-1.5,0.1-2.2c-0.6,1.3-1.1,2.7-1.6,4.1c-0.5,1.5-1,3-1.5,4.4c0,0,0.1,0.1,0.1,0.2c-0.2,0-0.4,0-0.7,0.1
+		c-0.3,0.1-0.5,0.1-0.7,0.1c-0.5-1.9-1.1-3.7-1.6-5.5c-0.5-1.8-1.1-3.6-1.6-5.5c-0.1,1-0.1,2-0.1,3c0,1.1-0.1,2.1-0.1,3.2
+		c0,1.1,0,2.1-0.1,3.2c0,1-0.1,2-0.1,3h1.4v1.1c-0.5,0-0.9,0.1-1.3,0c-0.4,0-0.8,0-1.2-0.1c-0.4,0-0.8-0.1-1.2-0.1
+		c-0.4,0-0.8,0-1.3,0c-0.1,0-0.3,0-0.4,0c-0.1,0-0.2,0-0.3-0.1c-0.1,0-0.1-0.1-0.1-0.2c0-0.1-0.1-0.3-0.1-0.4c0-0.1,0-0.3,0-0.4
+		c0-0.1,0.1-0.2,0.1-0.2c0.2,0.1,0.4,0.2,0.6,0.1s0.4-0.2,0.5-0.4c0-0.1,0.1-0.3,0.1-0.7c0-0.4,0-0.9,0.1-1.6c0-0.6,0.1-1.3,0.1-2.1
+		C59,8.8,59,8,59,7.2c0-0.8,0-1.5,0.1-2.3c0-0.7,0.1-1.3,0.1-1.8c0-0.2,0-0.5,0-0.7c0-0.2-0.1-0.4-0.2-0.6c-0.1-0.2-0.3-0.3-0.5-0.4
+		c-0.2-0.1-0.4,0-0.6,0.1c0-0.2-0.1-0.5-0.1-0.7c0-0.2,0-0.4-0.1-0.7c1,0,2,0.1,3,0.1c0.9,0,1.9,0.1,3,0.1c0,0.3-0.1,0.5-0.4,0.7
+		c0.3,1.3,0.6,2.6,1,3.9c0.4,1.3,0.8,2.6,1.2,3.9c0.2-0.6,0.4-1.3,0.6-1.9c0.2-0.6,0.4-1.2,0.6-1.8C67,4.6,67.2,4,67.5,3.4
+		c0.2-0.6,0.4-1.3,0.6-2c-0.1,0-0.3,0-0.4-0.1c-0.1,0-0.2,0-0.4-0.1c-0.1,0-0.1-0.1-0.1-0.3c0-0.1,0.1-0.2,0.1-0.3
+		c0.1-0.1,0.2-0.1,0.3-0.1c0.1,0,0.2,0,0.3,0c0.4,0,0.7,0,1,0s0.6,0,0.9,0c0.3,0,0.6,0,0.9,0c0.3,0,0.6,0,1,0c0.1,0,0.3,0,0.4,0
+		c0.1,0,0.3,0.1,0.4,0.2c0.1,0.1,0.2,0.2,0.2,0.4c0,0.2,0,0.3-0.2,0.3c-0.1-0.1-0.2-0.1-0.3-0.1c-0.1,0-0.2,0.1-0.3,0.1
+		c-0.2,0.4-0.3,0.8-0.4,1.3c-0.1,0.5-0.1,0.9-0.1,1.4c-0.2,2.8-0.2,5.6,0,8.4c0,0.3,0,0.5,0.1,0.7C71.4,13.5,71.5,13.7,71.7,13.9z"
+		/>
+	<path fill="#c3c3c3" d="M81.7,12c-0.1,0-0.1,0-0.2,0c-0.1,0-0.1,0-0.2,0c0,0.4,0,0.9-0.2,1.3c-0.1,0.4-0.4,0.8-0.7,1.1
+		c-0.3,0.3-0.7,0.6-1.1,0.8c-0.4,0.2-0.9,0.3-1.3,0.4c-0.4,0.1-0.8,0-1.2,0c-0.4-0.1-0.8-0.2-1.1-0.5c-0.2-0.1-0.3-0.3-0.5-0.5
+		c-0.2-0.2-0.3-0.4-0.4-0.6c-0.2-0.4-0.3-0.7-0.4-1c-0.1-0.3-0.2-0.6-0.3-1C74,11.7,74,11.4,74,11c0-0.3,0-0.7,0.1-1.1
+		c0.1-0.7,0.3-1.4,0.5-2c0.3-0.6,0.6-1.1,0.9-1.6s0.8-0.8,1.3-1.1c0.5-0.3,1-0.4,1.5-0.4c0.2,0,0.4,0,0.6,0.1
+		c0.2,0.1,0.3,0.1,0.5,0.3C79.6,5.4,79.8,5.6,80,6c0.2,0.4,0.4,0.8,0.5,1.3c0.1,0,0.1,0,0.2,0c0.1,0,0.1,0,0.2,0c0,0.1,0,0.1,0,0.2
+		c0,0.1,0,0.1,0,0.2L79.2,8c-0.2,0.1-0.3,0.1-0.4,0c-0.1,0-0.1-0.1-0.2-0.2c0-0.1,0-0.1,0-0.2c0.1,0,0.1,0,0.2,0c0,0,0.1,0,0.2,0
+		c0.1-0.1,0.2-0.2,0.2-0.4c0-0.2,0-0.3,0-0.5c0-0.3-0.1-0.6-0.3-0.9c-0.1-0.1-0.2-0.2-0.3-0.3c-0.1-0.1-0.2-0.1-0.4,0
+		c-0.1,0-0.3,0.1-0.4,0.3c-0.1,0.2-0.3,0.4-0.4,0.6c-0.1,0.2-0.2,0.4-0.3,0.6c-0.1,0.2-0.1,0.4-0.1,0.5c-0.4,1.8-0.5,3.6-0.1,5.5
+		c0.1,0.2,0.1,0.4,0.2,0.7c0.1,0.2,0.2,0.4,0.3,0.6c0.1,0.2,0.3,0.3,0.6,0.5c0.2,0.1,0.4,0.1,0.7,0.1c0.4-0.1,0.7-0.3,1-0.7
+		c0.2-0.4,0.4-0.8,0.5-1.2c0-0.2,0.1-0.4,0.1-0.6v-0.3c-0.2,0-0.3,0-0.4,0c-0.1,0-0.1-0.1-0.1-0.2c0-0.1,0-0.2,0.1-0.2
+		c0.4,0,0.8,0,1.2,0c0.4,0,0.8,0,1.2,0c0,0.1,0,0.1,0,0.2C81.8,11.8,81.8,11.9,81.7,12z"/>
+	<path fill="#c3c3c3" d="M83.5,14.2c0.2-4.3,0.3-8.5,0.2-12.8c-0.3,0-0.6,0-0.9,0c-0.3,0-0.6,0-0.9,0c0-0.2,0-0.3,0-0.5s0-0.3,0-0.5
+		c0.7,0,1.3,0,2-0.1c0.7,0,1.3,0,2-0.1c0.8-0.2,1.6-0.2,2.4-0.1c0.8,0.1,1.6,0.3,2.4,0.5c0.7,0.3,1.4,0.7,1.9,1.2
+		c0.5,0.5,0.9,1.1,1.1,1.8C94,4.9,94.1,6.1,94,7.4C94,8.6,93.8,9.8,93.7,11c0,0.4-0.1,0.8-0.2,1.2c-0.1,0.4-0.3,0.8-0.5,1.1
+		c-0.3,0.5-0.8,1-1.3,1.3c-0.5,0.3-1.1,0.5-1.7,0.6c-0.5,0.1-0.9,0.2-1.4,0.1c-0.5,0-0.9,0-1.4-0.1v0c-0.2,0-0.3,0-0.5,0
+		s-0.4,0-0.5,0l-0.1,0c0,0,0,0,0,0c-0.6,0-1.3,0-1.9,0c-0.6,0-1.3,0-1.9,0c-0.2-0.4-0.1-0.8,0.2-1.1c0.2-0.2,0.3-0.2,0.5-0.3
+		C83.2,14.1,83.4,14.1,83.5,14.2z M89.4,1.9c-0.4-0.3-0.8-0.5-1.3-0.6c-0.5-0.1-1-0.1-1.5-0.1c-0.3,4.5-0.2,9.1,0.4,13.6
+		c0.2,0,0.4,0,0.5-0.1c0.2,0,0.4-0.1,0.6-0.1c0.3-0.1,0.6-0.2,0.9-0.4c0.3-0.2,0.6-0.4,0.8-0.7c0.2-0.3,0.4-0.6,0.5-1
+		s0.2-0.7,0.2-1.1c0.4-2.1,0.4-4.2,0.2-6.3c-0.1-0.6-0.2-1.2-0.4-1.9C90.3,2.8,89.9,2.3,89.4,1.9z"/>
+	<path fill="#c3c3c3" d="M102.4,9.7c-0.6-0.1-1.3-0.1-2,0c-0.7,0.1-1.4,0.4-2,0.8l-0.2-1.4L99.1,9c0-0.4-0.1-0.7-0.1-1
+		c0-0.2-0.1-0.5-0.1-0.9c-0.3,0-0.6,0.1-0.9,0.1c-0.3,0-0.6,0.1-1,0.1c-0.2,0.7-0.3,1.3-0.4,1.8c-0.1,0.5-0.2,1.1-0.4,1.6l0.2-0.1
+		l0.7,0.6c-0.4,0.2-0.8,0.6-1.2,1.1c-0.4,0.5-0.7,1-0.9,1.5l-0.9-0.5c0-0.1,0.1-0.2,0.2-0.4c0.1-0.2,0.2-0.3,0.2-0.4
+		c0.1-0.2,0.2-0.5,0.3-1c0.1-0.4,0.2-0.9,0.4-1.3c0.1-0.5,0.2-0.9,0.3-1.3c0.1-0.4,0.2-0.7,0.2-0.9c0.1-0.4,0.2-0.8,0.3-1.2
+		c0.1-0.4,0.2-0.8,0.3-1.2c0.2-0.7,0.3-1.4,0.4-2.1c0.1-0.7,0.2-1.4,0.3-2.2c-0.1,0-0.2,0-0.3,0c-0.1,0-0.2,0-0.3,0l0.1-0.8l4-0.1
+		l0.1,0.8c-0.1,0-0.2,0-0.2,0c0,0-0.1,0-0.2,0c0.1,0.7,0.2,1.4,0.3,2c0.1,0.6,0.2,1.2,0.3,1.8c0.1,0.6,0.2,1.2,0.3,1.8
+		c0.1,0.6,0.2,1.3,0.4,2c0.2,0,0.3,0,0.3,0c0,0,0.1,0,0.3,0L102.4,9.7z M98.8,6.1c-0.1-0.7-0.2-1.3-0.3-2c-0.1-0.6-0.3-1.3-0.4-2
+		c-0.1,0.6-0.2,1.3-0.4,2.1c-0.1,0.7-0.3,1.5-0.5,2.2L98.8,6.1z"/>
+	<path fill="#c3c3c3" d="M124.9,20.1c0-0.3,0.1-0.6,0.3-0.8c0.2-0.2,0.4-0.3,0.7-0.4c0.3-0.1,0.5,0,0.8,0.1c0.3,0.1,0.5,0.3,0.6,0.5
+		c0.3,0.4,0.6,0.9,0.7,1.4c0.2,0.5,0.2,1,0.2,1.5c0,0.5-0.1,1-0.3,1.5c-0.2,0.5-0.4,1-0.7,1.4c-0.6,0.9-1.4,1.6-2.4,2
+		c-1,0.5-2,0.7-3,0.7c-1.5,0-2.8-0.3-3.9-1s-2.1-1.4-3-2.4c-0.9-1-1.8-2.1-2.5-3.2c-0.8-1.2-1.5-2.3-2.3-3.5c-1.1,1.2-2.4,2.2-3.9,3
+		c-1.5,0.8-3,1.1-4.5,1c-1.1,0-2.1-0.1-3-0.5c-0.9-0.3-1.6-0.8-2.2-1.4c-0.6-0.6-0.9-1.3-1.1-2.2c-0.2-0.8-0.1-1.7,0.2-2.7
+		c0.3-0.9,0.7-1.6,1.3-2.2c0.6-0.6,1.2-1.1,2-1.5c0.7-0.4,1.5-0.6,2.4-0.7c0.8-0.1,1.7,0,2.6,0.2c0-1.7,0-3.4,0-5c0-1.7,0-3.2,0-4.6
+		c-0.3,0-0.6,0-0.9,0c-0.3,0-0.6,0-0.9,0c0-0.2,0-0.3,0-0.5s0-0.3,0-0.5l3.7-0.1c0.8-0.2,1.6-0.2,2.4-0.1c0.8,0.1,1.6,0.3,2.4,0.5
+		c0.7,0.3,1.4,0.7,1.9,1.2c0.5,0.5,0.9,1.1,1.1,1.8c0.3,1.2,0.4,2.4,0.3,3.6c-0.1,1.2-0.2,2.5-0.4,3.7c-0.1,1-0.4,2-0.8,3
+		c-0.5,1-1,2-1.7,2.9c0.3,0.4,0.6,0.8,0.8,1.2c0.3,0.4,0.5,0.8,0.8,1.2c0.5,0.8,1.1,1.6,1.7,2.5c0.6,0.8,1.3,1.6,2,2.4
+		c0.7,0.7,1.5,1.3,2.4,1.8s1.8,0.7,2.9,0.8c1.1,0,2.1-0.2,3-0.7c0.9-0.5,1.6-1.2,2.1-2.2c0.2-0.4,0.3-0.8,0.4-1.3
+		c0.1-0.5,0-0.9-0.1-1.3c-0.2,0.1-0.4,0.2-0.6,0.2c-0.2,0-0.4,0-0.6-0.1c-0.2-0.1-0.4-0.2-0.5-0.4S124.9,20.4,124.9,20.1z M102.9,21
+		c1.5-0.4,2.8-1,3.7-1.8c0.9-0.8,1.7-1.7,2.3-2.8c-0.2-0.2-0.3-0.5-0.6-0.7c-0.6-0.7-1.2-1.4-1.9-1.9c0,0.6,0.1,1.2,0.1,1.8
+		c0,0.6,0.1,1.1,0.2,1.6h0v0.1c-0.5,0-0.9,0-1.3,0c-0.4,0-0.8,0-1.2,0c-0.3,0-0.6,0-0.9,0c-0.3,0-0.6,0-0.9,0
+		c-0.1-0.2-0.1-0.4,0-0.7c0-0.2,0.1-0.3,0.3-0.5c0.3-0.3,0.7-0.4,1.1-0.2l0.1-3.5c-0.5-0.2-1-0.3-1.5-0.3c-0.5,0-1.1,0-1.6,0.1
+		c-0.6,0.1-1.1,0.3-1.6,0.6c-0.5,0.3-0.9,0.7-1.3,1.1c-0.4,0.4-0.7,0.9-0.9,1.5c-0.2,0.5-0.3,1.1-0.3,1.6c0,0.7,0.2,1.3,0.6,1.8
+		c0.4,0.5,0.9,0.9,1.4,1.4c0.2,0.2,0.5,0.3,0.8,0.5c0.3,0.1,0.7,0.2,1.1,0.3c0.4,0.1,0.8,0.1,1.2,0.1
+		C102.1,21.1,102.5,21.1,102.9,21z M109.3,1.9c-0.4-0.3-0.8-0.5-1.2-0.6c-0.5-0.1-0.9-0.1-1.4-0.1c-0.1,1.7-0.2,3.4-0.3,5.3
+		c-0.1,1.9-0.1,3.7,0,5.6c0.6,0.4,1.2,0.8,1.7,1.4c0.5,0.5,1,1.1,1.5,1.6c0.2-0.6,0.4-1.2,0.6-1.9c0.2-0.6,0.3-1.2,0.3-1.7
+		c0.2-1.1,0.2-2.1,0.3-3.1c0-1,0-2.1-0.1-3.1c-0.1-0.6-0.2-1.2-0.4-1.9C110.1,2.8,109.8,2.3,109.3,1.9z"/>
+	<path fill="#c3c3c3" d="M116.5,1.2c-0.3,0-0.6,0-0.9,0c-0.3,0-0.6,0-0.9,0V0.4c0.5,0,0.9,0,1.2-0.1s0.7,0,1.1,0c0.4,0,0.7,0,1.1,0
+		s0.8,0,1.3-0.1c0.9,0,1.8,0,2.8-0.1c0.9,0,1.8,0,2.8-0.1c0,0.6,0,1.2,0,1.8c0,0.6,0,1.2,0,1.8c-0.2,0-0.3,0-0.5,0
+		c-0.2,0-0.3,0-0.5,0c-0.1,0-0.2,0-0.3,0c-0.1,0-0.1-0.1,0-0.1c0.1-0.2,0.1-0.4,0.1-0.6s0-0.4-0.1-0.6c-0.1-0.2-0.2-0.4-0.3-0.6
+		c-0.1-0.2-0.2-0.3-0.4-0.4c-0.2-0.1-0.4-0.2-0.6-0.2c-0.2,0-0.5,0-0.7,0c-0.3,0-0.5,0.1-0.8,0.1c-0.3,0.1-0.5,0.2-0.6,0.4
+		c-0.1,0.2-0.1,0.3-0.1,0.3c0,0.1,0,0.2,0,0.3c0,0.7-0.1,1.3-0.1,2c0,0.6-0.1,1.3-0.1,1.9c0,0.2,0,0.3,0,0.5c0,0.2,0,0.3,0,0.5
+		c0.6-0.2,1.2-0.3,1.9-0.4c0.6-0.1,1.2-0.3,1.9-0.4c0,0.1,0.1,0.2,0.1,0.3c0,0.1,0,0.3,0,0.4c0,0.2-0.1,0.3-0.1,0.4
+		c-0.1,0.1-0.1,0.2-0.1,0.3c-0.1,0.1-0.2,0.1-0.4,0.2c-0.1,0-0.3,0.1-0.4,0.1c-0.5,0.1-0.9,0.2-1.4,0.3c-0.5,0.1-0.9,0.1-1.4,0.2
+		c0,1-0.1,2-0.2,2.9c-0.1,1-0.1,1.9-0.2,2.9c0.8,0.2,1.5,0.3,2,0.1c0.6-0.2,1.2-0.5,1.9-1c0.2-0.1,0.2-0.3,0.2-0.5
+		c0-0.2,0-0.5,0-0.7c0-0.2,0.1-0.5,0.2-0.6c0.1-0.2,0.3-0.3,0.7-0.4c0.4,0,0.6,0.1,0.7,0.4c0.1,0.3,0.2,0.7,0.2,1.1
+		c0,0.5,0,0.9-0.1,1.4c-0.1,0.5-0.1,0.9,0,1.2c-0.5,0-1,0-1.4,0c-0.4,0-0.8,0-1.2,0.1c-0.4,0-0.8,0-1.2,0.1c-0.4,0-0.9,0-1.3,0
+		c-0.9,0-1.7,0-2.5,0.1c-0.7,0.1-1.6,0.1-2.4,0.1c-0.2-0.2-0.2-0.4-0.2-0.7c0-0.2,0.1-0.5,0.3-0.6c0.2-0.2,0.3-0.3,0.6-0.3
+		c0.2-0.1,0.5,0,0.7,0.1c0.1-2.1,0.2-4.3,0.1-6.5C116.3,5.5,116.3,3.4,116.5,1.2z"/>
+</g>
+</svg>
+
+            </a>
+        </p>
+	</footer>
+
+	<script>
+		var algolia_app_id      = 'FU55RWGNDN';
+		var algolia_search_key  = 'c41c5de31ca55044dbb0bde815d35121';
+				var version             = '5.3';
+			</script>
+
+	<script id="search_suggestion_template" type="text/template">
+	<div class="autocomplete-wrapper">
+		{{#_highlightResult.h1}}
+		<div class="h1">
+			{{{ _highlightResult.h1.value }}}
+		</div>
+		{{/_highlightResult.h1}}
+
+		<div class="sub-section">
+			{{#_highlightResult.h2}}
+			<div class="h2">
+				<span class="hash">#</span> {{{ _highlightResult.h2.value }}}
+			</div>
+			{{/_highlightResult.h2}}
+
+			{{#_highlightResult.h3}}
+			<div class="h3">
+				> {{{ _highlightResult.h3.value }}}
+			</div>
+			{{/_highlightResult.h3}}
+
+			{{#_highlightResult.h4}}
+			<div class="h4">
+				> {{{ _highlightResult.h4.value }}}
+			</div>
+			{{/_highlightResult.h4}}
+		</div>
+
+		{{#_highlightResult.content}}
+		<div class="content">
+			{{{ _highlightResult.content.value }}}
+		</div>
+		{{/_highlightResult.content}}
+	</div>
+</script>
+
+<script id="search_empty_template" type="text/template">
+	<div class="autocomplete-wrapper empty">
+		<div class="h2">We didn't find any result for "{{query}}". Sorry!</div>
+	</div>
+</script>
+
+<script id="search_footer_template" type="text/template">
+	<div class="footer">
+		<a target="_blank" href="https://www.algolia.com/referrals/5a08e6a4/join">
+			<img width="50" src="/docs/assets/img/algolia-logo.png">
+			<div class="powered">powered by</div>
+			<div style="clear: both"></div>
+		</a>
+	</div>
+</script>
+
+	<script src="../../build/assets/js/laravel-be3cb5d7de.js"></script>
+	<script src="../../assets/js/viewport-units-buggyfill.js"></script>
+
+	<script>window.viewportUnitsBuggyfill.init();</script>
+    <script>
+          ga('create', 'UA-53903425-7', 'auto');
+          ga('send', 'pageview');
+    </script>
+</body>
+</html>

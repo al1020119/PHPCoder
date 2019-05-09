@@ -1,0 +1,958 @@
+<!doctype html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<title>Laravel Elixir | Laravel 5.1 中文文档
+</title>
+	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+	<meta name="author" content="Taylor Otwell">
+	<meta name="description" content="Laravel Elixir,简介,安装与配置,运行 Elixir,使用样式,Less,Sass,纯 CSS,Source Maps,使用脚本,CoffeeScript,Browserify,Babel,Scripts,复制文件与目录,版本与缓存清除,BrowserSync,调用既有的 Gulp 任务,编写 Elix...
+">
+	<meta name="keywords" content="laravel,laravel中国,laravel中文,laravel框架中文,laravel文档,laravel框架中国,laravel中文文档">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+		<!--[if lte IE 9]>
+		<script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+	<![endif]-->
+	<link rel="stylesheet" href="../../build/assets/css/laravel-4bbf92d154.css">
+	<link rel="apple-touch-icon" href="../../favicon.png.jpeg">
+    <style>
+        .list-group-item img.media-object {
+            width: 20px;
+            border-radius: 2px;
+            margin-right: 4px;
+            display: inline-block;
+        }
+    </style>
+</head>
+<body class="docs language-php">
+
+	<span class="overlay"></span>
+
+	<nav class="main">
+		<a href="../../index.html" class="brand nav-block">
+			<svg version="1.1"
+	 xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:a="http://ns.adobe.com/AdobeSVGViewerExtensions/3.0/"
+	 x="0px" y="0px" width="84.1px" height="57.6px" viewBox="0 0 84.1 57.6" enable-background="new 0 0 84.1 57.6"
+	 xml:space="preserve">
+<defs>
+</defs>
+<path fill="#FB503B" d="M83.8,26.9c-0.6-0.6-8.3-10.3-9.6-11.9c-1.4-1.6-2-1.3-2.9-1.2s-10.6,1.8-11.7,1.9c-1.1,0.2-1.8,0.6-1.1,1.6
+	c0.6,0.9,7,9.9,8.4,12l-25.5,6.1L21.2,1.5c-0.8-1.2-1-1.6-2.8-1.5C16.6,0.1,2.5,1.3,1.5,1.3c-1,0.1-2.1,0.5-1.1,2.9
+	c1,2.4,17,36.8,17.4,37.8c0.4,1,1.6,2.6,4.3,2c2.8-0.7,12.4-3.2,17.7-4.6c2.8,5,8.4,15.2,9.5,16.7c1.4,2,2.4,1.6,4.5,1
+	c1.7-0.5,26.2-9.3,27.3-9.8c1.1-0.5,1.8-0.8,1-1.9c-0.6-0.8-7-9.5-10.4-14c2.3-0.6,10.6-2.8,11.5-3.1C84.2,28,84.4,27.5,83.8,26.9z
+	 M37.5,36.4c-0.3,0.1-14.6,3.5-15.3,3.7c-0.8,0.2-0.8,0.1-0.8-0.2C21.2,39.6,4.4,4.8,4.1,4.4c-0.2-0.4-0.2-0.8,0-0.8
+	c0.2,0,13.5-1.2,13.9-1.2c0.5,0,0.4,0.1,0.6,0.4c0,0,18.7,32.3,19,32.8C38,36.1,37.8,36.3,37.5,36.4z M77.7,43.9
+	c0.2,0.4,0.5,0.6-0.3,0.8c-0.7,0.3-24.1,8.2-24.6,8.4c-0.5,0.2-0.8,0.3-1.4-0.6s-8.2-14-8.2-14L68.1,32c0.6-0.2,0.8-0.3,1.2,0.3
+	C69.7,33,77.5,43.6,77.7,43.9z M79.3,26.3c-0.6,0.1-9.7,2.4-9.7,2.4l-7.5-10.2c-0.2-0.3-0.4-0.6,0.1-0.7c0.5-0.1,9-1.6,9.4-1.7
+	c0.4-0.1,0.7-0.2,1.2,0.5c0.5,0.6,6.9,8.8,7.2,9.1C80.3,26,79.9,26.2,79.3,26.3z"/>
+</svg>
+
+			<span>Laravel</span>
+		</a>
+
+        <div class="search nav-block">
+            <svg version="1.1"
+	 xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:a="http://ns.adobe.com/AdobeSVGViewerExtensions/3.0/"
+	 x="0px" y="0px" width="16px" height="16px" viewBox="0 0 16 16" enable-background="new 0 0 16 16" xml:space="preserve">
+<defs>
+</defs>
+<g>
+	<g>
+		<path fill="#A1A1A1" d="M5.8,11.7c-1.6,0-3-0.6-4.1-1.7S0,7.4,0,5.8s0.6-3,1.7-4.1C2.8,0.6,4.3,0,5.8,0s3,0.6,4.1,1.7
+			c2.3,2.3,2.3,6,0,8.3C8.9,11.1,7.4,11.7,5.8,11.7z M5.8,1C4.5,1,3.3,1.5,2.4,2.4C1.5,3.3,1,4.5,1,5.8s0.5,2.5,1.4,3.4
+			c0.9,0.9,2.1,1.4,3.4,1.4s2.5-0.5,3.4-1.4c1.9-1.9,1.9-5,0-6.9C8.4,1.5,7.1,1,5.8,1z"/>
+	</g>
+	<g>
+		<path fill="#A1A1A1" d="M15.5,16c-0.1,0-0.3,0-0.3-0.1L9.3,10c-0.2-0.2-0.2-0.5,0-0.7s0.5-0.2,0.7,0l5.9,5.9
+			c0.2,0.2,0.2,0.5,0,0.7C15.8,16,15.6,16,15.5,16z"/>
+	</g>
+</g>
+</svg>
+
+            <input placeholder="搜索文档" type="text" v-model="search" id="search-input" v-on:blur="reset" />
+        </div>
+
+		<ul class="main-nav" v-if="! search">
+			<li class="nav-docs"><a href="../5.4.html">文档</a></li>
+<li ><a href="https://laravel-china.org/news" class="no-pjax">Laravel 资讯</a></li>
+<li class="dropdown"><a href="https://laravel-china.org/">Laravel China 社区</a></li>
+<li class="nav-forge"><a href="https://laravel-china.org/categories/1">酷工作</a></li>
+<li class="nav-docs"><a href="http://lumen.laravel-china.org">Lumen</a></li>
+<li class="nav-forge"><a href="https://cs.laravel-china.org/">速查表</a></li>
+<li class="nav-forge"><a href="https://fsdhub.com/books/laravel-essential-training-5.5">《Laravel 入门教程》</a></li>
+		</ul>
+
+        			<div class="switcher">
+	<div class="dropdown">
+		<button class="btn dropdown-toggle btn-inverted" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-expanded="true">
+			<!--<span class="faint">v</span> -->
+			5.1
+			<span class="caret"></span>
+		</button>
+		<ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu1">
+							<li role="presentation">
+					<a role="menuitem" tabindex="-1" href="http://d.laravel-china.org/docs/5.5/elixir">5.5</a>
+				</li>
+							<li role="presentation">
+					<a role="menuitem" tabindex="-1" href="http://d.laravel-china.org/docs/5.4/elixir">5.4</a>
+				</li>
+							<li role="presentation">
+					<a role="menuitem" tabindex="-1" href="../5.3/elixir.html">5.3</a>
+				</li>
+							<li role="presentation">
+					<a role="menuitem" tabindex="-1" href="../5.2/elixir.html">5.2</a>
+				</li>
+							<li role="presentation">
+					<a role="menuitem" tabindex="-1" href="elixir.html">5.1</a>
+				</li>
+					</ul>
+	</div>
+</div>
+		
+        <div class="responsive-sidebar-nav">
+			<a href="elixir.html#" class="toggle-slide menu-link btn">&#9776;</a>
+		</div>
+	</nav>
+
+	<nav id="slide-menu" class="slide-menu" role="navigation">
+
+	<div class="brand">
+		<a href="../../index.html">
+			<img src="../../assets/img/laravel-logo-white.png" height="50">
+		</a>
+	</div>
+
+	<ul class="slide-main-nav">
+		<li><a href="../../index.html">Home</a></li>
+		<li class="nav-docs"><a href="../5.4.html">文档</a></li>
+<li ><a href="https://laravel-china.org/news" class="no-pjax">Laravel 资讯</a></li>
+<li class="dropdown"><a href="https://laravel-china.org/">Laravel China 社区</a></li>
+<li class="nav-forge"><a href="https://laravel-china.org/categories/1">酷工作</a></li>
+<li class="nav-docs"><a href="http://lumen.laravel-china.org">Lumen</a></li>
+<li class="nav-forge"><a href="https://cs.laravel-china.org/">速查表</a></li>
+<li class="nav-forge"><a href="https://fsdhub.com/books/laravel-essential-training-5.5">《Laravel 入门教程》</a></li>
+	</ul>
+
+	<div class="slide-docs-nav">
+		<h2>Documentation</h2>
+		<ul>
+<li>
+<h2>前言</h2>
+<ul>
+<li><a href="about.html">翻译说明</a></li>
+<li><a href="releases.html">发行说明</a></li>
+<li><a href="upgrade.html">升级导引</a></li>
+<li><a href="contributions.html">贡献导引</a></li>
+<li><a href="http://laravel-china.org/api/5.1">API 文档</a></li>
+</ul>
+</li>
+<li>
+<h2>环境配置</h2>
+<ul>
+<li><a href="installation.html">安装</a></li>
+<li><a href="homestead.html">Homestead</a></li>
+</ul>
+</li>
+<li>
+<h2>基本功能</h2>
+<ul>
+<li><a href="routing.html">路由</a></li>
+<li><a href="middleware.html">中间件</a></li>
+<li><a href="controllers.html">控制器</a></li>
+<li><a href="requests.html">请求</a></li>
+<li><a href="responses.html">响应</a></li>
+<li><a href="views.html">视图</a></li>
+<li><a href="blade.html">Blade 模板</a></li>
+</ul>
+</li>
+<li>
+<h2>教程</h2>
+<ul>
+<li><a href="quickstart.html">初级任务清单</a></li>
+<li><a href="quickstart-intermediate.html">中级任务清单</a></li>
+</ul>
+</li>
+<li>
+<h2>系统架构</h2>
+<ul>
+<li><a href="lifecycle.html">请求生命周期</a></li>
+<li><a href="structure.html">应用程序结构</a></li>
+<li><a href="providers.html">服务提供者</a></li>
+<li><a href="container.html">服务容器</a></li>
+<li><a href="contracts.html">Contracts</a></li>
+<li><a href="facades.html">Facades</a></li>
+</ul>
+</li>
+<li>
+<h2>系统服务</h2>
+<ul>
+<li><a href="authentication.html">用户认证</a></li>
+<li><a href="authorization.html">用户授权</a></li>
+<li><a href="artisan.html">Artisan 命令行</a></li>
+<li><a href="billing.html">交易</a></li>
+<li><a href="cache.html">缓存</a></li>
+<li><a href="collections.html">集合</a></li>
+<li><a href="elixir.html">Elixir</a></li>
+<li><a href="encryption.html">加密与解密</a></li>
+<li><a href="errors.html">错误与日志</a></li>
+<li><a href="events.html">事件</a></li>
+<li><a href="filesystem.html">文件系统与云存储</a></li>
+<li><a href="hashing.html">哈希</a></li>
+<li><a href="helpers.html">辅助函数</a></li>
+<li><a href="localization.html">本地化</a></li>
+<li><a href="mail.html">邮件</a></li>
+<li><a href="packages.html">扩展包开发</a></li>
+<li><a href="pagination.html">分页</a></li>
+<li><a href="queues.html">队列</a></li>
+<li><a href="redis.html">Redis</a></li>
+<li><a href="session.html">Session</a></li>
+<li><a href="envoy.html">Envoy</a></li>
+<li><a href="scheduling.html">任务调度</a></li>
+<li><a href="testing.html">测试</a></li>
+<li><a href="validation.html">表单验证</a></li>
+</ul>
+</li>
+<li>
+<h2>数据库</h2>
+<ul>
+<li><a href="database.html">入门</a></li>
+<li><a href="queries.html">查询构造器</a></li>
+<li><a href="migrations.html">数据库迁移</a></li>
+<li><a href="seeding.html">数据填充</a></li>
+</ul>
+</li>
+<li>
+<h2>Eloquent ORM</h2>
+<ul>
+<li><a href="eloquent.html">入门</a></li>
+<li><a href="eloquent-relationships.html">模型关联</a></li>
+<li><a href="eloquent-collections.html">Eloquent 集合</a></li>
+<li><a href="eloquent-mutators.html">Getter/Setter</a></li>
+<li><a href="eloquent-serialization.html">序列化</a></li>
+</ul>
+</li>
+</ul>
+	</div>
+
+</nav>
+
+<div class="docs-wrapper container">
+
+	<section class="sidebar">
+
+            <div class="header">
+              <a type="button" class="btn btn-primary btn-inverted btn-lg btn-block turnofflight"><i class="fa fa-lightbulb-o"></i> 夜间模式 </a>
+              <br>
+              <div class="versions text-center ">
+                <a class="doc-btn btn-inverted " href="../5.5.html" title="Laravel 5.5 中文文档">C5.5</a>
+                <a class="doc-btn btn-inverted " href="../5.4.html" title="Laravel 5.4 中文文档">C5.4</a>
+                <a class="doc-btn btn-inverted active" href="../5.1.html" title="Laravel 5.1 中文文档">C5.1</a>
+              </div>
+            </div>
+
+            <a href="https://laravel-china.org/topics/3383" target="_blank" rel="nofollow" title="" style="display: block;margin-bottom: 23px;">
+                <img src="https://dn-phphub.qbox.me/uploads/images/201612/10/1/k7wwMpJduq.jpg" style="width: 100%;border: 1px solid #d8d3d3;box-shadow: 0 0 30px #d4d4d4;-moz-box-shadow: 0 0 30px #ccc;-webkit-box-shadow: 0 0 30px #d4d4d4;margin-bottom: 30px;margin-top: 10px;border-radius: 4px;">
+            </a>
+
+            <small><a href="elixir.html#" id="doc-expand" style="font-size: 9px; color: #525252;">▶</a></small>
+
+		<ul>
+<li>
+<h2>前言</h2>
+<ul>
+<li><a href="about.html">翻译说明</a></li>
+<li><a href="releases.html">发行说明</a></li>
+<li><a href="upgrade.html">升级导引</a></li>
+<li><a href="contributions.html">贡献导引</a></li>
+<li><a href="http://laravel-china.org/api/5.1">API 文档</a></li>
+</ul>
+</li>
+<li>
+<h2>环境配置</h2>
+<ul>
+<li><a href="installation.html">安装</a></li>
+<li><a href="homestead.html">Homestead</a></li>
+</ul>
+</li>
+<li>
+<h2>基本功能</h2>
+<ul>
+<li><a href="routing.html">路由</a></li>
+<li><a href="middleware.html">中间件</a></li>
+<li><a href="controllers.html">控制器</a></li>
+<li><a href="requests.html">请求</a></li>
+<li><a href="responses.html">响应</a></li>
+<li><a href="views.html">视图</a></li>
+<li><a href="blade.html">Blade 模板</a></li>
+</ul>
+</li>
+<li>
+<h2>教程</h2>
+<ul>
+<li><a href="quickstart.html">初级任务清单</a></li>
+<li><a href="quickstart-intermediate.html">中级任务清单</a></li>
+</ul>
+</li>
+<li>
+<h2>系统架构</h2>
+<ul>
+<li><a href="lifecycle.html">请求生命周期</a></li>
+<li><a href="structure.html">应用程序结构</a></li>
+<li><a href="providers.html">服务提供者</a></li>
+<li><a href="container.html">服务容器</a></li>
+<li><a href="contracts.html">Contracts</a></li>
+<li><a href="facades.html">Facades</a></li>
+</ul>
+</li>
+<li>
+<h2>系统服务</h2>
+<ul>
+<li><a href="authentication.html">用户认证</a></li>
+<li><a href="authorization.html">用户授权</a></li>
+<li><a href="artisan.html">Artisan 命令行</a></li>
+<li><a href="billing.html">交易</a></li>
+<li><a href="cache.html">缓存</a></li>
+<li><a href="collections.html">集合</a></li>
+<li><a href="elixir.html">Elixir</a></li>
+<li><a href="encryption.html">加密与解密</a></li>
+<li><a href="errors.html">错误与日志</a></li>
+<li><a href="events.html">事件</a></li>
+<li><a href="filesystem.html">文件系统与云存储</a></li>
+<li><a href="hashing.html">哈希</a></li>
+<li><a href="helpers.html">辅助函数</a></li>
+<li><a href="localization.html">本地化</a></li>
+<li><a href="mail.html">邮件</a></li>
+<li><a href="packages.html">扩展包开发</a></li>
+<li><a href="pagination.html">分页</a></li>
+<li><a href="queues.html">队列</a></li>
+<li><a href="redis.html">Redis</a></li>
+<li><a href="session.html">Session</a></li>
+<li><a href="envoy.html">Envoy</a></li>
+<li><a href="scheduling.html">任务调度</a></li>
+<li><a href="testing.html">测试</a></li>
+<li><a href="validation.html">表单验证</a></li>
+</ul>
+</li>
+<li>
+<h2>数据库</h2>
+<ul>
+<li><a href="database.html">入门</a></li>
+<li><a href="queries.html">查询构造器</a></li>
+<li><a href="migrations.html">数据库迁移</a></li>
+<li><a href="seeding.html">数据填充</a></li>
+</ul>
+</li>
+<li>
+<h2>Eloquent ORM</h2>
+<ul>
+<li><a href="eloquent.html">入门</a></li>
+<li><a href="eloquent-relationships.html">模型关联</a></li>
+<li><a href="eloquent-collections.html">Eloquent 集合</a></li>
+<li><a href="eloquent-mutators.html">Getter/Setter</a></li>
+<li><a href="eloquent-serialization.html">序列化</a></li>
+</ul>
+</li>
+</ul>
+
+		<hr>
+            <ul>
+              <li>社交账号</li>
+                <ul class="social-account">
+                  <li><a href="http://weibo.com/1837553744/profile?topnav=1&wvr=6&is_all=1">Summer 的微博</a></li>
+                  <li>新手 QQ 群：282196078</li>
+                </ul>
+
+            </ul>
+
+            <ul>
+              <li>
+              微信订阅号
+                <ul>
+                  <li>
+<img class="image-border popover-with-html" data-content="" src="https://dn-phphub.qbox.me/uploads/images/201708/06/1/4zgVR8dNCt.png" style="width: 148px;height: 148px;border:1px solid #ccc;padding:2px;border-radius:3px;margin-top:5px;" data-original-title="" title="">
+                  </li>
+                </ul>
+                </li>
+            </ul>
+
+            <ul>
+              <li>推荐资源
+              <ul class="list list-group resource-links">
+                    <li class="list-group-item ">
+                <a href="../../index.html" class="no-pjax" title="Laravel 中文文档">
+                    <img class="media-object inline-block " src="https://dn-phphub.qbox.me/uploads/banners/ql9XtosRhTe4v8HVC3TV.jpg">
+                    Laravel 中文文档
+                </a>
+            </li>
+                    <li class="list-group-item ">
+                <a href="https://lumen.laravel-china.org" class="no-pjax" title="Lumen 中文文档">
+                    <img class="media-object inline-block " src="https://dn-phphub.qbox.me/uploads/banners/bcMFkfsJZpetLgKFwWqY.jpg">
+                    Lumen 中文文档
+                </a>
+            </li>
+                    <li class="list-group-item ">
+                <a href="https://cs.laravel-china.org/" class="no-pjax" title="Laravel 速查表">
+                    <img class="media-object inline-block " src="https://dn-phphub.qbox.me/uploads/banners/cV55gsrH70qz6VdKr502.jpg">
+                    Laravel 速查表
+                </a>
+            </li>
+                    <li class="list-group-item ">
+                <a href="http://yousails.mikecrm.com/4Dh5uWU" class="no-pjax" title="Laravel 软件外包服务">
+                    <img class="media-object inline-block " src="https://dn-phphub.qbox.me/uploads/banners/v89tIQ6vjceA6g7JmrQB.png">
+                    Laravel 软件外包
+                </a>
+            </li>
+                    <li class="list-group-item ">
+                <a href="https://laravel-china.org/topics/3626" class="no-pjax" title="Laravel 远程工作 ">
+                    <img class="media-object inline-block " src="https://dn-phphub.qbox.me/uploads/banners/Xlq6s7wLxvX8FlTP4qZe.png">
+                    Laravel 远程工作
+                </a>
+            </li>
+                    <li class="list-group-item ">
+                <a href="https://laravel-china.github.io/php-the-right-way/" class="no-pjax" title="PHP 之道 - PHPer 必读">
+                    <img class="media-object inline-block " src="https://dn-phphub.qbox.me/uploads/banners/vA50AYuscu2RCMowq7ee.png">
+                    PHP 之道
+                </a>
+            </li>
+                    <li class="list-group-item ">
+                <a href="https://laravel-china.org/composer" class="no-pjax" title="Composer 中文全量镜像">
+                    <img class="media-object inline-block " src="https://dn-phphub.qbox.me/uploads/banners/KltcLb6leMa12dvTAxD7.png">
+                    Composer 镜像
+                </a>
+            </li>
+            </ul>
+              </li>
+            </ul>
+
+	</section>
+
+	
+
+	<article>
+
+		<div class="alert alert-warning" role="alert">
+			一小时同步一次，更多信息请查阅 <a href="https://laravel-china.org/topics/2095">文档导读</a>。
+			发现瑕疵？你也可以
+				<a href="https://github.com/laravel-china/laravel-docs/edit/5.1/elixir.md"><i class="fa fa-pencil-square-o"></i> 改进本文</a>
+			。<a href="https://laravel-china.org/topics/4026" target="_blank"><i class="fa fa-cloud-download" aria-hidden="true"></i> 离线版本下载</a>
+		</div>
+
+		<div class="main-content">
+			<h1>Laravel Elixir</h1>
+<ul>
+<li><a href="elixir.html#introduction">简介</a></li>
+<li><a href="elixir.html#installation">安装与配置</a></li>
+<li><a href="elixir.html#running-elixir">运行 Elixir</a></li>
+<li><a href="elixir.html#working-with-stylesheets">使用样式</a>
+<ul>
+<li><a href="elixir.html#less">Less</a></li>
+<li><a href="elixir.html#sass">Sass</a></li>
+<li><a href="elixir.html#plain-css">纯 CSS</a></li>
+<li><a href="elixir.html#css-source-maps">Source Maps</a></li>
+</ul></li>
+<li><a href="elixir.html#working-with-scripts">使用脚本</a>
+<ul>
+<li><a href="elixir.html#coffeescript">CoffeeScript</a></li>
+<li><a href="elixir.html#browserify">Browserify</a></li>
+<li><a href="elixir.html#babel">Babel</a></li>
+<li><a href="elixir.html#javascript">Scripts</a></li>
+</ul></li>
+<li><a href="elixir.html#copying-files-and-directories">复制文件与目录</a></li>
+<li><a href="elixir.html#versioning-and-cache-busting">版本与缓存清除</a></li>
+<li><a href="elixir.html#browser-sync">BrowserSync</a></li>
+<li><a href="elixir.html#calling-existing-gulp-tasks">调用既有的 Gulp 任务</a></li>
+<li><a href="elixir.html#writing-elixir-extensions">编写 Elixir 扩展功能</a></li>
+</ul>
+<p><a name="introduction"></a></p>
+<h2>简介</h2>
+<p>Laravel Elixir 提供了简洁流畅的 API，让你能够在你的 Laravel 应用程序中定义基本的 <a href="http://gulpjs.com">Gulp</a> 任务。Elixir 支持许多常见的 CSS 与 JavaScrtip 预处理器，甚至包含了测试工具。使用链式调用，Elixir 让你流畅地定义开发流程，例如：</p>
+<pre><code class="language-javascript">elixir(function(mix) {
+    mix.sass('app.scss')
+       .coffee('app.coffee');
+});</code></pre>
+<p>如果你曾经对于上手 Gulp 及编译资源文件感到困惑，那么你将会爱上 Laravel Elixir，不过 Laravel 并不强迫你使用 Elixir，你可以自由的选用你喜欢的自动化开发流程工具。</p>
+<p><a name="installation"></a></p>
+<h2>安装及配置</h2>
+<h3>安装 Node</h3>
+<p>在开始使用 Elixir 之前，你必须先确定你的机器上有安装 Node.js。</p>
+<pre><code>node -v</code></pre>
+<p>默认情况下，Laravel Homestead 会包含你所需的一切；但是，如果你没有使用 Vagrant，那么你可以简单的浏览 <a href="http://nodejs.org/download/">Node 的下载页面</a> 进行安装。</p>
+<h3>Gulp</h3>
+<p>接着，你需要全局安装 <a href="http://gulpjs.com">Gulp</a> 的 NPM 扩展包：</p>
+<pre><code>npm install --global gulp</code></pre>
+<h3>Laravel Elixir</h3>
+<p>最后的步骤就是安装 Elixir！在每一份新安装的 Laravel 代码里，你会发现根目录有个名为 <code>package.json</code> 的文件。想像它就如同你的 <code>composer.json</code> 文件，只不过它定义的是 Node 的依赖扩展包，而不是 PHP 的。你可以使用以下的命令安装依赖扩展包：</p>
+<pre><code>npm install</code></pre>
+<p>如果你是在 Windows 系统上或在 Windows 主机系统上运行 VM 进行开发，你需要在运行 <code>npm install</code> 命令时将 <code>--no-bin-links</code> 开启：</p>
+<pre><code>npm install --no-bin-links</code></pre>
+<blockquote>
+<p>译者注： <a href="https://phphub.org/topics/2102">优化 NPM 安装 Gulp 和 Laravel Elixir 的下载速度</a></p>
+</blockquote>
+<p><a name="running-elixir"></a></p>
+<h2>运行 Elixir</h2>
+<p>Elixir 是创建于 <a href="http://gulpjs.com">Gulp</a> 之上，所以要运行你的 Elixir 任务，只需要在命令行运行 <code>gulp</code> 命令。在命令增加 <code>--production</code> 标示会告知 Elixir 压缩你的 CSS 及 JavaScript 文件：</p>
+<pre><code>// 运行所有任务...
+gulp
+
+// 运行所有任务并压缩所有 CSS 及 JavaScript...
+gulp --production</code></pre>
+<h4>监控资源文件修改</h4>
+<p>因为每次修改你的资源文件之后在命令行运行 <code>gulp</code> 命令会相当不便，因此你可以使用 <code>gulp watch</code> 命令。此命令会在你的命令行运行并监控资源文件的任何修改。当发生修改时，新文件将会自动被编译：</p>
+<pre><code>gulp watch</code></pre>
+<p><a name="working-with-stylesheets"></a></p>
+<h2>使用样式</h2>
+<p>项目根目录的 <code>gulpfile.js</code> 包含你所有的 Elixir 任务。Elixir 任务可以被链式调用起来，以定义你的资源文件该如何进行编译。</p>
+<p><a name="less"></a></p>
+<h3>Less</h3>
+<p>要将 <a href="http://lesscss.org/">Less</a> 编译为 CSS，你可以使用 <code>less</code> 方法。<code>less</code> 方法会假设你的 Less 文件被保存在 <code>resources/assets/less</code> 文件夹中。默认情况下，此例子的任务会将编译后的 CSS 放置于 <code>public/css/app.css</code>：</p>
+<pre><code class="language-javascript">elixir(function(mix) {
+    mix.less('app.less');
+});</code></pre>
+<p>你可能会想合并多个 Less 文件至单个 CSS 文件。同样的，生成的 CSS 会被放置于 <code>public/css/app.css</code>：</p>
+<pre><code class="language-javascript">elixir(function(mix) {
+    mix.less([
+        'app.less',
+        'controllers.less'
+    ]);
+});</code></pre>
+<p>如果你想自定义编译后的 CSS 输出位置，可以传递第二个参数至 <code>less</code> 方法：</p>
+<pre><code class="language-javascript">elixir(function(mix) {
+    mix.less('app.less', 'public/stylesheets');
+});
+
+// 指定输出的文件名称...
+elixir(function(mix) {
+    mix.less('app.less', 'public/stylesheets/style.css');
+});</code></pre>
+<p><a name="sass"></a></p>
+<h3>Sass</h3>
+<p><code>sass</code> 方法让你能编译 <a href="http://sass-lang.com/">Sass</a> 至 CSS。Sass 文件的默认读取路径是 <code>resources/assets/sass</code>，你可以使用此方法：</p>
+<pre><code class="language-javascript">elixir(function(mix) {
+    mix.sass('app.scss');
+});</code></pre>
+<p>同样的，如同 <code>less</code> 方法，你可以编译多个 Sass 文件至单个的 CSS 文件，甚至可以自定义生成的 CSS 的输出目录：</p>
+<pre><code class="language-javascript">elixir(function(mix) {
+    mix.sass([
+        'app.scss',
+        'controllers.scss'
+    ], 'public/assets/css');
+});</code></pre>
+<p><a name="plain-css"></a></p>
+<h3>纯 CSS</h3>
+<p>如果你只是想将一些纯 CSS 样式合并成单个的文件，你可以使用 <code>styles</code> 方法。此方法的默认路径为 <code>resources/assets/css</code> 目录，而生成的 CSS 会被放置于 <code>public/css/all.css</code>：</p>
+<pre><code class="language-javascript">elixir(function(mix) {
+    mix.styles([
+        'normalize.css',
+        'main.css'
+    ]);
+});</code></pre>
+<p>当然，你也可以通过传递第二个参数至 <code>styles</code> 方法，将生成的文件输出至指定的位置：</p>
+<pre><code class="language-javascript">elixir(function(mix) {
+    mix.styles([
+        'normalize.css',
+        'main.css'
+    ], 'public/assets/css');
+});</code></pre>
+<p><a name="css-source-maps"></a></p>
+<h3>Source Maps</h3>
+<p>Source maps 在默认情况下是开启的。因此，针对每个被编译的文件，同目录内都会伴随着一个 <code>*.css.map</code> 文件。这个文件能够让你在浏览器调试时，可以追踪编译后的样式选择器至原始的 Sass 或 Less 位置。</p>
+<p>如果你不想为你的 CSS 生成 source maps，你可以使用一个简单的配置选项关闭它们：</p>
+<pre><code class="language-javascript">elixir.config.sourcemaps = false;
+
+elixir(function(mix) {
+    mix.sass('app.scss');
+});</code></pre>
+<p><a name="working-with-scripts"></a></p>
+<h2>使用脚本</h2>
+<p>Elixir 也提供了一些函数来帮助你使用 JavaScript 文件，像是编译 ECMAScript 6、编译 CoffeeScript、Browserify、压缩、及简单的串联纯 JavaScript 文件。</p>
+<p><a name="coffeescript"></a></p>
+<h3>CoffeeScript</h3>
+<p><code>coffee</code> 方法可以用于编译 <a href="http://coffeescript.org/">CoffeeScript</a> 至纯 JavaScript。<code>coffee</code> 函数接收一个相对于 <code>resources/assets/coffee</code> 目录的 CoffeeScript 文件名字符串或数组，接着在 <code>public/js</code> 目录生成单个的 <code>app.js</code> 文件：</p>
+<pre><code class="language-javascript">elixir(function(mix) {
+    mix.coffee(['app.coffee', 'controllers.coffee']);
+});</code></pre>
+<p><a name="browserify"></a></p>
+<h3>Browserify</h3>
+<p>Elixir 还附带了一个 <code>browserify</code> 方法，给予你在浏览器引入模块及 ECMAScript 6 的有用的特性。</p>
+<p>此任务假设你的脚本都保存在 <code>resources/assets/js</code>，并会将生成的文件放置于 <code>public/js/main.js</code>：</p>
+<pre><code class="language-javascript">elixir(function(mix) {
+    mix.browserify('main.js');
+});</code></pre>
+<p>虽然 Browserify 附带了 Partialify 及 Babelify 转换器，但是只要你愿意，你可以随意安装并增加更多的转换器：</p>
+<pre><code>npm install aliasify --save-dev</code></pre>
+<pre><code class="language-javascript">elixir.config.js.browserify.transformers.push({
+    name: 'aliasify',
+    options: {}
+});
+
+elixir(function(mix) {
+    mix.browserify('main.js');
+});</code></pre>
+<p><a name="babel"></a></p>
+<h3>Babel</h3>
+<p><code>babel</code> 方法可被用于编译 <a href="https://babeljs.io/docs/learn-es2015/">ECMAScript 6 与 7</a> 至纯 JavaScript。此函数接收一个相对于 <code>resources/assets/js</code> 目录的文件数组，接着在 <code>public/js</code> 目录生成单个的 <code>all.js</code> 文件：</p>
+<pre><code class="language-javascript">elixir(function(mix) {
+    mix.babel([
+        'order.js',
+        'product.js'
+    ]);
+});</code></pre>
+<p>若要选择不同的输出位置，只需简单的指定你希望的路径作为第二个参数。该方法除了 Babel 的编译外，特色与功能同等于 <code>mix.scripts()</code>。</p>
+<p><a name="javascript"></a></p>
+<h3>Scripts</h3>
+<p>如果你想将多个 JavaScript 文件合并至单个文件，你可以使用 <code>scripts</code> 方法。</p>
+<p><code>scripts</code> 方法假设所有的路径都相对于 <code>resources/assets/js</code> 目录，且默认会将生成的 JavaScript 放置于 <code>public/js/all.js</code>：</p>
+<pre><code class="language-javascript">elixir(function(mix) {
+    mix.scripts([
+        'jquery.js',
+        'app.js'
+    ]);
+});</code></pre>
+<p>如果你想多个脚本的集合合并成不同文件，你可以使用调用多个 <code>scripts</code> 方法。给予该方法的第二个参数会为每个串联决定生成的文件名称：</p>
+<pre><code class="language-javascript">elixir(function(mix) {
+    mix.scripts(['app.js', 'controllers.js'], 'public/js/app.js')
+       .scripts(['forum.js', 'threads.js'], 'public/js/forum.js');
+});</code></pre>
+<p>如果你想合并指定目录中的所有脚本，你可以使用 <code>scriptsIn</code> 方法。生成的 JavaScript 会被放置在 <code>public/js/all.js</code>：</p>
+<pre><code class="language-javascript">elixir(function(mix) {
+    mix.scriptsIn('public/js/some/directory');
+});</code></pre>
+<p><a name="copying-files-and-directories"></a></p>
+<h2>复制文件与目录</h2>
+<p><code>copy</code> 方法可以复制文件与目录至新位置。所有操作路径都相对于项目的根目录：</p>
+<pre><code class="language-javascript">elixir(function(mix) {
+    mix.copy('vendor/foo/bar.css', 'public/css/bar.css');
+});
+
+elixir(function(mix) {
+    mix.copy('vendor/package/views', 'resources/views');
+});</code></pre>
+<p><a name="versioning-and-cache-busting"></a></p>
+<h2>版本与缓存清除</h2>
+<p>许多的开发者会在它们编译后的资源文件中加上时间戳或是唯一的 token，强迫浏览器加载全新的资源文件以取代提供的旧版本代码副本。你可以使用 <code>version</code> 方法让 Elixir 处理它们。</p>
+<p><code>version</code> 方法接收一个相对于 <code>public</code> 目录的文件名称，接着为你的文件名称加上唯一的哈希值，以防止文件被缓存。举例来说，生成出来的文件名称可能像这样：<code>all-16d570a7.css</code>：</p>
+<pre><code class="language-javascript">elixir(function(mix) {
+    mix.version('css/all.css');
+});</code></pre>
+<p>在为文件生成版本之后，你可以在你的 <a href="views.html">视图</a> 中使用 Laravel 的全局 <code>elixir</code> PHP 辅助函数来正确加载名称被哈希后的文件。<code>elixir</code> 函数会自动判断被哈希的文件名称：</p>
+<pre><code>&lt;link rel="stylesheet" href="{{ elixir('css/all.css') }}"&gt;</code></pre>
+<h4>为多个文件生成版本</h4>
+<p>你可以传递一个数组至 <code>version</code> 方法来为多个文件生成版本：</p>
+<pre><code class="language-javascript">elixir(function(mix) {
+    mix.version(['css/all.css', 'js/app.js']);
+});</code></pre>
+<p>一旦该文件被加上版本，你需要使用 <code>elixir</code> 辅助函数来生成哈希文件的正确链接。切记，你只需要传递未哈希文件的名称至 <code>elixir</code> 辅助函数。此函数会自动使用未哈希的名称来判断该文件为目前的哈希版本：</p>
+<pre><code>&lt;link rel="stylesheet" href="{{ elixir('css/all.css') }}"&gt;
+
+&lt;script src="{{ elixir('js/app.js') }}"&gt;&lt;/script&gt;</code></pre>
+<p><a name="browser-sync"></a></p>
+<h2>BrowserSync</h2>
+<p>当你对前端资源进行修改后，BrowserSync 会自动刷新你的网页浏览器。你可以使用 <code>browserSync</code> 方法来告知 Elixir，当你运行 <code>gulp watch</code> 命令时启动 BrowserSync 服务器：</p>
+<pre><code class="language-javascript">elixir(function(mix) {
+    mix.browserSync();
+});</code></pre>
+<p>一旦你运行 <code>gulp watch</code>，就能使用连接端口 3000 启用浏览器同步并访问你的网页应用程序：<code>http://homestead.app:3000</code>。如果你在本机开发所使用的域名不是 <code>homestead.app</code>，那么你可以传递一个 <a href="http://www.browsersync.io/docs/options/">选项</a> 的数组作为 <code>browserSync</code> 方法的第一个参数：</p>
+<pre><code class="language-javascript">elixir(function(mix) {
+    mix.browserSync({
+        proxy: 'project.app'
+    });
+});</code></pre>
+<p><a name="calling-existing-gulp-tasks"></a></p>
+<h2>调用既有的 Gulp 任务</h2>
+<p>如果你需要在 Elixir 调用一个既有的 Gulp 任务，你可以使用 <code>task</code> 方法。举个例子，假设你有一个 Gulp 任务，当你调用时会输出一些简单的文本：</p>
+<pre><code class="language-javascript">gulp.task('speak', function() {
+    var message = 'Tea...Earl Grey...Hot';
+
+    gulp.src('').pipe(shell('say ' + message));
+});</code></pre>
+<p>如果你希望在 Elixir 中调用这个任务，使用 <code>mix.task</code> 方法并传递该任务的名称作为该方法唯一的参数：</p>
+<pre><code class="language-javascript">elixir(function(mix) {
+    mix.task('speak');
+});</code></pre>
+<h4>自定义监控器</h4>
+<p>如果你想注册一个监控器让你的自定义任务能在每次文件改变时就运行，只需传递一个正则表达式作为 <code>task</code> 方法的第二个参数：</p>
+<pre><code class="language-javascript">elixir(function(mix) {
+    mix.task('speak', 'app/**/*.php');
+});</code></pre>
+<p><a name="writing-elixir-extensions"></a></p>
+<h2>编写 Elixir 扩展功能</h2>
+<p>如果你需要比 Elixir 的 <code>task</code> 方法更灵活的方案，你可以创建自定义的 Elixir 扩展功能。Elixir 扩展功能允许你传递参数至你的自定义任务。举例来说，你可以编写一个扩展功能，像是：</p>
+<pre><code class="language-javascript">// 文件：elixir-extensions.js
+
+var gulp = require('gulp');
+var shell = require('gulp-shell');
+var Elixir = require('laravel-elixir');
+
+var Task = Elixir.Task;
+
+Elixir.extend('speak', function(message) {
+
+    new Task('speak', function() {
+        return gulp.src('').pipe(shell('say ' + message));
+    });
+
+});
+
+// mix.speak('Hello World');</code></pre>
+<p>就是这样！注意，你的 Gulp 具体的逻辑必须被放置在 <code>Task</code> 第二个参数传递的构造器函数里面。你可以将此扩展功能放置在 Gulpfile 的上方，取而代之也可以导出至一个自定义任务的文件。举个例子，如果你将你的扩展功能放置在 <code>elixir-extensions.js</code> 文件中，那么你可以在 <code>Gulpfile</code> 中像这样引入该文件：</p>
+<pre><code class="language-javascript">// 文件：Gulpfile.js
+
+var elixir = require('laravel-elixir');
+
+require('./elixir-extensions')
+
+elixir(function(mix) {
+    mix.speak('Tea, Earl Grey, Hot');
+});</code></pre>
+<h4>自定义监控器</h4>
+<p>如果你想在运行 <code>gulp watch</code> 时能够重新触发你的自定义任务，你可以注册一个监控器：</p>
+<pre><code class="language-javascript">new Task('speak', function() {
+    return gulp.src('').pipe(shell('say ' + message));
+})
+.watch('./app/**');</code></pre>
+<hr />
+<blockquote>
+<p>{note} 欢迎任何形式的转载，但请务必注明出处，尊重他人劳动共创开源社区。</p>
+<p>转载请注明：本文档由 Laravel China 社区 [laravel-china.org] 组织翻译。</p>
+<p>文档永久地址： <a href="../../index.html">http://d.laravel-china.org</a></p>
+</blockquote>
+		</div>
+
+		<div class="main-footer" style="border-top:1px dashed rgba(0, 0, 0, 0.1);padding-top: 30px;margin-top:30px;margin-bottom: 20px;">
+			<div class="prev-next-wrap clearfix">
+
+									<a class="btn btn-primary pull-left btn-inverted" href="collections.html"><i class="fa fa-arrow-left"></i> 集合</a>
+				
+			    &nbsp;
+								    <a class="btn btn-primary pull-right btn-inverted" href="encryption.html">加密与解密 <i class="fa fa-arrow-right"></i></a>
+							</div>
+		</div>
+
+	</article>
+</div>
+
+	<footer class="main">
+		<ul>
+			<li class="nav-docs"><a href="../5.4.html">文档</a></li>
+<li ><a href="https://laravel-china.org/news" class="no-pjax">Laravel 资讯</a></li>
+<li class="dropdown"><a href="https://laravel-china.org/">Laravel China 社区</a></li>
+<li class="nav-forge"><a href="https://laravel-china.org/categories/1">酷工作</a></li>
+<li class="nav-docs"><a href="http://lumen.laravel-china.org">Lumen</a></li>
+<li class="nav-forge"><a href="https://cs.laravel-china.org/">速查表</a></li>
+<li class="nav-forge"><a href="https://fsdhub.com/books/laravel-essential-training-5.5">《Laravel 入门教程》</a></li>
+		</ul>
+		<p>Laravel is a trademark of Taylor Otwell. Copyright &copy; Taylor Otwell.</p>
+            <div style="margin-top: 32px;">
+                <a href="https://www.upyun.com/" title="Composer 镜像赞助商">
+                    <img src="https://dn-phphub.qbox.me/uploads/banners/XPtLlZmIN1cQbLuDFEON.png" style="width: 200px;">
+                </a>
+            </div>
+            <p class="less-significant">
+            <a href="http://jackmcdade.com">
+                Designed by<br>
+                <svg version="1.1"
+	 xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:a="http://ns.adobe.com/AdobeSVGViewerExtensions/3.0/"
+	 x="0px" y="0px" width="128.2px" height="28px" viewBox="0 0 128.2 28" enable-background="new 0 0 128.2 28" xml:space="preserve"
+	>
+<defs>
+</defs>
+<g>
+	<path fill="#c3c3c3" d="M14.2,0.4c0,0.2,0,0.5,0,0.7c0,0.2,0,0.5,0,0.7l-1.4-0.3C12.9,3,13,4.5,13.1,6c0.1,1.5,0,3-0.1,4.5
+		c0,0.4-0.1,0.8-0.1,1.2c-0.1,0.4-0.1,0.8-0.3,1.2c-0.1,0.4-0.3,0.7-0.5,1.1c-0.2,0.3-0.5,0.6-0.9,0.9c-0.4,0.2-0.9,0.4-1.5,0.6
+		c-0.6,0.2-1.1,0.3-1.6,0.3c-0.6,0-1.2-0.1-1.6-0.3c-0.5-0.2-0.9-0.6-1.1-1c-0.3-0.5-0.5-1-0.6-1.6c-0.1-0.6-0.1-1.3,0-2.1
+		c0-0.2,0.1-0.5,0.2-0.7C4.9,9.9,5,9.7,5.1,9.5c0.1-0.2,0.2-0.4,0.3-0.6l1.1,0.4C6.7,9.3,7,9.4,7.3,9.5c0.3,0.1,0.5,0.1,0.6,0.2
+		c0,0.2,0,0.4-0.1,0.5c-0.1,0.2-0.1,0.3-0.2,0.4c-0.1,0.1-0.2,0.3-0.2,0.4c-0.1,0.2-0.1,0.3-0.1,0.5l-1.3-0.7
+		c-0.1,0.3-0.2,0.7-0.2,1.1c0,0.4,0.1,0.8,0.2,1.2c0.2,0.4,0.4,0.7,0.6,1c0.3,0.3,0.6,0.4,1,0.3c0.6,0,1.1-0.3,1.4-0.6
+		c0.3-0.4,0.5-0.9,0.7-1.7c0.1-0.7,0.2-1.6,0.2-2.8c0-1.1,0-2.4,0-3.9c0-0.6-0.1-1.3-0.1-2C9.7,2.8,9.6,2.1,9.5,1.4
+		c-0.2,0-0.5,0-0.8,0c-0.3,0-0.6,0-0.8,0c-0.8,0-1.5,0-2.2,0c-0.7,0-1.5,0-2.2,0.2c-0.3,0.1-0.6,0.2-1,0.4C2.2,2.1,1.9,2.4,1.6,2.6
+		C1.4,2.9,1.2,3.2,1.1,3.6C1,3.9,1,4.3,1.1,4.6c0.1,0.5,0.3,0.8,0.4,0.9V5.4c0-0.4,0.1-0.8,0.4-1c0.3-0.2,0.6-0.3,0.9-0.3
+		c0.3,0,0.6,0.1,0.9,0.3C4,4.6,4.1,5,4.1,5.4c0,0.4-0.1,0.8-0.4,1c-0.3,0.2-0.6,0.3-1,0.3H2.7C1.9,6.7,1.3,6.5,0.9,6
+		C0.5,5.6,0.2,5.1,0.1,4.5C0,4,0,3.4,0.2,2.7c0.2-0.6,0.5-1.1,1-1.5c0.4-0.3,0.8-0.5,1.2-0.7c0.4-0.1,0.9-0.2,1.4-0.3
+		c0.5-0.1,0.9-0.1,1.4-0.1c0.5,0,0.9,0,1.4,0h1.5c0.6,0,1.1,0,1.6,0.1c0.5,0,1,0.1,1.5,0.1c0.5,0,1,0.1,1.5,0.1
+		C13.1,0.5,13.6,0.5,14.2,0.4z"/>
+	<path fill="#c3c3c3" d="M25.2,14.3c0,0.2,0.1,0.4,0.1,0.6c0,0.2,0.1,0.4,0.1,0.7c-1-0.1-2-0.2-3-0.1c-1.1,0.1-2.1,0.2-3,0.4
+		c0-0.2-0.1-0.4-0.1-0.5c0-0.2-0.1-0.4-0.1-0.5c0.2,0,0.5-0.1,0.7-0.1c0.2,0,0.4-0.1,0.6-0.1c-0.1-1.5-0.3-3.1-0.5-4.6
+		c-0.5,0.1-0.9,0.1-1.4,0.2c-0.5,0.1-0.9,0.1-1.4,0.2c-0.2,0.7-0.3,1.3-0.5,2c-0.2,0.7-0.3,1.3-0.5,2c0.2,0,0.4,0,0.6,0
+		c0.1,0,0.3,0,0.4,0.1c0,0.2,0,0.3,0,0.5c0,0.1,0,0.2,0,0.4c0,0.1,0,0.2-0.1,0.3H14v-1.2h1c0.2-0.5,0.3-1,0.4-1.5
+		c0.1-0.5,0.3-1,0.4-1.5c0.2-0.6,0.3-1.2,0.5-1.7c0.2-0.6,0.3-1.2,0.5-1.7c0.2-1.1,0.4-2.1,0.6-3.2c0.2-1.1,0.3-2.1,0.4-3.2
+		c-0.2,0-0.5,0-0.7,0c-0.2,0-0.4,0-0.7,0c0-0.2,0.1-0.4,0.1-0.6c0-0.2,0-0.4,0.1-0.6c0.9,0,1.9,0,2.9,0c1,0,2,0,2.9,0l0.2,1.2
+		c-0.2,0-0.3,0-0.5,0c-0.2,0-0.3,0-0.5,0c0.3,2.1,0.7,4.3,1,6.5c0.3,2.2,0.7,4.4,1,6.5H25.2z M17.5,9c0.4-0.1,0.7-0.1,1.1-0.2
+		c0.4-0.1,0.8-0.1,1.2-0.2c-0.2-1-0.3-2-0.5-2.9c-0.2-1-0.4-1.9-0.6-2.9c-0.2,1-0.4,2.1-0.5,3.1C17.9,6.9,17.7,8,17.5,9z"/>
+	<path fill="#c3c3c3" d="M36.7,10.4c-0.1,0-0.2,0-0.3,0c-0.1,0-0.2,0-0.3,0c0,0.6,0,1.2-0.2,1.9c-0.2,0.6-0.5,1.2-1,1.6
+		c-0.5,0.5-1,0.9-1.6,1.1c-0.6,0.3-1.3,0.4-2,0.5c-0.6,0.1-1.1,0.1-1.8,0c-0.6-0.1-1.1-0.4-1.6-0.7c-0.2-0.2-0.5-0.4-0.8-0.7
+		c-0.3-0.3-0.5-0.5-0.6-0.8c-0.3-0.5-0.5-1-0.6-1.5c-0.2-0.5-0.3-0.9-0.4-1.4c-0.1-0.5-0.2-1-0.2-1.5c0-0.5,0-1,0.1-1.6
+		c0.2-1,0.4-2,0.8-2.9c0.4-0.9,0.8-1.7,1.4-2.3c0.5-0.7,1.2-1.2,1.9-1.6C30.2,0.2,30.9,0,31.7,0c0.3,0,0.5,0,0.8,0.1
+		c0.3,0.1,0.5,0.2,0.7,0.4c0.3,0.3,0.7,0.7,1,1.2c0.3,0.5,0.6,1.2,0.7,1.9c0.1,0,0.2,0,0.3,0c0.1,0,0.2,0,0.3,0c0,0.1,0,0.2,0,0.3
+		c0,0.1,0,0.2,0,0.3L33,4.6c-0.3,0.1-0.5,0.1-0.6,0c-0.1,0-0.2-0.1-0.2-0.2c-0.1-0.1-0.1-0.2,0-0.3c0.1,0,0.2,0,0.2,0
+		c0.1,0,0.1,0,0.2,0c0.2-0.2,0.3-0.3,0.3-0.6c0-0.2,0-0.5,0-0.7c0-0.5-0.2-0.9-0.5-1.3c-0.2-0.2-0.3-0.3-0.4-0.4
+		C31.8,1,31.6,1,31.4,1.1c-0.2,0-0.4,0.2-0.6,0.4c-0.2,0.2-0.4,0.5-0.5,0.9C30,2.6,29.9,3,29.8,3.3c-0.1,0.3-0.2,0.5-0.2,0.7
+		c-0.6,2.6-0.7,5.3-0.2,8c0.1,0.3,0.2,0.7,0.3,1s0.3,0.6,0.5,0.9c0.2,0.3,0.5,0.5,0.8,0.7c0.3,0.2,0.6,0.2,1,0.1
+		c0.6-0.1,1-0.4,1.4-1c0.3-0.5,0.6-1.1,0.7-1.8c0.1-0.3,0.1-0.6,0.1-0.9v-0.5c-0.2,0-0.4,0-0.6-0.1c-0.1-0.1-0.2-0.2-0.2-0.3
+		c0-0.1,0-0.2,0.1-0.3c0.6,0,1.2,0,1.7,0c0.6,0,1.2,0,1.7,0c0,0.1,0,0.2-0.1,0.3C36.7,10.2,36.7,10.3,36.7,10.4z"/>
+	<path fill="#c3c3c3" d="M48,14.2c0.1,0.2,0.3,0.3,0.5,0.4c0.2,0.1,0.5,0.1,0.7,0c0.1,0.1,0.1,0.2,0.1,0.4c0,0.2-0.1,0.3-0.2,0.4
+		c-0.1,0.1-0.2,0.2-0.4,0.2c-0.2,0-0.3,0-0.4,0c-0.3,0-0.7,0-1,0c-0.3,0-0.7,0-1-0.1c-0.3-0.1-0.7-0.2-1-0.4
+		c-0.3-0.2-0.5-0.4-0.7-0.7c-0.2-0.3-0.3-0.6-0.3-1c0-0.3,0-0.7,0-1.1V9.9c0-0.1,0-0.3,0-0.4c0-0.2-0.1-0.3-0.2-0.5
+		c-0.1-0.2-0.3-0.3-0.4-0.4c-0.2-0.1-0.4-0.1-0.7-0.1c-0.1,0-0.2,0-0.5,0.1c-0.2,0.3-0.3,0.5-0.5,0.8c-0.2,0.3-0.3,0.5-0.5,0.7
+		c0,0.8,0,1.5-0.1,2.2c0,0.7-0.1,1.5-0.1,2.1h1.4v1.1c-0.5,0-0.9,0.1-1.3,0c-0.4,0-0.8,0-1.2-0.1c-0.4,0-0.8-0.1-1.2-0.1
+		c-0.4,0-0.8,0-1.3,0c-0.1,0-0.3,0-0.4,0c-0.1,0-0.2,0-0.3-0.1c-0.1,0-0.1-0.1-0.1-0.2c0-0.1-0.1-0.3-0.1-0.4c0-0.1,0-0.3,0-0.4
+		c0-0.1,0.1-0.2,0.1-0.2c0.2,0.1,0.4,0.2,0.6,0.1s0.4-0.2,0.5-0.4c0-0.1,0.1-0.3,0.1-0.7c0-0.4,0-0.9,0.1-1.6c0-0.6,0.1-1.3,0.1-2.1
+		c0-0.8,0-1.6,0.1-2.4c0-0.8,0-1.5,0.1-2.3c0-0.7,0.1-1.3,0.1-1.8c0-0.2,0-0.5,0-0.7c0-0.2-0.1-0.4-0.2-0.6
+		c-0.1-0.2-0.3-0.3-0.5-0.4c-0.2-0.1-0.4,0-0.6,0.1c0-0.2-0.1-0.5-0.1-0.7c0-0.2,0-0.4-0.1-0.7c1,0,2,0.1,3,0.1c0.9,0,1.9,0.1,3,0.1
+		c0,0.1,0,0.2,0,0.3c0,0.1,0,0.3,0.1,0.4c0,0.1,0,0.3,0,0.4c0,0.1,0,0.2-0.1,0.2c-0.1,0.1-0.2,0.1-0.3,0.1c-0.1,0-0.2,0-0.4-0.1
+		c-0.1-0.1-0.3-0.1-0.4-0.2c-0.1-0.1-0.3-0.1-0.3-0.1c-0.1,0.9-0.1,1.9-0.1,2.9c0,1-0.1,2-0.1,3.1c0.7-1.2,1.4-2.5,2-3.8
+		c0.2-0.3,0.3-0.6,0.4-0.9c0.1-0.3,0.3-0.6,0.5-0.9c0.2-0.3,0.4-0.5,0.7-0.7C45.4,1,45.7,0.9,46,0.8c0.3-0.1,0.7-0.1,1,0
+		c0.3,0.1,0.6,0.2,0.9,0.5c0.2,0.3,0.4,0.6,0.4,1c0,0.4,0.1,0.8,0,1.1c0,0.2,0,0.3,0,0.5c0,0.2-0.1,0.3-0.2,0.4
+		c-0.1,0.2-0.2,0.3-0.4,0.4c-0.2,0.1-0.4,0.1-0.5,0.2c-0.1,0-0.3,0.1-0.4,0.1c-0.1,0-0.3,0-0.4,0C46.2,4.7,46,4.6,46,4.4
+		c-0.1-0.2-0.1-0.4,0-0.5c0.1-0.2,0.2-0.3,0.3-0.3c0.1,0,0.2-0.1,0.4-0.1c0.2-0.1,0.3-0.2,0.3-0.3c0.1-0.2,0.1-0.3,0.1-0.5
+		C47.1,2.4,47,2.2,47,2c-0.1-0.2-0.2-0.3-0.3-0.3c-0.2,0-0.3,0-0.5,0.1C46,1.9,45.9,2,45.7,2.2c-0.2,0.2-0.3,0.4-0.4,0.6
+		C45.2,3,45,3.3,44.9,3.5c-0.1,0.3-0.3,0.6-0.4,0.8c-0.2,0.2-0.3,0.5-0.4,0.8c-0.4,0.9-0.8,1.7-1.2,2.5c0.3,0,0.6-0.1,1,0
+		c0.4,0,0.7,0,1,0c0.3,0,0.7,0.1,1,0.2c0.3,0.1,0.6,0.3,0.8,0.6c0.3,0.3,0.4,0.6,0.5,1c0.1,0.4,0.1,0.8,0.2,1.1l0.2,2.1
+		c0,0.2,0.1,0.5,0.1,0.7C47.7,13.7,47.8,14,48,14.2z"/>
+	<path fill="#c3c3c3" d="M71.7,13.9c0.2,0.2,0.4,0.4,0.7,0.5c0.3,0.1,0.5,0,0.8-0.1c0,0.2,0.1,0.3,0.1,0.6c0.1,0.2,0.1,0.4,0.1,0.6
+		c-0.3,0-0.7,0-1.1,0s-0.8,0-1.3,0.1c-0.4,0-0.9,0-1.3,0c-0.4,0-0.8,0-1,0c0-0.1,0-0.1,0-0.2c0-0.1,0.1-0.2,0.2-0.3
+		c0.1-0.1,0.2-0.2,0.4-0.3c0.2-0.1,0.3-0.1,0.6-0.1c0.1,0,0.1-0.2,0.1-0.7c0-0.4,0-1,0-1.6c0-0.6,0-1.2-0.1-1.9s0-1.1,0-1.5
+		c0-1,0-1.9,0-2.6c0-0.7,0.1-1.5,0.1-2.2c-0.6,1.3-1.1,2.7-1.6,4.1c-0.5,1.5-1,3-1.5,4.4c0,0,0.1,0.1,0.1,0.2c-0.2,0-0.4,0-0.7,0.1
+		c-0.3,0.1-0.5,0.1-0.7,0.1c-0.5-1.9-1.1-3.7-1.6-5.5c-0.5-1.8-1.1-3.6-1.6-5.5c-0.1,1-0.1,2-0.1,3c0,1.1-0.1,2.1-0.1,3.2
+		c0,1.1,0,2.1-0.1,3.2c0,1-0.1,2-0.1,3h1.4v1.1c-0.5,0-0.9,0.1-1.3,0c-0.4,0-0.8,0-1.2-0.1c-0.4,0-0.8-0.1-1.2-0.1
+		c-0.4,0-0.8,0-1.3,0c-0.1,0-0.3,0-0.4,0c-0.1,0-0.2,0-0.3-0.1c-0.1,0-0.1-0.1-0.1-0.2c0-0.1-0.1-0.3-0.1-0.4c0-0.1,0-0.3,0-0.4
+		c0-0.1,0.1-0.2,0.1-0.2c0.2,0.1,0.4,0.2,0.6,0.1s0.4-0.2,0.5-0.4c0-0.1,0.1-0.3,0.1-0.7c0-0.4,0-0.9,0.1-1.6c0-0.6,0.1-1.3,0.1-2.1
+		C59,8.8,59,8,59,7.2c0-0.8,0-1.5,0.1-2.3c0-0.7,0.1-1.3,0.1-1.8c0-0.2,0-0.5,0-0.7c0-0.2-0.1-0.4-0.2-0.6c-0.1-0.2-0.3-0.3-0.5-0.4
+		c-0.2-0.1-0.4,0-0.6,0.1c0-0.2-0.1-0.5-0.1-0.7c0-0.2,0-0.4-0.1-0.7c1,0,2,0.1,3,0.1c0.9,0,1.9,0.1,3,0.1c0,0.3-0.1,0.5-0.4,0.7
+		c0.3,1.3,0.6,2.6,1,3.9c0.4,1.3,0.8,2.6,1.2,3.9c0.2-0.6,0.4-1.3,0.6-1.9c0.2-0.6,0.4-1.2,0.6-1.8C67,4.6,67.2,4,67.5,3.4
+		c0.2-0.6,0.4-1.3,0.6-2c-0.1,0-0.3,0-0.4-0.1c-0.1,0-0.2,0-0.4-0.1c-0.1,0-0.1-0.1-0.1-0.3c0-0.1,0.1-0.2,0.1-0.3
+		c0.1-0.1,0.2-0.1,0.3-0.1c0.1,0,0.2,0,0.3,0c0.4,0,0.7,0,1,0s0.6,0,0.9,0c0.3,0,0.6,0,0.9,0c0.3,0,0.6,0,1,0c0.1,0,0.3,0,0.4,0
+		c0.1,0,0.3,0.1,0.4,0.2c0.1,0.1,0.2,0.2,0.2,0.4c0,0.2,0,0.3-0.2,0.3c-0.1-0.1-0.2-0.1-0.3-0.1c-0.1,0-0.2,0.1-0.3,0.1
+		c-0.2,0.4-0.3,0.8-0.4,1.3c-0.1,0.5-0.1,0.9-0.1,1.4c-0.2,2.8-0.2,5.6,0,8.4c0,0.3,0,0.5,0.1,0.7C71.4,13.5,71.5,13.7,71.7,13.9z"
+		/>
+	<path fill="#c3c3c3" d="M81.7,12c-0.1,0-0.1,0-0.2,0c-0.1,0-0.1,0-0.2,0c0,0.4,0,0.9-0.2,1.3c-0.1,0.4-0.4,0.8-0.7,1.1
+		c-0.3,0.3-0.7,0.6-1.1,0.8c-0.4,0.2-0.9,0.3-1.3,0.4c-0.4,0.1-0.8,0-1.2,0c-0.4-0.1-0.8-0.2-1.1-0.5c-0.2-0.1-0.3-0.3-0.5-0.5
+		c-0.2-0.2-0.3-0.4-0.4-0.6c-0.2-0.4-0.3-0.7-0.4-1c-0.1-0.3-0.2-0.6-0.3-1C74,11.7,74,11.4,74,11c0-0.3,0-0.7,0.1-1.1
+		c0.1-0.7,0.3-1.4,0.5-2c0.3-0.6,0.6-1.1,0.9-1.6s0.8-0.8,1.3-1.1c0.5-0.3,1-0.4,1.5-0.4c0.2,0,0.4,0,0.6,0.1
+		c0.2,0.1,0.3,0.1,0.5,0.3C79.6,5.4,79.8,5.6,80,6c0.2,0.4,0.4,0.8,0.5,1.3c0.1,0,0.1,0,0.2,0c0.1,0,0.1,0,0.2,0c0,0.1,0,0.1,0,0.2
+		c0,0.1,0,0.1,0,0.2L79.2,8c-0.2,0.1-0.3,0.1-0.4,0c-0.1,0-0.1-0.1-0.2-0.2c0-0.1,0-0.1,0-0.2c0.1,0,0.1,0,0.2,0c0,0,0.1,0,0.2,0
+		c0.1-0.1,0.2-0.2,0.2-0.4c0-0.2,0-0.3,0-0.5c0-0.3-0.1-0.6-0.3-0.9c-0.1-0.1-0.2-0.2-0.3-0.3c-0.1-0.1-0.2-0.1-0.4,0
+		c-0.1,0-0.3,0.1-0.4,0.3c-0.1,0.2-0.3,0.4-0.4,0.6c-0.1,0.2-0.2,0.4-0.3,0.6c-0.1,0.2-0.1,0.4-0.1,0.5c-0.4,1.8-0.5,3.6-0.1,5.5
+		c0.1,0.2,0.1,0.4,0.2,0.7c0.1,0.2,0.2,0.4,0.3,0.6c0.1,0.2,0.3,0.3,0.6,0.5c0.2,0.1,0.4,0.1,0.7,0.1c0.4-0.1,0.7-0.3,1-0.7
+		c0.2-0.4,0.4-0.8,0.5-1.2c0-0.2,0.1-0.4,0.1-0.6v-0.3c-0.2,0-0.3,0-0.4,0c-0.1,0-0.1-0.1-0.1-0.2c0-0.1,0-0.2,0.1-0.2
+		c0.4,0,0.8,0,1.2,0c0.4,0,0.8,0,1.2,0c0,0.1,0,0.1,0,0.2C81.8,11.8,81.8,11.9,81.7,12z"/>
+	<path fill="#c3c3c3" d="M83.5,14.2c0.2-4.3,0.3-8.5,0.2-12.8c-0.3,0-0.6,0-0.9,0c-0.3,0-0.6,0-0.9,0c0-0.2,0-0.3,0-0.5s0-0.3,0-0.5
+		c0.7,0,1.3,0,2-0.1c0.7,0,1.3,0,2-0.1c0.8-0.2,1.6-0.2,2.4-0.1c0.8,0.1,1.6,0.3,2.4,0.5c0.7,0.3,1.4,0.7,1.9,1.2
+		c0.5,0.5,0.9,1.1,1.1,1.8C94,4.9,94.1,6.1,94,7.4C94,8.6,93.8,9.8,93.7,11c0,0.4-0.1,0.8-0.2,1.2c-0.1,0.4-0.3,0.8-0.5,1.1
+		c-0.3,0.5-0.8,1-1.3,1.3c-0.5,0.3-1.1,0.5-1.7,0.6c-0.5,0.1-0.9,0.2-1.4,0.1c-0.5,0-0.9,0-1.4-0.1v0c-0.2,0-0.3,0-0.5,0
+		s-0.4,0-0.5,0l-0.1,0c0,0,0,0,0,0c-0.6,0-1.3,0-1.9,0c-0.6,0-1.3,0-1.9,0c-0.2-0.4-0.1-0.8,0.2-1.1c0.2-0.2,0.3-0.2,0.5-0.3
+		C83.2,14.1,83.4,14.1,83.5,14.2z M89.4,1.9c-0.4-0.3-0.8-0.5-1.3-0.6c-0.5-0.1-1-0.1-1.5-0.1c-0.3,4.5-0.2,9.1,0.4,13.6
+		c0.2,0,0.4,0,0.5-0.1c0.2,0,0.4-0.1,0.6-0.1c0.3-0.1,0.6-0.2,0.9-0.4c0.3-0.2,0.6-0.4,0.8-0.7c0.2-0.3,0.4-0.6,0.5-1
+		s0.2-0.7,0.2-1.1c0.4-2.1,0.4-4.2,0.2-6.3c-0.1-0.6-0.2-1.2-0.4-1.9C90.3,2.8,89.9,2.3,89.4,1.9z"/>
+	<path fill="#c3c3c3" d="M102.4,9.7c-0.6-0.1-1.3-0.1-2,0c-0.7,0.1-1.4,0.4-2,0.8l-0.2-1.4L99.1,9c0-0.4-0.1-0.7-0.1-1
+		c0-0.2-0.1-0.5-0.1-0.9c-0.3,0-0.6,0.1-0.9,0.1c-0.3,0-0.6,0.1-1,0.1c-0.2,0.7-0.3,1.3-0.4,1.8c-0.1,0.5-0.2,1.1-0.4,1.6l0.2-0.1
+		l0.7,0.6c-0.4,0.2-0.8,0.6-1.2,1.1c-0.4,0.5-0.7,1-0.9,1.5l-0.9-0.5c0-0.1,0.1-0.2,0.2-0.4c0.1-0.2,0.2-0.3,0.2-0.4
+		c0.1-0.2,0.2-0.5,0.3-1c0.1-0.4,0.2-0.9,0.4-1.3c0.1-0.5,0.2-0.9,0.3-1.3c0.1-0.4,0.2-0.7,0.2-0.9c0.1-0.4,0.2-0.8,0.3-1.2
+		c0.1-0.4,0.2-0.8,0.3-1.2c0.2-0.7,0.3-1.4,0.4-2.1c0.1-0.7,0.2-1.4,0.3-2.2c-0.1,0-0.2,0-0.3,0c-0.1,0-0.2,0-0.3,0l0.1-0.8l4-0.1
+		l0.1,0.8c-0.1,0-0.2,0-0.2,0c0,0-0.1,0-0.2,0c0.1,0.7,0.2,1.4,0.3,2c0.1,0.6,0.2,1.2,0.3,1.8c0.1,0.6,0.2,1.2,0.3,1.8
+		c0.1,0.6,0.2,1.3,0.4,2c0.2,0,0.3,0,0.3,0c0,0,0.1,0,0.3,0L102.4,9.7z M98.8,6.1c-0.1-0.7-0.2-1.3-0.3-2c-0.1-0.6-0.3-1.3-0.4-2
+		c-0.1,0.6-0.2,1.3-0.4,2.1c-0.1,0.7-0.3,1.5-0.5,2.2L98.8,6.1z"/>
+	<path fill="#c3c3c3" d="M124.9,20.1c0-0.3,0.1-0.6,0.3-0.8c0.2-0.2,0.4-0.3,0.7-0.4c0.3-0.1,0.5,0,0.8,0.1c0.3,0.1,0.5,0.3,0.6,0.5
+		c0.3,0.4,0.6,0.9,0.7,1.4c0.2,0.5,0.2,1,0.2,1.5c0,0.5-0.1,1-0.3,1.5c-0.2,0.5-0.4,1-0.7,1.4c-0.6,0.9-1.4,1.6-2.4,2
+		c-1,0.5-2,0.7-3,0.7c-1.5,0-2.8-0.3-3.9-1s-2.1-1.4-3-2.4c-0.9-1-1.8-2.1-2.5-3.2c-0.8-1.2-1.5-2.3-2.3-3.5c-1.1,1.2-2.4,2.2-3.9,3
+		c-1.5,0.8-3,1.1-4.5,1c-1.1,0-2.1-0.1-3-0.5c-0.9-0.3-1.6-0.8-2.2-1.4c-0.6-0.6-0.9-1.3-1.1-2.2c-0.2-0.8-0.1-1.7,0.2-2.7
+		c0.3-0.9,0.7-1.6,1.3-2.2c0.6-0.6,1.2-1.1,2-1.5c0.7-0.4,1.5-0.6,2.4-0.7c0.8-0.1,1.7,0,2.6,0.2c0-1.7,0-3.4,0-5c0-1.7,0-3.2,0-4.6
+		c-0.3,0-0.6,0-0.9,0c-0.3,0-0.6,0-0.9,0c0-0.2,0-0.3,0-0.5s0-0.3,0-0.5l3.7-0.1c0.8-0.2,1.6-0.2,2.4-0.1c0.8,0.1,1.6,0.3,2.4,0.5
+		c0.7,0.3,1.4,0.7,1.9,1.2c0.5,0.5,0.9,1.1,1.1,1.8c0.3,1.2,0.4,2.4,0.3,3.6c-0.1,1.2-0.2,2.5-0.4,3.7c-0.1,1-0.4,2-0.8,3
+		c-0.5,1-1,2-1.7,2.9c0.3,0.4,0.6,0.8,0.8,1.2c0.3,0.4,0.5,0.8,0.8,1.2c0.5,0.8,1.1,1.6,1.7,2.5c0.6,0.8,1.3,1.6,2,2.4
+		c0.7,0.7,1.5,1.3,2.4,1.8s1.8,0.7,2.9,0.8c1.1,0,2.1-0.2,3-0.7c0.9-0.5,1.6-1.2,2.1-2.2c0.2-0.4,0.3-0.8,0.4-1.3
+		c0.1-0.5,0-0.9-0.1-1.3c-0.2,0.1-0.4,0.2-0.6,0.2c-0.2,0-0.4,0-0.6-0.1c-0.2-0.1-0.4-0.2-0.5-0.4S124.9,20.4,124.9,20.1z M102.9,21
+		c1.5-0.4,2.8-1,3.7-1.8c0.9-0.8,1.7-1.7,2.3-2.8c-0.2-0.2-0.3-0.5-0.6-0.7c-0.6-0.7-1.2-1.4-1.9-1.9c0,0.6,0.1,1.2,0.1,1.8
+		c0,0.6,0.1,1.1,0.2,1.6h0v0.1c-0.5,0-0.9,0-1.3,0c-0.4,0-0.8,0-1.2,0c-0.3,0-0.6,0-0.9,0c-0.3,0-0.6,0-0.9,0
+		c-0.1-0.2-0.1-0.4,0-0.7c0-0.2,0.1-0.3,0.3-0.5c0.3-0.3,0.7-0.4,1.1-0.2l0.1-3.5c-0.5-0.2-1-0.3-1.5-0.3c-0.5,0-1.1,0-1.6,0.1
+		c-0.6,0.1-1.1,0.3-1.6,0.6c-0.5,0.3-0.9,0.7-1.3,1.1c-0.4,0.4-0.7,0.9-0.9,1.5c-0.2,0.5-0.3,1.1-0.3,1.6c0,0.7,0.2,1.3,0.6,1.8
+		c0.4,0.5,0.9,0.9,1.4,1.4c0.2,0.2,0.5,0.3,0.8,0.5c0.3,0.1,0.7,0.2,1.1,0.3c0.4,0.1,0.8,0.1,1.2,0.1
+		C102.1,21.1,102.5,21.1,102.9,21z M109.3,1.9c-0.4-0.3-0.8-0.5-1.2-0.6c-0.5-0.1-0.9-0.1-1.4-0.1c-0.1,1.7-0.2,3.4-0.3,5.3
+		c-0.1,1.9-0.1,3.7,0,5.6c0.6,0.4,1.2,0.8,1.7,1.4c0.5,0.5,1,1.1,1.5,1.6c0.2-0.6,0.4-1.2,0.6-1.9c0.2-0.6,0.3-1.2,0.3-1.7
+		c0.2-1.1,0.2-2.1,0.3-3.1c0-1,0-2.1-0.1-3.1c-0.1-0.6-0.2-1.2-0.4-1.9C110.1,2.8,109.8,2.3,109.3,1.9z"/>
+	<path fill="#c3c3c3" d="M116.5,1.2c-0.3,0-0.6,0-0.9,0c-0.3,0-0.6,0-0.9,0V0.4c0.5,0,0.9,0,1.2-0.1s0.7,0,1.1,0c0.4,0,0.7,0,1.1,0
+		s0.8,0,1.3-0.1c0.9,0,1.8,0,2.8-0.1c0.9,0,1.8,0,2.8-0.1c0,0.6,0,1.2,0,1.8c0,0.6,0,1.2,0,1.8c-0.2,0-0.3,0-0.5,0
+		c-0.2,0-0.3,0-0.5,0c-0.1,0-0.2,0-0.3,0c-0.1,0-0.1-0.1,0-0.1c0.1-0.2,0.1-0.4,0.1-0.6s0-0.4-0.1-0.6c-0.1-0.2-0.2-0.4-0.3-0.6
+		c-0.1-0.2-0.2-0.3-0.4-0.4c-0.2-0.1-0.4-0.2-0.6-0.2c-0.2,0-0.5,0-0.7,0c-0.3,0-0.5,0.1-0.8,0.1c-0.3,0.1-0.5,0.2-0.6,0.4
+		c-0.1,0.2-0.1,0.3-0.1,0.3c0,0.1,0,0.2,0,0.3c0,0.7-0.1,1.3-0.1,2c0,0.6-0.1,1.3-0.1,1.9c0,0.2,0,0.3,0,0.5c0,0.2,0,0.3,0,0.5
+		c0.6-0.2,1.2-0.3,1.9-0.4c0.6-0.1,1.2-0.3,1.9-0.4c0,0.1,0.1,0.2,0.1,0.3c0,0.1,0,0.3,0,0.4c0,0.2-0.1,0.3-0.1,0.4
+		c-0.1,0.1-0.1,0.2-0.1,0.3c-0.1,0.1-0.2,0.1-0.4,0.2c-0.1,0-0.3,0.1-0.4,0.1c-0.5,0.1-0.9,0.2-1.4,0.3c-0.5,0.1-0.9,0.1-1.4,0.2
+		c0,1-0.1,2-0.2,2.9c-0.1,1-0.1,1.9-0.2,2.9c0.8,0.2,1.5,0.3,2,0.1c0.6-0.2,1.2-0.5,1.9-1c0.2-0.1,0.2-0.3,0.2-0.5
+		c0-0.2,0-0.5,0-0.7c0-0.2,0.1-0.5,0.2-0.6c0.1-0.2,0.3-0.3,0.7-0.4c0.4,0,0.6,0.1,0.7,0.4c0.1,0.3,0.2,0.7,0.2,1.1
+		c0,0.5,0,0.9-0.1,1.4c-0.1,0.5-0.1,0.9,0,1.2c-0.5,0-1,0-1.4,0c-0.4,0-0.8,0-1.2,0.1c-0.4,0-0.8,0-1.2,0.1c-0.4,0-0.9,0-1.3,0
+		c-0.9,0-1.7,0-2.5,0.1c-0.7,0.1-1.6,0.1-2.4,0.1c-0.2-0.2-0.2-0.4-0.2-0.7c0-0.2,0.1-0.5,0.3-0.6c0.2-0.2,0.3-0.3,0.6-0.3
+		c0.2-0.1,0.5,0,0.7,0.1c0.1-2.1,0.2-4.3,0.1-6.5C116.3,5.5,116.3,3.4,116.5,1.2z"/>
+</g>
+</svg>
+
+            </a>
+        </p>
+	</footer>
+
+	<script>
+		var algolia_app_id      = 'FU55RWGNDN';
+		var algolia_search_key  = 'c41c5de31ca55044dbb0bde815d35121';
+				var version             = '5.1';
+			</script>
+
+	<script id="search_suggestion_template" type="text/template">
+	<div class="autocomplete-wrapper">
+		{{#_highlightResult.h1}}
+		<div class="h1">
+			{{{ _highlightResult.h1.value }}}
+		</div>
+		{{/_highlightResult.h1}}
+
+		<div class="sub-section">
+			{{#_highlightResult.h2}}
+			<div class="h2">
+				<span class="hash">#</span> {{{ _highlightResult.h2.value }}}
+			</div>
+			{{/_highlightResult.h2}}
+
+			{{#_highlightResult.h3}}
+			<div class="h3">
+				> {{{ _highlightResult.h3.value }}}
+			</div>
+			{{/_highlightResult.h3}}
+
+			{{#_highlightResult.h4}}
+			<div class="h4">
+				> {{{ _highlightResult.h4.value }}}
+			</div>
+			{{/_highlightResult.h4}}
+		</div>
+
+		{{#_highlightResult.content}}
+		<div class="content">
+			{{{ _highlightResult.content.value }}}
+		</div>
+		{{/_highlightResult.content}}
+	</div>
+</script>
+
+<script id="search_empty_template" type="text/template">
+	<div class="autocomplete-wrapper empty">
+		<div class="h2">We didn't find any result for "{{query}}". Sorry!</div>
+	</div>
+</script>
+
+<script id="search_footer_template" type="text/template">
+	<div class="footer">
+		<a target="_blank" href="https://www.algolia.com/referrals/5a08e6a4/join">
+			<img width="50" src="/docs/assets/img/algolia-logo.png">
+			<div class="powered">powered by</div>
+			<div style="clear: both"></div>
+		</a>
+	</div>
+</script>
+
+	<script src="../../build/assets/js/laravel-be3cb5d7de.js"></script>
+	<script src="../../assets/js/viewport-units-buggyfill.js"></script>
+
+	<script>window.viewportUnitsBuggyfill.init();</script>
+    <script>
+          ga('create', 'UA-53903425-7', 'auto');
+          ga('send', 'pageview');
+    </script>
+</body>
+</html>

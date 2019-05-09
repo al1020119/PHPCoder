@@ -1,0 +1,1175 @@
+<!doctype html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<title>Eloquent: 入门 | Laravel 5.1 中文文档
+</title>
+	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+	<meta name="author" content="Taylor Otwell">
+	<meta name="description" content="Eloquent: 入门,简介,定义模型,Eloquent 模型约定,取回多个模型,取回单个模型或集合,取回集合,添加和更新模型,基本添加,基本更新,批量赋值,删除模型,软删除,查找被软删除的模型,查找范围,事件,简介,Laravel 的 Eloqu...
+">
+	<meta name="keywords" content="laravel,laravel中国,laravel中文,laravel框架中文,laravel文档,laravel框架中国,laravel中文文档">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+			<link rel="canonical" href="../5.5/eloquent.html" />
+		<!--[if lte IE 9]>
+		<script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+	<![endif]-->
+	<link rel="stylesheet" href="../../build/assets/css/laravel-4bbf92d154.css">
+	<link rel="apple-touch-icon" href="../../favicon.png.jpeg">
+    <style>
+        .list-group-item img.media-object {
+            width: 20px;
+            border-radius: 2px;
+            margin-right: 4px;
+            display: inline-block;
+        }
+    </style>
+</head>
+<body class="docs language-php">
+
+	<span class="overlay"></span>
+
+	<nav class="main">
+		<a href="../../index.html" class="brand nav-block">
+			<svg version="1.1"
+	 xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:a="http://ns.adobe.com/AdobeSVGViewerExtensions/3.0/"
+	 x="0px" y="0px" width="84.1px" height="57.6px" viewBox="0 0 84.1 57.6" enable-background="new 0 0 84.1 57.6"
+	 xml:space="preserve">
+<defs>
+</defs>
+<path fill="#FB503B" d="M83.8,26.9c-0.6-0.6-8.3-10.3-9.6-11.9c-1.4-1.6-2-1.3-2.9-1.2s-10.6,1.8-11.7,1.9c-1.1,0.2-1.8,0.6-1.1,1.6
+	c0.6,0.9,7,9.9,8.4,12l-25.5,6.1L21.2,1.5c-0.8-1.2-1-1.6-2.8-1.5C16.6,0.1,2.5,1.3,1.5,1.3c-1,0.1-2.1,0.5-1.1,2.9
+	c1,2.4,17,36.8,17.4,37.8c0.4,1,1.6,2.6,4.3,2c2.8-0.7,12.4-3.2,17.7-4.6c2.8,5,8.4,15.2,9.5,16.7c1.4,2,2.4,1.6,4.5,1
+	c1.7-0.5,26.2-9.3,27.3-9.8c1.1-0.5,1.8-0.8,1-1.9c-0.6-0.8-7-9.5-10.4-14c2.3-0.6,10.6-2.8,11.5-3.1C84.2,28,84.4,27.5,83.8,26.9z
+	 M37.5,36.4c-0.3,0.1-14.6,3.5-15.3,3.7c-0.8,0.2-0.8,0.1-0.8-0.2C21.2,39.6,4.4,4.8,4.1,4.4c-0.2-0.4-0.2-0.8,0-0.8
+	c0.2,0,13.5-1.2,13.9-1.2c0.5,0,0.4,0.1,0.6,0.4c0,0,18.7,32.3,19,32.8C38,36.1,37.8,36.3,37.5,36.4z M77.7,43.9
+	c0.2,0.4,0.5,0.6-0.3,0.8c-0.7,0.3-24.1,8.2-24.6,8.4c-0.5,0.2-0.8,0.3-1.4-0.6s-8.2-14-8.2-14L68.1,32c0.6-0.2,0.8-0.3,1.2,0.3
+	C69.7,33,77.5,43.6,77.7,43.9z M79.3,26.3c-0.6,0.1-9.7,2.4-9.7,2.4l-7.5-10.2c-0.2-0.3-0.4-0.6,0.1-0.7c0.5-0.1,9-1.6,9.4-1.7
+	c0.4-0.1,0.7-0.2,1.2,0.5c0.5,0.6,6.9,8.8,7.2,9.1C80.3,26,79.9,26.2,79.3,26.3z"/>
+</svg>
+
+			<span>Laravel</span>
+		</a>
+
+        <div class="search nav-block">
+            <svg version="1.1"
+	 xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:a="http://ns.adobe.com/AdobeSVGViewerExtensions/3.0/"
+	 x="0px" y="0px" width="16px" height="16px" viewBox="0 0 16 16" enable-background="new 0 0 16 16" xml:space="preserve">
+<defs>
+</defs>
+<g>
+	<g>
+		<path fill="#A1A1A1" d="M5.8,11.7c-1.6,0-3-0.6-4.1-1.7S0,7.4,0,5.8s0.6-3,1.7-4.1C2.8,0.6,4.3,0,5.8,0s3,0.6,4.1,1.7
+			c2.3,2.3,2.3,6,0,8.3C8.9,11.1,7.4,11.7,5.8,11.7z M5.8,1C4.5,1,3.3,1.5,2.4,2.4C1.5,3.3,1,4.5,1,5.8s0.5,2.5,1.4,3.4
+			c0.9,0.9,2.1,1.4,3.4,1.4s2.5-0.5,3.4-1.4c1.9-1.9,1.9-5,0-6.9C8.4,1.5,7.1,1,5.8,1z"/>
+	</g>
+	<g>
+		<path fill="#A1A1A1" d="M15.5,16c-0.1,0-0.3,0-0.3-0.1L9.3,10c-0.2-0.2-0.2-0.5,0-0.7s0.5-0.2,0.7,0l5.9,5.9
+			c0.2,0.2,0.2,0.5,0,0.7C15.8,16,15.6,16,15.5,16z"/>
+	</g>
+</g>
+</svg>
+
+            <input placeholder="搜索文档" type="text" v-model="search" id="search-input" v-on:blur="reset" />
+        </div>
+
+		<ul class="main-nav" v-if="! search">
+			<li class="nav-docs"><a href="../5.4.html">文档</a></li>
+<li ><a href="https://laravel-china.org/news" class="no-pjax">Laravel 资讯</a></li>
+<li class="dropdown"><a href="https://laravel-china.org/">Laravel China 社区</a></li>
+<li class="nav-forge"><a href="https://laravel-china.org/categories/1">酷工作</a></li>
+<li class="nav-docs"><a href="http://lumen.laravel-china.org">Lumen</a></li>
+<li class="nav-forge"><a href="https://cs.laravel-china.org/">速查表</a></li>
+<li class="nav-forge"><a href="https://fsdhub.com/books/laravel-essential-training-5.5">《Laravel 入门教程》</a></li>
+		</ul>
+
+        			<div class="switcher">
+	<div class="dropdown">
+		<button class="btn dropdown-toggle btn-inverted" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-expanded="true">
+			<!--<span class="faint">v</span> -->
+			5.1
+			<span class="caret"></span>
+		</button>
+		<ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu1">
+							<li role="presentation">
+					<a role="menuitem" tabindex="-1" href="../5.5/eloquent.html">5.5</a>
+				</li>
+							<li role="presentation">
+					<a role="menuitem" tabindex="-1" href="../5.4/eloquent.html">5.4</a>
+				</li>
+							<li role="presentation">
+					<a role="menuitem" tabindex="-1" href="../5.3/eloquent.html">5.3</a>
+				</li>
+							<li role="presentation">
+					<a role="menuitem" tabindex="-1" href="../5.2/eloquent.html">5.2</a>
+				</li>
+							<li role="presentation">
+					<a role="menuitem" tabindex="-1" href="eloquent.html">5.1</a>
+				</li>
+					</ul>
+	</div>
+</div>
+		
+        <div class="responsive-sidebar-nav">
+			<a href="eloquent.html#" class="toggle-slide menu-link btn">&#9776;</a>
+		</div>
+	</nav>
+
+	<nav id="slide-menu" class="slide-menu" role="navigation">
+
+	<div class="brand">
+		<a href="../../index.html">
+			<img src="../../assets/img/laravel-logo-white.png" height="50">
+		</a>
+	</div>
+
+	<ul class="slide-main-nav">
+		<li><a href="../../index.html">Home</a></li>
+		<li class="nav-docs"><a href="../5.4.html">文档</a></li>
+<li ><a href="https://laravel-china.org/news" class="no-pjax">Laravel 资讯</a></li>
+<li class="dropdown"><a href="https://laravel-china.org/">Laravel China 社区</a></li>
+<li class="nav-forge"><a href="https://laravel-china.org/categories/1">酷工作</a></li>
+<li class="nav-docs"><a href="http://lumen.laravel-china.org">Lumen</a></li>
+<li class="nav-forge"><a href="https://cs.laravel-china.org/">速查表</a></li>
+<li class="nav-forge"><a href="https://fsdhub.com/books/laravel-essential-training-5.5">《Laravel 入门教程》</a></li>
+	</ul>
+
+	<div class="slide-docs-nav">
+		<h2>Documentation</h2>
+		<ul>
+<li>
+<h2>前言</h2>
+<ul>
+<li><a href="about.html">翻译说明</a></li>
+<li><a href="releases.html">发行说明</a></li>
+<li><a href="upgrade.html">升级导引</a></li>
+<li><a href="contributions.html">贡献导引</a></li>
+<li><a href="http://laravel-china.org/api/5.1">API 文档</a></li>
+</ul>
+</li>
+<li>
+<h2>环境配置</h2>
+<ul>
+<li><a href="installation.html">安装</a></li>
+<li><a href="homestead.html">Homestead</a></li>
+</ul>
+</li>
+<li>
+<h2>基本功能</h2>
+<ul>
+<li><a href="routing.html">路由</a></li>
+<li><a href="middleware.html">中间件</a></li>
+<li><a href="controllers.html">控制器</a></li>
+<li><a href="requests.html">请求</a></li>
+<li><a href="responses.html">响应</a></li>
+<li><a href="views.html">视图</a></li>
+<li><a href="blade.html">Blade 模板</a></li>
+</ul>
+</li>
+<li>
+<h2>教程</h2>
+<ul>
+<li><a href="quickstart.html">初级任务清单</a></li>
+<li><a href="quickstart-intermediate.html">中级任务清单</a></li>
+</ul>
+</li>
+<li>
+<h2>系统架构</h2>
+<ul>
+<li><a href="lifecycle.html">请求生命周期</a></li>
+<li><a href="structure.html">应用程序结构</a></li>
+<li><a href="providers.html">服务提供者</a></li>
+<li><a href="container.html">服务容器</a></li>
+<li><a href="contracts.html">Contracts</a></li>
+<li><a href="facades.html">Facades</a></li>
+</ul>
+</li>
+<li>
+<h2>系统服务</h2>
+<ul>
+<li><a href="authentication.html">用户认证</a></li>
+<li><a href="authorization.html">用户授权</a></li>
+<li><a href="artisan.html">Artisan 命令行</a></li>
+<li><a href="billing.html">交易</a></li>
+<li><a href="cache.html">缓存</a></li>
+<li><a href="collections.html">集合</a></li>
+<li><a href="elixir.html">Elixir</a></li>
+<li><a href="encryption.html">加密与解密</a></li>
+<li><a href="errors.html">错误与日志</a></li>
+<li><a href="events.html">事件</a></li>
+<li><a href="filesystem.html">文件系统与云存储</a></li>
+<li><a href="hashing.html">哈希</a></li>
+<li><a href="helpers.html">辅助函数</a></li>
+<li><a href="localization.html">本地化</a></li>
+<li><a href="mail.html">邮件</a></li>
+<li><a href="packages.html">扩展包开发</a></li>
+<li><a href="pagination.html">分页</a></li>
+<li><a href="queues.html">队列</a></li>
+<li><a href="redis.html">Redis</a></li>
+<li><a href="session.html">Session</a></li>
+<li><a href="envoy.html">Envoy</a></li>
+<li><a href="scheduling.html">任务调度</a></li>
+<li><a href="testing.html">测试</a></li>
+<li><a href="validation.html">表单验证</a></li>
+</ul>
+</li>
+<li>
+<h2>数据库</h2>
+<ul>
+<li><a href="database.html">入门</a></li>
+<li><a href="queries.html">查询构造器</a></li>
+<li><a href="migrations.html">数据库迁移</a></li>
+<li><a href="seeding.html">数据填充</a></li>
+</ul>
+</li>
+<li>
+<h2>Eloquent ORM</h2>
+<ul>
+<li><a href="eloquent.html">入门</a></li>
+<li><a href="eloquent-relationships.html">模型关联</a></li>
+<li><a href="eloquent-collections.html">Eloquent 集合</a></li>
+<li><a href="eloquent-mutators.html">Getter/Setter</a></li>
+<li><a href="eloquent-serialization.html">序列化</a></li>
+</ul>
+</li>
+</ul>
+	</div>
+
+</nav>
+
+<div class="docs-wrapper container">
+
+	<section class="sidebar">
+
+            <div class="header">
+              <a type="button" class="btn btn-primary btn-inverted btn-lg btn-block turnofflight"><i class="fa fa-lightbulb-o"></i> 夜间模式 </a>
+              <br>
+              <div class="versions text-center ">
+                <a class="doc-btn btn-inverted " href="../5.5.html" title="Laravel 5.5 中文文档">C5.5</a>
+                <a class="doc-btn btn-inverted " href="../5.4.html" title="Laravel 5.4 中文文档">C5.4</a>
+                <a class="doc-btn btn-inverted active" href="../5.1.html" title="Laravel 5.1 中文文档">C5.1</a>
+              </div>
+            </div>
+
+            <a href="https://laravel-china.org/topics/3383" target="_blank" rel="nofollow" title="" style="display: block;margin-bottom: 23px;">
+                <img src="https://dn-phphub.qbox.me/uploads/images/201612/10/1/k7wwMpJduq.jpg" style="width: 100%;border: 1px solid #d8d3d3;box-shadow: 0 0 30px #d4d4d4;-moz-box-shadow: 0 0 30px #ccc;-webkit-box-shadow: 0 0 30px #d4d4d4;margin-bottom: 30px;margin-top: 10px;border-radius: 4px;">
+            </a>
+
+            <small><a href="eloquent.html#" id="doc-expand" style="font-size: 9px; color: #525252;">▶</a></small>
+
+		<ul>
+<li>
+<h2>前言</h2>
+<ul>
+<li><a href="about.html">翻译说明</a></li>
+<li><a href="releases.html">发行说明</a></li>
+<li><a href="upgrade.html">升级导引</a></li>
+<li><a href="contributions.html">贡献导引</a></li>
+<li><a href="http://laravel-china.org/api/5.1">API 文档</a></li>
+</ul>
+</li>
+<li>
+<h2>环境配置</h2>
+<ul>
+<li><a href="installation.html">安装</a></li>
+<li><a href="homestead.html">Homestead</a></li>
+</ul>
+</li>
+<li>
+<h2>基本功能</h2>
+<ul>
+<li><a href="routing.html">路由</a></li>
+<li><a href="middleware.html">中间件</a></li>
+<li><a href="controllers.html">控制器</a></li>
+<li><a href="requests.html">请求</a></li>
+<li><a href="responses.html">响应</a></li>
+<li><a href="views.html">视图</a></li>
+<li><a href="blade.html">Blade 模板</a></li>
+</ul>
+</li>
+<li>
+<h2>教程</h2>
+<ul>
+<li><a href="quickstart.html">初级任务清单</a></li>
+<li><a href="quickstart-intermediate.html">中级任务清单</a></li>
+</ul>
+</li>
+<li>
+<h2>系统架构</h2>
+<ul>
+<li><a href="lifecycle.html">请求生命周期</a></li>
+<li><a href="structure.html">应用程序结构</a></li>
+<li><a href="providers.html">服务提供者</a></li>
+<li><a href="container.html">服务容器</a></li>
+<li><a href="contracts.html">Contracts</a></li>
+<li><a href="facades.html">Facades</a></li>
+</ul>
+</li>
+<li>
+<h2>系统服务</h2>
+<ul>
+<li><a href="authentication.html">用户认证</a></li>
+<li><a href="authorization.html">用户授权</a></li>
+<li><a href="artisan.html">Artisan 命令行</a></li>
+<li><a href="billing.html">交易</a></li>
+<li><a href="cache.html">缓存</a></li>
+<li><a href="collections.html">集合</a></li>
+<li><a href="elixir.html">Elixir</a></li>
+<li><a href="encryption.html">加密与解密</a></li>
+<li><a href="errors.html">错误与日志</a></li>
+<li><a href="events.html">事件</a></li>
+<li><a href="filesystem.html">文件系统与云存储</a></li>
+<li><a href="hashing.html">哈希</a></li>
+<li><a href="helpers.html">辅助函数</a></li>
+<li><a href="localization.html">本地化</a></li>
+<li><a href="mail.html">邮件</a></li>
+<li><a href="packages.html">扩展包开发</a></li>
+<li><a href="pagination.html">分页</a></li>
+<li><a href="queues.html">队列</a></li>
+<li><a href="redis.html">Redis</a></li>
+<li><a href="session.html">Session</a></li>
+<li><a href="envoy.html">Envoy</a></li>
+<li><a href="scheduling.html">任务调度</a></li>
+<li><a href="testing.html">测试</a></li>
+<li><a href="validation.html">表单验证</a></li>
+</ul>
+</li>
+<li>
+<h2>数据库</h2>
+<ul>
+<li><a href="database.html">入门</a></li>
+<li><a href="queries.html">查询构造器</a></li>
+<li><a href="migrations.html">数据库迁移</a></li>
+<li><a href="seeding.html">数据填充</a></li>
+</ul>
+</li>
+<li>
+<h2>Eloquent ORM</h2>
+<ul>
+<li><a href="eloquent.html">入门</a></li>
+<li><a href="eloquent-relationships.html">模型关联</a></li>
+<li><a href="eloquent-collections.html">Eloquent 集合</a></li>
+<li><a href="eloquent-mutators.html">Getter/Setter</a></li>
+<li><a href="eloquent-serialization.html">序列化</a></li>
+</ul>
+</li>
+</ul>
+
+		<hr>
+            <ul>
+              <li>社交账号</li>
+                <ul class="social-account">
+                  <li><a href="http://weibo.com/1837553744/profile?topnav=1&wvr=6&is_all=1">Summer 的微博</a></li>
+                  <li>新手 QQ 群：282196078</li>
+                </ul>
+
+            </ul>
+
+            <ul>
+              <li>
+              微信订阅号
+                <ul>
+                  <li>
+<img class="image-border popover-with-html" data-content="" src="https://dn-phphub.qbox.me/uploads/images/201708/06/1/4zgVR8dNCt.png" style="width: 148px;height: 148px;border:1px solid #ccc;padding:2px;border-radius:3px;margin-top:5px;" data-original-title="" title="">
+                  </li>
+                </ul>
+                </li>
+            </ul>
+
+            <ul>
+              <li>推荐资源
+              <ul class="list list-group resource-links">
+                    <li class="list-group-item ">
+                <a href="../../index.html" class="no-pjax" title="Laravel 中文文档">
+                    <img class="media-object inline-block " src="https://dn-phphub.qbox.me/uploads/banners/ql9XtosRhTe4v8HVC3TV.jpg">
+                    Laravel 中文文档
+                </a>
+            </li>
+                    <li class="list-group-item ">
+                <a href="https://lumen.laravel-china.org" class="no-pjax" title="Lumen 中文文档">
+                    <img class="media-object inline-block " src="https://dn-phphub.qbox.me/uploads/banners/bcMFkfsJZpetLgKFwWqY.jpg">
+                    Lumen 中文文档
+                </a>
+            </li>
+                    <li class="list-group-item ">
+                <a href="https://cs.laravel-china.org/" class="no-pjax" title="Laravel 速查表">
+                    <img class="media-object inline-block " src="https://dn-phphub.qbox.me/uploads/banners/cV55gsrH70qz6VdKr502.jpg">
+                    Laravel 速查表
+                </a>
+            </li>
+                    <li class="list-group-item ">
+                <a href="http://yousails.mikecrm.com/4Dh5uWU" class="no-pjax" title="Laravel 软件外包服务">
+                    <img class="media-object inline-block " src="https://dn-phphub.qbox.me/uploads/banners/v89tIQ6vjceA6g7JmrQB.png">
+                    Laravel 软件外包
+                </a>
+            </li>
+                    <li class="list-group-item ">
+                <a href="https://laravel-china.org/topics/3626" class="no-pjax" title="Laravel 远程工作 ">
+                    <img class="media-object inline-block " src="https://dn-phphub.qbox.me/uploads/banners/Xlq6s7wLxvX8FlTP4qZe.png">
+                    Laravel 远程工作
+                </a>
+            </li>
+                    <li class="list-group-item ">
+                <a href="https://laravel-china.github.io/php-the-right-way/" class="no-pjax" title="PHP 之道 - PHPer 必读">
+                    <img class="media-object inline-block " src="https://dn-phphub.qbox.me/uploads/banners/vA50AYuscu2RCMowq7ee.png">
+                    PHP 之道
+                </a>
+            </li>
+                    <li class="list-group-item ">
+                <a href="https://laravel-china.org/composer" class="no-pjax" title="Composer 中文全量镜像">
+                    <img class="media-object inline-block " src="https://dn-phphub.qbox.me/uploads/banners/KltcLb6leMa12dvTAxD7.png">
+                    Composer 镜像
+                </a>
+            </li>
+            </ul>
+              </li>
+            </ul>
+
+	</section>
+
+	
+
+	<article>
+
+		<div class="alert alert-warning" role="alert">
+			一小时同步一次，更多信息请查阅 <a href="https://laravel-china.org/topics/2095">文档导读</a>。
+			发现瑕疵？你也可以
+				<a href="https://github.com/laravel-china/laravel-docs/edit/5.1/eloquent.md"><i class="fa fa-pencil-square-o"></i> 改进本文</a>
+			。<a href="https://laravel-china.org/topics/4026" target="_blank"><i class="fa fa-cloud-download" aria-hidden="true"></i> 离线版本下载</a>
+		</div>
+
+		<div class="main-content">
+			<h1>Eloquent: 入门</h1>
+<ul>
+<li><a href="eloquent.html#introduction">简介</a></li>
+<li><a href="eloquent.html#defining-models">定义模型</a>
+<ul>
+<li><a href="eloquent.html#eloquent-model-conventions">Eloquent 模型约定</a></li>
+</ul></li>
+<li><a href="eloquent.html#retrieving-multiple-models">取回多个模型</a></li>
+<li><a href="eloquent.html#retrieving-single-models">取回单个模型或集合</a>
+<ul>
+<li><a href="eloquent.html#retrieving-aggregates">取回集合</a></li>
+</ul></li>
+<li><a href="eloquent.html#inserting-and-updating-models">添加和更新模型</a>
+<ul>
+<li><a href="eloquent.html#basic-inserts">基本添加</a></li>
+<li><a href="eloquent.html#basic-updates">基本更新</a></li>
+<li><a href="eloquent.html#mass-assignment">批量赋值</a></li>
+</ul></li>
+<li><a href="eloquent.html#deleting-models">删除模型</a>
+<ul>
+<li><a href="eloquent.html#soft-deleting">软删除</a></li>
+<li><a href="eloquent.html#querying-soft-deleted-models">查找被软删除的模型</a></li>
+</ul></li>
+<li><a href="eloquent.html#query-scopes">查找范围</a></li>
+<li><a href="eloquent.html#events">事件</a></li>
+</ul>
+<p><a name="introduction"></a></p>
+<h2>简介</h2>
+<p>Laravel 的 Eloquent ORM 提供了漂亮、简洁的 ActiveRecord 实现来和数据库进行交互。每个数据库表都有一个对应的「模型」可用来跟数据表进行交互。你可以通过模型查找数据表内的数据，以及将记录添加到数据表中。</p>
+<p>在开始之前，请确认你已在 <code>config/database.php</code> 文件中设置好了数据库连接。更多数据库的设置信息请查看 <a href="database.html#configuration">数据库设置</a> 文档。</p>
+<p><a name="defining-models"></a></p>
+<h2>定义模型</h2>
+<p>开始之前，让我们先来创建一个 Eloquent 模型。模型通常放在 <code>app</code> 目录中，不过你可以将他们随意放在任何可通过 <code>composer.json</code> 自动加载的地方。所有的 Eloquent 模型都继承自 <code>Illuminate\Database\Eloquent\Model</code> 类。</p>
+<blockquote>
+<p>译者注：建议在 app 目录下创建 <code>Models</code> 来统一存放。</p>
+</blockquote>
+<p>创建模型实例的最简单方法是使用 <code>make:model</code> <a href="artisan.html">Artisan 命令</a>：</p>
+<pre><code>php artisan make:model User</code></pre>
+<p>当你生成一个模型时想要顺便生成一个 <a href="migrations.html">数据库迁移</a>，可以使用 <code>--migration</code> 或 <code>-m</code> 选项：</p>
+<pre><code>php artisan make:model User --migration
+
+php artisan make:model User -m</code></pre>
+<p><a name="eloquent-model-conventions"></a></p>
+<h3>Eloquent 模型约定</h3>
+<p>现在，让我们来看一个 <code>Flight</code> 模型类的例子，我们将会用它从 <code>flights</code> 数据表中取回与保存信息：</p>
+<pre><code>&lt;?php
+
+namespace App;
+
+use Illuminate\Database\Eloquent\Model;
+
+class Flight extends Model
+{
+    //
+}</code></pre>
+<h4>数据表名称</h4>
+<p>请注意，我们并没有告诉 Eloquent <code>Flight</code> 模型该使用哪一个数据表。除非数据表明确地指定了其它名称，否则将使用类的「蛇形名称」、复数形式名称来作为数据表的名称。因此在此例子中，Eloquent 将会假设 <code>Flight</code> 模型被存储记录在 <code>flights</code> 数据表中。你可以在模型上定义一个 <code>table</code> 属性，用来指定自定义的数据表名称：</p>
+<pre><code>&lt;?php
+
+namespace App;
+
+use Illuminate\Database\Eloquent\Model;
+
+class Flight extends Model
+{
+    /**
+     * 与模型关联的数据表。
+     *
+     * @var string
+     */
+    protected $table = 'my_flights';
+}</code></pre>
+<h4>主键</h4>
+<p>Eloquent 也会假设每个数据表都有一个叫做 <code>id</code> 的主键字段。你也可以定义一个 <code>$primaryKey</code> 属性来重写这个约定。</p>
+<h4>时间戳</h4>
+<p>默认情况下，Eloquent 会预计你的数据表中有 <code>created_at</code> 和 <code>updated_at</code> 字段。如果你不希望让 Eloquent 来自动维护这两个字段，可在模型内将 <code>$timestamps</code> 属性设置为 <code>false</code>：</p>
+<pre><code>&lt;?php
+
+namespace App;
+
+use Illuminate\Database\Eloquent\Model;
+
+class Flight extends Model
+{
+    /**
+     * 指定是否模型应该被戳记时间。
+     *
+     * @var bool
+     */
+    public $timestamps = false;
+}</code></pre>
+<p>如果你需要自定义自己的时间戳格式，可在模型内设置 <code>$dateFormat</code> 属性。这个属性决定了日期应如何在数据库中存储，以及当模型被序列化成数组或 JSON 时的格式：</p>
+<pre><code>&lt;?php
+
+namespace App;
+
+use Illuminate\Database\Eloquent\Model;
+
+class Flight extends Model
+{
+    /**
+     * 模型的日期字段保存格式。
+     *
+     * @var string
+     */
+    protected $dateFormat = 'U';
+}</code></pre>
+<h4>数据库连接</h4>
+<p>默认情况下，所有的 Eloquent 模型会使用应用程序中默认的数据库连接设置。如果你想为模型指定不同的连接，可以使用 <code>$connection</code> 属性：</p>
+<pre><code>&lt;?php
+
+namespace App;
+
+use Illuminate\Database\Eloquent\Model;
+
+class Flight extends Model
+{
+    /**
+     * 此模型的连接名称。
+     *
+     * @var string
+     */
+    protected $connection = 'connection-name';
+}</code></pre>
+<p><a name="retrieving-multiple-models"></a></p>
+<h2>取回多个模型</h2>
+<p>一旦你创建并 <a href="http://d.laravel-china.org/docs/5.1/schema">关联了一个模型到数据表</a> 上，那么你就可以从数据库中获取数据。可把每个 Eloquent 模型想像成强大的 <a href="queries.html">查询构造器</a>，它让你可以流畅地查找与模型关联的数据表。例如：</p>
+<pre><code>&lt;?php
+
+namespace App\Http\Controllers;
+
+use App\Flight;
+use App\Http\Controllers\Controller;
+
+class FlightController extends Controller
+{
+    /**
+     * 显示所有可以的航班清单。
+     *
+     * @return Response
+     */
+    public function index()
+    {
+        $flights = Flight::all();
+
+        return view('flight.index', ['flights' =&gt; $flights]);
+    }
+}</code></pre>
+<h4>访问字段的值</h4>
+<p>假设你有一个 Eloquent 模型的实例，则可以通过相对应的属性来访问模型的字段值。例如，让我们遍历查找所返回的每个 <code>Flight</code> 实例，并且输出 <code>name</code> 字段的值：</p>
+<pre><code>foreach ($flights as $flight) {
+    echo $flight-&gt;name;
+}</code></pre>
+<h4>增加额外的限制</h4>
+<p>Eloquent 的 <code>all</code> 方法会返回在模型数据表中的所有结果。由于每个 Eloquent 模型都可以当作一个 <a href="queries.html">查询构造器</a>，所以你可以在查找中增加规则，然后使用 <code>get</code> 方法来获取结果：</p>
+<pre><code>$flights = App\Flight::where('active', 1)
+               -&gt;orderBy('name', 'desc')
+               -&gt;take(10)
+               -&gt;get();</code></pre>
+<blockquote>
+<p><strong>注意：</strong> 由于 Eloquent 模型是查询构造器，因此你应当去阅读所有 <a href="queries.html">查询构造器</a> 中可用的方法。你可在 Eloquent 查找中使用这其中的任何方法。</p>
+</blockquote>
+<h4>集合</h4>
+<p>像是 <code>all</code> 以及 <code>get</code> 之类的可以取回多个结果的 Eloquent 方法，将会返回一个 <code>Illuminate\Database\Eloquent\Collection</code> 实例。<code>Collection</code> 类提供 <a href="eloquent-collections.html#available-methods">多种辅助函数</a> 来处理你的 Eloquent 结果。当然，你也可以简单地像数组一样来遍历集合：</p>
+<pre><code>foreach ($flights as $flight) {
+    echo $flight-&gt;name;
+}</code></pre>
+<h4>分块结果</h4>
+<p>如果你需要处理上千笔 Eloquent 查找结果，则可以使用 <code>chunk</code> 命令。<code>chunk</code> 方法将会获取一个 Eloquent 模型的「分块」，并将它们送到指定的 <code>闭包 (Closure)</code> 中进行处理。当你在处理大量结果时，使用 <code>chunk</code> 方法可节省内存：</p>
+<pre><code>Flight::chunk(200, function ($flights) {
+    foreach ($flights as $flight) {
+        //
+    }
+});</code></pre>
+<p>传递到方法的第一个参数表示每次「分块」时你希望接收的数据数量。闭包则作为第二个参数传递，它将会在每次从数据取出分块时被调用。</p>
+<p><a name="retrieving-single-models"></a></p>
+<h2>取回单个模型／集合</h2>
+<p>当然，除了从指定的数据表取回所有记录，你也可以通过 <code>find</code> 和 <code>first</code> 方法来取回单条记录。这些方法返回的是单个模型的实例，而不是返回模型的集合：</p>
+<pre><code>// 通过主键取回一个模型...
+$flight = App\Flight::find(1);
+
+// 取回符合查找限制的第一个模型 ...
+$flight = App\Flight::where('active', 1)-&gt;first();</code></pre>
+<h4>「未找到」异常</h4>
+<p>有时候你可能希望在找不到模型时抛出一个异常，这在路由或是控制器内特别有用。<code>findOrFail</code> 以及 <code>firstOrFail</code> 方法会取回查找的第一个结果。如果没有找到相应结果，则会抛出一个 <code>Illuminate\Database\Eloquent\ModelNotFoundException</code>：</p>
+<pre><code>$model = App\Flight::findOrFail(1);
+
+$model = App\Flight::where('legs', '&gt;', 100)-&gt;firstOrFail();</code></pre>
+<p>如果没有捕捉到异常，则会自动地送回 HTTP <code>404</code> 响应给用户，因此当使用这些方法时，你没有必要明确的编写检查来返回 <code>404</code> 响应：</p>
+<pre><code>Route::get('/api/flights/{id}', function ($id) {
+    return App\Flight::findOrFail($id);
+});</code></pre>
+<p><a name="retrieving-aggregates"></a></p>
+<h3>取回集合</h3>
+<p>当然，你也可以使用 <code>count</code>、<code>sum</code>、<code>max</code>，和其它 <a href="queries.html">查询构造器</a> 提供的 <a href="queries.html#aggregates">聚合函数</a>。这些方法会返回适当的标量值，而不是一个完整的模型实例：</p>
+<pre><code>$count = App\Flight::where('active', 1)-&gt;count();
+
+$max = App\Flight::where('active', 1)-&gt;max('price');</code></pre>
+<p><a name="inserting-and-updating-models"></a></p>
+<h2>添加和更新模型</h2>
+<p><a name="basic-inserts"></a></p>
+<h3>基本添加</h3>
+<p>要在数据库中创建一条新记录，只需创建一个新模型实例，并在模型上设置属性和调用 <code>save</code> 方法即可：</p>
+<pre><code>&lt;?php
+
+namespace App\Http\Controllers;
+
+use App\Flight;
+use Illuminate\Http\Request;
+use App\Http\Controllers\Controller;
+
+class FlightController extends Controller
+{
+    /**
+     * 创建一个新的航班实例。
+     *
+     * @param  Request  $request
+     * @return Response
+     */
+    public function store(Request $request)
+    {
+        // 验证请求...
+
+        $flight = new Flight;
+
+        $flight-&gt;name = $request-&gt;name;
+
+        $flight-&gt;save();
+    }
+}</code></pre>
+<p>在这个例子中，我们把进来的 HTTP 请求的 <code>name</code> 参数简单地指定给 <code>App\Flight</code> 模型实例的 <code>name</code> 属性。当我们调用 <code>save</code> 方法，就会添加一条记录到数据库中。当 <code>save</code> 方法被调用时，<code>created_at</code> 以及 <code>updated_at</code> 时间戳将会被自动设置，因此我们不需要去手动设置它们。</p>
+<p><a name="basic-updates"></a></p>
+<h3>基本更新</h3>
+<p><code>save</code> 方法也可以用于更新数据库中已经存在的模型。要更新模型，则须先取回模型，再设置任何你希望更新的属性，接着调用 <code>save</code> 方法。同样的，<code>updated_at</code> 时间戳将会被自动更新，所以我们不需要手动设置它的值：</p>
+<pre><code>$flight = App\Flight::find(1);
+
+$flight-&gt;name = 'New Flight Name';
+
+$flight-&gt;save();</code></pre>
+<p>也可以针对符合指定查找的任意数量模型进行更新。在这个例子中，所有 <code>active</code> 并且 <code>destination</code> 为 <code>San Diego</code> 的航班，都将会被标识为延迟：</p>
+<pre><code>App\Flight::where('active', 1)
+          -&gt;where('destination', 'San Diego')
+          -&gt;update(['delayed' =&gt; 1]);</code></pre>
+<p><code>update</code> 方法会预计收到一个字段与值成对的数组，来代表应该被更新的字段。</p>
+<p><a name="mass-assignment"></a></p>
+<h3>批量赋值</h3>
+<p>你也可以使用 <code>create</code> 方法在一行代码上保存一个新模型。被添加的模型实例将会从你的方法中返回。然而，在这样做之前，你需要先在你的模型上指定一个 <code>fillable</code> 或 <code>guarded</code> 属性，因为所有的 Eloquent 模型都有针对批量赋值（Mass-Assignment）做保护。</p>
+<p>当用户通过 HTTP 请求传入了非预期的参数，并借助这些参数更改了数据库中你并不打算要更改的字段，这时就会出现批量赋值（Mass-Assignment）漏洞。例如，恶意用户可能会通过 HTTP 请求发送 <code>is_admin</code> 参数，然后对应到你模型的 <code>create</code> 方法，此操作能让该用户把自己升级为一个管理者。</p>
+<p>所以，在开始之前，你应该定义好哪些模型属性是可以被批量赋值的。你可以在模型上使用 <code>$fillable</code> 属性来实现。例如，让我们使 <code>Flight</code> 模型的 <code>name</code> 属性可以被批量赋值：</p>
+<pre><code>&lt;?php
+
+namespace App;
+
+use Illuminate\Database\Eloquent\Model;
+
+class Flight extends Model
+{
+    /**
+     * 可以被批量赋值的属性。
+     *
+     * @var array
+     */
+    protected $fillable = ['name'];
+}</code></pre>
+<p>一旦我们已经设置好可以被批量赋值的属性，便能通过 <code>create</code> 方法来添加一条新记录到数据库。<code>create</code> 方法返回已经被保存的模型实例：</p>
+<pre><code>$flight = App\Flight::create(['name' =&gt; 'Flight 10']);</code></pre>
+<p><code>$fillable</code> 作为一个可以被批量赋值的属性「白名单」。另外你也可以选择使用 <code>$guarded</code>。<code>$guarded</code> 属性应该包含一个你不想要被批量赋值的属性数组。所有不在数组里面的其它属性都可以被批量赋值。因此，<code>$guarded</code> 的功能更像是一个「黑名单」。使用的时候应该只选择 <code>$fillable</code> 或 <code>$guarded</code> 中的其中一个：</p>
+<pre><code>&lt;?php
+
+namespace App;
+
+use Illuminate\Database\Eloquent\Model;
+
+class Flight extends Model
+{
+    /**
+     * 不可被批量赋值的属性。
+     *
+     * @var array
+     */
+    protected $guarded = ['price'];
+}</code></pre>
+<p>在上面的例子当中，所有属性 <strong>除了 <code>price</code></strong> 以外，都可以被批量赋值。</p>
+<h4>其它创建的方法</h4>
+<p>还有两种其它方法，你可以用来通过属性批量赋值创建你的模型：<code>firstOrCreate</code> 和 <code>firstOrNew</code>。<code>firstOrCreate</code> 方法将会使用指定的字段／值对，来尝试寻找数据库中的记录。如果在数据库中找不到模型，则会使用指定的属性来添加一条记录。</p>
+<p><code>firstOrNew</code> 方法类似 <code>firstOrCreate</code> 方法，它会尝试使用指定的属性在数据库中寻找符合的纪录。如果模型未被找到，将会返回一个新的模型实例。请注意 <code>firstOrnew</code> 返回的模型还尚未保存到数据库。你需要通过手动调用 <code>save</code> 方法来保存它：</p>
+<pre><code>// 用属性取回航班，当结果不存在时创建它...
+$flight = App\Flight::firstOrCreate(['name' =&gt; 'Flight 10']);
+
+// 用属性取回航班，当结果不存在时实例化一个新实例...
+$flight = App\Flight::firstOrNew(['name' =&gt; 'Flight 10']);</code></pre>
+<p><a name="deleting-models"></a></p>
+<h2>删除模型</h2>
+<p>要删除模型，必须在模型实例上调用 <code>delete</code> 方法：</p>
+<pre><code>$flight = App\Flight::find(1);
+
+$flight-&gt;delete();</code></pre>
+<h4>通过键来删除现有的模型</h4>
+<p>在上面的例子中，我们在调用 <code>delete</code> 方法之前会先从数据库中取回模型。然而，如果你已知道了模型中的主键，则可以不用取回模型就能直接删除它。若要这么做，请调用 <code>destroy</code> 方法：</p>
+<pre><code>App\Flight::destroy(1);
+
+App\Flight::destroy([1, 2, 3]);
+
+App\Flight::destroy(1, 2, 3);</code></pre>
+<h4>通过查找来删除模型</h4>
+<p>当然，你也可以在一组模型上运行删除查找。在这个例子中，我们将会删除所有被标示为不活跃的航班：</p>
+<pre><code>$deletedRows = App\Flight::where('active', 0)-&gt;delete();</code></pre>
+<p><a name="soft-deleting"></a></p>
+<h3>软删除</h3>
+<p>除了从数据库中移除实际记录，Eloquent 也可以「软删除」模型。当模型被软删除时，它们并不会真的从数据库中被移除。而是会在模型上设置一个 <code>deleted_at</code> 属性并将其添加到数据库。如果模型有一个非空值 <code>deleted_at</code>，代表模型已经被软删除了。要在模型上启动软删除，则必须在模型上使用 <code>Illuminate\Database\Eloquent\SoftDeletes</code> trait 并添加 <code>deleted_at</code> 字段到你的 <code>$dates</code> 属性上：</p>
+<pre><code>&lt;?php
+
+namespace App;
+
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
+
+class Flight extends Model
+{
+    use SoftDeletes;
+
+    /**
+     * 需要被转换成日期的属性。
+     *
+     * @var array
+     */
+    protected $dates = ['deleted_at'];
+}</code></pre>
+<p>当然，你也应该添加 <code>deleted_at</code> 字段到数据表中。Laravel <a href="migrations.html">结构生成器</a> 包含了一个用来创建此字段的辅助函数：</p>
+<pre><code>Schema::table('flights', function ($table) {
+    $table-&gt;softDeletes();
+});</code></pre>
+<p>现在，当你在模型上调用 <code>delete</code> 方法时，<code>deleted_at</code> 字段将会被设置成目前的日期和时间。而且，当查找有启用软删除的模型时，被软删除的模型将会自动从所有查找结果中排除。</p>
+<p>要确认指定的模型实例是否已经被软删除，可以使用 <code>trashed</code> 方法：</p>
+<pre><code>if ($flight-&gt;trashed()) {
+    //
+}</code></pre>
+<p><a name="querying-soft-deleted-models"></a></p>
+<h3>查找被软删除的模型</h3>
+<h4>包含被软删除的模型</h4>
+<p>如上所述，被软删除的模型将会自动从所有的查找结果中排除。然而，你可以通过在查找中调用 <code>withTrashed</code> 方法来强制查找已被软删除的模型：</p>
+<pre><code>$flights = App\Flight::withTrashed()
+                -&gt;where('account_id', 1)
+                -&gt;get();</code></pre>
+<p><code>withTrashed</code> 方法也可以被用在 <a href="eloquent-relationships.html">关联</a> 查找：</p>
+<pre><code>$flight-&gt;history()-&gt;withTrashed()-&gt;get();</code></pre>
+<h4>Where 子句注意事项</h4>
+<p>当在你的软删除模型查找增加了 <code>orWhere</code> 子句时，请使用 <a href="http://laravel-china.org/docs/5.1/queries#advanced-where-clauses">高级 where 子句</a> 来对 <code>WHERE</code> 子句的逻辑进行分组。例如：</p>
+<pre><code>User::where(function($query) {
+        $query-&gt;where('name', '=', 'John')
+              -&gt;orWhere('votes', '&gt;', 100);
+        })
+        -&gt;get();</code></pre>
+<p>这将生成以下 SQL：</p>
+<pre><code>select * from `users` where `users`.`deleted_at` is null and (`name` = 'John' or `votes` &gt; 100)</code></pre>
+<p>如果 <code>orWhere</code> 子句没有被分组，它将会在包含软删除的纪录中生成以下 SQL：</p>
+<pre><code>select * from `users` where `users`.`deleted_at` is null and `name` = 'John' or `votes` &gt; 100</code></pre>
+<h4>只获取被软删除的模型</h4>
+<p><code>onlyTrashed</code> 方法会 <strong>只</strong> 获取已被软删除的模型：</p>
+<pre><code>$flights = App\Flight::onlyTrashed()
+                -&gt;where('airline_id', 1)
+                -&gt;get();</code></pre>
+<h4>恢复被软删除的模型</h4>
+<p>有时候你可能希望「取消删除」一个已被软删除的模型。要恢复一个已被软删除的模型到有效状态，则可在模型实例上使用 <code>restore</code> 方法：</p>
+<pre><code>$flight-&gt;restore();</code></pre>
+<p>你也可以在查找上使用 <code>restore</code> 方法来快速地恢复多个模型：</p>
+<pre><code>App\Flight::withTrashed()
+        -&gt;where('airline_id', 1)
+        -&gt;restore();</code></pre>
+<p>与 <code>withTrashed</code> 方法类似，<code>restore</code> 方法也可以被用在 <a href="eloquent-relationships.html">关联</a> 查找上:</p>
+<pre><code>$flight-&gt;history()-&gt;restore();</code></pre>
+<h4>永久地删除模型</h4>
+<p>有时候你可能需要真正地从数据库移除模型。要永久地从数据库移除一个已被软删除的模型，则可使用 <code>forceDelete</code> 方法：</p>
+<pre><code>// 强制删除单个模型实例...
+$flight-&gt;forceDelete();
+
+// 强制删除所有相关模型...
+$flight-&gt;history()-&gt;forceDelete();</code></pre>
+<p><a name="query-scopes"></a></p>
+<h2>查找范围</h2>
+<p>全局作用域（Global Scopes）可让你定义有限制的共用集合，它可以轻松地在你的应用程序中被重复使用。例如，你可能需要频繁地获取所有被认为是「受欢迎的」用户。要定义此范围，则可以简单地在 Eloquent 模型方法前面加上前缀 <code>scope</code>：</p>
+<p>范围应总是返回查询构造器的实例：</p>
+<pre><code>&lt;?php
+
+namespace App;
+
+use Illuminate\Database\Eloquent\Model;
+
+class User extends Model
+{
+    /**
+     * 限制查找只包括受欢迎的用户。
+     *
+     * @return \Illuminate\Database\Eloquent\Builder
+     */
+    public function scopePopular($query)
+    {
+        return $query-&gt;where('votes', '&gt;', 100);
+    }
+
+    /**
+     * 限制查找只包括活跃的用户。
+     *
+     * @return \Illuminate\Database\Eloquent\Builder
+     */
+    public function scopeActive($query)
+    {
+        return $query-&gt;where('active', 1);
+    }
+}</code></pre>
+<h4>利用查找范围</h4>
+<p>一旦定义了范围，则可以在查找模型时调用范围方法。在进行方法调用时不需要加上 <code>scope</code> 前缀。你甚至可以链式调用不同的范围，如：</p>
+<pre><code>$users = App\User::popular()-&gt;active()-&gt;orderBy('created_at')-&gt;get();</code></pre>
+<h4>动态范围</h4>
+<p>有时候，你可能希望定义一个可接受参数的范围。这时只需给你的范围加上额外的参数即可。范围参数应该被定义在 <code>$query</code> 参数之后：</p>
+<pre><code>&lt;?php
+
+namespace App;
+
+use Illuminate\Database\Eloquent\Model;
+
+class User extends Model
+{
+    /**
+     * 限制查找只包括指定类型的用户。
+     *
+     * @return \Illuminate\Database\Eloquent\Builder
+     */
+    public function scopeOfType($query, $type)
+    {
+        return $query-&gt;where('type', $type);
+    }
+}</code></pre>
+<p>现在，你可以在范围调用时传递参数：</p>
+<pre><code>$users = App\User::ofType('admin')-&gt;get();</code></pre>
+<p><a name="events"></a></p>
+<h2>事件</h2>
+<p>Eloquent 模型会触发许多事件，让你可以借助以下的方法在模型的生命周期的多个时间点进行监控：</p>
+<ul>
+<li>creating</li>
+<li>created</li>
+<li>updating</li>
+<li>updated</li>
+<li>saving</li>
+<li>saved</li>
+<li>deleting</li>
+<li>deleted</li>
+<li>restoring</li>
+<li>restored</li>
+</ul>
+<p>事件让你每当有特定的模型类发生触发事件时，对这些动作进行监控。</p>
+<p><a name="basic-usage"></a></p>
+<h3>基本用法</h3>
+<p>当一个新模型被初次保存将会触发 <code>creating</code> 以及 <code>created</code> 事件。如果一个模型已经存在于数据库且调用了 <code>save</code> 方法，将会触发 <code>updating</code> 和 <code>updated</code> 事件。在这两种情况下都会触发 <code>saving</code> 和 <code>saved</code> 事件。</p>
+<p>让我们在 <a href="providers.html">服务提供者</a> 中定义一个 Eloquent 事件侦听器来作为示例。在我们的事件侦听器中，我们会在指定的模型上调用 <code>isValid</code> 方法，并在模型无效时返回 <code>false</code>。从 Eloquent 事件侦听器中返回 <code>false</code> 的话会取消 <code>save</code> 和 <code>update</code> 的操作：</p>
+<pre><code>&lt;?php
+
+namespace App\Providers;
+
+use App\User;
+use Illuminate\Support\ServiceProvider;
+
+class AppServiceProvider extends ServiceProvider
+{
+    /**
+     * 启动所有应用程序服务。
+     *
+     * @return void
+     */
+    public function boot()
+    {
+        User::creating(function ($user) {
+            if ( ! $user-&gt;isValid()) {
+                return false;
+            }
+        });
+    }
+
+    /**
+     * 注册服务提供者。
+     *
+     * @return void
+     */
+    public function register()
+    {
+        //
+    }
+}</code></pre>
+<hr />
+<blockquote>
+<p>{note} 欢迎任何形式的转载，但请务必注明出处，尊重他人劳动共创开源社区。</p>
+<p>转载请注明：本文档由 Laravel China 社区 [laravel-china.org] 组织翻译。</p>
+<p>文档永久地址： <a href="../../index.html">http://d.laravel-china.org</a></p>
+</blockquote>
+		</div>
+
+		<div class="main-footer" style="border-top:1px dashed rgba(0, 0, 0, 0.1);padding-top: 30px;margin-top:30px;margin-bottom: 20px;">
+			<div class="prev-next-wrap clearfix">
+
+									<a class="btn btn-primary pull-left btn-inverted" href="seeding.html"><i class="fa fa-arrow-left"></i> 数据填充</a>
+				
+			    &nbsp;
+								    <a class="btn btn-primary pull-right btn-inverted" href="eloquent-relationships.html">模型关联 <i class="fa fa-arrow-right"></i></a>
+							</div>
+		</div>
+
+	</article>
+</div>
+
+	<footer class="main">
+		<ul>
+			<li class="nav-docs"><a href="../5.4.html">文档</a></li>
+<li ><a href="https://laravel-china.org/news" class="no-pjax">Laravel 资讯</a></li>
+<li class="dropdown"><a href="https://laravel-china.org/">Laravel China 社区</a></li>
+<li class="nav-forge"><a href="https://laravel-china.org/categories/1">酷工作</a></li>
+<li class="nav-docs"><a href="http://lumen.laravel-china.org">Lumen</a></li>
+<li class="nav-forge"><a href="https://cs.laravel-china.org/">速查表</a></li>
+<li class="nav-forge"><a href="https://fsdhub.com/books/laravel-essential-training-5.5">《Laravel 入门教程》</a></li>
+		</ul>
+		<p>Laravel is a trademark of Taylor Otwell. Copyright &copy; Taylor Otwell.</p>
+            <div style="margin-top: 32px;">
+                <a href="https://www.upyun.com/" title="Composer 镜像赞助商">
+                    <img src="https://dn-phphub.qbox.me/uploads/banners/XPtLlZmIN1cQbLuDFEON.png" style="width: 200px;">
+                </a>
+            </div>
+            <p class="less-significant">
+            <a href="http://jackmcdade.com">
+                Designed by<br>
+                <svg version="1.1"
+	 xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:a="http://ns.adobe.com/AdobeSVGViewerExtensions/3.0/"
+	 x="0px" y="0px" width="128.2px" height="28px" viewBox="0 0 128.2 28" enable-background="new 0 0 128.2 28" xml:space="preserve"
+	>
+<defs>
+</defs>
+<g>
+	<path fill="#c3c3c3" d="M14.2,0.4c0,0.2,0,0.5,0,0.7c0,0.2,0,0.5,0,0.7l-1.4-0.3C12.9,3,13,4.5,13.1,6c0.1,1.5,0,3-0.1,4.5
+		c0,0.4-0.1,0.8-0.1,1.2c-0.1,0.4-0.1,0.8-0.3,1.2c-0.1,0.4-0.3,0.7-0.5,1.1c-0.2,0.3-0.5,0.6-0.9,0.9c-0.4,0.2-0.9,0.4-1.5,0.6
+		c-0.6,0.2-1.1,0.3-1.6,0.3c-0.6,0-1.2-0.1-1.6-0.3c-0.5-0.2-0.9-0.6-1.1-1c-0.3-0.5-0.5-1-0.6-1.6c-0.1-0.6-0.1-1.3,0-2.1
+		c0-0.2,0.1-0.5,0.2-0.7C4.9,9.9,5,9.7,5.1,9.5c0.1-0.2,0.2-0.4,0.3-0.6l1.1,0.4C6.7,9.3,7,9.4,7.3,9.5c0.3,0.1,0.5,0.1,0.6,0.2
+		c0,0.2,0,0.4-0.1,0.5c-0.1,0.2-0.1,0.3-0.2,0.4c-0.1,0.1-0.2,0.3-0.2,0.4c-0.1,0.2-0.1,0.3-0.1,0.5l-1.3-0.7
+		c-0.1,0.3-0.2,0.7-0.2,1.1c0,0.4,0.1,0.8,0.2,1.2c0.2,0.4,0.4,0.7,0.6,1c0.3,0.3,0.6,0.4,1,0.3c0.6,0,1.1-0.3,1.4-0.6
+		c0.3-0.4,0.5-0.9,0.7-1.7c0.1-0.7,0.2-1.6,0.2-2.8c0-1.1,0-2.4,0-3.9c0-0.6-0.1-1.3-0.1-2C9.7,2.8,9.6,2.1,9.5,1.4
+		c-0.2,0-0.5,0-0.8,0c-0.3,0-0.6,0-0.8,0c-0.8,0-1.5,0-2.2,0c-0.7,0-1.5,0-2.2,0.2c-0.3,0.1-0.6,0.2-1,0.4C2.2,2.1,1.9,2.4,1.6,2.6
+		C1.4,2.9,1.2,3.2,1.1,3.6C1,3.9,1,4.3,1.1,4.6c0.1,0.5,0.3,0.8,0.4,0.9V5.4c0-0.4,0.1-0.8,0.4-1c0.3-0.2,0.6-0.3,0.9-0.3
+		c0.3,0,0.6,0.1,0.9,0.3C4,4.6,4.1,5,4.1,5.4c0,0.4-0.1,0.8-0.4,1c-0.3,0.2-0.6,0.3-1,0.3H2.7C1.9,6.7,1.3,6.5,0.9,6
+		C0.5,5.6,0.2,5.1,0.1,4.5C0,4,0,3.4,0.2,2.7c0.2-0.6,0.5-1.1,1-1.5c0.4-0.3,0.8-0.5,1.2-0.7c0.4-0.1,0.9-0.2,1.4-0.3
+		c0.5-0.1,0.9-0.1,1.4-0.1c0.5,0,0.9,0,1.4,0h1.5c0.6,0,1.1,0,1.6,0.1c0.5,0,1,0.1,1.5,0.1c0.5,0,1,0.1,1.5,0.1
+		C13.1,0.5,13.6,0.5,14.2,0.4z"/>
+	<path fill="#c3c3c3" d="M25.2,14.3c0,0.2,0.1,0.4,0.1,0.6c0,0.2,0.1,0.4,0.1,0.7c-1-0.1-2-0.2-3-0.1c-1.1,0.1-2.1,0.2-3,0.4
+		c0-0.2-0.1-0.4-0.1-0.5c0-0.2-0.1-0.4-0.1-0.5c0.2,0,0.5-0.1,0.7-0.1c0.2,0,0.4-0.1,0.6-0.1c-0.1-1.5-0.3-3.1-0.5-4.6
+		c-0.5,0.1-0.9,0.1-1.4,0.2c-0.5,0.1-0.9,0.1-1.4,0.2c-0.2,0.7-0.3,1.3-0.5,2c-0.2,0.7-0.3,1.3-0.5,2c0.2,0,0.4,0,0.6,0
+		c0.1,0,0.3,0,0.4,0.1c0,0.2,0,0.3,0,0.5c0,0.1,0,0.2,0,0.4c0,0.1,0,0.2-0.1,0.3H14v-1.2h1c0.2-0.5,0.3-1,0.4-1.5
+		c0.1-0.5,0.3-1,0.4-1.5c0.2-0.6,0.3-1.2,0.5-1.7c0.2-0.6,0.3-1.2,0.5-1.7c0.2-1.1,0.4-2.1,0.6-3.2c0.2-1.1,0.3-2.1,0.4-3.2
+		c-0.2,0-0.5,0-0.7,0c-0.2,0-0.4,0-0.7,0c0-0.2,0.1-0.4,0.1-0.6c0-0.2,0-0.4,0.1-0.6c0.9,0,1.9,0,2.9,0c1,0,2,0,2.9,0l0.2,1.2
+		c-0.2,0-0.3,0-0.5,0c-0.2,0-0.3,0-0.5,0c0.3,2.1,0.7,4.3,1,6.5c0.3,2.2,0.7,4.4,1,6.5H25.2z M17.5,9c0.4-0.1,0.7-0.1,1.1-0.2
+		c0.4-0.1,0.8-0.1,1.2-0.2c-0.2-1-0.3-2-0.5-2.9c-0.2-1-0.4-1.9-0.6-2.9c-0.2,1-0.4,2.1-0.5,3.1C17.9,6.9,17.7,8,17.5,9z"/>
+	<path fill="#c3c3c3" d="M36.7,10.4c-0.1,0-0.2,0-0.3,0c-0.1,0-0.2,0-0.3,0c0,0.6,0,1.2-0.2,1.9c-0.2,0.6-0.5,1.2-1,1.6
+		c-0.5,0.5-1,0.9-1.6,1.1c-0.6,0.3-1.3,0.4-2,0.5c-0.6,0.1-1.1,0.1-1.8,0c-0.6-0.1-1.1-0.4-1.6-0.7c-0.2-0.2-0.5-0.4-0.8-0.7
+		c-0.3-0.3-0.5-0.5-0.6-0.8c-0.3-0.5-0.5-1-0.6-1.5c-0.2-0.5-0.3-0.9-0.4-1.4c-0.1-0.5-0.2-1-0.2-1.5c0-0.5,0-1,0.1-1.6
+		c0.2-1,0.4-2,0.8-2.9c0.4-0.9,0.8-1.7,1.4-2.3c0.5-0.7,1.2-1.2,1.9-1.6C30.2,0.2,30.9,0,31.7,0c0.3,0,0.5,0,0.8,0.1
+		c0.3,0.1,0.5,0.2,0.7,0.4c0.3,0.3,0.7,0.7,1,1.2c0.3,0.5,0.6,1.2,0.7,1.9c0.1,0,0.2,0,0.3,0c0.1,0,0.2,0,0.3,0c0,0.1,0,0.2,0,0.3
+		c0,0.1,0,0.2,0,0.3L33,4.6c-0.3,0.1-0.5,0.1-0.6,0c-0.1,0-0.2-0.1-0.2-0.2c-0.1-0.1-0.1-0.2,0-0.3c0.1,0,0.2,0,0.2,0
+		c0.1,0,0.1,0,0.2,0c0.2-0.2,0.3-0.3,0.3-0.6c0-0.2,0-0.5,0-0.7c0-0.5-0.2-0.9-0.5-1.3c-0.2-0.2-0.3-0.3-0.4-0.4
+		C31.8,1,31.6,1,31.4,1.1c-0.2,0-0.4,0.2-0.6,0.4c-0.2,0.2-0.4,0.5-0.5,0.9C30,2.6,29.9,3,29.8,3.3c-0.1,0.3-0.2,0.5-0.2,0.7
+		c-0.6,2.6-0.7,5.3-0.2,8c0.1,0.3,0.2,0.7,0.3,1s0.3,0.6,0.5,0.9c0.2,0.3,0.5,0.5,0.8,0.7c0.3,0.2,0.6,0.2,1,0.1
+		c0.6-0.1,1-0.4,1.4-1c0.3-0.5,0.6-1.1,0.7-1.8c0.1-0.3,0.1-0.6,0.1-0.9v-0.5c-0.2,0-0.4,0-0.6-0.1c-0.1-0.1-0.2-0.2-0.2-0.3
+		c0-0.1,0-0.2,0.1-0.3c0.6,0,1.2,0,1.7,0c0.6,0,1.2,0,1.7,0c0,0.1,0,0.2-0.1,0.3C36.7,10.2,36.7,10.3,36.7,10.4z"/>
+	<path fill="#c3c3c3" d="M48,14.2c0.1,0.2,0.3,0.3,0.5,0.4c0.2,0.1,0.5,0.1,0.7,0c0.1,0.1,0.1,0.2,0.1,0.4c0,0.2-0.1,0.3-0.2,0.4
+		c-0.1,0.1-0.2,0.2-0.4,0.2c-0.2,0-0.3,0-0.4,0c-0.3,0-0.7,0-1,0c-0.3,0-0.7,0-1-0.1c-0.3-0.1-0.7-0.2-1-0.4
+		c-0.3-0.2-0.5-0.4-0.7-0.7c-0.2-0.3-0.3-0.6-0.3-1c0-0.3,0-0.7,0-1.1V9.9c0-0.1,0-0.3,0-0.4c0-0.2-0.1-0.3-0.2-0.5
+		c-0.1-0.2-0.3-0.3-0.4-0.4c-0.2-0.1-0.4-0.1-0.7-0.1c-0.1,0-0.2,0-0.5,0.1c-0.2,0.3-0.3,0.5-0.5,0.8c-0.2,0.3-0.3,0.5-0.5,0.7
+		c0,0.8,0,1.5-0.1,2.2c0,0.7-0.1,1.5-0.1,2.1h1.4v1.1c-0.5,0-0.9,0.1-1.3,0c-0.4,0-0.8,0-1.2-0.1c-0.4,0-0.8-0.1-1.2-0.1
+		c-0.4,0-0.8,0-1.3,0c-0.1,0-0.3,0-0.4,0c-0.1,0-0.2,0-0.3-0.1c-0.1,0-0.1-0.1-0.1-0.2c0-0.1-0.1-0.3-0.1-0.4c0-0.1,0-0.3,0-0.4
+		c0-0.1,0.1-0.2,0.1-0.2c0.2,0.1,0.4,0.2,0.6,0.1s0.4-0.2,0.5-0.4c0-0.1,0.1-0.3,0.1-0.7c0-0.4,0-0.9,0.1-1.6c0-0.6,0.1-1.3,0.1-2.1
+		c0-0.8,0-1.6,0.1-2.4c0-0.8,0-1.5,0.1-2.3c0-0.7,0.1-1.3,0.1-1.8c0-0.2,0-0.5,0-0.7c0-0.2-0.1-0.4-0.2-0.6
+		c-0.1-0.2-0.3-0.3-0.5-0.4c-0.2-0.1-0.4,0-0.6,0.1c0-0.2-0.1-0.5-0.1-0.7c0-0.2,0-0.4-0.1-0.7c1,0,2,0.1,3,0.1c0.9,0,1.9,0.1,3,0.1
+		c0,0.1,0,0.2,0,0.3c0,0.1,0,0.3,0.1,0.4c0,0.1,0,0.3,0,0.4c0,0.1,0,0.2-0.1,0.2c-0.1,0.1-0.2,0.1-0.3,0.1c-0.1,0-0.2,0-0.4-0.1
+		c-0.1-0.1-0.3-0.1-0.4-0.2c-0.1-0.1-0.3-0.1-0.3-0.1c-0.1,0.9-0.1,1.9-0.1,2.9c0,1-0.1,2-0.1,3.1c0.7-1.2,1.4-2.5,2-3.8
+		c0.2-0.3,0.3-0.6,0.4-0.9c0.1-0.3,0.3-0.6,0.5-0.9c0.2-0.3,0.4-0.5,0.7-0.7C45.4,1,45.7,0.9,46,0.8c0.3-0.1,0.7-0.1,1,0
+		c0.3,0.1,0.6,0.2,0.9,0.5c0.2,0.3,0.4,0.6,0.4,1c0,0.4,0.1,0.8,0,1.1c0,0.2,0,0.3,0,0.5c0,0.2-0.1,0.3-0.2,0.4
+		c-0.1,0.2-0.2,0.3-0.4,0.4c-0.2,0.1-0.4,0.1-0.5,0.2c-0.1,0-0.3,0.1-0.4,0.1c-0.1,0-0.3,0-0.4,0C46.2,4.7,46,4.6,46,4.4
+		c-0.1-0.2-0.1-0.4,0-0.5c0.1-0.2,0.2-0.3,0.3-0.3c0.1,0,0.2-0.1,0.4-0.1c0.2-0.1,0.3-0.2,0.3-0.3c0.1-0.2,0.1-0.3,0.1-0.5
+		C47.1,2.4,47,2.2,47,2c-0.1-0.2-0.2-0.3-0.3-0.3c-0.2,0-0.3,0-0.5,0.1C46,1.9,45.9,2,45.7,2.2c-0.2,0.2-0.3,0.4-0.4,0.6
+		C45.2,3,45,3.3,44.9,3.5c-0.1,0.3-0.3,0.6-0.4,0.8c-0.2,0.2-0.3,0.5-0.4,0.8c-0.4,0.9-0.8,1.7-1.2,2.5c0.3,0,0.6-0.1,1,0
+		c0.4,0,0.7,0,1,0c0.3,0,0.7,0.1,1,0.2c0.3,0.1,0.6,0.3,0.8,0.6c0.3,0.3,0.4,0.6,0.5,1c0.1,0.4,0.1,0.8,0.2,1.1l0.2,2.1
+		c0,0.2,0.1,0.5,0.1,0.7C47.7,13.7,47.8,14,48,14.2z"/>
+	<path fill="#c3c3c3" d="M71.7,13.9c0.2,0.2,0.4,0.4,0.7,0.5c0.3,0.1,0.5,0,0.8-0.1c0,0.2,0.1,0.3,0.1,0.6c0.1,0.2,0.1,0.4,0.1,0.6
+		c-0.3,0-0.7,0-1.1,0s-0.8,0-1.3,0.1c-0.4,0-0.9,0-1.3,0c-0.4,0-0.8,0-1,0c0-0.1,0-0.1,0-0.2c0-0.1,0.1-0.2,0.2-0.3
+		c0.1-0.1,0.2-0.2,0.4-0.3c0.2-0.1,0.3-0.1,0.6-0.1c0.1,0,0.1-0.2,0.1-0.7c0-0.4,0-1,0-1.6c0-0.6,0-1.2-0.1-1.9s0-1.1,0-1.5
+		c0-1,0-1.9,0-2.6c0-0.7,0.1-1.5,0.1-2.2c-0.6,1.3-1.1,2.7-1.6,4.1c-0.5,1.5-1,3-1.5,4.4c0,0,0.1,0.1,0.1,0.2c-0.2,0-0.4,0-0.7,0.1
+		c-0.3,0.1-0.5,0.1-0.7,0.1c-0.5-1.9-1.1-3.7-1.6-5.5c-0.5-1.8-1.1-3.6-1.6-5.5c-0.1,1-0.1,2-0.1,3c0,1.1-0.1,2.1-0.1,3.2
+		c0,1.1,0,2.1-0.1,3.2c0,1-0.1,2-0.1,3h1.4v1.1c-0.5,0-0.9,0.1-1.3,0c-0.4,0-0.8,0-1.2-0.1c-0.4,0-0.8-0.1-1.2-0.1
+		c-0.4,0-0.8,0-1.3,0c-0.1,0-0.3,0-0.4,0c-0.1,0-0.2,0-0.3-0.1c-0.1,0-0.1-0.1-0.1-0.2c0-0.1-0.1-0.3-0.1-0.4c0-0.1,0-0.3,0-0.4
+		c0-0.1,0.1-0.2,0.1-0.2c0.2,0.1,0.4,0.2,0.6,0.1s0.4-0.2,0.5-0.4c0-0.1,0.1-0.3,0.1-0.7c0-0.4,0-0.9,0.1-1.6c0-0.6,0.1-1.3,0.1-2.1
+		C59,8.8,59,8,59,7.2c0-0.8,0-1.5,0.1-2.3c0-0.7,0.1-1.3,0.1-1.8c0-0.2,0-0.5,0-0.7c0-0.2-0.1-0.4-0.2-0.6c-0.1-0.2-0.3-0.3-0.5-0.4
+		c-0.2-0.1-0.4,0-0.6,0.1c0-0.2-0.1-0.5-0.1-0.7c0-0.2,0-0.4-0.1-0.7c1,0,2,0.1,3,0.1c0.9,0,1.9,0.1,3,0.1c0,0.3-0.1,0.5-0.4,0.7
+		c0.3,1.3,0.6,2.6,1,3.9c0.4,1.3,0.8,2.6,1.2,3.9c0.2-0.6,0.4-1.3,0.6-1.9c0.2-0.6,0.4-1.2,0.6-1.8C67,4.6,67.2,4,67.5,3.4
+		c0.2-0.6,0.4-1.3,0.6-2c-0.1,0-0.3,0-0.4-0.1c-0.1,0-0.2,0-0.4-0.1c-0.1,0-0.1-0.1-0.1-0.3c0-0.1,0.1-0.2,0.1-0.3
+		c0.1-0.1,0.2-0.1,0.3-0.1c0.1,0,0.2,0,0.3,0c0.4,0,0.7,0,1,0s0.6,0,0.9,0c0.3,0,0.6,0,0.9,0c0.3,0,0.6,0,1,0c0.1,0,0.3,0,0.4,0
+		c0.1,0,0.3,0.1,0.4,0.2c0.1,0.1,0.2,0.2,0.2,0.4c0,0.2,0,0.3-0.2,0.3c-0.1-0.1-0.2-0.1-0.3-0.1c-0.1,0-0.2,0.1-0.3,0.1
+		c-0.2,0.4-0.3,0.8-0.4,1.3c-0.1,0.5-0.1,0.9-0.1,1.4c-0.2,2.8-0.2,5.6,0,8.4c0,0.3,0,0.5,0.1,0.7C71.4,13.5,71.5,13.7,71.7,13.9z"
+		/>
+	<path fill="#c3c3c3" d="M81.7,12c-0.1,0-0.1,0-0.2,0c-0.1,0-0.1,0-0.2,0c0,0.4,0,0.9-0.2,1.3c-0.1,0.4-0.4,0.8-0.7,1.1
+		c-0.3,0.3-0.7,0.6-1.1,0.8c-0.4,0.2-0.9,0.3-1.3,0.4c-0.4,0.1-0.8,0-1.2,0c-0.4-0.1-0.8-0.2-1.1-0.5c-0.2-0.1-0.3-0.3-0.5-0.5
+		c-0.2-0.2-0.3-0.4-0.4-0.6c-0.2-0.4-0.3-0.7-0.4-1c-0.1-0.3-0.2-0.6-0.3-1C74,11.7,74,11.4,74,11c0-0.3,0-0.7,0.1-1.1
+		c0.1-0.7,0.3-1.4,0.5-2c0.3-0.6,0.6-1.1,0.9-1.6s0.8-0.8,1.3-1.1c0.5-0.3,1-0.4,1.5-0.4c0.2,0,0.4,0,0.6,0.1
+		c0.2,0.1,0.3,0.1,0.5,0.3C79.6,5.4,79.8,5.6,80,6c0.2,0.4,0.4,0.8,0.5,1.3c0.1,0,0.1,0,0.2,0c0.1,0,0.1,0,0.2,0c0,0.1,0,0.1,0,0.2
+		c0,0.1,0,0.1,0,0.2L79.2,8c-0.2,0.1-0.3,0.1-0.4,0c-0.1,0-0.1-0.1-0.2-0.2c0-0.1,0-0.1,0-0.2c0.1,0,0.1,0,0.2,0c0,0,0.1,0,0.2,0
+		c0.1-0.1,0.2-0.2,0.2-0.4c0-0.2,0-0.3,0-0.5c0-0.3-0.1-0.6-0.3-0.9c-0.1-0.1-0.2-0.2-0.3-0.3c-0.1-0.1-0.2-0.1-0.4,0
+		c-0.1,0-0.3,0.1-0.4,0.3c-0.1,0.2-0.3,0.4-0.4,0.6c-0.1,0.2-0.2,0.4-0.3,0.6c-0.1,0.2-0.1,0.4-0.1,0.5c-0.4,1.8-0.5,3.6-0.1,5.5
+		c0.1,0.2,0.1,0.4,0.2,0.7c0.1,0.2,0.2,0.4,0.3,0.6c0.1,0.2,0.3,0.3,0.6,0.5c0.2,0.1,0.4,0.1,0.7,0.1c0.4-0.1,0.7-0.3,1-0.7
+		c0.2-0.4,0.4-0.8,0.5-1.2c0-0.2,0.1-0.4,0.1-0.6v-0.3c-0.2,0-0.3,0-0.4,0c-0.1,0-0.1-0.1-0.1-0.2c0-0.1,0-0.2,0.1-0.2
+		c0.4,0,0.8,0,1.2,0c0.4,0,0.8,0,1.2,0c0,0.1,0,0.1,0,0.2C81.8,11.8,81.8,11.9,81.7,12z"/>
+	<path fill="#c3c3c3" d="M83.5,14.2c0.2-4.3,0.3-8.5,0.2-12.8c-0.3,0-0.6,0-0.9,0c-0.3,0-0.6,0-0.9,0c0-0.2,0-0.3,0-0.5s0-0.3,0-0.5
+		c0.7,0,1.3,0,2-0.1c0.7,0,1.3,0,2-0.1c0.8-0.2,1.6-0.2,2.4-0.1c0.8,0.1,1.6,0.3,2.4,0.5c0.7,0.3,1.4,0.7,1.9,1.2
+		c0.5,0.5,0.9,1.1,1.1,1.8C94,4.9,94.1,6.1,94,7.4C94,8.6,93.8,9.8,93.7,11c0,0.4-0.1,0.8-0.2,1.2c-0.1,0.4-0.3,0.8-0.5,1.1
+		c-0.3,0.5-0.8,1-1.3,1.3c-0.5,0.3-1.1,0.5-1.7,0.6c-0.5,0.1-0.9,0.2-1.4,0.1c-0.5,0-0.9,0-1.4-0.1v0c-0.2,0-0.3,0-0.5,0
+		s-0.4,0-0.5,0l-0.1,0c0,0,0,0,0,0c-0.6,0-1.3,0-1.9,0c-0.6,0-1.3,0-1.9,0c-0.2-0.4-0.1-0.8,0.2-1.1c0.2-0.2,0.3-0.2,0.5-0.3
+		C83.2,14.1,83.4,14.1,83.5,14.2z M89.4,1.9c-0.4-0.3-0.8-0.5-1.3-0.6c-0.5-0.1-1-0.1-1.5-0.1c-0.3,4.5-0.2,9.1,0.4,13.6
+		c0.2,0,0.4,0,0.5-0.1c0.2,0,0.4-0.1,0.6-0.1c0.3-0.1,0.6-0.2,0.9-0.4c0.3-0.2,0.6-0.4,0.8-0.7c0.2-0.3,0.4-0.6,0.5-1
+		s0.2-0.7,0.2-1.1c0.4-2.1,0.4-4.2,0.2-6.3c-0.1-0.6-0.2-1.2-0.4-1.9C90.3,2.8,89.9,2.3,89.4,1.9z"/>
+	<path fill="#c3c3c3" d="M102.4,9.7c-0.6-0.1-1.3-0.1-2,0c-0.7,0.1-1.4,0.4-2,0.8l-0.2-1.4L99.1,9c0-0.4-0.1-0.7-0.1-1
+		c0-0.2-0.1-0.5-0.1-0.9c-0.3,0-0.6,0.1-0.9,0.1c-0.3,0-0.6,0.1-1,0.1c-0.2,0.7-0.3,1.3-0.4,1.8c-0.1,0.5-0.2,1.1-0.4,1.6l0.2-0.1
+		l0.7,0.6c-0.4,0.2-0.8,0.6-1.2,1.1c-0.4,0.5-0.7,1-0.9,1.5l-0.9-0.5c0-0.1,0.1-0.2,0.2-0.4c0.1-0.2,0.2-0.3,0.2-0.4
+		c0.1-0.2,0.2-0.5,0.3-1c0.1-0.4,0.2-0.9,0.4-1.3c0.1-0.5,0.2-0.9,0.3-1.3c0.1-0.4,0.2-0.7,0.2-0.9c0.1-0.4,0.2-0.8,0.3-1.2
+		c0.1-0.4,0.2-0.8,0.3-1.2c0.2-0.7,0.3-1.4,0.4-2.1c0.1-0.7,0.2-1.4,0.3-2.2c-0.1,0-0.2,0-0.3,0c-0.1,0-0.2,0-0.3,0l0.1-0.8l4-0.1
+		l0.1,0.8c-0.1,0-0.2,0-0.2,0c0,0-0.1,0-0.2,0c0.1,0.7,0.2,1.4,0.3,2c0.1,0.6,0.2,1.2,0.3,1.8c0.1,0.6,0.2,1.2,0.3,1.8
+		c0.1,0.6,0.2,1.3,0.4,2c0.2,0,0.3,0,0.3,0c0,0,0.1,0,0.3,0L102.4,9.7z M98.8,6.1c-0.1-0.7-0.2-1.3-0.3-2c-0.1-0.6-0.3-1.3-0.4-2
+		c-0.1,0.6-0.2,1.3-0.4,2.1c-0.1,0.7-0.3,1.5-0.5,2.2L98.8,6.1z"/>
+	<path fill="#c3c3c3" d="M124.9,20.1c0-0.3,0.1-0.6,0.3-0.8c0.2-0.2,0.4-0.3,0.7-0.4c0.3-0.1,0.5,0,0.8,0.1c0.3,0.1,0.5,0.3,0.6,0.5
+		c0.3,0.4,0.6,0.9,0.7,1.4c0.2,0.5,0.2,1,0.2,1.5c0,0.5-0.1,1-0.3,1.5c-0.2,0.5-0.4,1-0.7,1.4c-0.6,0.9-1.4,1.6-2.4,2
+		c-1,0.5-2,0.7-3,0.7c-1.5,0-2.8-0.3-3.9-1s-2.1-1.4-3-2.4c-0.9-1-1.8-2.1-2.5-3.2c-0.8-1.2-1.5-2.3-2.3-3.5c-1.1,1.2-2.4,2.2-3.9,3
+		c-1.5,0.8-3,1.1-4.5,1c-1.1,0-2.1-0.1-3-0.5c-0.9-0.3-1.6-0.8-2.2-1.4c-0.6-0.6-0.9-1.3-1.1-2.2c-0.2-0.8-0.1-1.7,0.2-2.7
+		c0.3-0.9,0.7-1.6,1.3-2.2c0.6-0.6,1.2-1.1,2-1.5c0.7-0.4,1.5-0.6,2.4-0.7c0.8-0.1,1.7,0,2.6,0.2c0-1.7,0-3.4,0-5c0-1.7,0-3.2,0-4.6
+		c-0.3,0-0.6,0-0.9,0c-0.3,0-0.6,0-0.9,0c0-0.2,0-0.3,0-0.5s0-0.3,0-0.5l3.7-0.1c0.8-0.2,1.6-0.2,2.4-0.1c0.8,0.1,1.6,0.3,2.4,0.5
+		c0.7,0.3,1.4,0.7,1.9,1.2c0.5,0.5,0.9,1.1,1.1,1.8c0.3,1.2,0.4,2.4,0.3,3.6c-0.1,1.2-0.2,2.5-0.4,3.7c-0.1,1-0.4,2-0.8,3
+		c-0.5,1-1,2-1.7,2.9c0.3,0.4,0.6,0.8,0.8,1.2c0.3,0.4,0.5,0.8,0.8,1.2c0.5,0.8,1.1,1.6,1.7,2.5c0.6,0.8,1.3,1.6,2,2.4
+		c0.7,0.7,1.5,1.3,2.4,1.8s1.8,0.7,2.9,0.8c1.1,0,2.1-0.2,3-0.7c0.9-0.5,1.6-1.2,2.1-2.2c0.2-0.4,0.3-0.8,0.4-1.3
+		c0.1-0.5,0-0.9-0.1-1.3c-0.2,0.1-0.4,0.2-0.6,0.2c-0.2,0-0.4,0-0.6-0.1c-0.2-0.1-0.4-0.2-0.5-0.4S124.9,20.4,124.9,20.1z M102.9,21
+		c1.5-0.4,2.8-1,3.7-1.8c0.9-0.8,1.7-1.7,2.3-2.8c-0.2-0.2-0.3-0.5-0.6-0.7c-0.6-0.7-1.2-1.4-1.9-1.9c0,0.6,0.1,1.2,0.1,1.8
+		c0,0.6,0.1,1.1,0.2,1.6h0v0.1c-0.5,0-0.9,0-1.3,0c-0.4,0-0.8,0-1.2,0c-0.3,0-0.6,0-0.9,0c-0.3,0-0.6,0-0.9,0
+		c-0.1-0.2-0.1-0.4,0-0.7c0-0.2,0.1-0.3,0.3-0.5c0.3-0.3,0.7-0.4,1.1-0.2l0.1-3.5c-0.5-0.2-1-0.3-1.5-0.3c-0.5,0-1.1,0-1.6,0.1
+		c-0.6,0.1-1.1,0.3-1.6,0.6c-0.5,0.3-0.9,0.7-1.3,1.1c-0.4,0.4-0.7,0.9-0.9,1.5c-0.2,0.5-0.3,1.1-0.3,1.6c0,0.7,0.2,1.3,0.6,1.8
+		c0.4,0.5,0.9,0.9,1.4,1.4c0.2,0.2,0.5,0.3,0.8,0.5c0.3,0.1,0.7,0.2,1.1,0.3c0.4,0.1,0.8,0.1,1.2,0.1
+		C102.1,21.1,102.5,21.1,102.9,21z M109.3,1.9c-0.4-0.3-0.8-0.5-1.2-0.6c-0.5-0.1-0.9-0.1-1.4-0.1c-0.1,1.7-0.2,3.4-0.3,5.3
+		c-0.1,1.9-0.1,3.7,0,5.6c0.6,0.4,1.2,0.8,1.7,1.4c0.5,0.5,1,1.1,1.5,1.6c0.2-0.6,0.4-1.2,0.6-1.9c0.2-0.6,0.3-1.2,0.3-1.7
+		c0.2-1.1,0.2-2.1,0.3-3.1c0-1,0-2.1-0.1-3.1c-0.1-0.6-0.2-1.2-0.4-1.9C110.1,2.8,109.8,2.3,109.3,1.9z"/>
+	<path fill="#c3c3c3" d="M116.5,1.2c-0.3,0-0.6,0-0.9,0c-0.3,0-0.6,0-0.9,0V0.4c0.5,0,0.9,0,1.2-0.1s0.7,0,1.1,0c0.4,0,0.7,0,1.1,0
+		s0.8,0,1.3-0.1c0.9,0,1.8,0,2.8-0.1c0.9,0,1.8,0,2.8-0.1c0,0.6,0,1.2,0,1.8c0,0.6,0,1.2,0,1.8c-0.2,0-0.3,0-0.5,0
+		c-0.2,0-0.3,0-0.5,0c-0.1,0-0.2,0-0.3,0c-0.1,0-0.1-0.1,0-0.1c0.1-0.2,0.1-0.4,0.1-0.6s0-0.4-0.1-0.6c-0.1-0.2-0.2-0.4-0.3-0.6
+		c-0.1-0.2-0.2-0.3-0.4-0.4c-0.2-0.1-0.4-0.2-0.6-0.2c-0.2,0-0.5,0-0.7,0c-0.3,0-0.5,0.1-0.8,0.1c-0.3,0.1-0.5,0.2-0.6,0.4
+		c-0.1,0.2-0.1,0.3-0.1,0.3c0,0.1,0,0.2,0,0.3c0,0.7-0.1,1.3-0.1,2c0,0.6-0.1,1.3-0.1,1.9c0,0.2,0,0.3,0,0.5c0,0.2,0,0.3,0,0.5
+		c0.6-0.2,1.2-0.3,1.9-0.4c0.6-0.1,1.2-0.3,1.9-0.4c0,0.1,0.1,0.2,0.1,0.3c0,0.1,0,0.3,0,0.4c0,0.2-0.1,0.3-0.1,0.4
+		c-0.1,0.1-0.1,0.2-0.1,0.3c-0.1,0.1-0.2,0.1-0.4,0.2c-0.1,0-0.3,0.1-0.4,0.1c-0.5,0.1-0.9,0.2-1.4,0.3c-0.5,0.1-0.9,0.1-1.4,0.2
+		c0,1-0.1,2-0.2,2.9c-0.1,1-0.1,1.9-0.2,2.9c0.8,0.2,1.5,0.3,2,0.1c0.6-0.2,1.2-0.5,1.9-1c0.2-0.1,0.2-0.3,0.2-0.5
+		c0-0.2,0-0.5,0-0.7c0-0.2,0.1-0.5,0.2-0.6c0.1-0.2,0.3-0.3,0.7-0.4c0.4,0,0.6,0.1,0.7,0.4c0.1,0.3,0.2,0.7,0.2,1.1
+		c0,0.5,0,0.9-0.1,1.4c-0.1,0.5-0.1,0.9,0,1.2c-0.5,0-1,0-1.4,0c-0.4,0-0.8,0-1.2,0.1c-0.4,0-0.8,0-1.2,0.1c-0.4,0-0.9,0-1.3,0
+		c-0.9,0-1.7,0-2.5,0.1c-0.7,0.1-1.6,0.1-2.4,0.1c-0.2-0.2-0.2-0.4-0.2-0.7c0-0.2,0.1-0.5,0.3-0.6c0.2-0.2,0.3-0.3,0.6-0.3
+		c0.2-0.1,0.5,0,0.7,0.1c0.1-2.1,0.2-4.3,0.1-6.5C116.3,5.5,116.3,3.4,116.5,1.2z"/>
+</g>
+</svg>
+
+            </a>
+        </p>
+	</footer>
+
+	<script>
+		var algolia_app_id      = 'FU55RWGNDN';
+		var algolia_search_key  = 'c41c5de31ca55044dbb0bde815d35121';
+				var version             = '5.1';
+			</script>
+
+	<script id="search_suggestion_template" type="text/template">
+	<div class="autocomplete-wrapper">
+		{{#_highlightResult.h1}}
+		<div class="h1">
+			{{{ _highlightResult.h1.value }}}
+		</div>
+		{{/_highlightResult.h1}}
+
+		<div class="sub-section">
+			{{#_highlightResult.h2}}
+			<div class="h2">
+				<span class="hash">#</span> {{{ _highlightResult.h2.value }}}
+			</div>
+			{{/_highlightResult.h2}}
+
+			{{#_highlightResult.h3}}
+			<div class="h3">
+				> {{{ _highlightResult.h3.value }}}
+			</div>
+			{{/_highlightResult.h3}}
+
+			{{#_highlightResult.h4}}
+			<div class="h4">
+				> {{{ _highlightResult.h4.value }}}
+			</div>
+			{{/_highlightResult.h4}}
+		</div>
+
+		{{#_highlightResult.content}}
+		<div class="content">
+			{{{ _highlightResult.content.value }}}
+		</div>
+		{{/_highlightResult.content}}
+	</div>
+</script>
+
+<script id="search_empty_template" type="text/template">
+	<div class="autocomplete-wrapper empty">
+		<div class="h2">We didn't find any result for "{{query}}". Sorry!</div>
+	</div>
+</script>
+
+<script id="search_footer_template" type="text/template">
+	<div class="footer">
+		<a target="_blank" href="https://www.algolia.com/referrals/5a08e6a4/join">
+			<img width="50" src="/docs/assets/img/algolia-logo.png">
+			<div class="powered">powered by</div>
+			<div style="clear: both"></div>
+		</a>
+	</div>
+</script>
+
+	<script src="../../build/assets/js/laravel-be3cb5d7de.js"></script>
+	<script src="../../assets/js/viewport-units-buggyfill.js"></script>
+
+	<script>window.viewportUnitsBuggyfill.init();</script>
+    <script>
+          ga('create', 'UA-53903425-7', 'auto');
+          ga('send', 'pageview');
+    </script>
+</body>
+</html>

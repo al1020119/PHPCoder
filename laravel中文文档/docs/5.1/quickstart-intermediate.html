@@ -1,0 +1,1374 @@
+<!doctype html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<title>中级任务清单 | Laravel 5.1 中文文档
+</title>
+	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+	<meta name="author" content="Taylor Otwell">
+	<meta name="description" content="中级任务清单,简介,安装,准备数据库,数据库迁移,Eloquent 模型,Eloquent 关联,路由,显示视图,认证,任务控制器,构建布局与视图,定义布局,定义子视图,增加任务,验证,创建任务,显示已有的任务,依赖注入,显示任务,删除任...
+">
+	<meta name="keywords" content="laravel,laravel中国,laravel中文,laravel框架中文,laravel文档,laravel框架中国,laravel中文文档">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+		<!--[if lte IE 9]>
+		<script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+	<![endif]-->
+	<link rel="stylesheet" href="../../build/assets/css/laravel-4bbf92d154.css">
+	<link rel="apple-touch-icon" href="../../favicon.png.jpeg">
+    <style>
+        .list-group-item img.media-object {
+            width: 20px;
+            border-radius: 2px;
+            margin-right: 4px;
+            display: inline-block;
+        }
+    </style>
+</head>
+<body class="docs language-php">
+
+	<span class="overlay"></span>
+
+	<nav class="main">
+		<a href="../../index.html" class="brand nav-block">
+			<svg version="1.1"
+	 xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:a="http://ns.adobe.com/AdobeSVGViewerExtensions/3.0/"
+	 x="0px" y="0px" width="84.1px" height="57.6px" viewBox="0 0 84.1 57.6" enable-background="new 0 0 84.1 57.6"
+	 xml:space="preserve">
+<defs>
+</defs>
+<path fill="#FB503B" d="M83.8,26.9c-0.6-0.6-8.3-10.3-9.6-11.9c-1.4-1.6-2-1.3-2.9-1.2s-10.6,1.8-11.7,1.9c-1.1,0.2-1.8,0.6-1.1,1.6
+	c0.6,0.9,7,9.9,8.4,12l-25.5,6.1L21.2,1.5c-0.8-1.2-1-1.6-2.8-1.5C16.6,0.1,2.5,1.3,1.5,1.3c-1,0.1-2.1,0.5-1.1,2.9
+	c1,2.4,17,36.8,17.4,37.8c0.4,1,1.6,2.6,4.3,2c2.8-0.7,12.4-3.2,17.7-4.6c2.8,5,8.4,15.2,9.5,16.7c1.4,2,2.4,1.6,4.5,1
+	c1.7-0.5,26.2-9.3,27.3-9.8c1.1-0.5,1.8-0.8,1-1.9c-0.6-0.8-7-9.5-10.4-14c2.3-0.6,10.6-2.8,11.5-3.1C84.2,28,84.4,27.5,83.8,26.9z
+	 M37.5,36.4c-0.3,0.1-14.6,3.5-15.3,3.7c-0.8,0.2-0.8,0.1-0.8-0.2C21.2,39.6,4.4,4.8,4.1,4.4c-0.2-0.4-0.2-0.8,0-0.8
+	c0.2,0,13.5-1.2,13.9-1.2c0.5,0,0.4,0.1,0.6,0.4c0,0,18.7,32.3,19,32.8C38,36.1,37.8,36.3,37.5,36.4z M77.7,43.9
+	c0.2,0.4,0.5,0.6-0.3,0.8c-0.7,0.3-24.1,8.2-24.6,8.4c-0.5,0.2-0.8,0.3-1.4-0.6s-8.2-14-8.2-14L68.1,32c0.6-0.2,0.8-0.3,1.2,0.3
+	C69.7,33,77.5,43.6,77.7,43.9z M79.3,26.3c-0.6,0.1-9.7,2.4-9.7,2.4l-7.5-10.2c-0.2-0.3-0.4-0.6,0.1-0.7c0.5-0.1,9-1.6,9.4-1.7
+	c0.4-0.1,0.7-0.2,1.2,0.5c0.5,0.6,6.9,8.8,7.2,9.1C80.3,26,79.9,26.2,79.3,26.3z"/>
+</svg>
+
+			<span>Laravel</span>
+		</a>
+
+        <div class="search nav-block">
+            <svg version="1.1"
+	 xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:a="http://ns.adobe.com/AdobeSVGViewerExtensions/3.0/"
+	 x="0px" y="0px" width="16px" height="16px" viewBox="0 0 16 16" enable-background="new 0 0 16 16" xml:space="preserve">
+<defs>
+</defs>
+<g>
+	<g>
+		<path fill="#A1A1A1" d="M5.8,11.7c-1.6,0-3-0.6-4.1-1.7S0,7.4,0,5.8s0.6-3,1.7-4.1C2.8,0.6,4.3,0,5.8,0s3,0.6,4.1,1.7
+			c2.3,2.3,2.3,6,0,8.3C8.9,11.1,7.4,11.7,5.8,11.7z M5.8,1C4.5,1,3.3,1.5,2.4,2.4C1.5,3.3,1,4.5,1,5.8s0.5,2.5,1.4,3.4
+			c0.9,0.9,2.1,1.4,3.4,1.4s2.5-0.5,3.4-1.4c1.9-1.9,1.9-5,0-6.9C8.4,1.5,7.1,1,5.8,1z"/>
+	</g>
+	<g>
+		<path fill="#A1A1A1" d="M15.5,16c-0.1,0-0.3,0-0.3-0.1L9.3,10c-0.2-0.2-0.2-0.5,0-0.7s0.5-0.2,0.7,0l5.9,5.9
+			c0.2,0.2,0.2,0.5,0,0.7C15.8,16,15.6,16,15.5,16z"/>
+	</g>
+</g>
+</svg>
+
+            <input placeholder="搜索文档" type="text" v-model="search" id="search-input" v-on:blur="reset" />
+        </div>
+
+		<ul class="main-nav" v-if="! search">
+			<li class="nav-docs"><a href="../5.4.html">文档</a></li>
+<li ><a href="https://laravel-china.org/news" class="no-pjax">Laravel 资讯</a></li>
+<li class="dropdown"><a href="https://laravel-china.org/">Laravel China 社区</a></li>
+<li class="nav-forge"><a href="https://laravel-china.org/categories/1">酷工作</a></li>
+<li class="nav-docs"><a href="http://lumen.laravel-china.org">Lumen</a></li>
+<li class="nav-forge"><a href="https://cs.laravel-china.org/">速查表</a></li>
+<li class="nav-forge"><a href="https://fsdhub.com/books/laravel-essential-training-5.5">《Laravel 入门教程》</a></li>
+		</ul>
+
+        			<div class="switcher">
+	<div class="dropdown">
+		<button class="btn dropdown-toggle btn-inverted" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-expanded="true">
+			<!--<span class="faint">v</span> -->
+			5.1
+			<span class="caret"></span>
+		</button>
+		<ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu1">
+							<li role="presentation">
+					<a role="menuitem" tabindex="-1" href="http://d.laravel-china.org/docs/5.5/quickstart-intermediate">5.5</a>
+				</li>
+							<li role="presentation">
+					<a role="menuitem" tabindex="-1" href="http://d.laravel-china.org/docs/5.4/quickstart-intermediate">5.4</a>
+				</li>
+							<li role="presentation">
+					<a role="menuitem" tabindex="-1" href="http://d.laravel-china.org/docs/5.3/quickstart-intermediate">5.3</a>
+				</li>
+							<li role="presentation">
+					<a role="menuitem" tabindex="-1" href="../5.2/quickstart-intermediate.html">5.2</a>
+				</li>
+							<li role="presentation">
+					<a role="menuitem" tabindex="-1" href="quickstart-intermediate.html">5.1</a>
+				</li>
+					</ul>
+	</div>
+</div>
+		
+        <div class="responsive-sidebar-nav">
+			<a href="quickstart-intermediate.html#" class="toggle-slide menu-link btn">&#9776;</a>
+		</div>
+	</nav>
+
+	<nav id="slide-menu" class="slide-menu" role="navigation">
+
+	<div class="brand">
+		<a href="../../index.html">
+			<img src="../../assets/img/laravel-logo-white.png" height="50">
+		</a>
+	</div>
+
+	<ul class="slide-main-nav">
+		<li><a href="../../index.html">Home</a></li>
+		<li class="nav-docs"><a href="../5.4.html">文档</a></li>
+<li ><a href="https://laravel-china.org/news" class="no-pjax">Laravel 资讯</a></li>
+<li class="dropdown"><a href="https://laravel-china.org/">Laravel China 社区</a></li>
+<li class="nav-forge"><a href="https://laravel-china.org/categories/1">酷工作</a></li>
+<li class="nav-docs"><a href="http://lumen.laravel-china.org">Lumen</a></li>
+<li class="nav-forge"><a href="https://cs.laravel-china.org/">速查表</a></li>
+<li class="nav-forge"><a href="https://fsdhub.com/books/laravel-essential-training-5.5">《Laravel 入门教程》</a></li>
+	</ul>
+
+	<div class="slide-docs-nav">
+		<h2>Documentation</h2>
+		<ul>
+<li>
+<h2>前言</h2>
+<ul>
+<li><a href="about.html">翻译说明</a></li>
+<li><a href="releases.html">发行说明</a></li>
+<li><a href="upgrade.html">升级导引</a></li>
+<li><a href="contributions.html">贡献导引</a></li>
+<li><a href="http://laravel-china.org/api/5.1">API 文档</a></li>
+</ul>
+</li>
+<li>
+<h2>环境配置</h2>
+<ul>
+<li><a href="installation.html">安装</a></li>
+<li><a href="homestead.html">Homestead</a></li>
+</ul>
+</li>
+<li>
+<h2>基本功能</h2>
+<ul>
+<li><a href="routing.html">路由</a></li>
+<li><a href="middleware.html">中间件</a></li>
+<li><a href="controllers.html">控制器</a></li>
+<li><a href="requests.html">请求</a></li>
+<li><a href="responses.html">响应</a></li>
+<li><a href="views.html">视图</a></li>
+<li><a href="blade.html">Blade 模板</a></li>
+</ul>
+</li>
+<li>
+<h2>教程</h2>
+<ul>
+<li><a href="quickstart.html">初级任务清单</a></li>
+<li><a href="quickstart-intermediate.html">中级任务清单</a></li>
+</ul>
+</li>
+<li>
+<h2>系统架构</h2>
+<ul>
+<li><a href="lifecycle.html">请求生命周期</a></li>
+<li><a href="structure.html">应用程序结构</a></li>
+<li><a href="providers.html">服务提供者</a></li>
+<li><a href="container.html">服务容器</a></li>
+<li><a href="contracts.html">Contracts</a></li>
+<li><a href="facades.html">Facades</a></li>
+</ul>
+</li>
+<li>
+<h2>系统服务</h2>
+<ul>
+<li><a href="authentication.html">用户认证</a></li>
+<li><a href="authorization.html">用户授权</a></li>
+<li><a href="artisan.html">Artisan 命令行</a></li>
+<li><a href="billing.html">交易</a></li>
+<li><a href="cache.html">缓存</a></li>
+<li><a href="collections.html">集合</a></li>
+<li><a href="elixir.html">Elixir</a></li>
+<li><a href="encryption.html">加密与解密</a></li>
+<li><a href="errors.html">错误与日志</a></li>
+<li><a href="events.html">事件</a></li>
+<li><a href="filesystem.html">文件系统与云存储</a></li>
+<li><a href="hashing.html">哈希</a></li>
+<li><a href="helpers.html">辅助函数</a></li>
+<li><a href="localization.html">本地化</a></li>
+<li><a href="mail.html">邮件</a></li>
+<li><a href="packages.html">扩展包开发</a></li>
+<li><a href="pagination.html">分页</a></li>
+<li><a href="queues.html">队列</a></li>
+<li><a href="redis.html">Redis</a></li>
+<li><a href="session.html">Session</a></li>
+<li><a href="envoy.html">Envoy</a></li>
+<li><a href="scheduling.html">任务调度</a></li>
+<li><a href="testing.html">测试</a></li>
+<li><a href="validation.html">表单验证</a></li>
+</ul>
+</li>
+<li>
+<h2>数据库</h2>
+<ul>
+<li><a href="database.html">入门</a></li>
+<li><a href="queries.html">查询构造器</a></li>
+<li><a href="migrations.html">数据库迁移</a></li>
+<li><a href="seeding.html">数据填充</a></li>
+</ul>
+</li>
+<li>
+<h2>Eloquent ORM</h2>
+<ul>
+<li><a href="eloquent.html">入门</a></li>
+<li><a href="eloquent-relationships.html">模型关联</a></li>
+<li><a href="eloquent-collections.html">Eloquent 集合</a></li>
+<li><a href="eloquent-mutators.html">Getter/Setter</a></li>
+<li><a href="eloquent-serialization.html">序列化</a></li>
+</ul>
+</li>
+</ul>
+	</div>
+
+</nav>
+
+<div class="docs-wrapper container">
+
+	<section class="sidebar">
+
+            <div class="header">
+              <a type="button" class="btn btn-primary btn-inverted btn-lg btn-block turnofflight"><i class="fa fa-lightbulb-o"></i> 夜间模式 </a>
+              <br>
+              <div class="versions text-center ">
+                <a class="doc-btn btn-inverted " href="../5.5.html" title="Laravel 5.5 中文文档">C5.5</a>
+                <a class="doc-btn btn-inverted " href="../5.4.html" title="Laravel 5.4 中文文档">C5.4</a>
+                <a class="doc-btn btn-inverted active" href="../5.1.html" title="Laravel 5.1 中文文档">C5.1</a>
+              </div>
+            </div>
+
+            <a href="https://laravel-china.org/topics/3383" target="_blank" rel="nofollow" title="" style="display: block;margin-bottom: 23px;">
+                <img src="https://dn-phphub.qbox.me/uploads/images/201612/10/1/k7wwMpJduq.jpg" style="width: 100%;border: 1px solid #d8d3d3;box-shadow: 0 0 30px #d4d4d4;-moz-box-shadow: 0 0 30px #ccc;-webkit-box-shadow: 0 0 30px #d4d4d4;margin-bottom: 30px;margin-top: 10px;border-radius: 4px;">
+            </a>
+
+            <small><a href="quickstart-intermediate.html#" id="doc-expand" style="font-size: 9px; color: #525252;">▶</a></small>
+
+		<ul>
+<li>
+<h2>前言</h2>
+<ul>
+<li><a href="about.html">翻译说明</a></li>
+<li><a href="releases.html">发行说明</a></li>
+<li><a href="upgrade.html">升级导引</a></li>
+<li><a href="contributions.html">贡献导引</a></li>
+<li><a href="http://laravel-china.org/api/5.1">API 文档</a></li>
+</ul>
+</li>
+<li>
+<h2>环境配置</h2>
+<ul>
+<li><a href="installation.html">安装</a></li>
+<li><a href="homestead.html">Homestead</a></li>
+</ul>
+</li>
+<li>
+<h2>基本功能</h2>
+<ul>
+<li><a href="routing.html">路由</a></li>
+<li><a href="middleware.html">中间件</a></li>
+<li><a href="controllers.html">控制器</a></li>
+<li><a href="requests.html">请求</a></li>
+<li><a href="responses.html">响应</a></li>
+<li><a href="views.html">视图</a></li>
+<li><a href="blade.html">Blade 模板</a></li>
+</ul>
+</li>
+<li>
+<h2>教程</h2>
+<ul>
+<li><a href="quickstart.html">初级任务清单</a></li>
+<li><a href="quickstart-intermediate.html">中级任务清单</a></li>
+</ul>
+</li>
+<li>
+<h2>系统架构</h2>
+<ul>
+<li><a href="lifecycle.html">请求生命周期</a></li>
+<li><a href="structure.html">应用程序结构</a></li>
+<li><a href="providers.html">服务提供者</a></li>
+<li><a href="container.html">服务容器</a></li>
+<li><a href="contracts.html">Contracts</a></li>
+<li><a href="facades.html">Facades</a></li>
+</ul>
+</li>
+<li>
+<h2>系统服务</h2>
+<ul>
+<li><a href="authentication.html">用户认证</a></li>
+<li><a href="authorization.html">用户授权</a></li>
+<li><a href="artisan.html">Artisan 命令行</a></li>
+<li><a href="billing.html">交易</a></li>
+<li><a href="cache.html">缓存</a></li>
+<li><a href="collections.html">集合</a></li>
+<li><a href="elixir.html">Elixir</a></li>
+<li><a href="encryption.html">加密与解密</a></li>
+<li><a href="errors.html">错误与日志</a></li>
+<li><a href="events.html">事件</a></li>
+<li><a href="filesystem.html">文件系统与云存储</a></li>
+<li><a href="hashing.html">哈希</a></li>
+<li><a href="helpers.html">辅助函数</a></li>
+<li><a href="localization.html">本地化</a></li>
+<li><a href="mail.html">邮件</a></li>
+<li><a href="packages.html">扩展包开发</a></li>
+<li><a href="pagination.html">分页</a></li>
+<li><a href="queues.html">队列</a></li>
+<li><a href="redis.html">Redis</a></li>
+<li><a href="session.html">Session</a></li>
+<li><a href="envoy.html">Envoy</a></li>
+<li><a href="scheduling.html">任务调度</a></li>
+<li><a href="testing.html">测试</a></li>
+<li><a href="validation.html">表单验证</a></li>
+</ul>
+</li>
+<li>
+<h2>数据库</h2>
+<ul>
+<li><a href="database.html">入门</a></li>
+<li><a href="queries.html">查询构造器</a></li>
+<li><a href="migrations.html">数据库迁移</a></li>
+<li><a href="seeding.html">数据填充</a></li>
+</ul>
+</li>
+<li>
+<h2>Eloquent ORM</h2>
+<ul>
+<li><a href="eloquent.html">入门</a></li>
+<li><a href="eloquent-relationships.html">模型关联</a></li>
+<li><a href="eloquent-collections.html">Eloquent 集合</a></li>
+<li><a href="eloquent-mutators.html">Getter/Setter</a></li>
+<li><a href="eloquent-serialization.html">序列化</a></li>
+</ul>
+</li>
+</ul>
+
+		<hr>
+            <ul>
+              <li>社交账号</li>
+                <ul class="social-account">
+                  <li><a href="http://weibo.com/1837553744/profile?topnav=1&wvr=6&is_all=1">Summer 的微博</a></li>
+                  <li>新手 QQ 群：282196078</li>
+                </ul>
+
+            </ul>
+
+            <ul>
+              <li>
+              微信订阅号
+                <ul>
+                  <li>
+<img class="image-border popover-with-html" data-content="" src="https://dn-phphub.qbox.me/uploads/images/201708/06/1/4zgVR8dNCt.png" style="width: 148px;height: 148px;border:1px solid #ccc;padding:2px;border-radius:3px;margin-top:5px;" data-original-title="" title="">
+                  </li>
+                </ul>
+                </li>
+            </ul>
+
+            <ul>
+              <li>推荐资源
+              <ul class="list list-group resource-links">
+                    <li class="list-group-item ">
+                <a href="../../index.html" class="no-pjax" title="Laravel 中文文档">
+                    <img class="media-object inline-block " src="https://dn-phphub.qbox.me/uploads/banners/ql9XtosRhTe4v8HVC3TV.jpg">
+                    Laravel 中文文档
+                </a>
+            </li>
+                    <li class="list-group-item ">
+                <a href="https://lumen.laravel-china.org" class="no-pjax" title="Lumen 中文文档">
+                    <img class="media-object inline-block " src="https://dn-phphub.qbox.me/uploads/banners/bcMFkfsJZpetLgKFwWqY.jpg">
+                    Lumen 中文文档
+                </a>
+            </li>
+                    <li class="list-group-item ">
+                <a href="https://cs.laravel-china.org/" class="no-pjax" title="Laravel 速查表">
+                    <img class="media-object inline-block " src="https://dn-phphub.qbox.me/uploads/banners/cV55gsrH70qz6VdKr502.jpg">
+                    Laravel 速查表
+                </a>
+            </li>
+                    <li class="list-group-item ">
+                <a href="http://yousails.mikecrm.com/4Dh5uWU" class="no-pjax" title="Laravel 软件外包服务">
+                    <img class="media-object inline-block " src="https://dn-phphub.qbox.me/uploads/banners/v89tIQ6vjceA6g7JmrQB.png">
+                    Laravel 软件外包
+                </a>
+            </li>
+                    <li class="list-group-item ">
+                <a href="https://laravel-china.org/topics/3626" class="no-pjax" title="Laravel 远程工作 ">
+                    <img class="media-object inline-block " src="https://dn-phphub.qbox.me/uploads/banners/Xlq6s7wLxvX8FlTP4qZe.png">
+                    Laravel 远程工作
+                </a>
+            </li>
+                    <li class="list-group-item ">
+                <a href="https://laravel-china.github.io/php-the-right-way/" class="no-pjax" title="PHP 之道 - PHPer 必读">
+                    <img class="media-object inline-block " src="https://dn-phphub.qbox.me/uploads/banners/vA50AYuscu2RCMowq7ee.png">
+                    PHP 之道
+                </a>
+            </li>
+                    <li class="list-group-item ">
+                <a href="https://laravel-china.org/composer" class="no-pjax" title="Composer 中文全量镜像">
+                    <img class="media-object inline-block " src="https://dn-phphub.qbox.me/uploads/banners/KltcLb6leMa12dvTAxD7.png">
+                    Composer 镜像
+                </a>
+            </li>
+            </ul>
+              </li>
+            </ul>
+
+	</section>
+
+	
+
+	<article>
+
+		<div class="alert alert-warning" role="alert">
+			一小时同步一次，更多信息请查阅 <a href="https://laravel-china.org/topics/2095">文档导读</a>。
+			发现瑕疵？你也可以
+				<a href="https://github.com/laravel-china/laravel-docs/edit/5.1/quickstart-intermediate.md"><i class="fa fa-pencil-square-o"></i> 改进本文</a>
+			。<a href="https://laravel-china.org/topics/4026" target="_blank"><i class="fa fa-cloud-download" aria-hidden="true"></i> 离线版本下载</a>
+		</div>
+
+		<div class="main-content">
+			<h1>中级任务清单</h1>
+<ul>
+<li><a href="quickstart-intermediate.html#introduction">简介</a></li>
+<li><a href="quickstart-intermediate.html#installation">安装</a></li>
+<li><a href="quickstart-intermediate.html#prepping-the-database">准备数据库</a>
+<ul>
+<li><a href="quickstart-intermediate.html#database-migrations">数据库迁移</a></li>
+<li><a href="quickstart-intermediate.html#eloquent-models">Eloquent 模型</a></li>
+<li><a href="quickstart-intermediate.html#eloquent-relationships">Eloquent 关联</a></li>
+</ul></li>
+<li><a href="quickstart-intermediate.html#routing">路由</a>
+<ul>
+<li><a href="quickstart-intermediate.html#displaying-a-view">显示视图</a></li>
+<li><a href="quickstart-intermediate.html#authentication-routing">认证</a></li>
+<li><a href="quickstart-intermediate.html#the-task-controller">任务控制器</a></li>
+</ul></li>
+<li><a href="quickstart-intermediate.html#building-layouts-and-views">构建布局与视图</a>
+<ul>
+<li><a href="quickstart-intermediate.html#defining-the-layout">定义布局</a></li>
+<li><a href="quickstart-intermediate.html#defining-the-child-view">定义子视图</a></li>
+</ul></li>
+<li><a href="quickstart-intermediate.html#adding-tasks">增加任务</a>
+<ul>
+<li><a href="quickstart-intermediate.html#validation">验证</a></li>
+<li><a href="quickstart-intermediate.html#creating-the-task">创建任务</a></li>
+</ul></li>
+<li><a href="quickstart-intermediate.html#displaying-existing-tasks">显示已有的任务</a>
+<ul>
+<li><a href="quickstart-intermediate.html#dependency-injection">依赖注入</a></li>
+<li><a href="quickstart-intermediate.html#displaying-the-tasks">显示任务</a></li>
+</ul></li>
+<li><a href="quickstart-intermediate.html#deleting-tasks">删除任务</a>
+<ul>
+<li><a href="quickstart-intermediate.html#adding-the-delete-button">增加删除按钮</a></li>
+<li><a href="quickstart-intermediate.html#route-model-binding">路由模型绑定</a></li>
+<li><a href="quickstart-intermediate.html#authorization">授权</a></li>
+<li><a href="quickstart-intermediate.html#deleting-the-task">删除该任务</a></li>
+</ul></li>
+</ul>
+<p><a name="introduction"></a></p>
+<h2>简介</h2>
+<p>此快速入门指南为 Laravel 框架提供了高级的介绍，其中内容包括</p>
+<ul>
+<li>数据库迁移</li>
+<li>Eloquent ORM</li>
+<li>路由</li>
+<li>认证</li>
+<li>授权</li>
+<li>依赖注入</li>
+<li>验证</li>
+<li>视图</li>
+<li>Blade 模版。</li>
+</ul>
+<p>如果你已经有 Laravel 框架或 PHP 的基础，那么这会是个很好的开头。</p>
+<p>我们会构建一个简单的任务清单，可以使用它追踪所有想完成的任务（典型的「代办事项清单」例子）。与「基本」快速入门教程不同，此教程会允许用户在应用程序创建帐号并认证。此项目完整的源代码 <a href="https://github.com/summerblue/laravel-quickstart-intermediate-5.1">在 GitHub 上</a>。</p>
+<p><a name="installation"></a></p>
+<h2>安装</h2>
+<p>首先你需要安装一个全新的 Laravel 框架。你可以选择使用 <a href="homestead.html">Homestead 虚拟机</a> 或是其它本机 PHP 环境来运行框架。只要你准备好了本机环境，就可以使用 Composer 安装 Laravel 框架：</p>
+<pre><code>composer create-project laravel/laravel quickstart --prefer-dist</code></pre>
+<p>你可以随意阅读快速入门指南的剩余部分；不过，如果你想下载这个快速入门指南的源代码并在你的本机机器运行，那么你需要克隆它的 Git 代码仓库并安装依赖：</p>
+<pre><code>git clone https://github.com/laravel/quickstart-intermediate quickstart
+cd quickstart
+composer install
+php artisan migrate</code></pre>
+<p>欲了解更多关于构建本机 Laravel 开发环境的文档，请查阅完整的 <a href="homestead.html">Homestead</a> 及 <a href="installation.html">安装</a> 文档。</p>
+<p><a name="prepping-the-database"></a></p>
+<h2>准备数据库</h2>
+<p><a name="database-migrations"></a></p>
+<h3>数据库迁移</h3>
+<p>首先，让我们使用迁移来定义数据表以容纳我们所有的任务。Laravel 的数据库迁移提供了一个简单的方式，使用流畅、一目了然的 PHP 代码来定义数据表的结构与修改。</p>
+<p>你无需再告诉团队成员要手动增加字段至他们本机的数据库中，他们只需要运行你提交到版本控制的迁移，即可应用数据库修改。</p>
+<h4><code>users</code> 数据表</h4>
+<p>因为我们要让用户可以在应用程序中创建他们的帐号，所以我们需要一张数据表来保存我们的用户。值得庆幸的是，Laravel 已经附带了创建 <code>users</code> 数据表的迁移，所以我们没必要再手动生成一个。默认的 <code>users</code> 数据表迁移位于 <code>database/migrations</code> 目录中。</p>
+<h4><code>tasks</code> 数据表</h4>
+<p>下一步，让我们构建一张将容纳所有任务的数据表。<a href="artisan.html">Artisan 命令行接口</a> 可以被用于生成各种类，为你构建 Laravel 项目时节省大量手动输入的时间。在此例中，让我们使用 <code>make:migration</code> 命令为 <code>tasks</code> 数据表生成新的数据库迁移：</p>
+<pre><code>php artisan make:migration create_tasks_table --create=tasks</code></pre>
+<p>此迁移会被放置在你项目的 <code>database/migrations</code> 目录中。你可能已经注意到，<code>make:migration</code> 命令已经增加了自动递增的 ID 及时间戳至迁移文件。让我们编辑这个文件并为任务的名称增加额外的 <code>string</code> 字段，也增加连接 <code>tasks</code> 与 <code>users</code> 数据表的 <code>user_id</code> 字段：</p>
+<pre><code>&lt;?php
+
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Database\Migrations\Migration;
+
+class CreateTasksTable extends Migration
+{
+    /**
+     * 运行迁移。
+     *
+     * @return void
+     */
+    public function up()
+    {
+        Schema::create('tasks', function (Blueprint $table) {
+            $table-&gt;increments('id');
+            $table-&gt;integer('user_id')-&gt;index();
+            $table-&gt;string('name');
+            $table-&gt;timestamps();
+        });
+    }
+
+    /**
+     * 还原迁移。
+     *
+     * @return void
+     */
+    public function down()
+    {
+        Schema::drop('tasks');
+    }
+}</code></pre>
+<p>我们可以使用 <code>migrate</code> Artisan 命令来运行迁移。如果你使用了 Homestead，则必须在虚拟机中运行这个命令，因为你的主机无法直接访问数据库：</p>
+<pre><code>php artisan migrate</code></pre>
+<p>这个命令会创建我们所有的数据表。如果你使用数据库客户端检查数据表，那么你应该看到新的 <code>tasks</code> 与 <code>users</code> 数据表，其中包含了我们迁移中所定义的字段。接着，我们已经准备好定义我们的 Eloquent ORM 模型！</p>
+<p><a name="eloquent-models"></a></p>
+<h3>Eloquent 模型</h3>
+<p><a href="eloquent.html">Eloquent</a> 是 Laravel 默认的 ORM（对象关联映射）。Eloqunet 通过明确的定义「模型」，让你可以轻松的在数据库获取及保存数据。一般情况下，每个 Eloqunet 模型会直接对应一张数据表。</p>
+<h4><code>User</code> 模型</h4>
+<p>首先，我们需要对应 <code>users</code> 数据表的模型。不过，如果你看过项目的 <code>app</code> 目录，你会发现 Laravel 已经附带了一个 <code>User</code> 模型，所以没必要去手动生成。</p>
+<h4><code>Task</code> 模型</h4>
+<p>让我们定义一个对应至 <code>tasks</code> 数据表的 <code>Task</code> 模型。同样的，我们可以使用 Artisan 命令来生成此模型。在此例中，我们会使用 <code>make:model</code> 命令：</p>
+<pre><code>php artisan make:model Task</code></pre>
+<p>这个模型会放置到你应用程序的 <code>app</code> 目录中。默认情况下此模型类将是空的。我们不必明确告知 Eloquent 模型要对应哪张数据表，因为它会假设数据表是模型名称的复数型态。所以，在此例中，<code>Task</code> 模型会假设对应至 <code>tasks</code> 数据表。</p>
+<p>让我们增加一些东西到模型上。首先，我们需要声明模型的 <code>name</code> 属性应该能被「批量赋值」：</p>
+<pre><code>&lt;?php
+
+namespace App;
+
+use Illuminate\Database\Eloquent\Model;
+
+class Task extends Model
+{
+    /**
+     * 这些属性能被批量赋值。
+     *
+     * @var array
+     */
+    protected $fillable = ['name'];
+}</code></pre>
+<p>在为我们的应用程序增加路由时，我们会学习更多关于如何使用 Eloquent 模型的知识。当然，你也可以随意参考 <a href="eloquent.html">完整的 Eloquent 文档</a> 来获取更多信息。</p>
+<p><a name="eloquent-relationships"></a></p>
+<h3>Eloquent 关联</h3>
+<p>现在我们的模型已经定义好了，这时候需要将他们链接在一起。例如，我们的 <code>User</code> 可以拥有多个 <code>Task</code> 实例，而一条 <code>Task</code> 则只能被赋给一名 <code>User</code>。定义好关联可以让我们很轻松的整理它们之间的关系，就像这样：</p>
+<pre><code>$user = App\User::find(1);
+
+foreach ($user-&gt;tasks as $task) {
+    echo $task-&gt;name;
+}</code></pre>
+<h4><code>tasks</code> 关联</h4>
+<p>首先，让我们在 <code>User</code> 模型定义 <code>tasks</code> 的关联。Eloquent 关联被定义为模型中的方法。Eloquent 支持多种不同类型的关联，所以请务必查阅 <a href="eloquent-relationships.html">完整的 Eloquent 文档</a> 以获取更多信息。在本例中，我们会在 <code>User</code> 模型中定义一个 <code>tasks</code> 函数，并调用 Eloquent 提供的 <code>hasMany</code> 方法：</p>
+<pre><code>&lt;?php
+
+namespace App;
+
+// 导入的命名空间...
+
+class User extends Model implements AuthenticatableContract,
+                                    AuthorizableContract,
+                                    CanResetPasswordContract
+{
+    use Authenticatable, Authorizable, CanResetPassword;
+
+    // 其它的 Eloquent 属性...
+
+    /**
+     * 获取该用户的所有任务。
+     */
+    public function tasks()
+    {
+        return $this-&gt;hasMany(Task::class);
+    }
+}</code></pre>
+<h4><code>user</code> 关联</h4>
+<p>接着，让我们在 <code>Task</code> 模型定义 <code>user</code> 关联。同样的，我们会将此关联定义为模型中的方法。在本例中，我们会使用 Eloquent 提供的 <code>belongsTo</code> 方法来定义关联：</p>
+<pre><code>&lt;?php
+
+namespace App;
+
+use App\User;
+use Illuminate\Database\Eloquent\Model;
+
+class Task extends Model
+{
+    /**
+     * 这些属性能被批量赋值。
+     *
+     * @var array
+     */
+    protected $fillable = ['name'];
+
+    /**
+     * 获取拥有此任务的用户。
+     */
+    public function user()
+    {
+        return $this-&gt;belongsTo(User::class);
+    }
+}</code></pre>
+<p>太棒了！现在我们的关联已经定义好了，可以开始构建我们的控制器啦！</p>
+<p><a name="routing"></a></p>
+<h2>路由</h2>
+<p>在我们任务清单应用程序的 <a href="quickstart.html">基本版本</a> 中，我们在 <code>routes.php</code> 中将所有逻辑都定义为闭包。对于大多数的应用程序来说，一般都会使用 <a href="controllers.html">控制器</a> 来组织路由。控制器让我们将 HTTP 请求处理逻辑分散至多个文件以便进行更好的组织。</p>
+<p><a name="displaying-a-view"></a></p>
+<h3>显示视图</h3>
+<p>我们只会有一个使用闭包的<code>/</code> 路由，它是给应用程序访客的一个简单起始页面。所以，让我们先填写 <code>/</code> 路由。对于此路由，我们想渲染一个包含「欢迎」页面的 HTML 模板：</p>
+<p>在 Laravel 里，所有的 HTML 模版都保存在 <code>resources/views</code> 目录，且我们可以在路由中使用 <code>view</code> 辅助函数来返回这些模版的其中一个：</p>
+<pre><code>Route::get('/', function () {
+    return view('welcome');
+});</code></pre>
+<p>当然，我们必须明确定义好这些视图。这个将在稍后完成！</p>
+<p><a name="authentication-routing"></a></p>
+<h3>认证</h3>
+<p>我们需要让用户创建并登录帐号至我们的应用程序。一般来说，为网页应用程序构建完整的认证是相当乏味的工作。不过，因为它是一个通用的需求，所以 Laravel 试着让这个过程变得更轻松便捷。</p>
+<p>首先，你会注意到在应用程序中已经包含一个 <code>app/Http/Controllers/Auth/AuthController</code>。这个控制器使用了特别的 <code>AuthenticatesAndRegistersUsers</code> trait，它包含了所有创建及认证用户的必要逻辑。</p>
+<h4>认证路由</h4>
+<p>所以，还有哪些部分是留给我们做的？我们依然需要创建注册及登录模板，并定义指向认证控制器的路由。首先，让我们在 <code>app/Http/routes.php</code> 文件中增加需要的路由：</p>
+<pre><code>// 认证路由...
+Route::get('auth/login', 'Auth\AuthController@getLogin');
+Route::post('auth/login', 'Auth\AuthController@postLogin');
+Route::get('auth/logout', 'Auth\AuthController@getLogout');
+
+// 注册路由...
+Route::get('auth/register', 'Auth\AuthController@getRegister');
+Route::post('auth/register', 'Auth\AuthController@postRegister');</code></pre>
+<h4>认证视图</h4>
+<p>认证需要在 <code>resources/views/auth</code> 目录中创建 <code>login.blade.php</code> 与 <code>register.blade.php</code>。当然，这些视图的设计及样式并不重要；不过，它们至少得包含一些基本的字段。</p>
+<p><code>register.blade.php</code> 文件必需有一个包含 <code>name</code>、<code>email</code>、<code>password</code> 与 <code>password_confirmation</code> 字段的表单，并创建一个到 <code>/auth/register</code> 路由上的 <code>POST</code> 请求。</p>
+<p><code>login.blade.php</code> 文件必需有一个包含 <code>email</code> 与 <code>password</code> 字段的表单，并创建一个到 <code>/auth/login</code> 上的 <code>POST</code> 请求。</p>
+<blockquote>
+<p><strong>注意：</strong>如果你想查看这些视图的完整例子，可以在 <a href="https://github.com/laravel/quickstart-intermediate">GitHub 上获取</a> 完整的源代码。</p>
+</blockquote>
+<p><a name="the-task-controller"></a></p>
+<h3>任务控制器</h3>
+<p>因为我们已经知道任务需要可被获取及保存，所以让我们使用 Artisan 命令行接口创建一个 <code>TaskController</code>，这个新的控制器会放置在 <code>app/Http/Controllers</code> 目录中：</p>
+<pre><code>php artisan make:controller TaskController --plain</code></pre>
+<p>现在这个控制器已经被生成，让我们继续在 <code>app/Http/routes.php</code> 文件中构建一些对应至此控制器的路由：</p>
+<pre><code>Route::get('/tasks', 'TaskController@index');
+Route::post('/task', 'TaskController@store');
+Route::delete('/task/{task}', 'TaskController@destroy');</code></pre>
+<h4>认证所有的任务路由</h4>
+<p>对于此应用程序，我们希望所有的任务路由都需要一个认证的用户。换句话说，用户为了创建任务必须「登录至」应用程序中。所以，我们需要对任务路由进行限制，让其仅限已认证的用户访问。Laravel 使用 <a href="middleware.html">中间件</a> 让这件事变得相当容易。</p>
+<p>要让所有控制器中的行为要求已认证的用户，我们可以在控制器的构造器中增加 <code>middleware</code> 方法的调用。所以可用的路由中间件都被定义在 <code>app/Http/Kernel.php</code> 文件中。在本例中，我们希望为所有控制器的动作指派 <code>auth</code> 中间件：</p>
+<pre><code>&lt;?php
+
+namespace App\Http\Controllers;
+
+use App\Http\Requests;
+use Illuminate\Http\Request;
+use App\Http\Controllers\Controller;
+
+class TaskController extends Controller
+{
+    /**
+     * 创建一个新的控制器实例。
+     *
+     * @return void
+     */
+    public function __construct()
+    {
+        $this-&gt;middleware('auth');
+    }
+}</code></pre>
+<p><a name="building-layouts-and-views"></a></p>
+<h2>构建布局与视图</h2>
+<p>这个应用程序只会有一张视图，包含添加任务的表单，及目前所有任务的清单。为了帮助你想像此视图的画面，下方是完成后应用程序的截屏，采用了基本的 Bootstrap CSS 样式：</p>
+<p><img src="https://laravel.tw/assets/img/quickstart/basic-overview.png" alt="应用程序图片" /></p>
+<p><a name="defining-the-layout"></a></p>
+<h3>定义布局</h3>
+<p>几乎所有的网页应用程序都会在不同页面中共用相同的布局。举个例子，应用程序通常在每个页面（如果我们有一个以上页面）的顶部都拥有导航栏。Laravel 使用了 Blade <strong>布局</strong> 来让不同页面共用这些相同的功能。</p>
+<p>如同我们前面讨论的那样，Laravel 所有的视图都被保存在 <code>resources/views</code>。所以，让我们来定义一个新的布局视图至 <code>resources/views/layouts/app.blade.php</code> 中。<code>.blade.php</code> 扩展名会告知框架使用 <a href="blade.html">Blade 模板引擎</a> 渲染此视图。当然，你可以在 Laravel 使用纯 PHP 的模版。不过，Blade 提供了更方便的捷径来编写干净、简洁的模板。</p>
+<p>我们的 <code>app.blade.php</code> 视图看起来应该如下面这样：</p>
+<pre><code>// resources/views/layouts/app.blade.php
+
+&lt;!DOCTYPE html&gt;
+&lt;html lang="en"&gt;
+    &lt;head&gt;
+        &lt;title&gt;Laravel 快速入门 - 高级&lt;/title&gt;
+
+        &lt;!-- CSS 及 JavaScript --&gt;
+    &lt;/head&gt;
+
+    &lt;body&gt;
+        &lt;div class="container"&gt;
+            &lt;nav class="navbar navbar-default"&gt;
+                &lt;!-- Navbar 内容 --&gt;
+            &lt;/nav&gt;
+        &lt;/div&gt;
+
+        @yield('content')
+    &lt;/body&gt;
+&lt;/html&gt;</code></pre>
+<p>注意布局中的 <code>@yield('content')</code> 部分。这是特殊的 Blade 命令，让子页面可以在此处注入自己的内容以扩展布局。接着，让我们定义将会使用此布局并提供主要内容的子视图。</p>
+<p><a name="defining-the-child-view"></a></p>
+<h3>定义子视图</h3>
+<p>很好，我们的应用程序布局已经完成。接下来，我们需要定义包含创建任务的表单，及列出已有任务数据库表的视图。让我们将此视图定义在 <code>resources/views/tasks/index.blade.php</code>，它会对应至我们 <code>TaskController</code> 的 <code>index</code> 方法。</p>
+<p>我们会跳过一些 Bootstrap CSS 模版，只专注在重要的事物上。你可以在 <a href="https://github.com/laravel/quickstart-intermediate">GitHub</a> 下载到应用程序的完整源代码：</p>
+<pre><code>// resources/views/tasks/index.blade.php
+
+@extends('layouts.app')
+
+@section('content')
+
+    &lt;!-- Bootstrap 模版... --&gt;
+
+    &lt;div class="panel-body"&gt;
+        &lt;!-- 显示验证错误 --&gt;
+        @include('common.errors')
+
+        &lt;!-- 新任务的表单 --&gt;
+        &lt;form action="/task" method="POST" class="form-horizontal"&gt;
+            {{ csrf_field() }}
+
+            &lt;!-- 任务名称 --&gt;
+            &lt;div class="form-group"&gt;
+                &lt;label for="task-name" class="col-sm-3 control-label"&gt;任务&lt;/label&gt;
+
+                &lt;div class="col-sm-6"&gt;
+                    &lt;input type="text" name="name" id="task-name" class="form-control"&gt;
+                &lt;/div&gt;
+            &lt;/div&gt;
+
+            &lt;!-- 增加任务按钮--&gt;
+            &lt;div class="form-group"&gt;
+                &lt;div class="col-sm-offset-3 col-sm-6"&gt;
+                    &lt;button type="submit" class="btn btn-default"&gt;
+                        &lt;i class="fa fa-plus"&gt;&lt;/i&gt; 增加任务
+                    &lt;/button&gt;
+                &lt;/div&gt;
+            &lt;/div&gt;
+        &lt;/form&gt;
+    &lt;/div&gt;
+
+    &lt;!-- 待办：目前任务 --&gt;
+@endsection</code></pre>
+<h4>一些注意事项的说明</h4>
+<p>在继续开始之前，让我们先来谈谈有关模板的一些注意事项。首先 <code>@extends</code> 命令会告知 Blade，我们使用了定义于 <code>resources/views/layouts/app.blade.php</code> 的布局。所有在 <code>@section('content')</code> 及 <code>@endsection</code> 之间的内容都会被注入到 <code>app.blade.php</code> 布局中的 <code>@yield('content')</code> 位置里。</p>
+<p>现在我们已经为我们的应用程序定义了基本的布局及视图。接着让我们在 <code>TaskController</code> 的 <code>index</code> 方法返回此视图：</p>
+<pre><code>/**
+ * 显示用户所有任务的清单。
+ *
+ * @param  Request  $request
+ * @return Response
+ */
+public function index(Request $request)
+{
+    return view('tasks.index');
+}</code></pre>
+<p>接着，我们已经准备好增加代码至我们的 <code>POST /task</code> 路由的控制器方法内，以处理接收到的表单输入并增加新的任务至数据库中。</p>
+<blockquote>
+<p><strong>注意：</strong><code>@include('common.errors')</code> 命令会加载位于 <code>resources/views/common/errors.blade.php</code> 的模板。我们尚未定义此模板，但是我们将会在后面定义它！</p>
+</blockquote>
+<p><a name="adding-tasks"></a></p>
+<h2>增加任务</h2>
+<p><a name="validation"></a></p>
+<h3>验证</h3>
+<p>现在我们视图中已经有一个表单，我们需要增加代码至我们的 <code>TaskController@store</code> 方法来验证接收到的表单输入并创建新的任务。首先，让我们先来验证表单输入。</p>
+<p>对此表单来说，我们要让 <code>name</code> 字段为必填，且它必须少于 <code>255</code> 字符。如果验证失败，我们会将用户重定向回 <code>/</code> URL，并将旧的输入及错误消息闪存至 <a href="session.html">session</a> 中：</p>
+<pre><code>/**
+ * 创建新的任务。
+ *
+ * @param  Request  $request
+ * @return Response
+ */
+public function store(Request $request)
+{
+    $this-&gt;validate($request, [
+        'name' =&gt; 'required|max:255',
+    ]);
+
+    // 创建该任务...
+}</code></pre>
+<p>如果你看过 <a href="quickstart.html">基本快速入门指南</a>，你会注意到验证的代码相比起来有些不同！这是因为在控制器内可以使用 Laravel 基底控制器所包含的 <code>ValidatesRequests</code> trait。这个 trait 提供了一个简单的 <code>validate</code> 方法，此方法可接收一个请求和包含验证规则的数组。</p>
+<p>当验证失败时我们无需再手动重定向。如果指定的规则验证失败，用户会自动被重定向回原本的位置，并自动将错误消息闪存至 session 中。</p>
+<h4><code>$errors</code> 变量</h4>
+<p>我们在视图中使用了 <code>@include('common.errors')</code> 命令来渲染表单的错误验证消息。<code>common.errors</code> 让我们可以简单的在所有的页面都显示相同格式的错误验证消息。现在让我们定义此视图的内容：</p>
+<pre><code>// resources/views/common/errors.blade.php
+
+@if (count($errors) &gt; 0)
+    &lt;!-- 表单错误清单 --&gt;
+    &lt;div class="alert alert-danger"&gt;
+        &lt;strong&gt;哎呀！出了些问题！&lt;/strong&gt;
+
+        &lt;br&gt;&lt;br&gt;
+
+        &lt;ul&gt;
+            @foreach ($errors-&gt;all() as $error)
+                &lt;li&gt;{{ $error }}&lt;/li&gt;
+            @endforeach
+        &lt;/ul&gt;
+    &lt;/div&gt;
+@endif</code></pre>
+<blockquote>
+<p><strong>注意：</strong><code>errors</code> 变量可用于 <strong>每个</strong> Laravel 的视图中。如果没有错误验证消息存在，那么它就会是一个空的 <code>ViewErrorBag</code> 实例。</p>
+</blockquote>
+<p><a name="creating-the-task"></a></p>
+<h3>创建任务</h3>
+<p>现在输入已经被验证处理完毕。让我们继续填写我们的路由来实际的创建一条新的任务。一旦新的任务被创建，我们便会将用户重定向回 <code>/tasks</code> URL。我们会充分的利用 Eloquent 的关联功能来创建该任务。</p>
+<p>Laravel 大部分的关联提供了一个 <code>create</code> 方法，它接收一个包含属性的数组，并会在保存至数据库前自动设置关联模型的外键值。在此例中，<code>create</code> 方法会自动将指定任务的 <code>user_id</code> 属性设置为目前已验证用户的 ID，因为我们通过 <code>$request-&gt;user()</code> 访问。</p>
+<pre><code>/**
+ * 创建新的任务。
+ *
+ * @param  Request  $request
+ * @return Response
+ */
+public function store(Request $request)
+{
+    $this-&gt;validate($request, [
+        'name' =&gt; 'required|max:255',
+    ]);
+
+    $request-&gt;user()-&gt;tasks()-&gt;create([
+        'name' =&gt; $request-&gt;name,
+    ]);
+
+    return redirect('/tasks');
+}</code></pre>
+<p>太棒了！现在可以成功的创建任务了。接着，让我们继续构建已有的任务清单，并增加至我们的视图中。</p>
+<p><a name="displaying-existing-tasks"></a></p>
+<h3>显示已有的任务</h3>
+<p>首先，我们需要编辑我们的 <code>TaskController@index</code> 方法，以传递所有已有的任务到此视图上。<code>view</code> 函数接收一个能在视图中取用的数据数组作为第二个参数，数组中的每个键都会在视图中作为变量。就像这样:</p>
+<pre><code>/**
+ * 显示用户的所有任务清单。
+ *
+ * @param  Request  $request
+ * @return Response
+ */
+public function index(Request $request)
+{
+    $tasks = Task::where('user_id', $request-&gt;user()-&gt;id)-&gt;get();
+
+    return view('tasks.index', [
+        'tasks' =&gt; $tasks,
+    ]);
+}</code></pre>
+<p>不过，让我们先来探讨一些 Laravel 的依赖注入功能，来将 <code>TaskRepository</code> 注入至我们的 <code>TaskController</code>，我们将会通过它来访问所有的数据。</p>
+<p><a name="dependency-injection"></a></p>
+<h3>依赖注入</h3>
+<p>Laravel 的 <a href="container.html">服务容器</a> 是整个框架中最强大的功能之一。在读完本快速上手之后，请务必阅读容器文档的全部内容。</p>
+<h4>创建资源库</h4>
+<p>如前面所提，我们希望定义一个 <code>TaskRepository</code> 存放所有 <code>Task</code> 模型的数据访问逻辑。当应用程序扩增时，在整个应用程序中共用同样的 Eloquent 查找将会是相当有用的。</p>
+<p>所以，让我们先来创建一个 <code>app/Repositories</code> 目录，并增加 <code>TaskRepository</code> 类。切记，Laravel 的 <code>app</code> 中所有的文件夹会自动加载并使用 PSR-4 自动加载标准，所以你可以随意创建许多额外目录。</p>
+<pre><code>&lt;?php
+
+namespace App\Repositories;
+
+use App\User;
+use App\Task;
+
+class TaskRepository
+{
+    /**
+     * 获取指定用户的所有任务。
+     *
+     * @param  User  $user
+     * @return Collection
+     */
+    public function forUser(User $user)
+    {
+        return Task::where('user_id', $user-&gt;id)
+                    -&gt;orderBy('created_at', 'asc')
+                    -&gt;get();
+    }
+}</code></pre>
+<h4>注入资源库</h4>
+<p>一旦我们的资源库定义完成，我们就可以在 <code>TaskController</code> 控制器的构造器中对它使用「类型提示」，并在我们的 <code>index</code> 路由中使用它。因为 Laravel 使用容器来解析所有的控制器，所以我们的依赖会自动被注入至控制器的实例中：</p>
+<pre><code>&lt;?php
+
+namespace App\Http\Controllers;
+
+use App\Task;
+use App\Http\Requests;
+use Illuminate\Http\Request;
+use App\Http\Controllers\Controller;
+use App\Repositories\TaskRepository;
+
+class TaskController extends Controller
+{
+    /**
+     * 任务资源库的实例。
+     *
+     * @var TaskRepository
+     */
+    protected $tasks;
+
+    /**
+     * 创建新的控制器实例。
+     *
+     * @param  TaskRepository  $tasks
+     * @return void
+     */
+    public function __construct(TaskRepository $tasks)
+    {
+        $this-&gt;middleware('auth');
+
+        $this-&gt;tasks = $tasks;
+    }
+
+    /**
+     * 获取指定用户的所有任务。
+     *
+     * @param  Request  $request
+     * @return Response
+     */
+    public function index(Request $request)
+    {
+        return view('tasks.index', [
+            'tasks' =&gt; $this-&gt;tasks-&gt;forUser($request-&gt;user()),
+        ]);
+    }
+}</code></pre>
+<p><a name="displaying-the-tasks"></a></p>
+<h3>显示任务</h3>
+<p>一旦数据被传递，我们将在 <code>tasks/index.blade.php</code> 视图中将任务切分并将它们显示至数据库表中。<code>@foreach</code> 命令结构让我们可以编写简洁的循环语句，并编译成快速的纯 PHP 代码：</p>
+<pre><code>@extends('layouts.app')
+
+@section('content')
+    &lt;!-- 创建任务表单... --&gt;
+
+    &lt;!-- 目前任务 --&gt;
+    @if (count($tasks) &gt; 0)
+        &lt;div class="panel panel-default"&gt;
+            &lt;div class="panel-heading"&gt;
+               目前任务
+            &lt;/div&gt;
+
+            &lt;div class="panel-body"&gt;
+                &lt;table class="table table-striped task-table"&gt;
+
+                    &lt;!-- 表头 --&gt;
+                    &lt;thead&gt;
+                        &lt;th&gt;Task&lt;/th&gt;
+                        &lt;th&gt;&amp;nbsp;&lt;/th&gt;
+                    &lt;/thead&gt;
+
+                    &lt;!-- 表身 --&gt;
+                    &lt;tbody&gt;
+                        @foreach ($tasks as $task)
+                            &lt;tr&gt;
+                                &lt;!-- 任务名称 --&gt;
+                                &lt;td class="table-text"&gt;
+                                    &lt;div&gt;{{ $task-&gt;name }}&lt;/div&gt;
+                                &lt;/td&gt;
+
+                                &lt;td&gt;
+                                   &lt;!-- 待办：删除按钮 --&gt;
+                                &lt;/td&gt;
+                            &lt;/tr&gt;
+                        @endforeach
+                    &lt;/tbody&gt;
+                &lt;/table&gt;
+            &lt;/div&gt;
+        &lt;/div&gt;
+    @endif
+@endsection</code></pre>
+<p>我们的任务应用大部分都完成了。但是，当我们完成已有的任务后，还没有任何方式可以删除它们。接着让我们来增加此功能！</p>
+<p><a name="deleting-tasks"></a></p>
+<h2>删除任务</h2>
+<p><a name="adding-the-delete-button"></a></p>
+<h3>增加删除按钮</h3>
+<p>我们在我们的代码中应该放删除按钮的地方放了「待办」的注释。所以，让我们在 <code>tasks/index.blade.php</code> 视图中列出任务的每一行增加一个删除按钮。我们会为列表中的每个任务创建一个只有单个按钮的小表单。当按钮被按下时，一个 <code>DELETE /task</code> 的请求将会被发送到应用程序，它会触发我们的 <code>TaskController@destroy</code> 方法：</p>
+<pre><code>&lt;tr&gt;
+    &lt;!-- 任务名称 --&gt;
+    &lt;td class="table-text"&gt;
+        &lt;div&gt;{{ $task-&gt;name }}&lt;/div&gt;
+    &lt;/td&gt;
+
+    &lt;!-- 删除按钮 --&gt;
+    &lt;td&gt;
+        &lt;form action="/task/{{ $task-&gt;id }}" method="POST"&gt;
+            {{ csrf_field() }}
+            {{ method_field('DELETE') }}
+
+            &lt;button&gt;删除任务&lt;/button&gt;
+        &lt;/form&gt;
+    &lt;/td&gt;
+&lt;/tr&gt;</code></pre>
+<p><a name="a-note-on-method-spoofing"></a></p>
+<h4>表单方法伪造</h4>
+<p>注意，删除按钮的表单 <code>method</code> 被列为 <code>POST</code>，即使我们响应的请求使用了 <code>Route::delete</code> 路由。HTML 表单只允许 <code>GET</code> 及 <code>POST</code> HTTP 动词，所以我们需要有个方式在表单假冒一个 <code>DELETE</code> 请求。</p>
+<p>我们可以在表单中通过 <code>method_field('DELETE')</code> 函数输出的结果假冒一个 <code>DELETE</code> 请求。此函数会生成一个隐藏的表单输入，Laravel 会辨识并覆盖掉实际使用的 HTTP 请求方法。生成的字段看起来如下：</p>
+<pre><code>&lt;input type="hidden" name="_method" value="DELETE"&gt;</code></pre>
+<p><a name="route-model-binding"></a></p>
+<h3>路由模型绑定</h3>
+<p>现在，我们大致上已经准备好定义我们 <code>TaskController</code> 的 <code>destroy</code> 方法。但是首先，让我们重新检查我们为它声明的路由：</p>
+<pre><code>Route::delete('/task/{task}', 'TaskController@destroy');</code></pre>
+<p>无需添加任何额外的代码，Laravel 便会将指定的任务 ID 注入至 <code>TaskController@destroy</code> 方法中，如下：</p>
+<pre><code>/**
+ * Destroy the given task.
+ *
+ * @param  Request  $request
+ * @param  string  $taskId
+ * @return Response
+ */
+public function destroy(Request $request, $taskId)
+{
+    //
+}</code></pre>
+<p>但是，我们要在这个方法中做的第一件事，就是通过指定的 ID 从数据库中获取 <code>Task</code> 实例。所以，如果 Laravel 可以先注入与 ID 符合的 <code>Task</code> 实例，那岂不是很棒？让我们来做到这一点！</p>
+<p>在你的 <code>app/Providers/RouteServiceProvider.php</code> 文件的 <code>boot</code> 方法中，增加下方这行代码：</p>
+<pre><code>$router-&gt;model('task', 'App\Task');</code></pre>
+<p>这一小行的代码会告知 Laravel，若在路由声明中看见 <code>{task}</code>，就会获取与指定 ID 对应的 <code>Task</code> 模型。现在我们可以定义我们的 destroy 方法，如下：</p>
+<pre><code>/**
+ * 卸除指定的任务。
+ *
+ * @param  Request  $request
+ * @param  Task  $task
+ * @return Response
+ */
+public function destroy(Request $request, Task $task)
+{
+    //
+}</code></pre>
+<p><a name="authorization"></a></p>
+<h3>认证</h3>
+<p>现在，我们有一个注入至 <code>destroy</code> 方法的 <code>Task</code> 实例；然而，我们不能保证通过认证的用户实际上「拥有」指定的任务。举个例子，一个恶意的请求可能通过传递一个随机任务 ID 至 <code>/tasks/{task}</code> URL，企图尝试删除其他用户的任务。所以，我们需要使用 Laravel 的授权功能，以确保只有已认证的用户才能注入路由的 <code>Task</code> 实例。</p>
+<h4>创建一个授权策略</h4>
+<p>Laravel 使用了「授权策略」将授权逻辑组织至简单，小型的类。一般来说，每个授权策略会对应至一个模型。所以，让我们使用 Artisan 命令行接口创建一个 <code>TaskPolicy</code>，生成的文件会被放置于 <code>app/Policies/TaskPolicy.php</code>：</p>
+<pre><code>php artisan make:policy TaskPolicy</code></pre>
+<p>接着，让我们给授权策略增加一个 <code>destroy</code> 方法。此方法会获取一个 <code>User</code> 实例及一个 <code>Task</code> 实例。此方法会简单的检查当用户的 ID 是否是任务的 <code>user_id</code>，也就是说是不是作者。实际上，所有的授权方法都必须返回 <code>true</code> 或 <code>false</code>：</p>
+<pre><code>&lt;?php
+
+namespace App\Policies;
+
+use App\User;
+use App\Task;
+use Illuminate\Auth\Access\HandlesAuthorization;
+
+class TaskPolicy
+{
+    use HandlesAuthorization;
+
+    /**
+     * 判断指定用户是否可以删除指定的任务。
+     *
+     * @param  User  $user
+     * @param  Task  $task
+     * @return bool
+     */
+    public function destroy(User $user, Task $task)
+    {
+        return $user-&gt;id === $task-&gt;user_id;
+    }
+}</code></pre>
+<p>最后，我们需要将 <code>Task</code> 模型与 <code>TaskPolicy</code> 进行连接。可以通过在 <code>app/Providers/AuthServiceProvider.php</code> 文件增加一行 <code>$policies</code> 属性做到这件事。这会告知 Laravel，当我们尝试授权 <code>Task</code> 实例的行为时该用哪个授权策略：</p>
+<pre><code>/**
+ * 应用程序的授权策略对应。
+ *
+ * @var array
+ */
+protected $policies = [
+    Task::class =&gt; TaskPolicy::class,
+];</code></pre>
+<h4>授权行为</h4>
+<p>现在我们的授权策略已经编写完毕，让我们在 <code>destroy</code> 方法中使用它。Laravel 所有的控制器都可以调用一个 <code>authorize</code> 方法，它由 <code>AuthorizesRequest</code> trait 所提供：</p>
+<pre><code>/**
+ * 卸除指定的任务。
+ *
+ * @param  Request  $request
+ * @param  Task  $task
+ * @return Response
+ */
+public function destroy(Request $request, Task $task)
+{
+    $this-&gt;authorize('destroy', $task);
+
+    // 删除该任务...
+}</code></pre>
+<p>让我们花点时间看看此方法的调用。传递至 <code>authorize</code> 的第一个参数是我们希望调用的授权策略方法名称。第二个参数是我们目前有关的模型实例。切记，我们已经告诉 Laravel 我们的 <code>Task</code> 模型会对应至我们的 <code>TaskPolicy</code>，所以框架会知道该触发哪个授权策略的 <code>destroy</code> 方法。当前用户会被自动发送至授权方法中，所以我们不必在此手动传递它。</p>
+<p>如果该行为被授权了，我们的代码就会继续正常运行。但是，如果该行为不被授权（意指授权策略的 <code>destroy</code> 方法返回 <code>false</code>），就会自动被抛出一个 403 异常并将错误页面显示给用户。</p>
+<blockquote>
+<p><strong>注意：</strong>Laravel 提供的授权服务还有很多种其它的方式可供交互。请务必浏览完整的 <a href="authorization.html">授权文档</a>。</p>
+</blockquote>
+<p><a name="deleting-the-task"></a></p>
+<h3>删除该任务</h3>
+<p>最后，让我们完成增加逻辑至我们的 <code>destroy</code> 方法来实际删除指定的任务。我们可以使用 Eloquent 的 <code>delete</code> 方法从数据库中删除指定的模型实例。一旦记录被删除，我们将会把用户重定向回 <code>tasks</code> URL：</p>
+<pre><code>/**
+ * 删除指定的任务。
+ *
+ * @param  Request  $request
+ * @param  Task  $task
+ * @return Response
+ */
+public function destroy(Request $request, Task $task)
+{
+    $this-&gt;authorize('destroy', $task);
+
+    $task-&gt;delete();
+
+    return redirect('/tasks');
+}</code></pre>
+<hr />
+<blockquote>
+<p>{note} 欢迎任何形式的转载，但请务必注明出处，尊重他人劳动共创开源社区。</p>
+<p>转载请注明：本文档由 Laravel China 社区 [laravel-china.org] 组织翻译。</p>
+<p>文档永久地址： <a href="../../index.html">http://d.laravel-china.org</a></p>
+</blockquote>
+		</div>
+
+		<div class="main-footer" style="border-top:1px dashed rgba(0, 0, 0, 0.1);padding-top: 30px;margin-top:30px;margin-bottom: 20px;">
+			<div class="prev-next-wrap clearfix">
+
+									<a class="btn btn-primary pull-left btn-inverted" href="quickstart.html"><i class="fa fa-arrow-left"></i> 初级任务清单</a>
+				
+			    &nbsp;
+								    <a class="btn btn-primary pull-right btn-inverted" href="lifecycle.html">请求的生命周期 <i class="fa fa-arrow-right"></i></a>
+							</div>
+		</div>
+
+	</article>
+</div>
+
+	<footer class="main">
+		<ul>
+			<li class="nav-docs"><a href="../5.4.html">文档</a></li>
+<li ><a href="https://laravel-china.org/news" class="no-pjax">Laravel 资讯</a></li>
+<li class="dropdown"><a href="https://laravel-china.org/">Laravel China 社区</a></li>
+<li class="nav-forge"><a href="https://laravel-china.org/categories/1">酷工作</a></li>
+<li class="nav-docs"><a href="http://lumen.laravel-china.org">Lumen</a></li>
+<li class="nav-forge"><a href="https://cs.laravel-china.org/">速查表</a></li>
+<li class="nav-forge"><a href="https://fsdhub.com/books/laravel-essential-training-5.5">《Laravel 入门教程》</a></li>
+		</ul>
+		<p>Laravel is a trademark of Taylor Otwell. Copyright &copy; Taylor Otwell.</p>
+            <div style="margin-top: 32px;">
+                <a href="https://www.upyun.com/" title="Composer 镜像赞助商">
+                    <img src="https://dn-phphub.qbox.me/uploads/banners/XPtLlZmIN1cQbLuDFEON.png" style="width: 200px;">
+                </a>
+            </div>
+            <p class="less-significant">
+            <a href="http://jackmcdade.com">
+                Designed by<br>
+                <svg version="1.1"
+	 xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:a="http://ns.adobe.com/AdobeSVGViewerExtensions/3.0/"
+	 x="0px" y="0px" width="128.2px" height="28px" viewBox="0 0 128.2 28" enable-background="new 0 0 128.2 28" xml:space="preserve"
+	>
+<defs>
+</defs>
+<g>
+	<path fill="#c3c3c3" d="M14.2,0.4c0,0.2,0,0.5,0,0.7c0,0.2,0,0.5,0,0.7l-1.4-0.3C12.9,3,13,4.5,13.1,6c0.1,1.5,0,3-0.1,4.5
+		c0,0.4-0.1,0.8-0.1,1.2c-0.1,0.4-0.1,0.8-0.3,1.2c-0.1,0.4-0.3,0.7-0.5,1.1c-0.2,0.3-0.5,0.6-0.9,0.9c-0.4,0.2-0.9,0.4-1.5,0.6
+		c-0.6,0.2-1.1,0.3-1.6,0.3c-0.6,0-1.2-0.1-1.6-0.3c-0.5-0.2-0.9-0.6-1.1-1c-0.3-0.5-0.5-1-0.6-1.6c-0.1-0.6-0.1-1.3,0-2.1
+		c0-0.2,0.1-0.5,0.2-0.7C4.9,9.9,5,9.7,5.1,9.5c0.1-0.2,0.2-0.4,0.3-0.6l1.1,0.4C6.7,9.3,7,9.4,7.3,9.5c0.3,0.1,0.5,0.1,0.6,0.2
+		c0,0.2,0,0.4-0.1,0.5c-0.1,0.2-0.1,0.3-0.2,0.4c-0.1,0.1-0.2,0.3-0.2,0.4c-0.1,0.2-0.1,0.3-0.1,0.5l-1.3-0.7
+		c-0.1,0.3-0.2,0.7-0.2,1.1c0,0.4,0.1,0.8,0.2,1.2c0.2,0.4,0.4,0.7,0.6,1c0.3,0.3,0.6,0.4,1,0.3c0.6,0,1.1-0.3,1.4-0.6
+		c0.3-0.4,0.5-0.9,0.7-1.7c0.1-0.7,0.2-1.6,0.2-2.8c0-1.1,0-2.4,0-3.9c0-0.6-0.1-1.3-0.1-2C9.7,2.8,9.6,2.1,9.5,1.4
+		c-0.2,0-0.5,0-0.8,0c-0.3,0-0.6,0-0.8,0c-0.8,0-1.5,0-2.2,0c-0.7,0-1.5,0-2.2,0.2c-0.3,0.1-0.6,0.2-1,0.4C2.2,2.1,1.9,2.4,1.6,2.6
+		C1.4,2.9,1.2,3.2,1.1,3.6C1,3.9,1,4.3,1.1,4.6c0.1,0.5,0.3,0.8,0.4,0.9V5.4c0-0.4,0.1-0.8,0.4-1c0.3-0.2,0.6-0.3,0.9-0.3
+		c0.3,0,0.6,0.1,0.9,0.3C4,4.6,4.1,5,4.1,5.4c0,0.4-0.1,0.8-0.4,1c-0.3,0.2-0.6,0.3-1,0.3H2.7C1.9,6.7,1.3,6.5,0.9,6
+		C0.5,5.6,0.2,5.1,0.1,4.5C0,4,0,3.4,0.2,2.7c0.2-0.6,0.5-1.1,1-1.5c0.4-0.3,0.8-0.5,1.2-0.7c0.4-0.1,0.9-0.2,1.4-0.3
+		c0.5-0.1,0.9-0.1,1.4-0.1c0.5,0,0.9,0,1.4,0h1.5c0.6,0,1.1,0,1.6,0.1c0.5,0,1,0.1,1.5,0.1c0.5,0,1,0.1,1.5,0.1
+		C13.1,0.5,13.6,0.5,14.2,0.4z"/>
+	<path fill="#c3c3c3" d="M25.2,14.3c0,0.2,0.1,0.4,0.1,0.6c0,0.2,0.1,0.4,0.1,0.7c-1-0.1-2-0.2-3-0.1c-1.1,0.1-2.1,0.2-3,0.4
+		c0-0.2-0.1-0.4-0.1-0.5c0-0.2-0.1-0.4-0.1-0.5c0.2,0,0.5-0.1,0.7-0.1c0.2,0,0.4-0.1,0.6-0.1c-0.1-1.5-0.3-3.1-0.5-4.6
+		c-0.5,0.1-0.9,0.1-1.4,0.2c-0.5,0.1-0.9,0.1-1.4,0.2c-0.2,0.7-0.3,1.3-0.5,2c-0.2,0.7-0.3,1.3-0.5,2c0.2,0,0.4,0,0.6,0
+		c0.1,0,0.3,0,0.4,0.1c0,0.2,0,0.3,0,0.5c0,0.1,0,0.2,0,0.4c0,0.1,0,0.2-0.1,0.3H14v-1.2h1c0.2-0.5,0.3-1,0.4-1.5
+		c0.1-0.5,0.3-1,0.4-1.5c0.2-0.6,0.3-1.2,0.5-1.7c0.2-0.6,0.3-1.2,0.5-1.7c0.2-1.1,0.4-2.1,0.6-3.2c0.2-1.1,0.3-2.1,0.4-3.2
+		c-0.2,0-0.5,0-0.7,0c-0.2,0-0.4,0-0.7,0c0-0.2,0.1-0.4,0.1-0.6c0-0.2,0-0.4,0.1-0.6c0.9,0,1.9,0,2.9,0c1,0,2,0,2.9,0l0.2,1.2
+		c-0.2,0-0.3,0-0.5,0c-0.2,0-0.3,0-0.5,0c0.3,2.1,0.7,4.3,1,6.5c0.3,2.2,0.7,4.4,1,6.5H25.2z M17.5,9c0.4-0.1,0.7-0.1,1.1-0.2
+		c0.4-0.1,0.8-0.1,1.2-0.2c-0.2-1-0.3-2-0.5-2.9c-0.2-1-0.4-1.9-0.6-2.9c-0.2,1-0.4,2.1-0.5,3.1C17.9,6.9,17.7,8,17.5,9z"/>
+	<path fill="#c3c3c3" d="M36.7,10.4c-0.1,0-0.2,0-0.3,0c-0.1,0-0.2,0-0.3,0c0,0.6,0,1.2-0.2,1.9c-0.2,0.6-0.5,1.2-1,1.6
+		c-0.5,0.5-1,0.9-1.6,1.1c-0.6,0.3-1.3,0.4-2,0.5c-0.6,0.1-1.1,0.1-1.8,0c-0.6-0.1-1.1-0.4-1.6-0.7c-0.2-0.2-0.5-0.4-0.8-0.7
+		c-0.3-0.3-0.5-0.5-0.6-0.8c-0.3-0.5-0.5-1-0.6-1.5c-0.2-0.5-0.3-0.9-0.4-1.4c-0.1-0.5-0.2-1-0.2-1.5c0-0.5,0-1,0.1-1.6
+		c0.2-1,0.4-2,0.8-2.9c0.4-0.9,0.8-1.7,1.4-2.3c0.5-0.7,1.2-1.2,1.9-1.6C30.2,0.2,30.9,0,31.7,0c0.3,0,0.5,0,0.8,0.1
+		c0.3,0.1,0.5,0.2,0.7,0.4c0.3,0.3,0.7,0.7,1,1.2c0.3,0.5,0.6,1.2,0.7,1.9c0.1,0,0.2,0,0.3,0c0.1,0,0.2,0,0.3,0c0,0.1,0,0.2,0,0.3
+		c0,0.1,0,0.2,0,0.3L33,4.6c-0.3,0.1-0.5,0.1-0.6,0c-0.1,0-0.2-0.1-0.2-0.2c-0.1-0.1-0.1-0.2,0-0.3c0.1,0,0.2,0,0.2,0
+		c0.1,0,0.1,0,0.2,0c0.2-0.2,0.3-0.3,0.3-0.6c0-0.2,0-0.5,0-0.7c0-0.5-0.2-0.9-0.5-1.3c-0.2-0.2-0.3-0.3-0.4-0.4
+		C31.8,1,31.6,1,31.4,1.1c-0.2,0-0.4,0.2-0.6,0.4c-0.2,0.2-0.4,0.5-0.5,0.9C30,2.6,29.9,3,29.8,3.3c-0.1,0.3-0.2,0.5-0.2,0.7
+		c-0.6,2.6-0.7,5.3-0.2,8c0.1,0.3,0.2,0.7,0.3,1s0.3,0.6,0.5,0.9c0.2,0.3,0.5,0.5,0.8,0.7c0.3,0.2,0.6,0.2,1,0.1
+		c0.6-0.1,1-0.4,1.4-1c0.3-0.5,0.6-1.1,0.7-1.8c0.1-0.3,0.1-0.6,0.1-0.9v-0.5c-0.2,0-0.4,0-0.6-0.1c-0.1-0.1-0.2-0.2-0.2-0.3
+		c0-0.1,0-0.2,0.1-0.3c0.6,0,1.2,0,1.7,0c0.6,0,1.2,0,1.7,0c0,0.1,0,0.2-0.1,0.3C36.7,10.2,36.7,10.3,36.7,10.4z"/>
+	<path fill="#c3c3c3" d="M48,14.2c0.1,0.2,0.3,0.3,0.5,0.4c0.2,0.1,0.5,0.1,0.7,0c0.1,0.1,0.1,0.2,0.1,0.4c0,0.2-0.1,0.3-0.2,0.4
+		c-0.1,0.1-0.2,0.2-0.4,0.2c-0.2,0-0.3,0-0.4,0c-0.3,0-0.7,0-1,0c-0.3,0-0.7,0-1-0.1c-0.3-0.1-0.7-0.2-1-0.4
+		c-0.3-0.2-0.5-0.4-0.7-0.7c-0.2-0.3-0.3-0.6-0.3-1c0-0.3,0-0.7,0-1.1V9.9c0-0.1,0-0.3,0-0.4c0-0.2-0.1-0.3-0.2-0.5
+		c-0.1-0.2-0.3-0.3-0.4-0.4c-0.2-0.1-0.4-0.1-0.7-0.1c-0.1,0-0.2,0-0.5,0.1c-0.2,0.3-0.3,0.5-0.5,0.8c-0.2,0.3-0.3,0.5-0.5,0.7
+		c0,0.8,0,1.5-0.1,2.2c0,0.7-0.1,1.5-0.1,2.1h1.4v1.1c-0.5,0-0.9,0.1-1.3,0c-0.4,0-0.8,0-1.2-0.1c-0.4,0-0.8-0.1-1.2-0.1
+		c-0.4,0-0.8,0-1.3,0c-0.1,0-0.3,0-0.4,0c-0.1,0-0.2,0-0.3-0.1c-0.1,0-0.1-0.1-0.1-0.2c0-0.1-0.1-0.3-0.1-0.4c0-0.1,0-0.3,0-0.4
+		c0-0.1,0.1-0.2,0.1-0.2c0.2,0.1,0.4,0.2,0.6,0.1s0.4-0.2,0.5-0.4c0-0.1,0.1-0.3,0.1-0.7c0-0.4,0-0.9,0.1-1.6c0-0.6,0.1-1.3,0.1-2.1
+		c0-0.8,0-1.6,0.1-2.4c0-0.8,0-1.5,0.1-2.3c0-0.7,0.1-1.3,0.1-1.8c0-0.2,0-0.5,0-0.7c0-0.2-0.1-0.4-0.2-0.6
+		c-0.1-0.2-0.3-0.3-0.5-0.4c-0.2-0.1-0.4,0-0.6,0.1c0-0.2-0.1-0.5-0.1-0.7c0-0.2,0-0.4-0.1-0.7c1,0,2,0.1,3,0.1c0.9,0,1.9,0.1,3,0.1
+		c0,0.1,0,0.2,0,0.3c0,0.1,0,0.3,0.1,0.4c0,0.1,0,0.3,0,0.4c0,0.1,0,0.2-0.1,0.2c-0.1,0.1-0.2,0.1-0.3,0.1c-0.1,0-0.2,0-0.4-0.1
+		c-0.1-0.1-0.3-0.1-0.4-0.2c-0.1-0.1-0.3-0.1-0.3-0.1c-0.1,0.9-0.1,1.9-0.1,2.9c0,1-0.1,2-0.1,3.1c0.7-1.2,1.4-2.5,2-3.8
+		c0.2-0.3,0.3-0.6,0.4-0.9c0.1-0.3,0.3-0.6,0.5-0.9c0.2-0.3,0.4-0.5,0.7-0.7C45.4,1,45.7,0.9,46,0.8c0.3-0.1,0.7-0.1,1,0
+		c0.3,0.1,0.6,0.2,0.9,0.5c0.2,0.3,0.4,0.6,0.4,1c0,0.4,0.1,0.8,0,1.1c0,0.2,0,0.3,0,0.5c0,0.2-0.1,0.3-0.2,0.4
+		c-0.1,0.2-0.2,0.3-0.4,0.4c-0.2,0.1-0.4,0.1-0.5,0.2c-0.1,0-0.3,0.1-0.4,0.1c-0.1,0-0.3,0-0.4,0C46.2,4.7,46,4.6,46,4.4
+		c-0.1-0.2-0.1-0.4,0-0.5c0.1-0.2,0.2-0.3,0.3-0.3c0.1,0,0.2-0.1,0.4-0.1c0.2-0.1,0.3-0.2,0.3-0.3c0.1-0.2,0.1-0.3,0.1-0.5
+		C47.1,2.4,47,2.2,47,2c-0.1-0.2-0.2-0.3-0.3-0.3c-0.2,0-0.3,0-0.5,0.1C46,1.9,45.9,2,45.7,2.2c-0.2,0.2-0.3,0.4-0.4,0.6
+		C45.2,3,45,3.3,44.9,3.5c-0.1,0.3-0.3,0.6-0.4,0.8c-0.2,0.2-0.3,0.5-0.4,0.8c-0.4,0.9-0.8,1.7-1.2,2.5c0.3,0,0.6-0.1,1,0
+		c0.4,0,0.7,0,1,0c0.3,0,0.7,0.1,1,0.2c0.3,0.1,0.6,0.3,0.8,0.6c0.3,0.3,0.4,0.6,0.5,1c0.1,0.4,0.1,0.8,0.2,1.1l0.2,2.1
+		c0,0.2,0.1,0.5,0.1,0.7C47.7,13.7,47.8,14,48,14.2z"/>
+	<path fill="#c3c3c3" d="M71.7,13.9c0.2,0.2,0.4,0.4,0.7,0.5c0.3,0.1,0.5,0,0.8-0.1c0,0.2,0.1,0.3,0.1,0.6c0.1,0.2,0.1,0.4,0.1,0.6
+		c-0.3,0-0.7,0-1.1,0s-0.8,0-1.3,0.1c-0.4,0-0.9,0-1.3,0c-0.4,0-0.8,0-1,0c0-0.1,0-0.1,0-0.2c0-0.1,0.1-0.2,0.2-0.3
+		c0.1-0.1,0.2-0.2,0.4-0.3c0.2-0.1,0.3-0.1,0.6-0.1c0.1,0,0.1-0.2,0.1-0.7c0-0.4,0-1,0-1.6c0-0.6,0-1.2-0.1-1.9s0-1.1,0-1.5
+		c0-1,0-1.9,0-2.6c0-0.7,0.1-1.5,0.1-2.2c-0.6,1.3-1.1,2.7-1.6,4.1c-0.5,1.5-1,3-1.5,4.4c0,0,0.1,0.1,0.1,0.2c-0.2,0-0.4,0-0.7,0.1
+		c-0.3,0.1-0.5,0.1-0.7,0.1c-0.5-1.9-1.1-3.7-1.6-5.5c-0.5-1.8-1.1-3.6-1.6-5.5c-0.1,1-0.1,2-0.1,3c0,1.1-0.1,2.1-0.1,3.2
+		c0,1.1,0,2.1-0.1,3.2c0,1-0.1,2-0.1,3h1.4v1.1c-0.5,0-0.9,0.1-1.3,0c-0.4,0-0.8,0-1.2-0.1c-0.4,0-0.8-0.1-1.2-0.1
+		c-0.4,0-0.8,0-1.3,0c-0.1,0-0.3,0-0.4,0c-0.1,0-0.2,0-0.3-0.1c-0.1,0-0.1-0.1-0.1-0.2c0-0.1-0.1-0.3-0.1-0.4c0-0.1,0-0.3,0-0.4
+		c0-0.1,0.1-0.2,0.1-0.2c0.2,0.1,0.4,0.2,0.6,0.1s0.4-0.2,0.5-0.4c0-0.1,0.1-0.3,0.1-0.7c0-0.4,0-0.9,0.1-1.6c0-0.6,0.1-1.3,0.1-2.1
+		C59,8.8,59,8,59,7.2c0-0.8,0-1.5,0.1-2.3c0-0.7,0.1-1.3,0.1-1.8c0-0.2,0-0.5,0-0.7c0-0.2-0.1-0.4-0.2-0.6c-0.1-0.2-0.3-0.3-0.5-0.4
+		c-0.2-0.1-0.4,0-0.6,0.1c0-0.2-0.1-0.5-0.1-0.7c0-0.2,0-0.4-0.1-0.7c1,0,2,0.1,3,0.1c0.9,0,1.9,0.1,3,0.1c0,0.3-0.1,0.5-0.4,0.7
+		c0.3,1.3,0.6,2.6,1,3.9c0.4,1.3,0.8,2.6,1.2,3.9c0.2-0.6,0.4-1.3,0.6-1.9c0.2-0.6,0.4-1.2,0.6-1.8C67,4.6,67.2,4,67.5,3.4
+		c0.2-0.6,0.4-1.3,0.6-2c-0.1,0-0.3,0-0.4-0.1c-0.1,0-0.2,0-0.4-0.1c-0.1,0-0.1-0.1-0.1-0.3c0-0.1,0.1-0.2,0.1-0.3
+		c0.1-0.1,0.2-0.1,0.3-0.1c0.1,0,0.2,0,0.3,0c0.4,0,0.7,0,1,0s0.6,0,0.9,0c0.3,0,0.6,0,0.9,0c0.3,0,0.6,0,1,0c0.1,0,0.3,0,0.4,0
+		c0.1,0,0.3,0.1,0.4,0.2c0.1,0.1,0.2,0.2,0.2,0.4c0,0.2,0,0.3-0.2,0.3c-0.1-0.1-0.2-0.1-0.3-0.1c-0.1,0-0.2,0.1-0.3,0.1
+		c-0.2,0.4-0.3,0.8-0.4,1.3c-0.1,0.5-0.1,0.9-0.1,1.4c-0.2,2.8-0.2,5.6,0,8.4c0,0.3,0,0.5,0.1,0.7C71.4,13.5,71.5,13.7,71.7,13.9z"
+		/>
+	<path fill="#c3c3c3" d="M81.7,12c-0.1,0-0.1,0-0.2,0c-0.1,0-0.1,0-0.2,0c0,0.4,0,0.9-0.2,1.3c-0.1,0.4-0.4,0.8-0.7,1.1
+		c-0.3,0.3-0.7,0.6-1.1,0.8c-0.4,0.2-0.9,0.3-1.3,0.4c-0.4,0.1-0.8,0-1.2,0c-0.4-0.1-0.8-0.2-1.1-0.5c-0.2-0.1-0.3-0.3-0.5-0.5
+		c-0.2-0.2-0.3-0.4-0.4-0.6c-0.2-0.4-0.3-0.7-0.4-1c-0.1-0.3-0.2-0.6-0.3-1C74,11.7,74,11.4,74,11c0-0.3,0-0.7,0.1-1.1
+		c0.1-0.7,0.3-1.4,0.5-2c0.3-0.6,0.6-1.1,0.9-1.6s0.8-0.8,1.3-1.1c0.5-0.3,1-0.4,1.5-0.4c0.2,0,0.4,0,0.6,0.1
+		c0.2,0.1,0.3,0.1,0.5,0.3C79.6,5.4,79.8,5.6,80,6c0.2,0.4,0.4,0.8,0.5,1.3c0.1,0,0.1,0,0.2,0c0.1,0,0.1,0,0.2,0c0,0.1,0,0.1,0,0.2
+		c0,0.1,0,0.1,0,0.2L79.2,8c-0.2,0.1-0.3,0.1-0.4,0c-0.1,0-0.1-0.1-0.2-0.2c0-0.1,0-0.1,0-0.2c0.1,0,0.1,0,0.2,0c0,0,0.1,0,0.2,0
+		c0.1-0.1,0.2-0.2,0.2-0.4c0-0.2,0-0.3,0-0.5c0-0.3-0.1-0.6-0.3-0.9c-0.1-0.1-0.2-0.2-0.3-0.3c-0.1-0.1-0.2-0.1-0.4,0
+		c-0.1,0-0.3,0.1-0.4,0.3c-0.1,0.2-0.3,0.4-0.4,0.6c-0.1,0.2-0.2,0.4-0.3,0.6c-0.1,0.2-0.1,0.4-0.1,0.5c-0.4,1.8-0.5,3.6-0.1,5.5
+		c0.1,0.2,0.1,0.4,0.2,0.7c0.1,0.2,0.2,0.4,0.3,0.6c0.1,0.2,0.3,0.3,0.6,0.5c0.2,0.1,0.4,0.1,0.7,0.1c0.4-0.1,0.7-0.3,1-0.7
+		c0.2-0.4,0.4-0.8,0.5-1.2c0-0.2,0.1-0.4,0.1-0.6v-0.3c-0.2,0-0.3,0-0.4,0c-0.1,0-0.1-0.1-0.1-0.2c0-0.1,0-0.2,0.1-0.2
+		c0.4,0,0.8,0,1.2,0c0.4,0,0.8,0,1.2,0c0,0.1,0,0.1,0,0.2C81.8,11.8,81.8,11.9,81.7,12z"/>
+	<path fill="#c3c3c3" d="M83.5,14.2c0.2-4.3,0.3-8.5,0.2-12.8c-0.3,0-0.6,0-0.9,0c-0.3,0-0.6,0-0.9,0c0-0.2,0-0.3,0-0.5s0-0.3,0-0.5
+		c0.7,0,1.3,0,2-0.1c0.7,0,1.3,0,2-0.1c0.8-0.2,1.6-0.2,2.4-0.1c0.8,0.1,1.6,0.3,2.4,0.5c0.7,0.3,1.4,0.7,1.9,1.2
+		c0.5,0.5,0.9,1.1,1.1,1.8C94,4.9,94.1,6.1,94,7.4C94,8.6,93.8,9.8,93.7,11c0,0.4-0.1,0.8-0.2,1.2c-0.1,0.4-0.3,0.8-0.5,1.1
+		c-0.3,0.5-0.8,1-1.3,1.3c-0.5,0.3-1.1,0.5-1.7,0.6c-0.5,0.1-0.9,0.2-1.4,0.1c-0.5,0-0.9,0-1.4-0.1v0c-0.2,0-0.3,0-0.5,0
+		s-0.4,0-0.5,0l-0.1,0c0,0,0,0,0,0c-0.6,0-1.3,0-1.9,0c-0.6,0-1.3,0-1.9,0c-0.2-0.4-0.1-0.8,0.2-1.1c0.2-0.2,0.3-0.2,0.5-0.3
+		C83.2,14.1,83.4,14.1,83.5,14.2z M89.4,1.9c-0.4-0.3-0.8-0.5-1.3-0.6c-0.5-0.1-1-0.1-1.5-0.1c-0.3,4.5-0.2,9.1,0.4,13.6
+		c0.2,0,0.4,0,0.5-0.1c0.2,0,0.4-0.1,0.6-0.1c0.3-0.1,0.6-0.2,0.9-0.4c0.3-0.2,0.6-0.4,0.8-0.7c0.2-0.3,0.4-0.6,0.5-1
+		s0.2-0.7,0.2-1.1c0.4-2.1,0.4-4.2,0.2-6.3c-0.1-0.6-0.2-1.2-0.4-1.9C90.3,2.8,89.9,2.3,89.4,1.9z"/>
+	<path fill="#c3c3c3" d="M102.4,9.7c-0.6-0.1-1.3-0.1-2,0c-0.7,0.1-1.4,0.4-2,0.8l-0.2-1.4L99.1,9c0-0.4-0.1-0.7-0.1-1
+		c0-0.2-0.1-0.5-0.1-0.9c-0.3,0-0.6,0.1-0.9,0.1c-0.3,0-0.6,0.1-1,0.1c-0.2,0.7-0.3,1.3-0.4,1.8c-0.1,0.5-0.2,1.1-0.4,1.6l0.2-0.1
+		l0.7,0.6c-0.4,0.2-0.8,0.6-1.2,1.1c-0.4,0.5-0.7,1-0.9,1.5l-0.9-0.5c0-0.1,0.1-0.2,0.2-0.4c0.1-0.2,0.2-0.3,0.2-0.4
+		c0.1-0.2,0.2-0.5,0.3-1c0.1-0.4,0.2-0.9,0.4-1.3c0.1-0.5,0.2-0.9,0.3-1.3c0.1-0.4,0.2-0.7,0.2-0.9c0.1-0.4,0.2-0.8,0.3-1.2
+		c0.1-0.4,0.2-0.8,0.3-1.2c0.2-0.7,0.3-1.4,0.4-2.1c0.1-0.7,0.2-1.4,0.3-2.2c-0.1,0-0.2,0-0.3,0c-0.1,0-0.2,0-0.3,0l0.1-0.8l4-0.1
+		l0.1,0.8c-0.1,0-0.2,0-0.2,0c0,0-0.1,0-0.2,0c0.1,0.7,0.2,1.4,0.3,2c0.1,0.6,0.2,1.2,0.3,1.8c0.1,0.6,0.2,1.2,0.3,1.8
+		c0.1,0.6,0.2,1.3,0.4,2c0.2,0,0.3,0,0.3,0c0,0,0.1,0,0.3,0L102.4,9.7z M98.8,6.1c-0.1-0.7-0.2-1.3-0.3-2c-0.1-0.6-0.3-1.3-0.4-2
+		c-0.1,0.6-0.2,1.3-0.4,2.1c-0.1,0.7-0.3,1.5-0.5,2.2L98.8,6.1z"/>
+	<path fill="#c3c3c3" d="M124.9,20.1c0-0.3,0.1-0.6,0.3-0.8c0.2-0.2,0.4-0.3,0.7-0.4c0.3-0.1,0.5,0,0.8,0.1c0.3,0.1,0.5,0.3,0.6,0.5
+		c0.3,0.4,0.6,0.9,0.7,1.4c0.2,0.5,0.2,1,0.2,1.5c0,0.5-0.1,1-0.3,1.5c-0.2,0.5-0.4,1-0.7,1.4c-0.6,0.9-1.4,1.6-2.4,2
+		c-1,0.5-2,0.7-3,0.7c-1.5,0-2.8-0.3-3.9-1s-2.1-1.4-3-2.4c-0.9-1-1.8-2.1-2.5-3.2c-0.8-1.2-1.5-2.3-2.3-3.5c-1.1,1.2-2.4,2.2-3.9,3
+		c-1.5,0.8-3,1.1-4.5,1c-1.1,0-2.1-0.1-3-0.5c-0.9-0.3-1.6-0.8-2.2-1.4c-0.6-0.6-0.9-1.3-1.1-2.2c-0.2-0.8-0.1-1.7,0.2-2.7
+		c0.3-0.9,0.7-1.6,1.3-2.2c0.6-0.6,1.2-1.1,2-1.5c0.7-0.4,1.5-0.6,2.4-0.7c0.8-0.1,1.7,0,2.6,0.2c0-1.7,0-3.4,0-5c0-1.7,0-3.2,0-4.6
+		c-0.3,0-0.6,0-0.9,0c-0.3,0-0.6,0-0.9,0c0-0.2,0-0.3,0-0.5s0-0.3,0-0.5l3.7-0.1c0.8-0.2,1.6-0.2,2.4-0.1c0.8,0.1,1.6,0.3,2.4,0.5
+		c0.7,0.3,1.4,0.7,1.9,1.2c0.5,0.5,0.9,1.1,1.1,1.8c0.3,1.2,0.4,2.4,0.3,3.6c-0.1,1.2-0.2,2.5-0.4,3.7c-0.1,1-0.4,2-0.8,3
+		c-0.5,1-1,2-1.7,2.9c0.3,0.4,0.6,0.8,0.8,1.2c0.3,0.4,0.5,0.8,0.8,1.2c0.5,0.8,1.1,1.6,1.7,2.5c0.6,0.8,1.3,1.6,2,2.4
+		c0.7,0.7,1.5,1.3,2.4,1.8s1.8,0.7,2.9,0.8c1.1,0,2.1-0.2,3-0.7c0.9-0.5,1.6-1.2,2.1-2.2c0.2-0.4,0.3-0.8,0.4-1.3
+		c0.1-0.5,0-0.9-0.1-1.3c-0.2,0.1-0.4,0.2-0.6,0.2c-0.2,0-0.4,0-0.6-0.1c-0.2-0.1-0.4-0.2-0.5-0.4S124.9,20.4,124.9,20.1z M102.9,21
+		c1.5-0.4,2.8-1,3.7-1.8c0.9-0.8,1.7-1.7,2.3-2.8c-0.2-0.2-0.3-0.5-0.6-0.7c-0.6-0.7-1.2-1.4-1.9-1.9c0,0.6,0.1,1.2,0.1,1.8
+		c0,0.6,0.1,1.1,0.2,1.6h0v0.1c-0.5,0-0.9,0-1.3,0c-0.4,0-0.8,0-1.2,0c-0.3,0-0.6,0-0.9,0c-0.3,0-0.6,0-0.9,0
+		c-0.1-0.2-0.1-0.4,0-0.7c0-0.2,0.1-0.3,0.3-0.5c0.3-0.3,0.7-0.4,1.1-0.2l0.1-3.5c-0.5-0.2-1-0.3-1.5-0.3c-0.5,0-1.1,0-1.6,0.1
+		c-0.6,0.1-1.1,0.3-1.6,0.6c-0.5,0.3-0.9,0.7-1.3,1.1c-0.4,0.4-0.7,0.9-0.9,1.5c-0.2,0.5-0.3,1.1-0.3,1.6c0,0.7,0.2,1.3,0.6,1.8
+		c0.4,0.5,0.9,0.9,1.4,1.4c0.2,0.2,0.5,0.3,0.8,0.5c0.3,0.1,0.7,0.2,1.1,0.3c0.4,0.1,0.8,0.1,1.2,0.1
+		C102.1,21.1,102.5,21.1,102.9,21z M109.3,1.9c-0.4-0.3-0.8-0.5-1.2-0.6c-0.5-0.1-0.9-0.1-1.4-0.1c-0.1,1.7-0.2,3.4-0.3,5.3
+		c-0.1,1.9-0.1,3.7,0,5.6c0.6,0.4,1.2,0.8,1.7,1.4c0.5,0.5,1,1.1,1.5,1.6c0.2-0.6,0.4-1.2,0.6-1.9c0.2-0.6,0.3-1.2,0.3-1.7
+		c0.2-1.1,0.2-2.1,0.3-3.1c0-1,0-2.1-0.1-3.1c-0.1-0.6-0.2-1.2-0.4-1.9C110.1,2.8,109.8,2.3,109.3,1.9z"/>
+	<path fill="#c3c3c3" d="M116.5,1.2c-0.3,0-0.6,0-0.9,0c-0.3,0-0.6,0-0.9,0V0.4c0.5,0,0.9,0,1.2-0.1s0.7,0,1.1,0c0.4,0,0.7,0,1.1,0
+		s0.8,0,1.3-0.1c0.9,0,1.8,0,2.8-0.1c0.9,0,1.8,0,2.8-0.1c0,0.6,0,1.2,0,1.8c0,0.6,0,1.2,0,1.8c-0.2,0-0.3,0-0.5,0
+		c-0.2,0-0.3,0-0.5,0c-0.1,0-0.2,0-0.3,0c-0.1,0-0.1-0.1,0-0.1c0.1-0.2,0.1-0.4,0.1-0.6s0-0.4-0.1-0.6c-0.1-0.2-0.2-0.4-0.3-0.6
+		c-0.1-0.2-0.2-0.3-0.4-0.4c-0.2-0.1-0.4-0.2-0.6-0.2c-0.2,0-0.5,0-0.7,0c-0.3,0-0.5,0.1-0.8,0.1c-0.3,0.1-0.5,0.2-0.6,0.4
+		c-0.1,0.2-0.1,0.3-0.1,0.3c0,0.1,0,0.2,0,0.3c0,0.7-0.1,1.3-0.1,2c0,0.6-0.1,1.3-0.1,1.9c0,0.2,0,0.3,0,0.5c0,0.2,0,0.3,0,0.5
+		c0.6-0.2,1.2-0.3,1.9-0.4c0.6-0.1,1.2-0.3,1.9-0.4c0,0.1,0.1,0.2,0.1,0.3c0,0.1,0,0.3,0,0.4c0,0.2-0.1,0.3-0.1,0.4
+		c-0.1,0.1-0.1,0.2-0.1,0.3c-0.1,0.1-0.2,0.1-0.4,0.2c-0.1,0-0.3,0.1-0.4,0.1c-0.5,0.1-0.9,0.2-1.4,0.3c-0.5,0.1-0.9,0.1-1.4,0.2
+		c0,1-0.1,2-0.2,2.9c-0.1,1-0.1,1.9-0.2,2.9c0.8,0.2,1.5,0.3,2,0.1c0.6-0.2,1.2-0.5,1.9-1c0.2-0.1,0.2-0.3,0.2-0.5
+		c0-0.2,0-0.5,0-0.7c0-0.2,0.1-0.5,0.2-0.6c0.1-0.2,0.3-0.3,0.7-0.4c0.4,0,0.6,0.1,0.7,0.4c0.1,0.3,0.2,0.7,0.2,1.1
+		c0,0.5,0,0.9-0.1,1.4c-0.1,0.5-0.1,0.9,0,1.2c-0.5,0-1,0-1.4,0c-0.4,0-0.8,0-1.2,0.1c-0.4,0-0.8,0-1.2,0.1c-0.4,0-0.9,0-1.3,0
+		c-0.9,0-1.7,0-2.5,0.1c-0.7,0.1-1.6,0.1-2.4,0.1c-0.2-0.2-0.2-0.4-0.2-0.7c0-0.2,0.1-0.5,0.3-0.6c0.2-0.2,0.3-0.3,0.6-0.3
+		c0.2-0.1,0.5,0,0.7,0.1c0.1-2.1,0.2-4.3,0.1-6.5C116.3,5.5,116.3,3.4,116.5,1.2z"/>
+</g>
+</svg>
+
+            </a>
+        </p>
+	</footer>
+
+	<script>
+		var algolia_app_id      = 'FU55RWGNDN';
+		var algolia_search_key  = 'c41c5de31ca55044dbb0bde815d35121';
+				var version             = '5.1';
+			</script>
+
+	<script id="search_suggestion_template" type="text/template">
+	<div class="autocomplete-wrapper">
+		{{#_highlightResult.h1}}
+		<div class="h1">
+			{{{ _highlightResult.h1.value }}}
+		</div>
+		{{/_highlightResult.h1}}
+
+		<div class="sub-section">
+			{{#_highlightResult.h2}}
+			<div class="h2">
+				<span class="hash">#</span> {{{ _highlightResult.h2.value }}}
+			</div>
+			{{/_highlightResult.h2}}
+
+			{{#_highlightResult.h3}}
+			<div class="h3">
+				> {{{ _highlightResult.h3.value }}}
+			</div>
+			{{/_highlightResult.h3}}
+
+			{{#_highlightResult.h4}}
+			<div class="h4">
+				> {{{ _highlightResult.h4.value }}}
+			</div>
+			{{/_highlightResult.h4}}
+		</div>
+
+		{{#_highlightResult.content}}
+		<div class="content">
+			{{{ _highlightResult.content.value }}}
+		</div>
+		{{/_highlightResult.content}}
+	</div>
+</script>
+
+<script id="search_empty_template" type="text/template">
+	<div class="autocomplete-wrapper empty">
+		<div class="h2">We didn't find any result for "{{query}}". Sorry!</div>
+	</div>
+</script>
+
+<script id="search_footer_template" type="text/template">
+	<div class="footer">
+		<a target="_blank" href="https://www.algolia.com/referrals/5a08e6a4/join">
+			<img width="50" src="/docs/assets/img/algolia-logo.png">
+			<div class="powered">powered by</div>
+			<div style="clear: both"></div>
+		</a>
+	</div>
+</script>
+
+	<script src="../../build/assets/js/laravel-be3cb5d7de.js"></script>
+	<script src="../../assets/js/viewport-units-buggyfill.js"></script>
+
+	<script>window.viewportUnitsBuggyfill.init();</script>
+    <script>
+          ga('create', 'UA-53903425-7', 'auto');
+          ga('send', 'pageview');
+    </script>
+</body>
+</html>

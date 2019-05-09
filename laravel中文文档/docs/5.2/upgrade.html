@@ -1,0 +1,1295 @@
+<!doctype html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<title>升级导引 | Laravel 5.2 中文文档
+</title>
+	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+	<meta name="author" content="Taylor Otwell">
+	<meta name="description" content="升级导引,从 5.1 升级到 5.2.0,升级到 5.1.11,升级到 5.1.0,升级到 5.0.16,从 4.2 升级到 5.0,从 4.1 升级到 4.2,从 4.1.x 以前版本升级到 4.1.29,从 4.1.25 以前版本升级到 4.1.26,从 4.0 升级到 4.1,从 5.1 升级到...
+">
+	<meta name="keywords" content="laravel,laravel中国,laravel中文,laravel框架中文,laravel文档,laravel框架中国,laravel中文文档">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+			<link rel="canonical" href="../5.5/upgrade.html" />
+		<!--[if lte IE 9]>
+		<script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+	<![endif]-->
+	<link rel="stylesheet" href="../../build/assets/css/laravel-4bbf92d154.css">
+	<link rel="apple-touch-icon" href="../../favicon.png.jpeg">
+    <style>
+        .list-group-item img.media-object {
+            width: 20px;
+            border-radius: 2px;
+            margin-right: 4px;
+            display: inline-block;
+        }
+    </style>
+</head>
+<body class="docs language-php">
+
+	<span class="overlay"></span>
+
+	<nav class="main">
+		<a href="../../index.html" class="brand nav-block">
+			<svg version="1.1"
+	 xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:a="http://ns.adobe.com/AdobeSVGViewerExtensions/3.0/"
+	 x="0px" y="0px" width="84.1px" height="57.6px" viewBox="0 0 84.1 57.6" enable-background="new 0 0 84.1 57.6"
+	 xml:space="preserve">
+<defs>
+</defs>
+<path fill="#FB503B" d="M83.8,26.9c-0.6-0.6-8.3-10.3-9.6-11.9c-1.4-1.6-2-1.3-2.9-1.2s-10.6,1.8-11.7,1.9c-1.1,0.2-1.8,0.6-1.1,1.6
+	c0.6,0.9,7,9.9,8.4,12l-25.5,6.1L21.2,1.5c-0.8-1.2-1-1.6-2.8-1.5C16.6,0.1,2.5,1.3,1.5,1.3c-1,0.1-2.1,0.5-1.1,2.9
+	c1,2.4,17,36.8,17.4,37.8c0.4,1,1.6,2.6,4.3,2c2.8-0.7,12.4-3.2,17.7-4.6c2.8,5,8.4,15.2,9.5,16.7c1.4,2,2.4,1.6,4.5,1
+	c1.7-0.5,26.2-9.3,27.3-9.8c1.1-0.5,1.8-0.8,1-1.9c-0.6-0.8-7-9.5-10.4-14c2.3-0.6,10.6-2.8,11.5-3.1C84.2,28,84.4,27.5,83.8,26.9z
+	 M37.5,36.4c-0.3,0.1-14.6,3.5-15.3,3.7c-0.8,0.2-0.8,0.1-0.8-0.2C21.2,39.6,4.4,4.8,4.1,4.4c-0.2-0.4-0.2-0.8,0-0.8
+	c0.2,0,13.5-1.2,13.9-1.2c0.5,0,0.4,0.1,0.6,0.4c0,0,18.7,32.3,19,32.8C38,36.1,37.8,36.3,37.5,36.4z M77.7,43.9
+	c0.2,0.4,0.5,0.6-0.3,0.8c-0.7,0.3-24.1,8.2-24.6,8.4c-0.5,0.2-0.8,0.3-1.4-0.6s-8.2-14-8.2-14L68.1,32c0.6-0.2,0.8-0.3,1.2,0.3
+	C69.7,33,77.5,43.6,77.7,43.9z M79.3,26.3c-0.6,0.1-9.7,2.4-9.7,2.4l-7.5-10.2c-0.2-0.3-0.4-0.6,0.1-0.7c0.5-0.1,9-1.6,9.4-1.7
+	c0.4-0.1,0.7-0.2,1.2,0.5c0.5,0.6,6.9,8.8,7.2,9.1C80.3,26,79.9,26.2,79.3,26.3z"/>
+</svg>
+
+			<span>Laravel</span>
+		</a>
+
+        <div class="search nav-block">
+            <svg version="1.1"
+	 xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:a="http://ns.adobe.com/AdobeSVGViewerExtensions/3.0/"
+	 x="0px" y="0px" width="16px" height="16px" viewBox="0 0 16 16" enable-background="new 0 0 16 16" xml:space="preserve">
+<defs>
+</defs>
+<g>
+	<g>
+		<path fill="#A1A1A1" d="M5.8,11.7c-1.6,0-3-0.6-4.1-1.7S0,7.4,0,5.8s0.6-3,1.7-4.1C2.8,0.6,4.3,0,5.8,0s3,0.6,4.1,1.7
+			c2.3,2.3,2.3,6,0,8.3C8.9,11.1,7.4,11.7,5.8,11.7z M5.8,1C4.5,1,3.3,1.5,2.4,2.4C1.5,3.3,1,4.5,1,5.8s0.5,2.5,1.4,3.4
+			c0.9,0.9,2.1,1.4,3.4,1.4s2.5-0.5,3.4-1.4c1.9-1.9,1.9-5,0-6.9C8.4,1.5,7.1,1,5.8,1z"/>
+	</g>
+	<g>
+		<path fill="#A1A1A1" d="M15.5,16c-0.1,0-0.3,0-0.3-0.1L9.3,10c-0.2-0.2-0.2-0.5,0-0.7s0.5-0.2,0.7,0l5.9,5.9
+			c0.2,0.2,0.2,0.5,0,0.7C15.8,16,15.6,16,15.5,16z"/>
+	</g>
+</g>
+</svg>
+
+            <input placeholder="搜索文档" type="text" v-model="search" id="search-input" v-on:blur="reset" />
+        </div>
+
+		<ul class="main-nav" v-if="! search">
+			<li class="nav-docs"><a href="../5.4.html">文档</a></li>
+<li ><a href="https://laravel-china.org/news" class="no-pjax">Laravel 资讯</a></li>
+<li class="dropdown"><a href="https://laravel-china.org/">Laravel China 社区</a></li>
+<li class="nav-forge"><a href="https://laravel-china.org/categories/1">酷工作</a></li>
+<li class="nav-docs"><a href="http://lumen.laravel-china.org">Lumen</a></li>
+<li class="nav-forge"><a href="https://cs.laravel-china.org/">速查表</a></li>
+<li class="nav-forge"><a href="https://fsdhub.com/books/laravel-essential-training-5.5">《Laravel 入门教程》</a></li>
+		</ul>
+
+        			<div class="switcher">
+	<div class="dropdown">
+		<button class="btn dropdown-toggle btn-inverted" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-expanded="true">
+			<!--<span class="faint">v</span> -->
+			5.2
+			<span class="caret"></span>
+		</button>
+		<ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu1">
+							<li role="presentation">
+					<a role="menuitem" tabindex="-1" href="../5.5/upgrade.html">5.5</a>
+				</li>
+							<li role="presentation">
+					<a role="menuitem" tabindex="-1" href="../5.4/upgrade.html">5.4</a>
+				</li>
+							<li role="presentation">
+					<a role="menuitem" tabindex="-1" href="../5.3/upgrade.html">5.3</a>
+				</li>
+							<li role="presentation">
+					<a role="menuitem" tabindex="-1" href="upgrade.html">5.2</a>
+				</li>
+							<li role="presentation">
+					<a role="menuitem" tabindex="-1" href="../5.1/upgrade.html">5.1</a>
+				</li>
+					</ul>
+	</div>
+</div>
+		
+        <div class="responsive-sidebar-nav">
+			<a href="upgrade.html#" class="toggle-slide menu-link btn">&#9776;</a>
+		</div>
+	</nav>
+
+	<nav id="slide-menu" class="slide-menu" role="navigation">
+
+	<div class="brand">
+		<a href="../../index.html">
+			<img src="../../assets/img/laravel-logo-white.png" height="50">
+		</a>
+	</div>
+
+	<ul class="slide-main-nav">
+		<li><a href="../../index.html">Home</a></li>
+		<li class="nav-docs"><a href="../5.4.html">文档</a></li>
+<li ><a href="https://laravel-china.org/news" class="no-pjax">Laravel 资讯</a></li>
+<li class="dropdown"><a href="https://laravel-china.org/">Laravel China 社区</a></li>
+<li class="nav-forge"><a href="https://laravel-china.org/categories/1">酷工作</a></li>
+<li class="nav-docs"><a href="http://lumen.laravel-china.org">Lumen</a></li>
+<li class="nav-forge"><a href="https://cs.laravel-china.org/">速查表</a></li>
+<li class="nav-forge"><a href="https://fsdhub.com/books/laravel-essential-training-5.5">《Laravel 入门教程》</a></li>
+	</ul>
+
+	<div class="slide-docs-nav">
+		<h2>Documentation</h2>
+		<ul>
+<li>
+<h2>前言</h2>
+<ul>
+<li><a href="about.html">翻译说明</a></li>
+<li><a href="releases.html">发行说明</a></li>
+<li><a href="upgrade.html">升级导引</a></li>
+<li><a href="contributions.html">贡献导引</a></li>
+<li><a href="../../api/5.2/index.html">API 文档</a></li>
+</ul>
+</li>
+<li>
+<h2>安装与配置</h2>
+<ul>
+<li><a href="installation.html">安装</a></li>
+<li><a href="configuration.html">配置</a></li>
+<li><a href="homestead.html">Homestead</a></li>
+<li><a href="valet.html">Valet</a></li>
+</ul>
+</li>
+<li>
+<h2>教程</h2>
+<ul>
+<li><a href="quickstart.html">初级任务清单</a></li>
+<li><a href="quickstart-intermediate.html">中级任务清单</a></li>
+</ul>
+</li>
+<li>
+<h2>基本功能</h2>
+<ul>
+<li><a href="routing.html">路由</a></li>
+<li><a href="middleware.html">中间件</a></li>
+<li><a href="controllers.html">控制器</a></li>
+<li><a href="requests.html">请求</a></li>
+<li><a href="responses.html">响应</a></li>
+<li><a href="views.html">视图</a></li>
+<li><a href="blade.html">Blade 模板</a></li>
+</ul>
+</li>
+<li>
+<h2>系统架构</h2>
+<ul>
+<li><a href="lifecycle.html">请求生命周期</a></li>
+<li><a href="structure.html">应用程序架构</a></li>
+<li><a href="providers.html">服务提供者</a></li>
+<li><a href="container.html">服务容器</a></li>
+<li><a href="contracts.html">Contracts</a></li>
+<li><a href="facades.html">Facades</a></li>
+</ul>
+</li>
+<li>
+<h2>系统服务</h2>
+<ul>
+<li><a href="authentication.html">用户认证</a></li>
+<li><a href="authorization.html">用户授权</a></li>
+<li><a href="artisan.html">Artisan 命令行</a></li>
+<li><a href="billing.html">交易</a></li>
+<li><a href="cache.html">缓存</a></li>
+<li><a href="collections.html">集合</a></li>
+<li><a href="elixir.html">Elixir</a></li>
+<li><a href="encryption.html">加密与解密</a></li>
+<li><a href="errors.html">错误与日志</a></li>
+<li><a href="events.html">事件</a></li>
+<li><a href="filesystem.html">文件系统与云存储</a></li>
+<li><a href="hashing.html">哈希</a></li>
+<li><a href="helpers.html">辅助函数</a></li>
+<li><a href="localization.html">本地化</a></li>
+<li><a href="mail.html">邮件</a></li>
+<li><a href="packages.html">扩展包开发</a></li>
+<li><a href="pagination.html">分页</a></li>
+<li><a href="queues.html">队列</a></li>
+<li><a href="redis.html">Redis</a></li>
+<li><a href="session.html">Session</a></li>
+<li><a href="envoy.html">Envoy</a></li>
+<li><a href="scheduling.html">任务调度</a></li>
+<li><a href="testing.html">测试</a></li>
+<li><a href="validation.html">表单验证</a></li>
+</ul>
+</li>
+<li>
+<h2>数据库</h2>
+<ul>
+<li><a href="database.html">数据库入门</a></li>
+<li><a href="queries.html">查询构造器</a></li>
+<li><a href="migrations.html">数据库迁移</a></li>
+<li><a href="seeding.html">数据填充</a></li>
+</ul>
+</li>
+<li>
+<h2>Eloquent ORM</h2>
+<ul>
+<li><a href="eloquent.html">入门</a></li>
+<li><a href="eloquent-relationships.html">模型关联</a></li>
+<li><a href="eloquent-collections.html">Eloquent 集合</a></li>
+<li><a href="eloquent-mutators.html">修改器</a></li>
+<li><a href="eloquent-serialization.html">序列化</a></li>
+</ul>
+</li>
+</ul>
+	</div>
+
+</nav>
+
+<div class="docs-wrapper container">
+
+	<section class="sidebar">
+
+            <div class="header">
+              <a type="button" class="btn btn-primary btn-inverted btn-lg btn-block turnofflight"><i class="fa fa-lightbulb-o"></i> 夜间模式 </a>
+              <br>
+              <div class="versions text-center ">
+                <a class="doc-btn btn-inverted " href="../5.5.html" title="Laravel 5.5 中文文档">C5.5</a>
+                <a class="doc-btn btn-inverted " href="../5.4.html" title="Laravel 5.4 中文文档">C5.4</a>
+                <a class="doc-btn btn-inverted " href="../5.1.html" title="Laravel 5.1 中文文档">C5.1</a>
+              </div>
+            </div>
+
+            <a href="https://laravel-china.org/topics/3383" target="_blank" rel="nofollow" title="" style="display: block;margin-bottom: 23px;">
+                <img src="https://dn-phphub.qbox.me/uploads/images/201612/10/1/k7wwMpJduq.jpg" style="width: 100%;border: 1px solid #d8d3d3;box-shadow: 0 0 30px #d4d4d4;-moz-box-shadow: 0 0 30px #ccc;-webkit-box-shadow: 0 0 30px #d4d4d4;margin-bottom: 30px;margin-top: 10px;border-radius: 4px;">
+            </a>
+
+            <small><a href="upgrade.html#" id="doc-expand" style="font-size: 9px; color: #525252;">▶</a></small>
+
+		<ul>
+<li>
+<h2>前言</h2>
+<ul>
+<li><a href="about.html">翻译说明</a></li>
+<li><a href="releases.html">发行说明</a></li>
+<li><a href="upgrade.html">升级导引</a></li>
+<li><a href="contributions.html">贡献导引</a></li>
+<li><a href="../../api/5.2/index.html">API 文档</a></li>
+</ul>
+</li>
+<li>
+<h2>安装与配置</h2>
+<ul>
+<li><a href="installation.html">安装</a></li>
+<li><a href="configuration.html">配置</a></li>
+<li><a href="homestead.html">Homestead</a></li>
+<li><a href="valet.html">Valet</a></li>
+</ul>
+</li>
+<li>
+<h2>教程</h2>
+<ul>
+<li><a href="quickstart.html">初级任务清单</a></li>
+<li><a href="quickstart-intermediate.html">中级任务清单</a></li>
+</ul>
+</li>
+<li>
+<h2>基本功能</h2>
+<ul>
+<li><a href="routing.html">路由</a></li>
+<li><a href="middleware.html">中间件</a></li>
+<li><a href="controllers.html">控制器</a></li>
+<li><a href="requests.html">请求</a></li>
+<li><a href="responses.html">响应</a></li>
+<li><a href="views.html">视图</a></li>
+<li><a href="blade.html">Blade 模板</a></li>
+</ul>
+</li>
+<li>
+<h2>系统架构</h2>
+<ul>
+<li><a href="lifecycle.html">请求生命周期</a></li>
+<li><a href="structure.html">应用程序架构</a></li>
+<li><a href="providers.html">服务提供者</a></li>
+<li><a href="container.html">服务容器</a></li>
+<li><a href="contracts.html">Contracts</a></li>
+<li><a href="facades.html">Facades</a></li>
+</ul>
+</li>
+<li>
+<h2>系统服务</h2>
+<ul>
+<li><a href="authentication.html">用户认证</a></li>
+<li><a href="authorization.html">用户授权</a></li>
+<li><a href="artisan.html">Artisan 命令行</a></li>
+<li><a href="billing.html">交易</a></li>
+<li><a href="cache.html">缓存</a></li>
+<li><a href="collections.html">集合</a></li>
+<li><a href="elixir.html">Elixir</a></li>
+<li><a href="encryption.html">加密与解密</a></li>
+<li><a href="errors.html">错误与日志</a></li>
+<li><a href="events.html">事件</a></li>
+<li><a href="filesystem.html">文件系统与云存储</a></li>
+<li><a href="hashing.html">哈希</a></li>
+<li><a href="helpers.html">辅助函数</a></li>
+<li><a href="localization.html">本地化</a></li>
+<li><a href="mail.html">邮件</a></li>
+<li><a href="packages.html">扩展包开发</a></li>
+<li><a href="pagination.html">分页</a></li>
+<li><a href="queues.html">队列</a></li>
+<li><a href="redis.html">Redis</a></li>
+<li><a href="session.html">Session</a></li>
+<li><a href="envoy.html">Envoy</a></li>
+<li><a href="scheduling.html">任务调度</a></li>
+<li><a href="testing.html">测试</a></li>
+<li><a href="validation.html">表单验证</a></li>
+</ul>
+</li>
+<li>
+<h2>数据库</h2>
+<ul>
+<li><a href="database.html">数据库入门</a></li>
+<li><a href="queries.html">查询构造器</a></li>
+<li><a href="migrations.html">数据库迁移</a></li>
+<li><a href="seeding.html">数据填充</a></li>
+</ul>
+</li>
+<li>
+<h2>Eloquent ORM</h2>
+<ul>
+<li><a href="eloquent.html">入门</a></li>
+<li><a href="eloquent-relationships.html">模型关联</a></li>
+<li><a href="eloquent-collections.html">Eloquent 集合</a></li>
+<li><a href="eloquent-mutators.html">修改器</a></li>
+<li><a href="eloquent-serialization.html">序列化</a></li>
+</ul>
+</li>
+</ul>
+
+		<hr>
+            <ul>
+              <li>社交账号</li>
+                <ul class="social-account">
+                  <li><a href="http://weibo.com/1837553744/profile?topnav=1&wvr=6&is_all=1">Summer 的微博</a></li>
+                  <li>新手 QQ 群：282196078</li>
+                </ul>
+
+            </ul>
+
+            <ul>
+              <li>
+              微信订阅号
+                <ul>
+                  <li>
+<img class="image-border popover-with-html" data-content="" src="https://dn-phphub.qbox.me/uploads/images/201708/06/1/4zgVR8dNCt.png" style="width: 148px;height: 148px;border:1px solid #ccc;padding:2px;border-radius:3px;margin-top:5px;" data-original-title="" title="">
+                  </li>
+                </ul>
+                </li>
+            </ul>
+
+            <ul>
+              <li>推荐资源
+              <ul class="list list-group resource-links">
+                    <li class="list-group-item ">
+                <a href="../../index.html" class="no-pjax" title="Laravel 中文文档">
+                    <img class="media-object inline-block " src="https://dn-phphub.qbox.me/uploads/banners/ql9XtosRhTe4v8HVC3TV.jpg">
+                    Laravel 中文文档
+                </a>
+            </li>
+                    <li class="list-group-item ">
+                <a href="https://lumen.laravel-china.org" class="no-pjax" title="Lumen 中文文档">
+                    <img class="media-object inline-block " src="https://dn-phphub.qbox.me/uploads/banners/bcMFkfsJZpetLgKFwWqY.jpg">
+                    Lumen 中文文档
+                </a>
+            </li>
+                    <li class="list-group-item ">
+                <a href="https://cs.laravel-china.org/" class="no-pjax" title="Laravel 速查表">
+                    <img class="media-object inline-block " src="https://dn-phphub.qbox.me/uploads/banners/cV55gsrH70qz6VdKr502.jpg">
+                    Laravel 速查表
+                </a>
+            </li>
+                    <li class="list-group-item ">
+                <a href="http://yousails.mikecrm.com/4Dh5uWU" class="no-pjax" title="Laravel 软件外包服务">
+                    <img class="media-object inline-block " src="https://dn-phphub.qbox.me/uploads/banners/v89tIQ6vjceA6g7JmrQB.png">
+                    Laravel 软件外包
+                </a>
+            </li>
+                    <li class="list-group-item ">
+                <a href="https://laravel-china.org/topics/3626" class="no-pjax" title="Laravel 远程工作 ">
+                    <img class="media-object inline-block " src="https://dn-phphub.qbox.me/uploads/banners/Xlq6s7wLxvX8FlTP4qZe.png">
+                    Laravel 远程工作
+                </a>
+            </li>
+                    <li class="list-group-item ">
+                <a href="https://laravel-china.github.io/php-the-right-way/" class="no-pjax" title="PHP 之道 - PHPer 必读">
+                    <img class="media-object inline-block " src="https://dn-phphub.qbox.me/uploads/banners/vA50AYuscu2RCMowq7ee.png">
+                    PHP 之道
+                </a>
+            </li>
+                    <li class="list-group-item ">
+                <a href="https://laravel-china.org/composer" class="no-pjax" title="Composer 中文全量镜像">
+                    <img class="media-object inline-block " src="https://dn-phphub.qbox.me/uploads/banners/KltcLb6leMa12dvTAxD7.png">
+                    Composer 镜像
+                </a>
+            </li>
+            </ul>
+              </li>
+            </ul>
+
+	</section>
+
+	
+
+	<article>
+
+		<div class="alert alert-warning" role="alert">
+			一小时同步一次，更多信息请查阅 <a href="https://laravel-china.org/topics/2095">文档导读</a>。
+			发现瑕疵？你也可以
+				<a href="https://github.com/laravel-china/laravel-docs/edit/5.2/upgrade.md"><i class="fa fa-pencil-square-o"></i> 改进本文</a>
+			。<a href="https://laravel-china.org/topics/4026" target="_blank"><i class="fa fa-cloud-download" aria-hidden="true"></i> 离线版本下载</a>
+		</div>
+
+		<div class="main-content">
+			<h1>升级导引</h1>
+<ul>
+<li><a href="upgrade.html#upgrade-5.2.0">从 5.1 升级到 5.2.0</a></li>
+<li><a href="upgrade.html#upgrade-5.1.11">升级到 5.1.11</a></li>
+<li><a href="upgrade.html#upgrade-5.1.0">升级到 5.1.0</a></li>
+<li><a href="upgrade.html#upgrade-5.0.16">升级到 5.0.16</a></li>
+<li><a href="upgrade.html#upgrade-5.0">从 4.2 升级到 5.0</a></li>
+<li><a href="upgrade.html#upgrade-4.2">从 4.1 升级到 4.2</a></li>
+<li><a href="upgrade.html#upgrade-4.1.29">从 4.1.x 以前版本升级到 4.1.29</a></li>
+<li><a href="upgrade.html#upgrade-4.1.26">从 4.1.25 以前版本升级到 4.1.26</a></li>
+<li><a href="upgrade.html#upgrade-4.1">从 4.0 升级到 4.1</a></li>
+</ul>
+<p><a name="upgrade-5.2.0"></a></p>
+<h2>从 5.1 升级到 5.2.0</h2>
+<h4>估计升级需耗时：少于 1 小时</h4>
+<blockquote>
+<p><strong>注：</strong> 这里我们会把所有框架中的破坏性变更罗列出来，但并不代表所有的这些变更都会危及你的应用程序。</p>
+</blockquote>
+<h3>更新依赖</h3>
+<p>在 <code>composer.json</code> 中指定 <code>laravel/framework 5.2.*</code>。</p>
+<p>增加 <code>"symfony/dom-crawler": "~3.0"</code> 和 <code>"symfony/css-selector": "~3.0"</code> 到 <code>composer.json</code> 文件的 <code>require-dev</code> 部分。</p>
+<h3>用户认证</h3>
+<h4>配置文件</h4>
+<p>你需要更新配置文件 <code>config/auth.php</code>，内容参照 <a href="https://github.com/laravel/laravel/blob/master/config/auth.php"><a href="https://github.com/laravel/laravel/blob/master/config/auth.php">https://github.com/laravel/laravel/blob/master/config/auth.php</a></a></p>
+<p>先覆盖最新的配置信息，然后把配置选项修改为你需要的值，如果你还准备使用经典的 Laravel 5.1 基于 Eloquent 的认证体系，大部分选项都应该保持不变。</p>
+<p>在新的 <code>auth.php</code> 配置文件中，要特别注意 <code>passwords.users.email</code> 配置项，由于在 Laravel 5.2 对 email 视图路径做了修改，因此要确保该视图路径与应用实际的路径相匹配，如果不匹配的话要更新该配置值。</p>
+<h4>Contracts</h4>
+<p>如果你实现了 <code>Illuminate\Contracts\Auth\Authenticatable</code>  契约但没有使用 <code>Authenticatable</code> trait 的话，那么你需要添加一个新的 <code>getAuthIdentifierName</code> 方法到该契约实现类。通常，该方法返回认证实体的主键字段名，如：<code>id</code>。</p>
+<p>除非你手动实现了此接口，否则这应该影响不到你的应用程序。</p>
+<h4>自定义驱动</h4>
+<p>如果你使用了 <code>Auth::extend</code> 自定义获取用户的方法，你现在应该使用 <code>Auth::provider</code> 来自定义用户提供者。一旦你自定义了提供者，就要在新的 <code>auth.php</code> 配置文件中的 <code>providers</code> 数组中配置该提供者。</p>
+<p>更多信息，请查看 <a href="authentication.html">完整的授权文档</a>.</p>
+<h4>重定向</h4>
+<p><code>loginPath()</code> 方法已从 <code>Illuminate\Foundation\Auth\AuthenticatesUsers</code> 中移除，所以现在没必要在你的 <code>AuthController</code> 控制器中设置 <code>$loginPath</code> 变量。负责授权的 trait 默认情况下会在发生错误时重定向会上一个请求路径。</p>
+<h3>授权</h3>
+<p><code>Illuminate\Auth\Access\UnauthorizedException</code> 被重命名为 <code>Illuminate\Auth\Access\AuthorizationException</code>。</p>
+<p>如果你之前没有手动捕获该异常，那么这一改变对之前代码没有什么影响。</p>
+<h3>集合</h3>
+<h4>Eloquent 集合</h4>
+<p>调用 Eloquent 集合实例的 <code>pluck</code>、<code>keys</code>、<code>zip</code>、<code>collapse</code>、<code>flatten</code>、<code>flip</code> 方法，现在会返回集合基类 <code>Illuminate\Support\Collection</code>。</p>
+<h4>保留键名</h4>
+<p><code>slice</code>, <code>chunk</code>, 和 <code>reverse</code> 方法现在会保留集合的键名，如果你不想这些方法保留键名，使用 <code>集合实例</code> 调用 <code>values</code> 方法即可。</p>
+<h3>Composer 类</h3>
+<p><code>Illuminate\Foundation\Composer</code> 类现在被移动到 <code>Illuminate\Support\Composer</code>，如果你没有在代码中使用该类，那么这一改变对程序没有影响。</p>
+<h3>命令和处理器</h3>
+<h4>自处理命令</h4>
+<p>在创建定时任务或者命令时不再需要实现 <code>SelfHandling</code> 契约，所有任务现在默认都是自处理的，因此你可以移除该接口。</p>
+<h4>独立的命令 &amp; 处理器</h4>
+<p>Laravel 5.2 命令总线模式现在只支持自处理命令，不再支持独立的命令和处理器。</p>
+<p>如果你想要继续使用独立的命令和处理器，可以安装提供向后兼容支持的 Laravel Collective 包：<a href="https://github.com/laravelcollective/bus"><a href="https://github.com/LaravelCollective/bus">https://github.com/LaravelCollective/bus</a></a></p>
+<h3>配置信息</h3>
+<h4><code>env</code> 环境变量</h4>
+<p>在配置文件 <code>app.php</code> 中添加 <code>env</code> 配置项，如下：</p>
+<pre><code>'env' =&gt; env('APP_ENV', 'production'),</code></pre>
+<h4>缓存和 <code>env</code> 设置项</h4>
+<p>如果你在开发过程中使用 <code>config:cache</code> 命令，<strong>必须</strong> 保证只是在配置文件中调用了 <code>env</code> 函数，而不是在应用程序的其它地方。</p>
+<p>如果你在应用程序中调用了 <code>env</code> 函数，强烈建议添加适当的配置值到配置文件，然后在该位置调用 <code>env</code>，从而允许你将 <code>env</code> 调用改为 <code>config</code> 调用。</p>
+<h4>编译文件</h4>
+<p>请把以下两行从你的 <code>files</code> 数组中移除，如果你的 <code>config/compile.php</code> 文件有出现这两行的话:</p>
+<pre><code>realpath(__DIR__.'/../app/Providers/BusServiceProvider.php'),
+realpath(__DIR__.'/../app/Providers/ConfigServiceProvider.php'),</code></pre>
+<p>不删除的话，可能会在运行 <code>php artisan optimize</code> 的时候触发 <code>service providers listed here do not exist</code> 错误。</p>
+<h3>CSRF 验证</h3>
+<p>在单元测试中不再自动进行 CSRF 验证，当然这一改变对你的应用程序代码没什么影响。</p>
+<h3>数据库</h3>
+<h4>MySQL 日期</h4>
+<p>自 MySQL 5.7 以后，默认 <code>strict</code> 模式是开启的，所以已经不再支持 <code>0000-00-00 00:00:00</code> 作为默认的日期值。所有的 <code>timestamp</code> 类型的字段在入库的时候都应该是正确的日期格式。</p>
+<p>你可以在数据库迁移中使用 <code>useCurrent</code> 方法默认使用当前时间，或者设置字段为 <code>nullable</code> 来接受 <code>null</code> 值：</p>
+<pre><code>$table-&gt;timestamp('foo')-&gt;nullable();
+
+$table-&gt;timestamp('foo')-&gt;useCurrent();
+
+$table-&gt;nullableTimestamps();</code></pre>
+<h4>MySQL JSON 字段类型</h4>
+<p>在 MySQL 驱动下，<code>json</code> 字段类型现在创建真实的 JSON 字段类型，如果你没有使用 MySQL 5.7 或者以上版本的话，将无法使用此字段。你可以使用 <code>text</code> 字段类型作为替代。</p>
+<h4>数据填充</h4>
+<p>当运行数据库填充时，默认情况下，所有的 Eloquent 数据模型现在都是 <code>unguarded</code> 的，在之前的版本中，你需要手动调用 <code>Model::unguard()</code> 。</p>
+<p>如果你还想在运行数据填充时开启 <code>guard</code> 模式的话，请在 <code>DatabaseSeeder</code> 类的最开始部分调用 <code>Model::reguard()</code> 。</p>
+<h3>Eloquent</h3>
+<h4>日期转化</h4>
+<p>当调用模型或模型集合的 <code>toArray</code> 方法时，任何添加到 <code>$casts</code> 的属性，如 <code>date</code> 或 <code>datetime</code>，现在都会被转化为字符串。这使在 <code>$dates</code> 数组中制定的日期转化规则保持一致。</p>
+<h4>全局作用域</h4>
+<p>我们重写了全局作用域的实现以便于更方便的使用，全局作用域不再需要 <code>remove</code> 方法，因此可以在所有你使用到该方法的地方将其移除。</p>
+<p>如果你曾在 Eloquent 查询构建器上调用过了 <code>getQuery</code> 方法以获取底层查询构建器实例，现在应该改为调用 <code>toBase</code> 方法。</p>
+<p>如果你因为某种原因直接调用了 <code>remove</code> 方法，需要将其改成 <code>$eloquentBuilder-&gt;withoutGlobalScope($scope)</code> 这种方式来调用。</p>
+<p>在 Eloquent 查询构建器中新增了 <code>withoutGlobalScope</code> 和 <code>withoutGlobalScopes</code> 方法，任何调用 <code>$model-&gt;removeGlobalScopes($builder)</code> 的地方现在都要改成  <code>$builder-&gt;withoutGlobalScopes()</code>。</p>
+<h4>主键</h4>
+<p>默认情况下，Eloquent 会假设你的主键是 <code>integer</code> 整数类型，并且会强制类型为 <code>integer</code> 整数类型，如果你的主键不是整数类型，请设置类属性 <code>$incrementing</code> 为 <code>false</code>：</p>
+<pre><code>/**
+ * 设定主键是否为整数类型
+ *
+ * @var bool
+ */
+public $incrementing = true;</code></pre>
+<h3>事件</h3>
+<h4>核心事件对象</h4>
+<p>Laravel 的一些核心事件现在使用事件对象取代之前的事件名称以及动态参数，下面是原来的事件名称与现在的事件对象对应关系：</p>
+<table>
+<thead>
+<tr>
+<th>Old</th>
+<th>New</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>artisan.start</code></td>
+<td><code>Illuminate\Console\Events\ArtisanStarting</code></td>
+</tr>
+<tr>
+<td><code>auth.attempting</code></td>
+<td><code>Illuminate\Auth\Events\Attempting</code></td>
+</tr>
+<tr>
+<td><code>auth.login</code></td>
+<td><code>Illuminate\Auth\Events\Login</code></td>
+</tr>
+<tr>
+<td><code>auth.logout</code></td>
+<td><code>Illuminate\Auth\Events\Logout</code></td>
+</tr>
+<tr>
+<td><code>cache.missed</code></td>
+<td><code>Illuminate\Cache\Events\CacheMissed</code></td>
+</tr>
+<tr>
+<td><code>cache.hit</code></td>
+<td><code>Illuminate\Cache\Events\CacheHit</code></td>
+</tr>
+<tr>
+<td><code>cache.write</code></td>
+<td><code>Illuminate\Cache\Events\KeyWritten</code></td>
+</tr>
+<tr>
+<td><code>cache.delete</code></td>
+<td><code>Illuminate\Cache\Events\KeyForgotten</code></td>
+</tr>
+<tr>
+<td><code>connection.{name}.beginTransaction</code></td>
+<td><code>Illuminate\Database\Events\TransactionBeginning</code></td>
+</tr>
+<tr>
+<td><code>connection.{name}.committed</code></td>
+<td><code>Illuminate\Database\Events\TransactionCommitted</code></td>
+</tr>
+<tr>
+<td><code>connection.{name}.rollingBack</code></td>
+<td><code>Illuminate\Database\Events\TransactionRolledBack</code></td>
+</tr>
+<tr>
+<td><code>illuminate.query</code></td>
+<td><code>Illuminate\Database\Events\QueryExecuted</code></td>
+</tr>
+<tr>
+<td><code>illuminate.queue.before</code></td>
+<td><code>Illuminate\Queue\Events\JobProcessing</code></td>
+</tr>
+<tr>
+<td><code>illuminate.queue.after</code></td>
+<td><code>Illuminate\Queue\Events\JobProcessed</code></td>
+</tr>
+<tr>
+<td><code>illuminate.queue.failed</code></td>
+<td><code>Illuminate\Queue\Events\JobFailed</code></td>
+</tr>
+<tr>
+<td><code>illuminate.queue.stopping</code></td>
+<td><code>Illuminate\Queue\Events\WorkerStopping</code></td>
+</tr>
+<tr>
+<td><code>mailer.sending</code></td>
+<td><code>Illuminate\Mail\Events\MessageSending</code></td>
+</tr>
+<tr>
+<td><code>router.matched</code></td>
+<td><code>Illuminate\Routing\Events\RouteMatched</code></td>
+</tr>
+</tbody>
+</table>
+<p>这些事件对象传入参数和 Laravel 5.1 的事件处理器 <strong>完全</strong> 一样，例如，如果你在 Laravel 5.1.* 中使用了 <code>DB:listen</code> 事件，在 5.2 中更新代码如下：</p>
+<pre><code>DB::listen(function ($event) {
+    dump($event-&gt;sql);
+    dump($event-&gt;bindings);
+});</code></pre>
+<p>你可以去检查每个事件对象类去查看它们的公有属性。</p>
+<h3>异常处理</h3>
+<p><code>App\Exceptions\Handler</code> 类的 <code>$dontReport</code> 属性应该被更新为至少包含以下异常：</p>
+<pre><code>use Illuminate\Validation\ValidationException;
+use Illuminate\Auth\Access\AuthorizationException;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
+use Symfony\Component\HttpKernel\Exception\HttpException;
+
+/**
+ * A list of the exception types that should not be reported.
+ *
+ * @var array
+ */
+protected $dontReport = [
+    AuthorizationException::class,
+    HttpException::class,
+    ModelNotFoundException::class,
+    ValidationException::class,
+];</code></pre>
+<h3>帮助函数</h3>
+<p><code>url()</code> 当你没传参调用时，会返回 <code>Illuminate\Routing\UrlGenerator</code> 实例。</p>
+<h3>隐式模型绑定</h3>
+<p>Laravel 5.2 支持「隐式模型绑定」，以便在路由和控制器中基于 URI 标识符自动注入模型实例。然而，这也改变了路由和控制器中类型提示模型实例这一行为。</p>
+<p>如果你之前在路由或控制器中类型提示了模型实例，并且希望注入一个空的模型实例，那么现在应该移除这个类型提示，然后在路由或控制器中直接创建一个新的模型实例；否则，Laravel 将会基于路由 URI 的标识符试图从数据库获取一个已存在的模型实例。</p>
+<h3>IronMQ</h3>
+<p>IronMQ 队列驱动被移动到自己的扩展包中：</p>
+<p><a href="http://github.com/laravelcollective/iron-queue"><a href="http://github.com/LaravelCollective/iron-queue">http://github.com/LaravelCollective/iron-queue</a></a></p>
+<h3>Jobs / Queue</h3>
+<p><code>php artisan make:job</code> 命令现在默认会创建一个队列任务类，如果你想要创建一个 <code>同步任务</code>（非队列），请在使用该命令时加上 <code>--sync</code> 选项。</p>
+<h3>邮件</h3>
+<p>邮件配置中移除了 <code>pretend</code> 选项，取而代之的，使用 <code>log</code> 邮件驱动执行和 <code>pretend</code> 同样的功能，并且 <code>log</code> 驱动能提供更多的邮件相关的信息。</p>
+<h3>分页</h3>
+<p>为了与框架生成的其它 URL 保持一致，分页 URL 不再包含斜杠，这一改变对应用代码不产生任何影响。</p>
+<h3>服务提供者</h3>
+<p>请在 <code>app.php</code> 的 <code>providers</code> 数组中移除以下两个服务提供者：</p>
+<pre><code>`Illuminate\Foundation\Providers\ArtisanServiceProvider`
+`Illuminate\Routing\ControllerServiceProvider`</code></pre>
+<h3>Sessions</h3>
+<p>因为 Laravel 5.2 认证系统更新的原因，所有现存的会话都将失效。</p>
+<h4>数据库 Session 驱动</h4>
+<p>我们为框架编写了新的 <code>database</code> Session 驱动，该驱动包含更多的用户信息，例如用户 ID、IP 地址以及用户浏览器信息，如果你想要继续使用之前的 <code>database</code> 驱动，需要在配置文件 <code>session.php</code> 中修改驱动为 <code>legacy-database</code>。</p>
+<p>如果你想要使用新的驱动，还需要添加 <code>user_id (nullable integer)</code>、<code>ip_address (nullable string)</code> 以及 <code>user_agent (text)</code> 字段到存放 Session 的数据表中。</p>
+<h3>Stringy</h3>
+<p>框架不再内置 <code>Stringy</code> 库，如果要在应用中使用，你需要通过 Composer 手动安装。</p>
+<h3>表单验证</h3>
+<h4>异常类型</h4>
+<p><code>ValidatesRequests</code> trait 现在会抛出 <code>Illuminate\Foundation\Validation\ValidationException</code> 异常以取代之前的  <code>Illuminate\Http\Exception\HttpResponseException</code>。</p>
+<p>如果你没有手动捕获该异常，那么这对之前的代码没有影响。</p>
+<h3>废弃清单</h3>
+<p>下面这些功能在 Laravel 5.2 中被废弃，在 Laravel 5.3 中会被彻底移除：</p>
+<ul>
+<li><code>Illuminate\Contracts\Bus\SelfHandling</code> 契约，现在可以从任务（Job）中移除。</li>
+<li>集合的 <code>lists</code> 方法被重命名为 <code>pluck</code>，方法的功能保持一致。</li>
+<li>隐式控制器路由注册 <code>Route::controller</code> 被废弃。在路由文件中请使用明确指定的路由注册。此功能很有可能会被整理成扩展包的形式提供。</li>
+<li><code>get</code>, <code>post</code> 还有其他的路由辅助函数被废弃，请使用 <code>Route</code> facade 作为替代。</li>
+<li>Laravel 5.1 的 <code>database</code> session 驱动已经被重命名为 <code>legacy-database</code>，并且将会被移除，请查看上文关于 <code>database</code> session 驱动以获取更多信息.</li>
+<li><code>Str::randomBytes</code> 方法被废弃，会被 PHP 原生 <code>random_bytes</code> 取代。</li>
+<li><code>Str::equals</code> 方法被废弃，会被 PHP 原生 <code>hash_equals</code> 取代。</li>
+<li><code>Illuminate\View\Expression</code> 被废弃，会被 <code>Illuminate\Support\HtmlString</code> 取代。</li>
+<li><code>WincacheStore</code> 缓存驱动已被移除。</li>
+</ul>
+<p><a name="upgrade-5.1.11"></a></p>
+<h2>升级到 5.1.11</h2>
+<p>Laravel 5.1.11 现支持 <a href="authorization.html">授权</a> 及 <a href="authorization.html#policies">授权策略</a>。要将这些功能添加到现有的 Laravel 5.1 应用程序中是相当容易的。</p>
+<blockquote>
+<p><strong>注意：</strong>这些升级是 <strong>可选的</strong>，忽略它们并不会影响你的应用程序。</p>
+</blockquote>
+<h4>创建 Policies 目录</h4>
+<p>首先，在你的应用程序创建一个空的 <code>app/Policies</code> 目录。</p>
+<h4>创建并注册 AuthServiceProvider 与 Gate Facade</h4>
+<p>在你的 <code>app/Providers</code> 目录创建一个 <code>AuthServiceProvider</code>。你可以 <a href="https://raw.githubusercontent.com/laravel/laravel/master/app/Providers/AuthServiceProvider.php">从 GitHub</a> 获取默认的内容，请注意，如果你的应用程序使用自定的命名空间的话，请修改提供者的命名空间。创建完成后，请务必在你的 <code>app.php</code> 配置文件的 <code>providers</code> 数组注册它。</p>
+<p>同样的，你必须在你的 <code>app.php</code> 配置文件的 <code>aliases</code> 数组注册 <code>Gate</code> facade：</p>
+<pre><code>'Gate' =&gt; Illuminate\Support\Facades\Gate::class,</code></pre>
+<h4>更新用户模型</h4>
+<p>然后，在你的 <code>App\User</code> 模型使用 <code>Illuminate\Foundation\Auth\Access\Authorizable</code> trait 及 <code>Illuminate\Contracts\Auth\Access\Authorizable</code> contract：</p>
+<pre><code>&lt;?php
+
+namespace App;
+
+use Illuminate\Auth\Authenticatable;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Auth\Passwords\CanResetPassword;
+use Illuminate\Foundation\Auth\Access\Authorizable;
+use Illuminate\Contracts\Auth\Authenticatable as AuthenticatableContract;
+use Illuminate\Contracts\Auth\Access\Authorizable as AuthorizableContract;
+use Illuminate\Contracts\Auth\CanResetPassword as CanResetPasswordContract;
+
+class User extends Model implements AuthenticatableContract,
+                                    AuthorizableContract,
+                                    CanResetPasswordContract
+{
+    use Authenticatable, Authorizable, CanResetPassword;
+}</code></pre>
+<h4>更新基础控制器</h4>
+<p>接着，更新 <code>App\Http\Controllers\Controller</code> 基础控制器，让它使用 <code>Illuminate\Foundation\Auth\Access\AuthorizesRequests</code> trait：</p>
+<pre><code>&lt;?php
+
+namespace App\Http\Controllers;
+
+use Illuminate\Foundation\Bus\DispatchesJobs;
+use Illuminate\Routing\Controller as BaseController;
+use Illuminate\Foundation\Validation\ValidatesRequests;
+use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
+
+abstract class Controller extends BaseController
+{
+    use AuthorizesRequests, DispatchesJobs, ValidatesRequests;
+}</code></pre>
+<p><a name="upgrade-5.1.0"></a></p>
+<h2>升级到 5.1.0</h2>
+<h4>估计升级需耗时：少于 1 小时</h4>
+<h3>更新 <code>bootstrap/autoload.php</code></h3>
+<p>将 <code>bootstrap/autoload.php</code> 里的 <code>$compiledPath</code> 变量按照以下方式更新：</p>
+<pre><code>$compiledPath = __DIR__.'/cache/compiled.php';</code></pre>
+<h3>创建 <code>bootstrap/cache</code> 目录</h3>
+<p>在你的 <code>bootstrap</code> 目录里，创建一个 <code>cache</code> 目录 (<code>bootstrap/cache</code>)。放置一个有以下内容的 <code>.gitignore</code> 文件在这个目录：</p>
+<pre><code>*
+!.gitignore</code></pre>
+<p>这个目录必须为可写的，框架会暂时存放如 <code>compiled.php</code>、<code>routes.php</code>、<code>config.php</code> 和 <code>services.json</code> 等文件在此目录。</p>
+<h3>添加 <code>BroadcastServiceProvider</code> 提供者</h3>
+<p>在你的 <code>config/app.php</code> 配置文件里面，增加 <code>Illuminate\Broadcasting\BroadcastServiceProvider</code> 到 <code>providers</code> 数组里。</p>
+<h3>认证</h3>
+<p>如果你有使用内置的 <code>AuthController</code>，此控制器使用了 <code>AuthenticatesAndRegistersUsers</code> trait，你会需要对新用户如何创建跟验证做一些修改。</p>
+<p>首先，你不再需要传递 <code>Guard</code> 和 <code>Registrar</code> 实例到基底构造器。你可以从控制器的构造器完全移除这些依赖。</p>
+<p>第二，已经不再需要 Laravel 5.0 中使用的 <code>App\Services\Registrar</code> 类。你可以简单的从这个类直接复制你的 <code>validator</code> 和 <code>create</code> 方法粘贴至你的 <code>AuthController</code>。这些方法不需要做其它修改。你必须确定有在你的 <code>AuthController</code> 顶端引入 <code>Validator</code> facade 跟你的 <code>User</code> 模型。</p>
+<h4>密码控制器</h4>
+<p>内置的 <code>PasswordController</code> 的构造器不再需要任何依赖。你可以把 5.0 下需要的依赖都移除。</p>
+<h3>验证</h3>
+<p>如果你在基底控制器类上重写了 <code>formatValidationErrors</code> 方法，你现在应该把类型提示改成 <code>Illuminate\Contracts\Validation\Validator</code> contract 来取代具体的 <code>Illuminate\Validation\Validator</code> 实例。</p>
+<p>同样地，如果你在基底表单请求类上重写了 <code>formatErrors</code> 方法，你现在应该把类型提示改成 <code>Illuminate\Contracts\Validation\Validator</code> contract 来取代具体的 <code>Illuminate\Validation\Validator</code> 实例。</p>
+<h3>Eloquent</h3>
+<h4><code>create</code> 方法</h4>
+<p>Eloquent 的 <code>create</code> 方法现在可以不带任何参数调用。如果你有在自己的模型重写了 <code>create</code> 方法，请把 <code>$attributes</code> 参数的默认值设置成空数组：</p>
+<pre><code>public static function create(array $attributes = [])
+{
+    // 你的自定义实现
+}</code></pre>
+<h4><code>find</code> 方法</h4>
+<p>如果你在自己的模型中重写了 <code>find</code> 方法并在方法中调用了 <code>parent::find()</code>，现在则应该把它改成调用 Eloquent 查询语句构造器上的 <code>find</code> 方法：</p>
+<pre><code>public static function find($id, $columns = ['*'])
+{
+    $model = static::query()-&gt;find($id, $columns);
+
+    // ...
+
+    return $model;
+}</code></pre>
+<h4><code>lists</code> 方法</h4>
+<p><code>lists</code> 方法现在返回一个 <code>Collection</code> 实例而不是 Eloquent 查找用的一般数组。如果你想要把 <code>Collection</code> 转换成一般数组，请使用 <code>all</code> 方法：</p>
+<pre><code>User::lists('id')-&gt;all();</code></pre>
+<p>请注意查询语句构造器的 <code>lists</code> 方法返回的是一个数组。</p>
+<h4>日期格式</h4>
+<p>以前，Eloquent 日期字段的保存格式可以借助重写模型上的 <code>getDateFormat</code> 方法来修改。现在仍然可以这么做。然而，为了方便起见，你可以直接在模型上指定 <code>$dateFormat</code> 属性来取代重写方法。</p>
+<p>当序列化模型成 <code>array</code> 或 JSON 时，也会采用该日期格式。当从 Laravel 5.0 迁移到 5.1 时，这可能会改变你的 JSON 序列化的日期字段格式。要想针对序列化模型设置特定的日期格式，你需要在你的模型上重写 <code>serializeDate(DateTime $date)</code> 方法。这个方法可以让你在不改变日期字段保存格式的情况下，精细的控制 Eloquent 序列化格式。</p>
+<h3>集合类</h3>
+<h4><code>sort</code> 方法</h4>
+<p><code>sort</code> 方法现在会返回全新的集合实例，而不是修改原有的集合：</p>
+<pre><code>$collection = $collection-&gt;sort($callback);</code></pre>
+<h4><code>sortBy</code> 方法</h4>
+<p><code>sortBy</code> 方法现在会返回一个全新的集合实例而不会去改动到现有的集合：</p>
+<pre><code>$collection = $collection-&gt;sortBy('name');</code></pre>
+<h4><code>groupBy</code> 方法</h4>
+<p><code>groupBy</code> 方法现在会返回 <code>Collection</code> 实例给父 <code>Collection</code> 的每一个元素。如果你想要把所有元素转换回一般数组，你可以通过 <code>map</code> 来处理：</p>
+<pre><code>$collection-&gt;groupBy('type')-&gt;map(function($item)
+{
+    return $item-&gt;all();
+});</code></pre>
+<h4><code>lists</code> 方法</h4>
+<p><code>lists</code> 方法现在返回一个 <code>Collection</code> 实例而不是一个一般数组。如果你想要把 <code>Collection</code> 转换成一般数组，请使用 <code>all</code> 方法：</p>
+<pre><code>$collection-&gt;lists('id')-&gt;all();</code></pre>
+<h3>命令和处理进程</h3>
+<p><code>app/Commands</code> 目录已经被改名成 <code>app/Jobs</code>。然而你并不需要把所有的命令移动到新的位置，且可以继续用 <code>make:command</code> 和 <code>handler:command</code> Artisan 命令来生成类。</p>
+<p><code>app/Handlers</code> 目录已经被改名成 <code>app/Listeners</code> 并且现在只包含事件监听者。不需要移动或重命名现有的命令和事件处理进程，并且可以继续使用 <code>handler:event</code> 命令来生成事件处理进程。</p>
+<p>借由 Laravel 5.0 目录结构提供的向下兼容性，你可以先升级你的应用程序到 Laravel 5.1，然后在你或你的团队方便的时候再慢慢地将你的事件跟命令升级到它们的新位置上。</p>
+<h3>Blade</h3>
+<p><code>createMatcher</code>、<code>createOpenMatcher</code> 和 <code>createPlainMatcher</code> 方法已经从 Blade 编译器移除。在 Laravel 5.1，请使用新的 <code>directive</code> 方法来创建自定义的 Blade 标签。请查看 <a href="blade.html#extending-blade">扩展 blade</a> 文档来了解更多信息。</p>
+<h3>测试</h3>
+<p>添加 protected <code>$baseUrl</code> 属性到 <code>tests/TestCase.php</code> 文件中：</p>
+<pre><code>protected $baseUrl = 'http://localhost';</code></pre>
+<h3>语言包</h3>
+<p>第三方扩展包发布语言包的默认目录已经改变。必须从 <code>resources/lang/packages/{locale}/{namespace}</code> 移动所有的第三方扩展包语言包到 <code>resources/lang/vendor/{namespace}/{locale}</code> 目录。例如，<code>Acme/Anvil</code> 扩展包命名空间为 <code>acme/anvil::foo</code> 的英文语言包应该从 <code>resources/lang/packages/en/acme/anvil/foo.php</code> 移动到 <code>resources/lang/vendor/acme/anvil/en/foo.php</code>。</p>
+<h3>Amazon 网络服务 SDK</h3>
+<p>如果你有使用 AWS SQS 队列驱动或 AWS SES 电子邮件驱动，你应该升级你安装的 AWS PHP SDK 到 3.0 版本。</p>
+<p>如果你有使用 Amazon S3 文件系统驱动，你将需要借助 Composer 更新对应的文件系统扩展包：</p>
+<ul>
+<li>Amazon S3: <code>league/flysystem-aws-s3-v3 ~1.0</code></li>
+</ul>
+<h3>弃用的功能</h3>
+<p>以下的 Laravel 功能已经被弃用， 并将会在 2015 十二月发布的 Laravel 5.2 中被完全移除：</p>
+<div class="content-list">
+<ul>
+<li>路由过滤器已经被弃用，转而使用<a href="middleware.html">中间件</a>。</li>
+<li><code>Illuminate\Contracts\Routing\Middleware</code> contract 已经被弃用。你的中间件上不需要任何 contract。此外，<code>TerminableMiddleware</code> contract 也已经被弃用。不要实现接口，简单地定义一个 <code>terminate</code> 方法在你的中间件上就好。</li>
+<li><code>Illuminate\Contracts\Queue\ShouldBeQueued</code> contract 已经被弃用而用 <code>Illuminate\Contracts\Queue\ShouldQueue</code> 取代。</li>
+<li>Iron.io 的「推送队列」已经被弃用而用一般的 Iron.io 队列和<a href="queues.html#running-the-queue-listener">队列监听者</a>取代。</li>
+<li><code>Illuminate\Foundation\Bus\DispatchesCommands</code> trait 已经被弃用并改名成 <code>Illuminate\Foundation\Bus\DispatchesJobs</code>。</li>
+<li><code>Illuminate\Container\BindingResolutionException</code> 被移到 <code>Illuminate\Contracts\Container\BindingResolutionException</code>。</li>
+<li>服务容器的 <code>bindShared</code> 方法已经被弃用，转而使用 <code>singleton</code> 方法取代。</li>
+<li>Eloquent 和查询语句构造器的 <code>pluck</code> 方法已被弃用并改名为 <code>value</code>。</li>
+<li>集合的 <code>fetch</code> 方法已经被弃用，转而用 <code>pluck</code> 方法取代。</li>
+<li><code>array_fetch</code> 辅助函数已经被弃用，转而用 <code>array_pluck</code> 方法取代。</li>
+</ul>
+</div>
+<p><a name="upgrade-5.0.16"></a></p>
+<h2>升级到 5.0.16</h2>
+<p>在你的 <code>bootstrap/autoload.php</code> 文件中，更新 <code>$compiledPath</code> 变量为：</p>
+<pre><code>$compiledPath = __DIR__.'/../vendor/compiled.php';</code></pre>
+<p><a name="upgrade-5.0"></a></p>
+<h2>从 4.2 升级到 5.0</h2>
+<h3>全新安装，然后迁移</h3>
+<p>推荐的升级方式是创建一个全新的 Laravel <code>5.0</code> 项目，然后复制你 <code>4.2</code> 网站特定的应用程序文件到此新的应用程序。其中包含控制器、路由、Eloquent 模型、Artisan 命令、资源文件，和其它专属于你的程序代码。</p>
+<p>开始前，请先在你的本地环境中 <a href="installation.html">安装一个新的 Laravel 5 应用程序</a> 到一个全新的目录中。不要安装超过 5.0 的任何版本，因为我们需要先完成迁移至 5.0 的步骤。我们将会在后面详细探讨各部分的详细迁移过程。</p>
+<h3>Composer 依赖与扩展包</h3>
+<p>别忘了复制其它额外的 Composer 依赖扩展包到你的 5.0 应用程序内。其中包含如 SDKs 的第三方代码。</p>
+<p>部分 Laravel 专用扩展包也许不兼容于刚发布的 Laravel 5。请向扩展包的维护者确认该扩展包支持 Laravel 5 的版本。在你添加完应用程序需要的所有额外 Composer 依赖后，请运行 <code>composer update</code>。</p>
+<h3>命名空间</h3>
+<p>默认情况下，Laravel 4 应用程序不会在应用程序的代码中使用命名空间。如所有的 Eloquent 模型和控制器都简单地存在于「全局」的命名空间中。为了更快速的迁移，Laravel 5 也允许你将这些类继续保留在全局的命名空间内。</p>
+<h3>配置</h3>
+<h4>迁移环境变量</h4>
+<p>复制新的 <code>.env.example</code> 文件到 <code>.env</code>，在 <code>5.0</code> 中这相当于原本的 <code>.env.php</code>。在此设置合适的值，如 <code>APP_ENV</code> 和 <code>APP_KEY</code> (你的加密密钥)、数据库凭证、缓存驱动与 session 驱动。</p>
+<p>此外，将你原本的 <code>.env.php</code> 文件中自定义的设置值都复制并移到 <code>.env</code> (本机环境的实际设置值) 和 <code>.env.example</code> (给其他团队成员的范本文件)。</p>
+<p>更多关于环境配置的信息，请查看 <a href="installation.html#environment-configuration">完整文档</a>。</p>
+<blockquote>
+<p><strong>注意：</strong>在部署你的 Laravel 5 应用程序之前，你需要先在正式主机上放置 <code>.env</code> 文件并给其设置好适当的值。</p>
+</blockquote>
+<h4>配置文件</h4>
+<p>Laravel 5.0 不再使用 <code>app/config/{environmentName}/</code> 目录结构来为指定环境提供配置文件。取而代之的是，将环境对应的各种设置值移到 <code>.env</code>，并接着借助 <code>env('key', 'default value')</code> 来获取配置文件的值。你可以在 <code>config/database.php</code> 配置文件中看到相关例子。</p>
+<p>将配置文件放在 <code>config/</code> 目录下，来代表所有环境共用的配置文件，或是在使用 <code>env()</code> 来获取对应该环境的设置值。</p>
+<p>请记住，如果你添加了其它的键值到 <code>.env</code> 文件中，记得在 <code>.env.example</code> 文件内也要添加相对应的键值。这将可以帮助其他团队成员创建他们自己的 <code>.env</code> 文件。</p>
+<h3>路由</h3>
+<p>复制粘贴你原本的 <code>routes.php</code> 文件到 <code>app/Http/routes.php</code>。</p>
+<h3>控制器</h3>
+<p>下一步，将你所有的控制器移到 <code>app/Http/Controllers</code> 目录下。因为在本指南中我们不打算迁移到完整的命名空间，请将 <code>app/Http/Controllers</code> 目录添加到 <code>composer.json</code> 的 <code>classmap</code> 属性中。接下来，你可以从 <code>app/Http/Controllers/Controller.php</code> 基底抽象类中移除命名空间。请确认你迁移过来的控制器都继承这个基类。</p>
+<p>在你的 <code>app/Providers/RouteServiceProvider.php</code> 文件，设置 <code>namespace</code> 属性为 <code>null</code>。</p>
+<h3>路由过滤器</h3>
+<p>将过滤器逻辑绑定从 <code>app/filters.php</code> 复制到 <code>app/Providers/RouteServiceProvider.php</code> 的 <code>boot()</code> 方法。并在 <code>app/Providers/RouteServiceProvider.php</code> 添加 <code>use Illuminate\Support\Facades\Route;</code> 来继续使用 <code>Route</code> Facade。</p>
+<p>你不需要移动任何 Laravel 4.0 中的默认过滤器，如 <code>auth</code> 和 <code>csrf</code>。他们已经内置其中，只是换作以中间件形式出现。那些在路由或控制器内有使用到旧有默认过滤器的 (例如，<code>['before' =&gt; 'auth']</code>) 请修改使用新的中间件 (例如，<code>['middleware' =&gt; 'auth']</code>)。</p>
+<p>过滤器在 Laravel 5 中没有被移除。你仍然可以绑定并借由 <code>before</code> 和 <code>after</code> 使用你自己自定义的过滤器。</p>
+<h3>全局 CSRF</h3>
+<p>默认情况下，所有路由都会启用 <a href="routing.html#csrf-protection">CSRF 保护</a>。如果你想要关闭它们或是只想在特定路由手动开启，请从 <code>App\Http\Kernel</code> 的 <code>middleware</code> 数组移除这行：</p>
+<pre><code>'App\Http\Middleware\VerifyCsrfToken',</code></pre>
+<p>如果你想要在其它地方使用它，添加此行到 <code>$routeMiddleware</code>：</p>
+<pre><code>'csrf' =&gt; 'App\Http\Middleware\VerifyCsrfToken',</code></pre>
+<p>现在你可以在路由内使用 <code>['middleware' =&gt; 'csrf']</code> 添加中间件到各个路由/控制器上。想要了解更多关于中间件的信息，请查看 <a href="middleware.html">完整文档</a>。</p>
+<h3>Eloquent 模型</h3>
+<p>你可以随意创建一个新的 <code>app/Models</code> 目录来放置 Eloquent 模型。同样地，这个目录必须添加到 <code>composer.json</code> 文件的 <code>classmap</code> 属性中。</p>
+<p>将正在使用 <code>SoftDeletingTrait</code> 的模型更改为使用 <code>Illuminate\Database\Eloquent\SoftDeletes</code>。</p>
+<h4>Eloquent 缓存</h4>
+<p>Eloquent 不再提供 <code>remember</code> 方法来缓存查找结果。现在你有责任手动地使用 <code>Cache::remember</code> 方法缓存查找结果。要了解更多关于缓存的信息，请查看 <a href="cache.html">完整文档</a>。</p>
+<h3>用户认证模型</h3>
+<p>要使用 Laravel 5 的认证系统，请遵循以下指引来升级你的 <code>User</code> 模型：</p>
+<p><strong>从你的 <code>use</code> 区块删除以下内容：</strong></p>
+<pre><code class="language-php">use Illuminate\Auth\UserInterface;
+use Illuminate\Auth\Reminders\RemindableInterface;</code></pre>
+<p><strong>添加以下内容到你的 <code>use</code> 区块：</strong></p>
+<pre><code class="language-php">use Illuminate\Auth\Authenticatable;
+use Illuminate\Auth\Passwords\CanResetPassword;
+use Illuminate\Contracts\Auth\Authenticatable as AuthenticatableContract;
+use Illuminate\Contracts\Auth\CanResetPassword as CanResetPasswordContract;</code></pre>
+<p><strong>移除 UserInterface 和 RemindableInterface 接口。</strong></p>
+<p><strong>标记类实现以下接口：</strong></p>
+<pre><code class="language-php">implements AuthenticatableContract, CanResetPasswordContract</code></pre>
+<p><strong>在类声明引入以下 traits：</strong></p>
+<pre><code class="language-php">use Authenticatable, CanResetPassword;</code></pre>
+<p><strong>如果你有使用它们，请把 <code>Illuminate\Auth\Reminders\RemindableTrait</code> 和 <code>Illuminate\Auth\UserTrait</code> 从你的 use 区块和类声明中移除。</strong></p>
+<h3>Cashier 的用户需要做的修改</h3>
+<p><a href="billing.html">Laravel Cashier</a> 使用的 trait 和接口名称已作修改。trait 请改用 <code>Laravel\Cashier\Billable</code> 取代 <code>BillableTrait</code>。接口实现请用 <code>Laravel\Cashier\Contracts\Billable</code> 取代 <code>Laravel\Cashier\BillableInterface</code>。不需要修改其它任何方法。</p>
+<h3>Artisan 命令</h3>
+<p>将所有的命令类从原本的 <code>app/commands</code> 目录移到新的 <code>app/Console/Commands</code> 目录。接下来，把 <code>app/Console/Commands</code> 目录添加到 <code>composer.json</code> 文件的 <code>classmap</code> 属性中。</p>
+<p>然后，把 Artisan 命令清单从 <code>start/artisan.php</code> 复制到 <code>app/Console/Kernel.php</code> 文件里的 <code>command</code> 数组中。</p>
+<h3>数据库迁移和数据填充</h3>
+<p>因为数据库里应该已经有 users 表了，请删除 Laravel 5.0 内置的两个迁移文件。</p>
+<p>将所有的迁移文件从原本的 <code>app/database/migrations</code> 目录移到新的 <code>database/migrations</code>。所有的数据填充档也应该从 <code>app/database/seeds</code> 移到 <code>database/seeds</code>。</p>
+<h3>全局 IoC 绑定</h3>
+<p>如果你在 <code>start/global.php</code> 有任何的 <a href="container.html">服务容器</a> 绑定，请将它们全部移至 <code>app/Providers/AppServiceProvider.php</code> 文件的 <code>register</code> 方法。你可能需要引入 <code>App</code> facade。</p>
+<p>你也可以选择将这些绑定，依照类拆分到各别的服务提供者中。</p>
+<h3>视图</h3>
+<p>将旧视图从 <code>app/views</code> 移到新的 <code>resources/views</code> 目录。</p>
+<h3>Blade 标签修改</h3>
+<p>基于安全考量，Laravel 5.0 会把所有 <code>{{ }}</code> 和 <code>{{{ }}}</code> Blade 标签的输出的特殊字符都进行转译。新的 <code>{!! !!}</code> 标签则被采用来显示原始未转译的输出。当你 <strong>有足够把握</strong> 来保证显示的原始输出内容是安全的，那么升级你的应用程序的最安全方法是只使用新的 <code>{!! !!}</code> 标签。</p>
+<p>然而，如果你 <strong>必须</strong> 使用旧的 Blade 语法，请在  <code>AppServiceProvider@register</code> 的结尾加入以下几行：</p>
+<pre><code class="language-php">\Blade::setRawTags('{{', '}}');
+\Blade::setContentTags('{{{', '}}}');
+\Blade::setEscapedContentTags('{{{', '}}}');</code></pre>
+<p>上述设置你不该轻易使用，这将使你的应用程序更加容易遭受 XSS 攻击。而且用 <code>{{--</code> 注释将无法作用。</p>
+<h3>语言包</h3>
+<p>将你的语言包从 <code>app/lang</code> 移到新的 <code>resources/lang</code> 目录。</p>
+<h3><code>public</code> 目录</h3>
+<p>从你的 <code>4.2</code> 应用程序的 <code>public</code> 目录内复制公开的 assets 到新应用程序的 <code>public</code> 目录内。请确定有保留 <code>5.0</code> 版本的 <code>index.php</code>。</p>
+<h3>测试</h3>
+<p>将你的测试从 <code>app/tests</code> 移到新的 <code>tests</code> 目录。</p>
+<h3>杂项文件</h3>
+<p>复制项目内任何其它的文件，例如： <code>.scrutinizer.yml</code>, <code>bower.json</code> 以及其它类似的工具配置文件。</p>
+<p>你可以将 Sass、Less 或 CoffeeScript 移动到任何你想放置的地方。<code>resources/assets</code> 目录是一个不错的默认位置。</p>
+<h3>表单和 HTML 辅助函数</h3>
+<p>如果你使用表单或 HTML 辅助函数，你将会看到 <code>class 'Form' not found</code> 或 <code>class 'Html' not found</code> 的错误。表单和 HTML 辅助函数已经在 Laravel 5.0 中被弃用。然而，有些社区导向的替代品可供替代，例如：<a href="http://laravelcollective.com/docs/5.2/html">Laravel Collective</a> 维护的这些。</p>
+<p>举例来说，你可以把 <code>"laravelcollective/html": "~5.0"</code> 添加到你的 <code>composer.json</code> 的 <code>require</code> 区块。</p>
+<p>你也需要表单和 HTML 的 facades 以及服务提供者。编辑 <code>config/app.php</code> 并添加这行到 'providers' 数组内：</p>
+<pre><code>'Collective\Html\HtmlServiceProvider',</code></pre>
+<p>接着，添加这几行到 'aliases' 数组内：</p>
+<pre><code>'Form' =&gt; 'Collective\Html\FormFacade',
+'Html' =&gt; 'Collective\Html\HtmlFacade',</code></pre>
+<h3>缓存管理员</h3>
+<p>如果你的代码有注入 <code>Illuminate\Cache\CacheManager</code> 来获取非 Facade 版本的 Laravel 缓存，请改成注入 <code>Illuminate\Contracts\Cache\Repository</code> 取代。</p>
+<h3>分页</h3>
+<p>替换所有的 <code>$paginator-&gt;links()</code> 为 <code>$paginator-&gt;render()</code>。</p>
+<p>依次替换所有的 <code>$paginator-&gt;getFrom()</code> 和 <code>$paginator-&gt;getTo()</code> 为 <code>$paginator-&gt;firstItem()</code> 和 <code>$paginator-&gt;lastItem()</code>。</p>
+<p>从 <code>$paginator-&gt;getPerPage()</code>、<code>$paginator-&gt;getCurrentPage()</code>、<code>$paginator-&gt;getLastPage()</code> 和 <code>$paginator-&gt;getTotal()</code> 移除「get」前缀 (例如：<code>$paginator-&gt;perPage()</code>)。</p>
+<h3>Beanstalk 队列</h3>
+<p>Laravel 5.0 现在需要 <code>"pda/pheanstalk": "~3.0"</code> 取代原本的 <code>"pda/pheanstalk": "~2.1"</code>。</p>
+<h3>Remote</h3>
+<p>Remote 组件已被弃用。</p>
+<h3>Workbench</h3>
+<p>Workbench 组件已被弃用。</p>
+<p><a name="upgrade-4.2"></a></p>
+<h2>从 4.1 升级到 4.2</h2>
+<h3>PHP 5.4+</h3>
+<p>Laravel 4.2 需要 PHP 5.4.0 或更高的版本。</p>
+<h3>默认加密</h3>
+<p>在你的 <code>app/config/app.php</code> 配置文件中添加一个新的 <code>cipher</code> 选项。这个选项的值应该为 <code>MCRYPT_RIJNDAEL_256</code>。</p>
+<pre><code>'cipher' =&gt; MCRYPT_RIJNDAEL_256</code></pre>
+<p>这个设置可以被用来调整 Laravel 加密工具使用的默认加密方法。</p>
+<blockquote>
+<p><strong>注意：</strong>在 Laravel 4.2，默认的加密方法为 <code>MCRYPT_RIJNDAEL_128</code> (AES)，它认为是最安全的加密方法。必须将加密方法改回 <code>MCRYPT_RIJNDAEL_256</code> 来解密在 Laravel 4.1 以前版本下加密的 cookies 和值。</p>
+</blockquote>
+<h3>现在在可以软删除的模型上使用 Traits</h3>
+<p>如果你有使用可以软删除的模型，<code>softDeletes</code> 属性已经被移除。现在你必须使用 <code>SoftDeletingTrait</code> 如下：</p>
+<pre><code>use Illuminate\Database\Eloquent\SoftDeletingTrait;
+
+class User extends Eloquent
+{
+    use SoftDeletingTrait;
+}</code></pre>
+<p>你也必须手动地添加 <code>deleted_at</code> 字段到你的 <code>dates</code> 属性中：</p>
+<pre><code>class User extends Eloquent
+{
+    use SoftDeletingTrait;
+
+    protected $dates = ['deleted_at'];
+}</code></pre>
+<p>而所有软删除的 API 使用方式保持不变。</p>
+<blockquote>
+<p><strong>注意：</strong><code>SoftDeletingTrait</code> 无法在模型基类下被使用。他必须用在一个实际的模型类。</p>
+</blockquote>
+<h3>视图 / 分页的环境名称修改</h3>
+<p>如果你直接参照 <code>Illuminate\View\Environment</code> 或 <code>Illuminate\Pagination\Environment</code> 类， 请更新你的代码将其改为参照 <code>Illuminate\View\Factory</code> 和 <code>Illuminate\Pagination\Factory</code>。改名后的这两个类更可以代表他们的功能。</p>
+<h3>额外的参数 On Pagination Presenter</h3>
+<p>如果你扩展了 <code>Illuminate\Pagination\Presenter</code> 类，抽象方法 <code>getPageLinkWrapper</code> 的参数表变成要加上 <code>rel</code> 参数：</p>
+<pre><code>abstract public function getPageLinkWrapper($url, $page, $rel = null);</code></pre>
+<h3>Iron.Io 队列加密</h3>
+<p>如果你有使用 Iron.io 队列驱动，你需要添加一个新的 <code>encrypt</code> 选项到你的 queue 配置文件中：</p>
+<pre><code>'encrypt' =&gt; true</code></pre>
+<p><a name="upgrade-4.1.29"></a></p>
+<h2>从 4.1.x 以前版本升级到 4.1.29</h2>
+<p>Laravel 4.1.29 对于所有的数据库驱动加强了 column quoting 的部分。当你的模型中 <strong>没有</strong> 使用 <code>fillable</code> 属性时，他保护你的应用程序不会受到 mass assignment 漏洞影响。如果你在模型中使用 <code>fillable</code> 属性来防范 mass assignment，你的应用程序将不会有漏洞。然而，如果你使用 <code>guarded</code> 并传递用户控制的数组到「更新」或「保存」类型的函数中，那你应该立即升级到 <code>4.1.29</code> 以避免你的应用程序遭受 mass assignment 的风险。</p>
+<p>要升级到 Laravel 4.1.29，只要 <code>composer update</code> 即可。在这个发行版本中没有重大的更新。</p>
+<p><a name="upgrade-4.1.26"></a></p>
+<h2>从 4.1.25 以前版本升级到 4.1.26</h2>
+<p>Laravel 4.1.26 针对「记得我」cookies 的安全性进行了更新。在此更新之前，如果一个 「记得我」cookie 被恶意用户劫持，该 cookie 在很长一段时间内仍然有效，即便真实的用户进行了重设密码或者注销等操作。</p>
+<p>此更动需要在你的 <code>users</code> (或同等的) 数据表中添加一个额外的 <code>remember_token</code> 字段。在更新之后，当用户每次登录你的应用程序将会被给予一个全新的 token。在用户注销应用程序后，这个 token 也会被更新。这个更新的影响为：如果一个「记得我」的 cookie 被劫持，只要用户注销应用程序该 cookie 将会失效。</p>
+<h3>升级路径</h3>
+<p>首先，添加一个新的 <code>remember_token</code> 字段到你的 <code>users</code> 数据表中，它可为空值且为 VARCHAR(100)、TEXT 或同等的类型。</p>
+<p>然后，如果你是使用 Eloquent 认证驱动，请更新你的 <code>User</code> 类的以下三个方法：</p>
+<pre><code>public function getRememberToken()
+{
+    return $this-&gt;remember_token;
+}
+
+public function setRememberToken($value)
+{
+    $this-&gt;remember_token = $value;
+}
+
+public function getRememberTokenName()
+{
+    return 'remember_token';
+}</code></pre>
+<blockquote>
+<p><strong>注意：</strong>所有现存的「记得我」sessions 在此更新后将会失效，所以应用程序的所有用户将会被迫重新认证。</p>
+</blockquote>
+<h3>扩展包维护者</h3>
+<p><code>Illuminate\Auth\UserProviderInterface</code> 接口加了两个新的方法。简单的实现可以在默认驱动中找到：</p>
+<pre><code>public function retrieveByToken($identifier, $token);
+
+public function updateRememberToken(UserInterface $user, $token);</code></pre>
+<p><code>Illuminate\Auth\UserInterface</code> 也添加了三个新方法并被描述在「升级路径」部分。</p>
+<p><a name="upgrade-4.1"></a></p>
+<h2>从 4.0 升级到 4.1</h2>
+<h3>升级你的 Composer 依赖</h3>
+<p>要将你的应用程序升级至 Laravel 4.1，则必须将应用程序的 <code>composer.json</code> 里的 <code>laravel/framework</code> 版本更改至 <code>4.1.*</code>。</p>
+<h3>文件替换</h3>
+<p>将你的 <code>public/index.php</code> 文件替换为 <a href="https://github.com/laravel/laravel/blob/v4.1.0/public/index.php">这个从 repository 复制的全新文件</a>。</p>
+<p>将你的 <code>artisan</code> 文件替换为 <a href="https://github.com/laravel/laravel/blob/v4.1.0/artisan">这个从 repository 复制的全新文件</a>。</p>
+<h3>添加配置文件及选项</h3>
+<p>更新 <code>app/config/app.php</code> 配置文件里的 <code>aliases</code> 和 <code>providers</code> 数组。这些数组更新后的值可以在 <a href="https://github.com/laravel/laravel/blob/v4.1.0/app/config/app.php">这个文件</a>中找到。请确保你自定义的 providers / aliases 和扩展包的 providers / aliases 都已添加回数组中。</p>
+<p><a href="https://github.com/laravel/laravel/blob/v4.1.0/app/config/remote.php">从 repository</a> 添加新的 <code>app/config/remote.php</code> 文件。</p>
+<p>在你的 <code>app/config/session.php</code> 文件里，添加新的 <code>expire_on_close</code> 设置选项。默认值应该为 <code>false</code>。</p>
+<p>在你的 <code>app/config/queue.php</code> 文件里，添加新的 <code>failed</code> 设置区块。以下为这区块的默认值：</p>
+<pre><code>'failed' =&gt; [
+    'database' =&gt; 'mysql', 'table' =&gt; 'failed_jobs',
+],</code></pre>
+<p><strong>(可选的)</strong> 在你的 <code>app/config/view.php</code> 文件里，将 <code>pagination</code> 设置选项更新为 <code>pagination::slider-3</code>。</p>
+<h3>控制器的修改</h3>
+<p>如果 <code>app/controllers/BaseController.php</code> 有个 <code>use</code> 语句在最上面，将 <code>use Illuminate\Routing\Controllers\Controller;</code> 改为 <code>use Illuminate\Routing\Controller;</code>。</p>
+<h3>密码提醒的修改</h3>
+<p>密码提醒功能在大幅改进后已经具有更好的灵活性。你可以运行 <code>php artisan auth:reminders-controller</code> Artisan 命令来检查新的存根控制器。你也可以浏览 <a href="http://d.laravel-china.org/docs/security#password-reminders-and-reset">更新后的文档</a> 来相应更新你的应用程序。</p>
+<p>更新你的 <code>app/lang/en/reminders.php</code> 语言文件来对应 <a href="https://github.com/laravel/laravel/blob/v4.1.0/app/lang/en/reminders.php">这个新版文件</a>。</p>
+<h3>环境侦测的修改</h3>
+<p>为了安全因素，不再使用网址域名来侦测应用程序的环境。因为这些值很容易被伪造欺骗，继而让攻击者通过请求来修改环境。你必须改为使用机器的主机名称 (在 Mac、Linux 和 Windows 下运行 <code>hostname</code> 命令的值) 来侦测环境。</p>
+<h3>更简单的日志文件</h3>
+<p>Laravel 目前只会生成单个的日志文件：<code>app/storage/logs/laravel.log</code>。然而，你还是可以在 <code>app/start/global.php</code> 文件设置更改它的行为。</p>
+<h3>移除重定向向结尾的斜线</h3>
+<p>在你的 <code>bootstrap/start.php</code> 文件中，移除对 <code>$app-&gt;redirectIfTrailingSlash()</code> 的调用。这个方法已经不再需要，因为这个功能现在已交由框架内的 <code>.htaccess</code> 文件来处理。</p>
+<p>然后，用 <a href="https://github.com/laravel/laravel/blob/v4.1.0/public/.htaccess">新的文件</a> 替换为 Apache 的 <code>.htaccess</code>，来处理结尾的斜线。</p>
+<h3>获取目前路由</h3>
+<p>现在通过 <code>Route::current()</code> 获取当前路由，而不是 <code>Route::getCurrentRoute()</code>。</p>
+<h3>Composer 更新</h3>
+<p>一旦你完成以上更新，则可以运行 <code>composer update</code> 功能来更新应用程序的核心文件！如果发生 class load 错误，试着运行 <code>update</code> 命令并加上 <code>--no-scripts</code> 选项，样就像这样：<code>composer update --no-scripts</code>。</p>
+<h3>通配符事件监听者</h3>
+<p>通配符事件监听者不再添加事件到你的处理函数参数上。如果你需要寻找触发的事件，则可用 <code>Event::firing()</code> 来触发。</p>
+<hr />
+<blockquote>
+<p>{note} 欢迎任何形式的转载，但请务必注明出处，尊重他人劳动共创开源社区。</p>
+<p>转载请注明：本文档由 Laravel China 社区 [laravel-china.org] 组织翻译。</p>
+<p>文档永久地址： <a href="../../index.html">http://d.laravel-china.org</a></p>
+</blockquote>
+		</div>
+
+		<div class="main-footer" style="border-top:1px dashed rgba(0, 0, 0, 0.1);padding-top: 30px;margin-top:30px;margin-bottom: 20px;">
+			<div class="prev-next-wrap clearfix">
+
+									<a class="btn btn-primary pull-left btn-inverted" href="releases.html"><i class="fa fa-arrow-left"></i> 发行说明</a>
+				
+			    &nbsp;
+								    <a class="btn btn-primary pull-right btn-inverted" href="contributions.html">贡献导引 <i class="fa fa-arrow-right"></i></a>
+							</div>
+		</div>
+
+	</article>
+</div>
+
+	<footer class="main">
+		<ul>
+			<li class="nav-docs"><a href="../5.4.html">文档</a></li>
+<li ><a href="https://laravel-china.org/news" class="no-pjax">Laravel 资讯</a></li>
+<li class="dropdown"><a href="https://laravel-china.org/">Laravel China 社区</a></li>
+<li class="nav-forge"><a href="https://laravel-china.org/categories/1">酷工作</a></li>
+<li class="nav-docs"><a href="http://lumen.laravel-china.org">Lumen</a></li>
+<li class="nav-forge"><a href="https://cs.laravel-china.org/">速查表</a></li>
+<li class="nav-forge"><a href="https://fsdhub.com/books/laravel-essential-training-5.5">《Laravel 入门教程》</a></li>
+		</ul>
+		<p>Laravel is a trademark of Taylor Otwell. Copyright &copy; Taylor Otwell.</p>
+            <div style="margin-top: 32px;">
+                <a href="https://www.upyun.com/" title="Composer 镜像赞助商">
+                    <img src="https://dn-phphub.qbox.me/uploads/banners/XPtLlZmIN1cQbLuDFEON.png" style="width: 200px;">
+                </a>
+            </div>
+            <p class="less-significant">
+            <a href="http://jackmcdade.com">
+                Designed by<br>
+                <svg version="1.1"
+	 xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:a="http://ns.adobe.com/AdobeSVGViewerExtensions/3.0/"
+	 x="0px" y="0px" width="128.2px" height="28px" viewBox="0 0 128.2 28" enable-background="new 0 0 128.2 28" xml:space="preserve"
+	>
+<defs>
+</defs>
+<g>
+	<path fill="#c3c3c3" d="M14.2,0.4c0,0.2,0,0.5,0,0.7c0,0.2,0,0.5,0,0.7l-1.4-0.3C12.9,3,13,4.5,13.1,6c0.1,1.5,0,3-0.1,4.5
+		c0,0.4-0.1,0.8-0.1,1.2c-0.1,0.4-0.1,0.8-0.3,1.2c-0.1,0.4-0.3,0.7-0.5,1.1c-0.2,0.3-0.5,0.6-0.9,0.9c-0.4,0.2-0.9,0.4-1.5,0.6
+		c-0.6,0.2-1.1,0.3-1.6,0.3c-0.6,0-1.2-0.1-1.6-0.3c-0.5-0.2-0.9-0.6-1.1-1c-0.3-0.5-0.5-1-0.6-1.6c-0.1-0.6-0.1-1.3,0-2.1
+		c0-0.2,0.1-0.5,0.2-0.7C4.9,9.9,5,9.7,5.1,9.5c0.1-0.2,0.2-0.4,0.3-0.6l1.1,0.4C6.7,9.3,7,9.4,7.3,9.5c0.3,0.1,0.5,0.1,0.6,0.2
+		c0,0.2,0,0.4-0.1,0.5c-0.1,0.2-0.1,0.3-0.2,0.4c-0.1,0.1-0.2,0.3-0.2,0.4c-0.1,0.2-0.1,0.3-0.1,0.5l-1.3-0.7
+		c-0.1,0.3-0.2,0.7-0.2,1.1c0,0.4,0.1,0.8,0.2,1.2c0.2,0.4,0.4,0.7,0.6,1c0.3,0.3,0.6,0.4,1,0.3c0.6,0,1.1-0.3,1.4-0.6
+		c0.3-0.4,0.5-0.9,0.7-1.7c0.1-0.7,0.2-1.6,0.2-2.8c0-1.1,0-2.4,0-3.9c0-0.6-0.1-1.3-0.1-2C9.7,2.8,9.6,2.1,9.5,1.4
+		c-0.2,0-0.5,0-0.8,0c-0.3,0-0.6,0-0.8,0c-0.8,0-1.5,0-2.2,0c-0.7,0-1.5,0-2.2,0.2c-0.3,0.1-0.6,0.2-1,0.4C2.2,2.1,1.9,2.4,1.6,2.6
+		C1.4,2.9,1.2,3.2,1.1,3.6C1,3.9,1,4.3,1.1,4.6c0.1,0.5,0.3,0.8,0.4,0.9V5.4c0-0.4,0.1-0.8,0.4-1c0.3-0.2,0.6-0.3,0.9-0.3
+		c0.3,0,0.6,0.1,0.9,0.3C4,4.6,4.1,5,4.1,5.4c0,0.4-0.1,0.8-0.4,1c-0.3,0.2-0.6,0.3-1,0.3H2.7C1.9,6.7,1.3,6.5,0.9,6
+		C0.5,5.6,0.2,5.1,0.1,4.5C0,4,0,3.4,0.2,2.7c0.2-0.6,0.5-1.1,1-1.5c0.4-0.3,0.8-0.5,1.2-0.7c0.4-0.1,0.9-0.2,1.4-0.3
+		c0.5-0.1,0.9-0.1,1.4-0.1c0.5,0,0.9,0,1.4,0h1.5c0.6,0,1.1,0,1.6,0.1c0.5,0,1,0.1,1.5,0.1c0.5,0,1,0.1,1.5,0.1
+		C13.1,0.5,13.6,0.5,14.2,0.4z"/>
+	<path fill="#c3c3c3" d="M25.2,14.3c0,0.2,0.1,0.4,0.1,0.6c0,0.2,0.1,0.4,0.1,0.7c-1-0.1-2-0.2-3-0.1c-1.1,0.1-2.1,0.2-3,0.4
+		c0-0.2-0.1-0.4-0.1-0.5c0-0.2-0.1-0.4-0.1-0.5c0.2,0,0.5-0.1,0.7-0.1c0.2,0,0.4-0.1,0.6-0.1c-0.1-1.5-0.3-3.1-0.5-4.6
+		c-0.5,0.1-0.9,0.1-1.4,0.2c-0.5,0.1-0.9,0.1-1.4,0.2c-0.2,0.7-0.3,1.3-0.5,2c-0.2,0.7-0.3,1.3-0.5,2c0.2,0,0.4,0,0.6,0
+		c0.1,0,0.3,0,0.4,0.1c0,0.2,0,0.3,0,0.5c0,0.1,0,0.2,0,0.4c0,0.1,0,0.2-0.1,0.3H14v-1.2h1c0.2-0.5,0.3-1,0.4-1.5
+		c0.1-0.5,0.3-1,0.4-1.5c0.2-0.6,0.3-1.2,0.5-1.7c0.2-0.6,0.3-1.2,0.5-1.7c0.2-1.1,0.4-2.1,0.6-3.2c0.2-1.1,0.3-2.1,0.4-3.2
+		c-0.2,0-0.5,0-0.7,0c-0.2,0-0.4,0-0.7,0c0-0.2,0.1-0.4,0.1-0.6c0-0.2,0-0.4,0.1-0.6c0.9,0,1.9,0,2.9,0c1,0,2,0,2.9,0l0.2,1.2
+		c-0.2,0-0.3,0-0.5,0c-0.2,0-0.3,0-0.5,0c0.3,2.1,0.7,4.3,1,6.5c0.3,2.2,0.7,4.4,1,6.5H25.2z M17.5,9c0.4-0.1,0.7-0.1,1.1-0.2
+		c0.4-0.1,0.8-0.1,1.2-0.2c-0.2-1-0.3-2-0.5-2.9c-0.2-1-0.4-1.9-0.6-2.9c-0.2,1-0.4,2.1-0.5,3.1C17.9,6.9,17.7,8,17.5,9z"/>
+	<path fill="#c3c3c3" d="M36.7,10.4c-0.1,0-0.2,0-0.3,0c-0.1,0-0.2,0-0.3,0c0,0.6,0,1.2-0.2,1.9c-0.2,0.6-0.5,1.2-1,1.6
+		c-0.5,0.5-1,0.9-1.6,1.1c-0.6,0.3-1.3,0.4-2,0.5c-0.6,0.1-1.1,0.1-1.8,0c-0.6-0.1-1.1-0.4-1.6-0.7c-0.2-0.2-0.5-0.4-0.8-0.7
+		c-0.3-0.3-0.5-0.5-0.6-0.8c-0.3-0.5-0.5-1-0.6-1.5c-0.2-0.5-0.3-0.9-0.4-1.4c-0.1-0.5-0.2-1-0.2-1.5c0-0.5,0-1,0.1-1.6
+		c0.2-1,0.4-2,0.8-2.9c0.4-0.9,0.8-1.7,1.4-2.3c0.5-0.7,1.2-1.2,1.9-1.6C30.2,0.2,30.9,0,31.7,0c0.3,0,0.5,0,0.8,0.1
+		c0.3,0.1,0.5,0.2,0.7,0.4c0.3,0.3,0.7,0.7,1,1.2c0.3,0.5,0.6,1.2,0.7,1.9c0.1,0,0.2,0,0.3,0c0.1,0,0.2,0,0.3,0c0,0.1,0,0.2,0,0.3
+		c0,0.1,0,0.2,0,0.3L33,4.6c-0.3,0.1-0.5,0.1-0.6,0c-0.1,0-0.2-0.1-0.2-0.2c-0.1-0.1-0.1-0.2,0-0.3c0.1,0,0.2,0,0.2,0
+		c0.1,0,0.1,0,0.2,0c0.2-0.2,0.3-0.3,0.3-0.6c0-0.2,0-0.5,0-0.7c0-0.5-0.2-0.9-0.5-1.3c-0.2-0.2-0.3-0.3-0.4-0.4
+		C31.8,1,31.6,1,31.4,1.1c-0.2,0-0.4,0.2-0.6,0.4c-0.2,0.2-0.4,0.5-0.5,0.9C30,2.6,29.9,3,29.8,3.3c-0.1,0.3-0.2,0.5-0.2,0.7
+		c-0.6,2.6-0.7,5.3-0.2,8c0.1,0.3,0.2,0.7,0.3,1s0.3,0.6,0.5,0.9c0.2,0.3,0.5,0.5,0.8,0.7c0.3,0.2,0.6,0.2,1,0.1
+		c0.6-0.1,1-0.4,1.4-1c0.3-0.5,0.6-1.1,0.7-1.8c0.1-0.3,0.1-0.6,0.1-0.9v-0.5c-0.2,0-0.4,0-0.6-0.1c-0.1-0.1-0.2-0.2-0.2-0.3
+		c0-0.1,0-0.2,0.1-0.3c0.6,0,1.2,0,1.7,0c0.6,0,1.2,0,1.7,0c0,0.1,0,0.2-0.1,0.3C36.7,10.2,36.7,10.3,36.7,10.4z"/>
+	<path fill="#c3c3c3" d="M48,14.2c0.1,0.2,0.3,0.3,0.5,0.4c0.2,0.1,0.5,0.1,0.7,0c0.1,0.1,0.1,0.2,0.1,0.4c0,0.2-0.1,0.3-0.2,0.4
+		c-0.1,0.1-0.2,0.2-0.4,0.2c-0.2,0-0.3,0-0.4,0c-0.3,0-0.7,0-1,0c-0.3,0-0.7,0-1-0.1c-0.3-0.1-0.7-0.2-1-0.4
+		c-0.3-0.2-0.5-0.4-0.7-0.7c-0.2-0.3-0.3-0.6-0.3-1c0-0.3,0-0.7,0-1.1V9.9c0-0.1,0-0.3,0-0.4c0-0.2-0.1-0.3-0.2-0.5
+		c-0.1-0.2-0.3-0.3-0.4-0.4c-0.2-0.1-0.4-0.1-0.7-0.1c-0.1,0-0.2,0-0.5,0.1c-0.2,0.3-0.3,0.5-0.5,0.8c-0.2,0.3-0.3,0.5-0.5,0.7
+		c0,0.8,0,1.5-0.1,2.2c0,0.7-0.1,1.5-0.1,2.1h1.4v1.1c-0.5,0-0.9,0.1-1.3,0c-0.4,0-0.8,0-1.2-0.1c-0.4,0-0.8-0.1-1.2-0.1
+		c-0.4,0-0.8,0-1.3,0c-0.1,0-0.3,0-0.4,0c-0.1,0-0.2,0-0.3-0.1c-0.1,0-0.1-0.1-0.1-0.2c0-0.1-0.1-0.3-0.1-0.4c0-0.1,0-0.3,0-0.4
+		c0-0.1,0.1-0.2,0.1-0.2c0.2,0.1,0.4,0.2,0.6,0.1s0.4-0.2,0.5-0.4c0-0.1,0.1-0.3,0.1-0.7c0-0.4,0-0.9,0.1-1.6c0-0.6,0.1-1.3,0.1-2.1
+		c0-0.8,0-1.6,0.1-2.4c0-0.8,0-1.5,0.1-2.3c0-0.7,0.1-1.3,0.1-1.8c0-0.2,0-0.5,0-0.7c0-0.2-0.1-0.4-0.2-0.6
+		c-0.1-0.2-0.3-0.3-0.5-0.4c-0.2-0.1-0.4,0-0.6,0.1c0-0.2-0.1-0.5-0.1-0.7c0-0.2,0-0.4-0.1-0.7c1,0,2,0.1,3,0.1c0.9,0,1.9,0.1,3,0.1
+		c0,0.1,0,0.2,0,0.3c0,0.1,0,0.3,0.1,0.4c0,0.1,0,0.3,0,0.4c0,0.1,0,0.2-0.1,0.2c-0.1,0.1-0.2,0.1-0.3,0.1c-0.1,0-0.2,0-0.4-0.1
+		c-0.1-0.1-0.3-0.1-0.4-0.2c-0.1-0.1-0.3-0.1-0.3-0.1c-0.1,0.9-0.1,1.9-0.1,2.9c0,1-0.1,2-0.1,3.1c0.7-1.2,1.4-2.5,2-3.8
+		c0.2-0.3,0.3-0.6,0.4-0.9c0.1-0.3,0.3-0.6,0.5-0.9c0.2-0.3,0.4-0.5,0.7-0.7C45.4,1,45.7,0.9,46,0.8c0.3-0.1,0.7-0.1,1,0
+		c0.3,0.1,0.6,0.2,0.9,0.5c0.2,0.3,0.4,0.6,0.4,1c0,0.4,0.1,0.8,0,1.1c0,0.2,0,0.3,0,0.5c0,0.2-0.1,0.3-0.2,0.4
+		c-0.1,0.2-0.2,0.3-0.4,0.4c-0.2,0.1-0.4,0.1-0.5,0.2c-0.1,0-0.3,0.1-0.4,0.1c-0.1,0-0.3,0-0.4,0C46.2,4.7,46,4.6,46,4.4
+		c-0.1-0.2-0.1-0.4,0-0.5c0.1-0.2,0.2-0.3,0.3-0.3c0.1,0,0.2-0.1,0.4-0.1c0.2-0.1,0.3-0.2,0.3-0.3c0.1-0.2,0.1-0.3,0.1-0.5
+		C47.1,2.4,47,2.2,47,2c-0.1-0.2-0.2-0.3-0.3-0.3c-0.2,0-0.3,0-0.5,0.1C46,1.9,45.9,2,45.7,2.2c-0.2,0.2-0.3,0.4-0.4,0.6
+		C45.2,3,45,3.3,44.9,3.5c-0.1,0.3-0.3,0.6-0.4,0.8c-0.2,0.2-0.3,0.5-0.4,0.8c-0.4,0.9-0.8,1.7-1.2,2.5c0.3,0,0.6-0.1,1,0
+		c0.4,0,0.7,0,1,0c0.3,0,0.7,0.1,1,0.2c0.3,0.1,0.6,0.3,0.8,0.6c0.3,0.3,0.4,0.6,0.5,1c0.1,0.4,0.1,0.8,0.2,1.1l0.2,2.1
+		c0,0.2,0.1,0.5,0.1,0.7C47.7,13.7,47.8,14,48,14.2z"/>
+	<path fill="#c3c3c3" d="M71.7,13.9c0.2,0.2,0.4,0.4,0.7,0.5c0.3,0.1,0.5,0,0.8-0.1c0,0.2,0.1,0.3,0.1,0.6c0.1,0.2,0.1,0.4,0.1,0.6
+		c-0.3,0-0.7,0-1.1,0s-0.8,0-1.3,0.1c-0.4,0-0.9,0-1.3,0c-0.4,0-0.8,0-1,0c0-0.1,0-0.1,0-0.2c0-0.1,0.1-0.2,0.2-0.3
+		c0.1-0.1,0.2-0.2,0.4-0.3c0.2-0.1,0.3-0.1,0.6-0.1c0.1,0,0.1-0.2,0.1-0.7c0-0.4,0-1,0-1.6c0-0.6,0-1.2-0.1-1.9s0-1.1,0-1.5
+		c0-1,0-1.9,0-2.6c0-0.7,0.1-1.5,0.1-2.2c-0.6,1.3-1.1,2.7-1.6,4.1c-0.5,1.5-1,3-1.5,4.4c0,0,0.1,0.1,0.1,0.2c-0.2,0-0.4,0-0.7,0.1
+		c-0.3,0.1-0.5,0.1-0.7,0.1c-0.5-1.9-1.1-3.7-1.6-5.5c-0.5-1.8-1.1-3.6-1.6-5.5c-0.1,1-0.1,2-0.1,3c0,1.1-0.1,2.1-0.1,3.2
+		c0,1.1,0,2.1-0.1,3.2c0,1-0.1,2-0.1,3h1.4v1.1c-0.5,0-0.9,0.1-1.3,0c-0.4,0-0.8,0-1.2-0.1c-0.4,0-0.8-0.1-1.2-0.1
+		c-0.4,0-0.8,0-1.3,0c-0.1,0-0.3,0-0.4,0c-0.1,0-0.2,0-0.3-0.1c-0.1,0-0.1-0.1-0.1-0.2c0-0.1-0.1-0.3-0.1-0.4c0-0.1,0-0.3,0-0.4
+		c0-0.1,0.1-0.2,0.1-0.2c0.2,0.1,0.4,0.2,0.6,0.1s0.4-0.2,0.5-0.4c0-0.1,0.1-0.3,0.1-0.7c0-0.4,0-0.9,0.1-1.6c0-0.6,0.1-1.3,0.1-2.1
+		C59,8.8,59,8,59,7.2c0-0.8,0-1.5,0.1-2.3c0-0.7,0.1-1.3,0.1-1.8c0-0.2,0-0.5,0-0.7c0-0.2-0.1-0.4-0.2-0.6c-0.1-0.2-0.3-0.3-0.5-0.4
+		c-0.2-0.1-0.4,0-0.6,0.1c0-0.2-0.1-0.5-0.1-0.7c0-0.2,0-0.4-0.1-0.7c1,0,2,0.1,3,0.1c0.9,0,1.9,0.1,3,0.1c0,0.3-0.1,0.5-0.4,0.7
+		c0.3,1.3,0.6,2.6,1,3.9c0.4,1.3,0.8,2.6,1.2,3.9c0.2-0.6,0.4-1.3,0.6-1.9c0.2-0.6,0.4-1.2,0.6-1.8C67,4.6,67.2,4,67.5,3.4
+		c0.2-0.6,0.4-1.3,0.6-2c-0.1,0-0.3,0-0.4-0.1c-0.1,0-0.2,0-0.4-0.1c-0.1,0-0.1-0.1-0.1-0.3c0-0.1,0.1-0.2,0.1-0.3
+		c0.1-0.1,0.2-0.1,0.3-0.1c0.1,0,0.2,0,0.3,0c0.4,0,0.7,0,1,0s0.6,0,0.9,0c0.3,0,0.6,0,0.9,0c0.3,0,0.6,0,1,0c0.1,0,0.3,0,0.4,0
+		c0.1,0,0.3,0.1,0.4,0.2c0.1,0.1,0.2,0.2,0.2,0.4c0,0.2,0,0.3-0.2,0.3c-0.1-0.1-0.2-0.1-0.3-0.1c-0.1,0-0.2,0.1-0.3,0.1
+		c-0.2,0.4-0.3,0.8-0.4,1.3c-0.1,0.5-0.1,0.9-0.1,1.4c-0.2,2.8-0.2,5.6,0,8.4c0,0.3,0,0.5,0.1,0.7C71.4,13.5,71.5,13.7,71.7,13.9z"
+		/>
+	<path fill="#c3c3c3" d="M81.7,12c-0.1,0-0.1,0-0.2,0c-0.1,0-0.1,0-0.2,0c0,0.4,0,0.9-0.2,1.3c-0.1,0.4-0.4,0.8-0.7,1.1
+		c-0.3,0.3-0.7,0.6-1.1,0.8c-0.4,0.2-0.9,0.3-1.3,0.4c-0.4,0.1-0.8,0-1.2,0c-0.4-0.1-0.8-0.2-1.1-0.5c-0.2-0.1-0.3-0.3-0.5-0.5
+		c-0.2-0.2-0.3-0.4-0.4-0.6c-0.2-0.4-0.3-0.7-0.4-1c-0.1-0.3-0.2-0.6-0.3-1C74,11.7,74,11.4,74,11c0-0.3,0-0.7,0.1-1.1
+		c0.1-0.7,0.3-1.4,0.5-2c0.3-0.6,0.6-1.1,0.9-1.6s0.8-0.8,1.3-1.1c0.5-0.3,1-0.4,1.5-0.4c0.2,0,0.4,0,0.6,0.1
+		c0.2,0.1,0.3,0.1,0.5,0.3C79.6,5.4,79.8,5.6,80,6c0.2,0.4,0.4,0.8,0.5,1.3c0.1,0,0.1,0,0.2,0c0.1,0,0.1,0,0.2,0c0,0.1,0,0.1,0,0.2
+		c0,0.1,0,0.1,0,0.2L79.2,8c-0.2,0.1-0.3,0.1-0.4,0c-0.1,0-0.1-0.1-0.2-0.2c0-0.1,0-0.1,0-0.2c0.1,0,0.1,0,0.2,0c0,0,0.1,0,0.2,0
+		c0.1-0.1,0.2-0.2,0.2-0.4c0-0.2,0-0.3,0-0.5c0-0.3-0.1-0.6-0.3-0.9c-0.1-0.1-0.2-0.2-0.3-0.3c-0.1-0.1-0.2-0.1-0.4,0
+		c-0.1,0-0.3,0.1-0.4,0.3c-0.1,0.2-0.3,0.4-0.4,0.6c-0.1,0.2-0.2,0.4-0.3,0.6c-0.1,0.2-0.1,0.4-0.1,0.5c-0.4,1.8-0.5,3.6-0.1,5.5
+		c0.1,0.2,0.1,0.4,0.2,0.7c0.1,0.2,0.2,0.4,0.3,0.6c0.1,0.2,0.3,0.3,0.6,0.5c0.2,0.1,0.4,0.1,0.7,0.1c0.4-0.1,0.7-0.3,1-0.7
+		c0.2-0.4,0.4-0.8,0.5-1.2c0-0.2,0.1-0.4,0.1-0.6v-0.3c-0.2,0-0.3,0-0.4,0c-0.1,0-0.1-0.1-0.1-0.2c0-0.1,0-0.2,0.1-0.2
+		c0.4,0,0.8,0,1.2,0c0.4,0,0.8,0,1.2,0c0,0.1,0,0.1,0,0.2C81.8,11.8,81.8,11.9,81.7,12z"/>
+	<path fill="#c3c3c3" d="M83.5,14.2c0.2-4.3,0.3-8.5,0.2-12.8c-0.3,0-0.6,0-0.9,0c-0.3,0-0.6,0-0.9,0c0-0.2,0-0.3,0-0.5s0-0.3,0-0.5
+		c0.7,0,1.3,0,2-0.1c0.7,0,1.3,0,2-0.1c0.8-0.2,1.6-0.2,2.4-0.1c0.8,0.1,1.6,0.3,2.4,0.5c0.7,0.3,1.4,0.7,1.9,1.2
+		c0.5,0.5,0.9,1.1,1.1,1.8C94,4.9,94.1,6.1,94,7.4C94,8.6,93.8,9.8,93.7,11c0,0.4-0.1,0.8-0.2,1.2c-0.1,0.4-0.3,0.8-0.5,1.1
+		c-0.3,0.5-0.8,1-1.3,1.3c-0.5,0.3-1.1,0.5-1.7,0.6c-0.5,0.1-0.9,0.2-1.4,0.1c-0.5,0-0.9,0-1.4-0.1v0c-0.2,0-0.3,0-0.5,0
+		s-0.4,0-0.5,0l-0.1,0c0,0,0,0,0,0c-0.6,0-1.3,0-1.9,0c-0.6,0-1.3,0-1.9,0c-0.2-0.4-0.1-0.8,0.2-1.1c0.2-0.2,0.3-0.2,0.5-0.3
+		C83.2,14.1,83.4,14.1,83.5,14.2z M89.4,1.9c-0.4-0.3-0.8-0.5-1.3-0.6c-0.5-0.1-1-0.1-1.5-0.1c-0.3,4.5-0.2,9.1,0.4,13.6
+		c0.2,0,0.4,0,0.5-0.1c0.2,0,0.4-0.1,0.6-0.1c0.3-0.1,0.6-0.2,0.9-0.4c0.3-0.2,0.6-0.4,0.8-0.7c0.2-0.3,0.4-0.6,0.5-1
+		s0.2-0.7,0.2-1.1c0.4-2.1,0.4-4.2,0.2-6.3c-0.1-0.6-0.2-1.2-0.4-1.9C90.3,2.8,89.9,2.3,89.4,1.9z"/>
+	<path fill="#c3c3c3" d="M102.4,9.7c-0.6-0.1-1.3-0.1-2,0c-0.7,0.1-1.4,0.4-2,0.8l-0.2-1.4L99.1,9c0-0.4-0.1-0.7-0.1-1
+		c0-0.2-0.1-0.5-0.1-0.9c-0.3,0-0.6,0.1-0.9,0.1c-0.3,0-0.6,0.1-1,0.1c-0.2,0.7-0.3,1.3-0.4,1.8c-0.1,0.5-0.2,1.1-0.4,1.6l0.2-0.1
+		l0.7,0.6c-0.4,0.2-0.8,0.6-1.2,1.1c-0.4,0.5-0.7,1-0.9,1.5l-0.9-0.5c0-0.1,0.1-0.2,0.2-0.4c0.1-0.2,0.2-0.3,0.2-0.4
+		c0.1-0.2,0.2-0.5,0.3-1c0.1-0.4,0.2-0.9,0.4-1.3c0.1-0.5,0.2-0.9,0.3-1.3c0.1-0.4,0.2-0.7,0.2-0.9c0.1-0.4,0.2-0.8,0.3-1.2
+		c0.1-0.4,0.2-0.8,0.3-1.2c0.2-0.7,0.3-1.4,0.4-2.1c0.1-0.7,0.2-1.4,0.3-2.2c-0.1,0-0.2,0-0.3,0c-0.1,0-0.2,0-0.3,0l0.1-0.8l4-0.1
+		l0.1,0.8c-0.1,0-0.2,0-0.2,0c0,0-0.1,0-0.2,0c0.1,0.7,0.2,1.4,0.3,2c0.1,0.6,0.2,1.2,0.3,1.8c0.1,0.6,0.2,1.2,0.3,1.8
+		c0.1,0.6,0.2,1.3,0.4,2c0.2,0,0.3,0,0.3,0c0,0,0.1,0,0.3,0L102.4,9.7z M98.8,6.1c-0.1-0.7-0.2-1.3-0.3-2c-0.1-0.6-0.3-1.3-0.4-2
+		c-0.1,0.6-0.2,1.3-0.4,2.1c-0.1,0.7-0.3,1.5-0.5,2.2L98.8,6.1z"/>
+	<path fill="#c3c3c3" d="M124.9,20.1c0-0.3,0.1-0.6,0.3-0.8c0.2-0.2,0.4-0.3,0.7-0.4c0.3-0.1,0.5,0,0.8,0.1c0.3,0.1,0.5,0.3,0.6,0.5
+		c0.3,0.4,0.6,0.9,0.7,1.4c0.2,0.5,0.2,1,0.2,1.5c0,0.5-0.1,1-0.3,1.5c-0.2,0.5-0.4,1-0.7,1.4c-0.6,0.9-1.4,1.6-2.4,2
+		c-1,0.5-2,0.7-3,0.7c-1.5,0-2.8-0.3-3.9-1s-2.1-1.4-3-2.4c-0.9-1-1.8-2.1-2.5-3.2c-0.8-1.2-1.5-2.3-2.3-3.5c-1.1,1.2-2.4,2.2-3.9,3
+		c-1.5,0.8-3,1.1-4.5,1c-1.1,0-2.1-0.1-3-0.5c-0.9-0.3-1.6-0.8-2.2-1.4c-0.6-0.6-0.9-1.3-1.1-2.2c-0.2-0.8-0.1-1.7,0.2-2.7
+		c0.3-0.9,0.7-1.6,1.3-2.2c0.6-0.6,1.2-1.1,2-1.5c0.7-0.4,1.5-0.6,2.4-0.7c0.8-0.1,1.7,0,2.6,0.2c0-1.7,0-3.4,0-5c0-1.7,0-3.2,0-4.6
+		c-0.3,0-0.6,0-0.9,0c-0.3,0-0.6,0-0.9,0c0-0.2,0-0.3,0-0.5s0-0.3,0-0.5l3.7-0.1c0.8-0.2,1.6-0.2,2.4-0.1c0.8,0.1,1.6,0.3,2.4,0.5
+		c0.7,0.3,1.4,0.7,1.9,1.2c0.5,0.5,0.9,1.1,1.1,1.8c0.3,1.2,0.4,2.4,0.3,3.6c-0.1,1.2-0.2,2.5-0.4,3.7c-0.1,1-0.4,2-0.8,3
+		c-0.5,1-1,2-1.7,2.9c0.3,0.4,0.6,0.8,0.8,1.2c0.3,0.4,0.5,0.8,0.8,1.2c0.5,0.8,1.1,1.6,1.7,2.5c0.6,0.8,1.3,1.6,2,2.4
+		c0.7,0.7,1.5,1.3,2.4,1.8s1.8,0.7,2.9,0.8c1.1,0,2.1-0.2,3-0.7c0.9-0.5,1.6-1.2,2.1-2.2c0.2-0.4,0.3-0.8,0.4-1.3
+		c0.1-0.5,0-0.9-0.1-1.3c-0.2,0.1-0.4,0.2-0.6,0.2c-0.2,0-0.4,0-0.6-0.1c-0.2-0.1-0.4-0.2-0.5-0.4S124.9,20.4,124.9,20.1z M102.9,21
+		c1.5-0.4,2.8-1,3.7-1.8c0.9-0.8,1.7-1.7,2.3-2.8c-0.2-0.2-0.3-0.5-0.6-0.7c-0.6-0.7-1.2-1.4-1.9-1.9c0,0.6,0.1,1.2,0.1,1.8
+		c0,0.6,0.1,1.1,0.2,1.6h0v0.1c-0.5,0-0.9,0-1.3,0c-0.4,0-0.8,0-1.2,0c-0.3,0-0.6,0-0.9,0c-0.3,0-0.6,0-0.9,0
+		c-0.1-0.2-0.1-0.4,0-0.7c0-0.2,0.1-0.3,0.3-0.5c0.3-0.3,0.7-0.4,1.1-0.2l0.1-3.5c-0.5-0.2-1-0.3-1.5-0.3c-0.5,0-1.1,0-1.6,0.1
+		c-0.6,0.1-1.1,0.3-1.6,0.6c-0.5,0.3-0.9,0.7-1.3,1.1c-0.4,0.4-0.7,0.9-0.9,1.5c-0.2,0.5-0.3,1.1-0.3,1.6c0,0.7,0.2,1.3,0.6,1.8
+		c0.4,0.5,0.9,0.9,1.4,1.4c0.2,0.2,0.5,0.3,0.8,0.5c0.3,0.1,0.7,0.2,1.1,0.3c0.4,0.1,0.8,0.1,1.2,0.1
+		C102.1,21.1,102.5,21.1,102.9,21z M109.3,1.9c-0.4-0.3-0.8-0.5-1.2-0.6c-0.5-0.1-0.9-0.1-1.4-0.1c-0.1,1.7-0.2,3.4-0.3,5.3
+		c-0.1,1.9-0.1,3.7,0,5.6c0.6,0.4,1.2,0.8,1.7,1.4c0.5,0.5,1,1.1,1.5,1.6c0.2-0.6,0.4-1.2,0.6-1.9c0.2-0.6,0.3-1.2,0.3-1.7
+		c0.2-1.1,0.2-2.1,0.3-3.1c0-1,0-2.1-0.1-3.1c-0.1-0.6-0.2-1.2-0.4-1.9C110.1,2.8,109.8,2.3,109.3,1.9z"/>
+	<path fill="#c3c3c3" d="M116.5,1.2c-0.3,0-0.6,0-0.9,0c-0.3,0-0.6,0-0.9,0V0.4c0.5,0,0.9,0,1.2-0.1s0.7,0,1.1,0c0.4,0,0.7,0,1.1,0
+		s0.8,0,1.3-0.1c0.9,0,1.8,0,2.8-0.1c0.9,0,1.8,0,2.8-0.1c0,0.6,0,1.2,0,1.8c0,0.6,0,1.2,0,1.8c-0.2,0-0.3,0-0.5,0
+		c-0.2,0-0.3,0-0.5,0c-0.1,0-0.2,0-0.3,0c-0.1,0-0.1-0.1,0-0.1c0.1-0.2,0.1-0.4,0.1-0.6s0-0.4-0.1-0.6c-0.1-0.2-0.2-0.4-0.3-0.6
+		c-0.1-0.2-0.2-0.3-0.4-0.4c-0.2-0.1-0.4-0.2-0.6-0.2c-0.2,0-0.5,0-0.7,0c-0.3,0-0.5,0.1-0.8,0.1c-0.3,0.1-0.5,0.2-0.6,0.4
+		c-0.1,0.2-0.1,0.3-0.1,0.3c0,0.1,0,0.2,0,0.3c0,0.7-0.1,1.3-0.1,2c0,0.6-0.1,1.3-0.1,1.9c0,0.2,0,0.3,0,0.5c0,0.2,0,0.3,0,0.5
+		c0.6-0.2,1.2-0.3,1.9-0.4c0.6-0.1,1.2-0.3,1.9-0.4c0,0.1,0.1,0.2,0.1,0.3c0,0.1,0,0.3,0,0.4c0,0.2-0.1,0.3-0.1,0.4
+		c-0.1,0.1-0.1,0.2-0.1,0.3c-0.1,0.1-0.2,0.1-0.4,0.2c-0.1,0-0.3,0.1-0.4,0.1c-0.5,0.1-0.9,0.2-1.4,0.3c-0.5,0.1-0.9,0.1-1.4,0.2
+		c0,1-0.1,2-0.2,2.9c-0.1,1-0.1,1.9-0.2,2.9c0.8,0.2,1.5,0.3,2,0.1c0.6-0.2,1.2-0.5,1.9-1c0.2-0.1,0.2-0.3,0.2-0.5
+		c0-0.2,0-0.5,0-0.7c0-0.2,0.1-0.5,0.2-0.6c0.1-0.2,0.3-0.3,0.7-0.4c0.4,0,0.6,0.1,0.7,0.4c0.1,0.3,0.2,0.7,0.2,1.1
+		c0,0.5,0,0.9-0.1,1.4c-0.1,0.5-0.1,0.9,0,1.2c-0.5,0-1,0-1.4,0c-0.4,0-0.8,0-1.2,0.1c-0.4,0-0.8,0-1.2,0.1c-0.4,0-0.9,0-1.3,0
+		c-0.9,0-1.7,0-2.5,0.1c-0.7,0.1-1.6,0.1-2.4,0.1c-0.2-0.2-0.2-0.4-0.2-0.7c0-0.2,0.1-0.5,0.3-0.6c0.2-0.2,0.3-0.3,0.6-0.3
+		c0.2-0.1,0.5,0,0.7,0.1c0.1-2.1,0.2-4.3,0.1-6.5C116.3,5.5,116.3,3.4,116.5,1.2z"/>
+</g>
+</svg>
+
+            </a>
+        </p>
+	</footer>
+
+	<script>
+		var algolia_app_id      = 'FU55RWGNDN';
+		var algolia_search_key  = 'c41c5de31ca55044dbb0bde815d35121';
+				var version             = '5.2';
+			</script>
+
+	<script id="search_suggestion_template" type="text/template">
+	<div class="autocomplete-wrapper">
+		{{#_highlightResult.h1}}
+		<div class="h1">
+			{{{ _highlightResult.h1.value }}}
+		</div>
+		{{/_highlightResult.h1}}
+
+		<div class="sub-section">
+			{{#_highlightResult.h2}}
+			<div class="h2">
+				<span class="hash">#</span> {{{ _highlightResult.h2.value }}}
+			</div>
+			{{/_highlightResult.h2}}
+
+			{{#_highlightResult.h3}}
+			<div class="h3">
+				> {{{ _highlightResult.h3.value }}}
+			</div>
+			{{/_highlightResult.h3}}
+
+			{{#_highlightResult.h4}}
+			<div class="h4">
+				> {{{ _highlightResult.h4.value }}}
+			</div>
+			{{/_highlightResult.h4}}
+		</div>
+
+		{{#_highlightResult.content}}
+		<div class="content">
+			{{{ _highlightResult.content.value }}}
+		</div>
+		{{/_highlightResult.content}}
+	</div>
+</script>
+
+<script id="search_empty_template" type="text/template">
+	<div class="autocomplete-wrapper empty">
+		<div class="h2">We didn't find any result for "{{query}}". Sorry!</div>
+	</div>
+</script>
+
+<script id="search_footer_template" type="text/template">
+	<div class="footer">
+		<a target="_blank" href="https://www.algolia.com/referrals/5a08e6a4/join">
+			<img width="50" src="/docs/assets/img/algolia-logo.png">
+			<div class="powered">powered by</div>
+			<div style="clear: both"></div>
+		</a>
+	</div>
+</script>
+
+	<script src="../../build/assets/js/laravel-be3cb5d7de.js"></script>
+	<script src="../../assets/js/viewport-units-buggyfill.js"></script>
+
+	<script>window.viewportUnitsBuggyfill.init();</script>
+    <script>
+          ga('create', 'UA-53903425-7', 'auto');
+          ga('send', 'pageview');
+    </script>
+</body>
+</html>

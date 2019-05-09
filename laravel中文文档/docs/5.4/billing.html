@@ -1,0 +1,1230 @@
+<!doctype html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<title>Laravel 的收费系统 Cashier | Laravel 5.4 中文文档
+</title>
+	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+	<meta name="author" content="Taylor Otwell">
+	<meta name="description" content="Laravel 的收费系统 Cashier,简介,配置,Stripe,Braintree,货币配置,订阅列表,创建订阅,查询订阅状态,更改订阅计划,按量计费订阅,订阅税额设置,取消订阅,恢复订阅,更新信用卡信息,试用订阅,必须提供信用卡信息,非必须...
+">
+	<meta name="keywords" content="laravel,laravel中国,laravel中文,laravel框架中文,laravel文档,laravel框架中国,laravel中文文档">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+			<link rel="canonical" href="../5.5/billing.html" />
+		<!--[if lte IE 9]>
+		<script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+	<![endif]-->
+	<link rel="stylesheet" href="../../build/assets/css/laravel-4bbf92d154.css">
+	<link rel="apple-touch-icon" href="../../favicon.png.jpeg">
+    <style>
+        .list-group-item img.media-object {
+            width: 20px;
+            border-radius: 2px;
+            margin-right: 4px;
+            display: inline-block;
+        }
+    </style>
+</head>
+<body class="docs language-php">
+
+	<span class="overlay"></span>
+
+	<nav class="main">
+		<a href="../../index.html" class="brand nav-block">
+			<svg version="1.1"
+	 xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:a="http://ns.adobe.com/AdobeSVGViewerExtensions/3.0/"
+	 x="0px" y="0px" width="84.1px" height="57.6px" viewBox="0 0 84.1 57.6" enable-background="new 0 0 84.1 57.6"
+	 xml:space="preserve">
+<defs>
+</defs>
+<path fill="#FB503B" d="M83.8,26.9c-0.6-0.6-8.3-10.3-9.6-11.9c-1.4-1.6-2-1.3-2.9-1.2s-10.6,1.8-11.7,1.9c-1.1,0.2-1.8,0.6-1.1,1.6
+	c0.6,0.9,7,9.9,8.4,12l-25.5,6.1L21.2,1.5c-0.8-1.2-1-1.6-2.8-1.5C16.6,0.1,2.5,1.3,1.5,1.3c-1,0.1-2.1,0.5-1.1,2.9
+	c1,2.4,17,36.8,17.4,37.8c0.4,1,1.6,2.6,4.3,2c2.8-0.7,12.4-3.2,17.7-4.6c2.8,5,8.4,15.2,9.5,16.7c1.4,2,2.4,1.6,4.5,1
+	c1.7-0.5,26.2-9.3,27.3-9.8c1.1-0.5,1.8-0.8,1-1.9c-0.6-0.8-7-9.5-10.4-14c2.3-0.6,10.6-2.8,11.5-3.1C84.2,28,84.4,27.5,83.8,26.9z
+	 M37.5,36.4c-0.3,0.1-14.6,3.5-15.3,3.7c-0.8,0.2-0.8,0.1-0.8-0.2C21.2,39.6,4.4,4.8,4.1,4.4c-0.2-0.4-0.2-0.8,0-0.8
+	c0.2,0,13.5-1.2,13.9-1.2c0.5,0,0.4,0.1,0.6,0.4c0,0,18.7,32.3,19,32.8C38,36.1,37.8,36.3,37.5,36.4z M77.7,43.9
+	c0.2,0.4,0.5,0.6-0.3,0.8c-0.7,0.3-24.1,8.2-24.6,8.4c-0.5,0.2-0.8,0.3-1.4-0.6s-8.2-14-8.2-14L68.1,32c0.6-0.2,0.8-0.3,1.2,0.3
+	C69.7,33,77.5,43.6,77.7,43.9z M79.3,26.3c-0.6,0.1-9.7,2.4-9.7,2.4l-7.5-10.2c-0.2-0.3-0.4-0.6,0.1-0.7c0.5-0.1,9-1.6,9.4-1.7
+	c0.4-0.1,0.7-0.2,1.2,0.5c0.5,0.6,6.9,8.8,7.2,9.1C80.3,26,79.9,26.2,79.3,26.3z"/>
+</svg>
+
+			<span>Laravel</span>
+		</a>
+
+        <div class="search nav-block">
+            <svg version="1.1"
+	 xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:a="http://ns.adobe.com/AdobeSVGViewerExtensions/3.0/"
+	 x="0px" y="0px" width="16px" height="16px" viewBox="0 0 16 16" enable-background="new 0 0 16 16" xml:space="preserve">
+<defs>
+</defs>
+<g>
+	<g>
+		<path fill="#A1A1A1" d="M5.8,11.7c-1.6,0-3-0.6-4.1-1.7S0,7.4,0,5.8s0.6-3,1.7-4.1C2.8,0.6,4.3,0,5.8,0s3,0.6,4.1,1.7
+			c2.3,2.3,2.3,6,0,8.3C8.9,11.1,7.4,11.7,5.8,11.7z M5.8,1C4.5,1,3.3,1.5,2.4,2.4C1.5,3.3,1,4.5,1,5.8s0.5,2.5,1.4,3.4
+			c0.9,0.9,2.1,1.4,3.4,1.4s2.5-0.5,3.4-1.4c1.9-1.9,1.9-5,0-6.9C8.4,1.5,7.1,1,5.8,1z"/>
+	</g>
+	<g>
+		<path fill="#A1A1A1" d="M15.5,16c-0.1,0-0.3,0-0.3-0.1L9.3,10c-0.2-0.2-0.2-0.5,0-0.7s0.5-0.2,0.7,0l5.9,5.9
+			c0.2,0.2,0.2,0.5,0,0.7C15.8,16,15.6,16,15.5,16z"/>
+	</g>
+</g>
+</svg>
+
+            <input placeholder="搜索文档" type="text" v-model="search" id="search-input" v-on:blur="reset" />
+        </div>
+
+		<ul class="main-nav" v-if="! search">
+			<li class="nav-docs"><a href="../5.4.html">文档</a></li>
+<li ><a href="https://laravel-china.org/news" class="no-pjax">Laravel 资讯</a></li>
+<li class="dropdown"><a href="https://laravel-china.org/">Laravel China 社区</a></li>
+<li class="nav-forge"><a href="https://laravel-china.org/categories/1">酷工作</a></li>
+<li class="nav-docs"><a href="http://lumen.laravel-china.org">Lumen</a></li>
+<li class="nav-forge"><a href="https://cs.laravel-china.org/">速查表</a></li>
+<li class="nav-forge"><a href="https://fsdhub.com/books/laravel-essential-training-5.5">《Laravel 入门教程》</a></li>
+		</ul>
+
+        			<div class="switcher">
+	<div class="dropdown">
+		<button class="btn dropdown-toggle btn-inverted" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-expanded="true">
+			<!--<span class="faint">v</span> -->
+			5.4
+			<span class="caret"></span>
+		</button>
+		<ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu1">
+							<li role="presentation">
+					<a role="menuitem" tabindex="-1" href="../5.5/billing.html">5.5</a>
+				</li>
+							<li role="presentation">
+					<a role="menuitem" tabindex="-1" href="billing.html">5.4</a>
+				</li>
+							<li role="presentation">
+					<a role="menuitem" tabindex="-1" href="../5.3/billing.html">5.3</a>
+				</li>
+							<li role="presentation">
+					<a role="menuitem" tabindex="-1" href="../5.2/billing.html">5.2</a>
+				</li>
+							<li role="presentation">
+					<a role="menuitem" tabindex="-1" href="../5.1/billing.html">5.1</a>
+				</li>
+					</ul>
+	</div>
+</div>
+		
+        <div class="responsive-sidebar-nav">
+			<a href="billing.html#" class="toggle-slide menu-link btn">&#9776;</a>
+		</div>
+	</nav>
+
+	<nav id="slide-menu" class="slide-menu" role="navigation">
+
+	<div class="brand">
+		<a href="../../index.html">
+			<img src="../../assets/img/laravel-logo-white.png" height="50">
+		</a>
+	</div>
+
+	<ul class="slide-main-nav">
+		<li><a href="../../index.html">Home</a></li>
+		<li class="nav-docs"><a href="../5.4.html">文档</a></li>
+<li ><a href="https://laravel-china.org/news" class="no-pjax">Laravel 资讯</a></li>
+<li class="dropdown"><a href="https://laravel-china.org/">Laravel China 社区</a></li>
+<li class="nav-forge"><a href="https://laravel-china.org/categories/1">酷工作</a></li>
+<li class="nav-docs"><a href="http://lumen.laravel-china.org">Lumen</a></li>
+<li class="nav-forge"><a href="https://cs.laravel-china.org/">速查表</a></li>
+<li class="nav-forge"><a href="https://fsdhub.com/books/laravel-essential-training-5.5">《Laravel 入门教程》</a></li>
+	</ul>
+
+	<div class="slide-docs-nav">
+		<h2>Documentation</h2>
+		<ul>
+<li>
+<h2>前言</h2>
+<ul>
+<li><a href="about.html">翻译说明</a></li>
+<li><a href="releases.html">发行说明</a></li>
+<li><a href="upgrade.html">升级说明</a></li>
+<li><a href="contributions.html">贡献导引</a></li>
+<li><a href="../../api/5.4/index.html">API 文档</a></li>
+</ul>
+</li>
+<li>
+<h2>入门指南</h2>
+<ul>
+<li><a href="installation.html">安装</a></li>
+<li><a href="configuration.html">配置信息</a></li>
+<li><a href="structure.html">文件夹结构</a></li>
+<li><a href="lifecycle.html">请求周期</a></li>
+</ul>
+</li>
+<li>
+<h2>开发环境部署</h2>
+<ul>
+<li><a href="homestead.html">Homestead</a></li>
+<li><a href="valet.html">Valet</a></li>
+</ul>
+</li>
+<li>
+<h2>核心概念</h2>
+<ul>
+<li><a href="container.html">服务容器</a></li>
+<li><a href="providers.html">服务提供者</a></li>
+<li><a href="facades.html">Facades</a></li>
+<li><a href="contracts.html">Contracts</a></li>
+</ul>
+</li>
+<li>
+<h2>HTTP 层</h2>
+<ul>
+<li><a href="routing.html">路由</a></li>
+<li><a href="middleware.html">中间件</a></li>
+<li><a href="csrf.html">CSRF 保护</a></li>
+<li><a href="controllers.html">控制器</a></li>
+<li><a href="requests.html">请求</a></li>
+<li><a href="responses.html">响应</a></li>
+<li><a href="views.html">视图</a></li>
+<li><a href="session.html">Session</a></li>
+<li><a href="validation.html">表单验证</a></li>
+</ul>
+</li>
+<li>
+<h2>前端</h2>
+<ul>
+<li><a href="blade.html">Blade 模板</a></li>
+<li><a href="localization.html">本地化</a></li>
+<li><a href="frontend.html">前端指南</a></li>
+<li><a href="mix.html">编辑资源 Mix</a></li>
+</ul>
+</li>
+<li>
+<h2>安全</h2>
+<ul>
+<li><a href="authentication.html">用户认证</a></li>
+<li><a href="passport.html">API 认证</a></li>
+<li><a href="authorization.html">用户授权</a></li>
+<li><a href="encryption.html">加密解密</a></li>
+<li><a href="hashing.html">哈希</a></li>
+<li><a href="passwords.html">重置密码</a></li>
+</ul>
+</li>
+<li>
+<h2>综合话题</h2>
+<ul>
+<li><a href="artisan.html">Artisan 命令行</a></li>
+<li><a href="broadcasting.html">广播系统</a></li>
+<li><a href="cache.html">缓存系统</a></li>
+<li><a href="collections.html">集合</a></li>
+<li><a href="errors.html">错误与日志</a></li>
+<li><a href="events.html">事件系统</a></li>
+<li><a href="filesystem.html">文件存储</a></li>
+<li><a href="helpers.html">辅助函数</a></li>
+<li><a href="mail.html">邮件发送</a></li>
+<li><a href="notifications.html">消息通知</a></li>
+<li><a href="packages.html">扩展包开发</a></li>
+<li><a href="queues.html">队列</a></li>
+<li><a href="scheduling.html">任务调度</a></li>
+</ul>
+</li>
+<li>
+<h2>数据库</h2>
+<ul>
+<li><a href="database.html">快速入门</a></li>
+<li><a href="queries.html">查询构造器</a></li>
+<li><a href="pagination.html">分页</a></li>
+<li><a href="migrations.html">数据库迁移</a></li>
+<li><a href="seeding.html">数据填充</a></li>
+<li><a href="redis.html">Redis</a></li>
+</ul>
+</li>
+<li>
+<h2>Eloquent ORM</h2>
+<ul>
+<li><a href="eloquent.html">快速入门</a></li>
+<li><a href="eloquent-relationships.html">模型关联</a></li>
+<li><a href="eloquent-collections.html">Eloquent 集合</a></li>
+<li><a href="eloquent-mutators.html">修改器</a></li>
+<li><a href="eloquent-serialization.html">序列化</a></li>
+</ul>
+</li>
+<li>
+<h2>测试</h2>
+<ul>
+<li><a href="testing.html">快速入门</a></li>
+<li><a href="http-tests.html">HTTP 测试</a></li>
+<li><a href="dusk.html">浏览器测试 Dusk</a></li>
+<li><a href="database-testing.html">数据库测试</a></li>
+<li><a href="mocking.html">测试模拟器</a></li>
+</ul>
+</li>
+<li>
+<h2>官方扩展包</h2>
+<ul>
+<li><a href="billing.html">Cashier 交易工具包</a></li>
+<li><a href="envoy.html">Envoy 部署工具</a></li>
+<li><a href="passport.html">Passport OAuth 认证</a></li>
+<li><a href="scout.html">Scout 全文搜索</a></li>
+<li><a href="socialite.html">Socialite 社会化登录</a></li>
+</ul>
+</li>
+</ul>
+	</div>
+
+</nav>
+
+<div class="docs-wrapper container">
+
+	<section class="sidebar">
+
+            <div class="header">
+              <a type="button" class="btn btn-primary btn-inverted btn-lg btn-block turnofflight"><i class="fa fa-lightbulb-o"></i> 夜间模式 </a>
+              <br>
+              <div class="versions text-center ">
+                <a class="doc-btn btn-inverted " href="../5.5.html" title="Laravel 5.5 中文文档">C5.5</a>
+                <a class="doc-btn btn-inverted active" href="../5.4.html" title="Laravel 5.4 中文文档">C5.4</a>
+                <a class="doc-btn btn-inverted " href="../5.1.html" title="Laravel 5.1 中文文档">C5.1</a>
+              </div>
+            </div>
+
+            <a href="https://laravel-china.org/topics/3383" target="_blank" rel="nofollow" title="" style="display: block;margin-bottom: 23px;">
+                <img src="https://dn-phphub.qbox.me/uploads/images/201612/10/1/k7wwMpJduq.jpg" style="width: 100%;border: 1px solid #d8d3d3;box-shadow: 0 0 30px #d4d4d4;-moz-box-shadow: 0 0 30px #ccc;-webkit-box-shadow: 0 0 30px #d4d4d4;margin-bottom: 30px;margin-top: 10px;border-radius: 4px;">
+            </a>
+
+            <small><a href="billing.html#" id="doc-expand" style="font-size: 9px; color: #525252;">▶</a></small>
+
+		<ul>
+<li>
+<h2>前言</h2>
+<ul>
+<li><a href="about.html">翻译说明</a></li>
+<li><a href="releases.html">发行说明</a></li>
+<li><a href="upgrade.html">升级说明</a></li>
+<li><a href="contributions.html">贡献导引</a></li>
+<li><a href="../../api/5.4/index.html">API 文档</a></li>
+</ul>
+</li>
+<li>
+<h2>入门指南</h2>
+<ul>
+<li><a href="installation.html">安装</a></li>
+<li><a href="configuration.html">配置信息</a></li>
+<li><a href="structure.html">文件夹结构</a></li>
+<li><a href="lifecycle.html">请求周期</a></li>
+</ul>
+</li>
+<li>
+<h2>开发环境部署</h2>
+<ul>
+<li><a href="homestead.html">Homestead</a></li>
+<li><a href="valet.html">Valet</a></li>
+</ul>
+</li>
+<li>
+<h2>核心概念</h2>
+<ul>
+<li><a href="container.html">服务容器</a></li>
+<li><a href="providers.html">服务提供者</a></li>
+<li><a href="facades.html">Facades</a></li>
+<li><a href="contracts.html">Contracts</a></li>
+</ul>
+</li>
+<li>
+<h2>HTTP 层</h2>
+<ul>
+<li><a href="routing.html">路由</a></li>
+<li><a href="middleware.html">中间件</a></li>
+<li><a href="csrf.html">CSRF 保护</a></li>
+<li><a href="controllers.html">控制器</a></li>
+<li><a href="requests.html">请求</a></li>
+<li><a href="responses.html">响应</a></li>
+<li><a href="views.html">视图</a></li>
+<li><a href="session.html">Session</a></li>
+<li><a href="validation.html">表单验证</a></li>
+</ul>
+</li>
+<li>
+<h2>前端</h2>
+<ul>
+<li><a href="blade.html">Blade 模板</a></li>
+<li><a href="localization.html">本地化</a></li>
+<li><a href="frontend.html">前端指南</a></li>
+<li><a href="mix.html">编辑资源 Mix</a></li>
+</ul>
+</li>
+<li>
+<h2>安全</h2>
+<ul>
+<li><a href="authentication.html">用户认证</a></li>
+<li><a href="passport.html">API 认证</a></li>
+<li><a href="authorization.html">用户授权</a></li>
+<li><a href="encryption.html">加密解密</a></li>
+<li><a href="hashing.html">哈希</a></li>
+<li><a href="passwords.html">重置密码</a></li>
+</ul>
+</li>
+<li>
+<h2>综合话题</h2>
+<ul>
+<li><a href="artisan.html">Artisan 命令行</a></li>
+<li><a href="broadcasting.html">广播系统</a></li>
+<li><a href="cache.html">缓存系统</a></li>
+<li><a href="collections.html">集合</a></li>
+<li><a href="errors.html">错误与日志</a></li>
+<li><a href="events.html">事件系统</a></li>
+<li><a href="filesystem.html">文件存储</a></li>
+<li><a href="helpers.html">辅助函数</a></li>
+<li><a href="mail.html">邮件发送</a></li>
+<li><a href="notifications.html">消息通知</a></li>
+<li><a href="packages.html">扩展包开发</a></li>
+<li><a href="queues.html">队列</a></li>
+<li><a href="scheduling.html">任务调度</a></li>
+</ul>
+</li>
+<li>
+<h2>数据库</h2>
+<ul>
+<li><a href="database.html">快速入门</a></li>
+<li><a href="queries.html">查询构造器</a></li>
+<li><a href="pagination.html">分页</a></li>
+<li><a href="migrations.html">数据库迁移</a></li>
+<li><a href="seeding.html">数据填充</a></li>
+<li><a href="redis.html">Redis</a></li>
+</ul>
+</li>
+<li>
+<h2>Eloquent ORM</h2>
+<ul>
+<li><a href="eloquent.html">快速入门</a></li>
+<li><a href="eloquent-relationships.html">模型关联</a></li>
+<li><a href="eloquent-collections.html">Eloquent 集合</a></li>
+<li><a href="eloquent-mutators.html">修改器</a></li>
+<li><a href="eloquent-serialization.html">序列化</a></li>
+</ul>
+</li>
+<li>
+<h2>测试</h2>
+<ul>
+<li><a href="testing.html">快速入门</a></li>
+<li><a href="http-tests.html">HTTP 测试</a></li>
+<li><a href="dusk.html">浏览器测试 Dusk</a></li>
+<li><a href="database-testing.html">数据库测试</a></li>
+<li><a href="mocking.html">测试模拟器</a></li>
+</ul>
+</li>
+<li>
+<h2>官方扩展包</h2>
+<ul>
+<li><a href="billing.html">Cashier 交易工具包</a></li>
+<li><a href="envoy.html">Envoy 部署工具</a></li>
+<li><a href="passport.html">Passport OAuth 认证</a></li>
+<li><a href="scout.html">Scout 全文搜索</a></li>
+<li><a href="socialite.html">Socialite 社会化登录</a></li>
+</ul>
+</li>
+</ul>
+
+		<hr>
+            <ul>
+              <li>社交账号</li>
+                <ul class="social-account">
+                  <li><a href="http://weibo.com/1837553744/profile?topnav=1&wvr=6&is_all=1">Summer 的微博</a></li>
+                  <li>新手 QQ 群：282196078</li>
+                </ul>
+
+            </ul>
+
+            <ul>
+              <li>
+              微信订阅号
+                <ul>
+                  <li>
+<img class="image-border popover-with-html" data-content="" src="https://dn-phphub.qbox.me/uploads/images/201708/06/1/4zgVR8dNCt.png" style="width: 148px;height: 148px;border:1px solid #ccc;padding:2px;border-radius:3px;margin-top:5px;" data-original-title="" title="">
+                  </li>
+                </ul>
+                </li>
+            </ul>
+
+            <ul>
+              <li>推荐资源
+              <ul class="list list-group resource-links">
+                    <li class="list-group-item ">
+                <a href="../../index.html" class="no-pjax" title="Laravel 中文文档">
+                    <img class="media-object inline-block " src="https://dn-phphub.qbox.me/uploads/banners/ql9XtosRhTe4v8HVC3TV.jpg">
+                    Laravel 中文文档
+                </a>
+            </li>
+                    <li class="list-group-item ">
+                <a href="https://lumen.laravel-china.org" class="no-pjax" title="Lumen 中文文档">
+                    <img class="media-object inline-block " src="https://dn-phphub.qbox.me/uploads/banners/bcMFkfsJZpetLgKFwWqY.jpg">
+                    Lumen 中文文档
+                </a>
+            </li>
+                    <li class="list-group-item ">
+                <a href="https://cs.laravel-china.org/" class="no-pjax" title="Laravel 速查表">
+                    <img class="media-object inline-block " src="https://dn-phphub.qbox.me/uploads/banners/cV55gsrH70qz6VdKr502.jpg">
+                    Laravel 速查表
+                </a>
+            </li>
+                    <li class="list-group-item ">
+                <a href="http://yousails.mikecrm.com/4Dh5uWU" class="no-pjax" title="Laravel 软件外包服务">
+                    <img class="media-object inline-block " src="https://dn-phphub.qbox.me/uploads/banners/v89tIQ6vjceA6g7JmrQB.png">
+                    Laravel 软件外包
+                </a>
+            </li>
+                    <li class="list-group-item ">
+                <a href="https://laravel-china.org/topics/3626" class="no-pjax" title="Laravel 远程工作 ">
+                    <img class="media-object inline-block " src="https://dn-phphub.qbox.me/uploads/banners/Xlq6s7wLxvX8FlTP4qZe.png">
+                    Laravel 远程工作
+                </a>
+            </li>
+                    <li class="list-group-item ">
+                <a href="https://laravel-china.github.io/php-the-right-way/" class="no-pjax" title="PHP 之道 - PHPer 必读">
+                    <img class="media-object inline-block " src="https://dn-phphub.qbox.me/uploads/banners/vA50AYuscu2RCMowq7ee.png">
+                    PHP 之道
+                </a>
+            </li>
+                    <li class="list-group-item ">
+                <a href="https://laravel-china.org/composer" class="no-pjax" title="Composer 中文全量镜像">
+                    <img class="media-object inline-block " src="https://dn-phphub.qbox.me/uploads/banners/KltcLb6leMa12dvTAxD7.png">
+                    Composer 镜像
+                </a>
+            </li>
+            </ul>
+              </li>
+            </ul>
+
+	</section>
+
+	
+
+	<article>
+
+		<div class="alert alert-warning" role="alert">
+			一小时同步一次，更多信息请查阅 <a href="https://laravel-china.org/topics/2095">文档导读</a>。
+			发现瑕疵？你也可以
+				<a href="https://github.com/laravel-china/laravel-docs/edit/5.4/billing.md"><i class="fa fa-pencil-square-o"></i> 改进本文</a>
+			。<a href="https://laravel-china.org/topics/4026" target="_blank"><i class="fa fa-cloud-download" aria-hidden="true"></i> 离线版本下载</a>
+		</div>
+
+		<div class="main-content">
+			<h1>Laravel 的收费系统 Cashier</h1>
+<ul>
+<li><a href="billing.html#introduction">简介</a></li>
+<li><a href="billing.html#configuration">配置</a>
+<ul>
+<li><a href="billing.html#stripe-configuration">Stripe</a></li>
+<li><a href="billing.html#braintree-configuration">Braintree</a></li>
+<li><a href="billing.html#currency-configuration">货币配置</a></li>
+</ul></li>
+<li><a href="billing.html#subscriptions">订阅列表</a>
+<ul>
+<li><a href="billing.html#creating-subscriptions">创建订阅</a></li>
+<li><a href="billing.html#checking-subscription-status">查询订阅状态</a></li>
+<li><a href="billing.html#changing-plans">更改订阅计划</a></li>
+<li><a href="billing.html#subscription-quantity">按量计费订阅</a></li>
+<li><a href="billing.html#subscription-taxes">订阅税额设置</a></li>
+<li><a href="billing.html#cancelling-subscriptions">取消订阅</a></li>
+<li><a href="billing.html#resuming-subscriptions">恢复订阅</a></li>
+<li><a href="billing.html#updating-credit-cards">更新信用卡信息</a></li>
+</ul></li>
+<li><a href="billing.html#subscription-trials">试用订阅</a>
+<ul>
+<li><a href="billing.html#with-credit-card-up-front">必须提供信用卡信息</a></li>
+<li><a href="billing.html#without-credit-card-up-front">非必须提供信用卡</a></li>
+</ul></li>
+<li><a href="billing.html#handling-stripe-webhooks">处理 Stripe Webhooks</a>
+<ul>
+<li><a href="billing.html#defining-webhook-event-handlers">定义 Webhook 事件处理器</a></li>
+<li><a href="billing.html#handling-failed-subscriptions">订阅失败</a></li>
+</ul></li>
+<li><a href="billing.html#handling-braintree-webhooks">处理 Braintree Webhooks</a>
+<ul>
+<li><a href="billing.html#defining-braintree-webhook-event-handlers">定义 Webhook 事件处理器</a></li>
+<li><a href="billing.html#handling-braintree-failed-subscriptions">订阅失败</a></li>
+</ul></li>
+<li><a href="billing.html#single-charges">一次性收费</a></li>
+<li><a href="billing.html#invoices">发票</a>
+<ul>
+<li><a href="billing.html#generating-invoice-pdfs">生成发票的 PDFs</a></li>
+</ul></li>
+</ul>
+<p><a name="introduction"></a></p>
+<h2>简介</h2>
+<p>Laravel Cashier 提供了直观、流畅的接口来接入 <a href="https://stripe.com">Stripe's</a> 和 <a href="https://braintreepayments.com">Braintree's</a> 订阅付费服务。它可以处理几乎所有你写起来非常头疼付费订阅代码。除了提供基本的订阅管理之外，Cashier 还可以帮你处理优惠券，更改订阅计划, 按量计费订阅, 已取消订阅宽限期管理, 甚至生成发票的 PDF 文件。</p>
+<blockquote>
+<p>{note} 如果你只是需要提供一次性的收费服务，建议直接使用 Stripe 和 Braintree 的 SDK，而无需使用 Cashier。</p>
+</blockquote>
+<p><a name="configuration"></a></p>
+<h2>配置</h2>
+<p><a name="stripe-configuration"></a></p>
+<h3>Stripe</h3>
+<h4>Composer</h4>
+<p>首先，将 Cashier Stripe 扩展包添加到 <code>composer.json</code> 文件，然后运行 <code>composer update</code> 命令:</p>
+<pre><code>"laravel/cashier": "~7.0"</code></pre>
+<h4>Service 服务提供者</h4>
+<p>接下来，需要注册 <code>Laravel\Cashier\CashierServiceProvider</code> <a href="providers.html">服务提供者</a> 到你的 <code>config/app.php</code> 配置文件。</p>
+<h4>数据库迁移</h4>
+<p>在使用 Cashier 之前，我们需要 <a href="migrations.html">准备一下数据库</a>。需要在 <code>users</code> 表中新增几列，以及创建一个新的 <code>subscriptions</code> 表来存储客户的订阅信息：</p>
+<pre><code>Schema::table('users', function ($table) {
+    $table-&gt;string('stripe_id')-&gt;nullable();
+    $table-&gt;string('card_brand')-&gt;nullable();
+    $table-&gt;string('card_last_four')-&gt;nullable();
+    $table-&gt;timestamp('trial_ends_at')-&gt;nullable();
+});
+
+Schema::create('subscriptions', function ($table) {
+    $table-&gt;increments('id');
+    $table-&gt;integer('user_id');
+    $table-&gt;string('name');
+    $table-&gt;string('stripe_id');
+    $table-&gt;string('stripe_plan');
+    $table-&gt;integer('quantity');
+    $table-&gt;timestamp('trial_ends_at')-&gt;nullable();
+    $table-&gt;timestamp('ends_at')-&gt;nullable();
+    $table-&gt;timestamps();
+});</code></pre>
+<p>创建好数据库迁移文件之后，需要运行一下 <code>migrate</code> Artisan 命令。</p>
+<h4>Billable 模型</h4>
+<p>现在，需要添加 <code>Billable</code> trait 到你的模型定义。<code>Billable</code> trait 提供了丰富的方法去允许你完成常见的支付任务，比如创建订阅，使用优惠券以及更新信用卡信息。</p>
+<pre><code>use Laravel\Cashier\Billable;
+
+class User extends Authenticatable
+{
+    use Billable;
+}</code></pre>
+<h4>API Keys</h4>
+<p>最后，你需要在 <code>services.php</code> 配置文件中设置你的 Stripe key。你可以在 Stripe 的控制面板获取到相关的 API keys。</p>
+<pre><code>'stripe' =&gt; [
+    'model'  =&gt; App\User::class,
+    'key' =&gt; env('STRIPE_KEY'),
+    'secret' =&gt; env('STRIPE_SECRET'),
+],</code></pre>
+<p><a name="braintree-configuration"></a></p>
+<h3>Braintree</h3>
+<h4>Braintree 注意事项</h4>
+<p>对于大多数操作，Stripe 和 Braintree 在 Cashier 的实现方法是一致的，都提供对信用卡订阅计费的支持。但是 Braintree 是通过 Paypal 进行支付的，所以相对 Stripe 来说会缺少一些功能的支持。在选择该使用 Stripe 还是 Braintree 的时候需要留意这些区别。</p>
+<div class="content-list">
+<ul>
+<li>Braintree 支持 PayPal，但是 Stripe 不支持。</li>
+<li>Braintree 并不支持对 subscriptions 使用 <code>increment</code> 和 <code>decrement</code> 方法。这是 Braintree 本身的限制，并不是 Cahier 的限制。</li>
+<li>Braintree 并不支持基于百分比的折扣。 这也是 Braintree 本身的限制，并不是 Cahier 的限制。</li>
+</ul>
+</div>
+<h4>Composer</h4>
+<p>首先，将 Cashier Braintree 扩展包添加到 <code>composer.json</code> 文件，然后运行 <code>composer update</code> 命令:</p>
+<pre><code>"laravel/cashier-braintree": "~2.0"</code></pre>
+<h4>服务提供者</h4>
+<p>接下来，需要注册 <code>Laravel\Cashier\CashierServiceProvider</code> <a href="providers.html">服务提供者</a> 到你的 <code>config/app/php</code> 配置文件。</p>
+<h4>信用卡优惠计划</h4>
+<p>在使用 Cashier 之前，你需要首先在 Braintree 控制面板定义一个 <code>plan-credit</code> 折扣。这个折扣会根据用户选择的支付选项匹配合适的折扣比例，比如选择年付还是月付。</p>
+<p>在 Braintree 控制面板中配置的折扣总额可以随意填，Cashier 会在每次使用优惠券的时候根据我们自己的定制覆盖该默认值。我们需要这个优惠券计划的原因是 Braintree 并不原生支持按照订阅频率来匹配折扣比例。</p>
+<h4>数据库迁移</h4>
+<p>在使用 Cashier 之前，我们需要 <a href="migrations.html">准备一下数据库</a>。需要在 <code>users</code> 表中新增几列，以及创建一个新的 <code>subscriptions</code> 表来存储客户的订阅信息：</p>
+<pre><code>Schema::table('users', function ($table) {
+    $table-&gt;string('braintree_id')-&gt;nullable();
+    $table-&gt;string('paypal_email')-&gt;nullable();
+    $table-&gt;string('card_brand')-&gt;nullable();
+    $table-&gt;string('card_last_four')-&gt;nullable();
+    $table-&gt;timestamp('trial_ends_at')-&gt;nullable();
+});
+
+Schema::create('subscriptions', function ($table) {
+    $table-&gt;increments('id');
+    $table-&gt;integer('user_id');
+    $table-&gt;string('name');
+    $table-&gt;string('braintree_id');
+    $table-&gt;string('braintree_plan');
+    $table-&gt;integer('quantity');
+    $table-&gt;timestamp('trial_ends_at')-&gt;nullable();
+    $table-&gt;timestamp('ends_at')-&gt;nullable();
+    $table-&gt;timestamps();
+});</code></pre>
+<p>创建好数据库迁移文件之后，需要运行一下 <code>migrate</code> Artisan 命令。</p>
+<h4>Billable 模型</h4>
+<p>接下来，添加 <code>Billable</code> trait 到你的模型定义。</p>
+<pre><code>use Laravel\Cashier\Billable;
+
+class User extends Authenticatable
+{
+    use Billable;
+}</code></pre>
+<h4>API Keys</h4>
+<p>现在，你需要参考下面的示例在 <code>services.php</code> 文件中配置相关选项：</p>
+<pre><code>'braintree' =&gt; [
+    'model'  =&gt; App\User::class,
+    'environment' =&gt; env('BRAINTREE_ENV'),
+    'merchant_id' =&gt; env('BRAINTREE_MERCHANT_ID'),
+    'public_key' =&gt; env('BRAINTREE_PUBLIC_KEY'),
+    'private_key' =&gt; env('BRAINTREE_PRIVATE_KEY'),
+],</code></pre>
+<p>然后你需要将 Braintree SDK 添加到你的 <code>AppServiceProvider</code> 的 <code>boot</code> 方法中：</p>
+<pre><code>\Braintree_Configuration::environment(config('services.braintree.environment'));
+\Braintree_Configuration::merchantId(config('services.braintree.merchant_id'));
+\Braintree_Configuration::publicKey(config('services.braintree.public_key'));
+\Braintree_Configuration::privateKey(config('services.braintree.private_key'));</code></pre>
+<p><a name="currency-configuration"></a></p>
+<h3>货币配置</h3>
+<p>Cashier 使用美元（USD）作为默认货币。你可以在某个服务提供者的 <code>boot</code> 方法中使用 <code>Cashier::useCurrency</code> 方法来修改默认的货币设置。<code>useCurrency</code> 方法接受两个字符串参数：货币名称和货币符号。</p>
+<pre><code>use Laravel\Cashier\Cashier;
+
+Cashier::useCurrency('eur', '€');</code></pre>
+<p><a name="subscriptions"></a></p>
+<h2>订阅列表</h2>
+<p><a name="creating-subscriptions"></a></p>
+<h3>创建订阅</h3>
+<p>创建订阅，首先需要获取到一个 billabel 模型实例，一般情况下就是 <code>App\User</code> 实例。然后你可以使用 <code>newSubscription</code> 方法来创建该模型的订阅：</p>
+<pre><code>$user = User::find(1);
+
+$user-&gt;newSubscription('main', 'monthly')-&gt;create($stripeToken);</code></pre>
+<p><code>newSubscription</code> 方法的第一个参数应该是订阅的名称。如果你的应用程序只是提供一个简单的订阅，你可以简单的设置为 <code>main</code> 或者 <code>primary</code>。第二个参数需要指定用户的 Stripe / Braintree 订阅计划。这里的值应该和在 Stripe 或 Braintree 的中的对应值保持一致。</p>
+<p><code>create</code> 方法会创建订阅并且更新客户 ID 和相关的支付信息到数据库。</p>
+<h4>Additional User Details</h4>
+<p>如果你需要添加额外的客户细节信息，你可以在 <code>create</code> 方法的第二个参数中进行传递：</p>
+<pre><code>$user-&gt;newSubscription('main', 'monthly')-&gt;create($stripeToken, [
+    'email' =&gt; $email,
+]);</code></pre>
+<p>查阅一下 Stripe 的 <a href="https://stripe.com/docs/api#create_customer">创建客户文档</a> 或对应的 <a href="https://developers.braintreepayments.com/reference/request/customer/create/php">Braintree 文档</a> 了解更多支持的客户细节信息的内容。</p>
+<h4>优惠券</h4>
+<p>如果你想在创建订阅的时候使用优惠券，你可以使用 <code>withCoupon</code> 方法：</p>
+<pre><code>$user-&gt;newSubscription('main', 'monthly')
+     -&gt;withCoupon('code')
+     -&gt;create($stripeToken);</code></pre>
+<p><a name="checking-subscription-status"></a></p>
+<h3>查询订阅状态</h3>
+<p>一旦用户在你的应用程序中完成了订阅，你可以使用大量便利的方法来查询他们的订阅状态。首先, <code>subscribed</code> 方法会返回 <code>true</code> 如果用户已经激活了订阅，即使该订阅正在试用期内。</p>
+<pre><code>if ($user-&gt;subscribed('main')) {
+    //
+}</code></pre>
+<p>也可以在 <a href="middleware.html">路由中间件</a> 中使用 <code>subscribed</code> 方法，来基于用户的订阅状态过滤用户请求：</p>
+<pre><code>public function handle($request, Closure $next)
+{
+    if ($request-&gt;user() &amp;&amp; ! $request-&gt;user()-&gt;subscribed('main')) {
+        // 用户并没有完成支付...
+        return redirect('billing');
+    }
+
+    return $next($request);
+}</code></pre>
+<p>如果你想知道用户是否在一个常识周期内，你可以使用 <code>onTrial</code> 方法。该方法可以用来提示用户他们还在试用期之内：</p>
+<pre><code>if ($user-&gt;subscription('main')-&gt;onTrial()) {
+    //
+}</code></pre>
+<p><code>subscribedToPlan</code> 方法可以基于给定的 Stripe / Braintree 计划 ID 来判断用户是否有订阅该计划。下面的示例，我们在判断用户的 <code>main</code> 订阅是否成功激活订阅了 <code>monthly</code> 计划。</p>
+<pre><code>if ($user-&gt;subscribedToPlan('monthly', 'main')) {
+    //
+}</code></pre>
+<h4>取消订阅的状态</h4>
+<p>可以使用 <code>cancelled</code> 方法来判断用户是否之前已经完成了订阅，但是又已经取消了他们的订阅：</p>
+<pre><code>if ($user-&gt;subscription('main')-&gt;cancelled()) {
+    //
+}</code></pre>
+<p>可以去判断用户是否已经取消了他们的订阅，但是还是在订阅的「宽限期」直到订阅完全到期。比方说，如果一个用户在 3 月 5 号取消了订阅，但是原本订阅定于 3 月 10 号到期，那么该用户就会处于「宽限期」直到 3 月 10 号。需要注意的是，<code>subscribed</code> 方法在宽限期还是会返回 <code>true</code> :</p>
+<pre><code>if ($user-&gt;subscription('main')-&gt;onGracePeriod()) {
+    //
+}</code></pre>
+<p><a name="changing-plans"></a></p>
+<h3>更改订阅计划</h3>
+<p>在用户完成订阅之后，有时会更改订阅计划。将用户切换到一个新的订阅计划，需要传递订阅计划的 ID 给 <code>swap</code> 方法：</p>
+<pre><code>$user = App\User::find(1);
+
+$user-&gt;subscription('main')-&gt;swap('provider-plan-id');</code></pre>
+<p>如果用户在试用期，试用期的期限会被保留。如果订阅有限量的「份额」存在，该份额数目也会被保留。</p>
+<p>如果你想在更改用户订阅计划的时候取消用户当前订阅的试用期，可以使用 <code>skipTrial</code> 方法：</p>
+<pre><code>$user-&gt;subscription('main')
+        -&gt;skipTrial()
+        -&gt;swap('provider-plan-id');</code></pre>
+<p><a name="subscription-quantity"></a></p>
+<h3>订阅份额</h3>
+<blockquote>
+<p>{note} 按量计费订阅方式只支持 Stripe，因为 Braintree 并没有按量计费订阅之类的功能。</p>
+</blockquote>
+<p>有些时候订阅是会受「数量」影响的。举个例子，你的应用程序的付费方式可能是每个账户 $10 /人/月。你可以使用 <code>incrementQuantity</code> 和 <code>decrementQuantity</code> 方法轻松的增加或者减少你的订阅数量。</p>
+<pre><code>$user = User::find(1);
+
+$user-&gt;subscription('main')-&gt;incrementQuantity();
+
+// 当前的订阅数量加 5 
+$user-&gt;subscription('main')-&gt;incrementQuantity(5);
+
+$user-&gt;subscription('main')-&gt;decrementQuantity();
+
+// 当前的订阅数量减 5 
+$user-&gt;subscription('main')-&gt;decrementQuantity(5);</code></pre>
+<p>另外，你可以使用 <code>updateQuantity</code> 方法指定订阅的数量：</p>
+<pre><code>$user-&gt;subscription('main')-&gt;updateQuantity(10);</code></pre>
+<p>查阅 <a href="https://stripe.com/docs/guides/subscriptions#setting-quantities">Stripe 文档</a> ，了解更多关于按量订阅的信息。</p>
+<p><a name="subscription-taxes"></a></p>
+<h3>订阅税额设置</h3>
+<p>为了设置每笔订阅的税收比例，需要在 billable 模型内实现 <code>taxPercentage</code> 方法，该方法返回一个 0 到 100 的数字，精度不超过小数点后两位。</p>
+<pre><code>public function taxPercentage() {
+    return 20;
+}</code></pre>
+<p><code>taxPercentage</code> 方法可以让你在模型基础上应用税率，这对于用户群跨越多个国家和税收的情况非常有帮助。</p>
+<blockquote>
+<p>{note} 但是需要注意的是 <code>taxPercentage</code> 方法仅适用于订阅付费模式。如果你使用 Cashier 完成一次性收费的业务，你需要手动的指定税率。</p>
+</blockquote>
+<p><a name="cancelling-subscriptions"></a></p>
+<h3>取消订阅</h3>
+<p>取消订阅，可以直接在用户的订阅上调用 <code>cancel</code> 方法：</p>
+<pre><code>$user-&gt;subscription('main')-&gt;cancel();</code></pre>
+<p>当订阅被取消之后，Cashier 自动会填充数据库中的 <code>ends_at</code> 列。这列用来指定 <code>subscribed</code> 方法什么时候应该返回 <code>false</code>。比如，如果一个客户在 3 月 1 号取消了订阅，但是订阅并不会结束直到 3 月 5 号才到期，所以 <code>subscribed</code> 方法会继续返回 <code>true</code> 直到 3 月 5 号。</p>
+<p>你也可以使用 <code>onGracePeriod</code> 方法来判断用户是否已经取消了订阅，但是还在一个「宽限期」：</p>
+<pre><code>if ($user-&gt;subscription('main')-&gt;onGracePeriod()) {
+    //
+}</code></pre>
+<p>如果你想直接取消一个订阅，可以直接调用 <code>cancelNow</code> 方法：</p>
+<pre><code>$user-&gt;subscription('main')-&gt;cancelNow();</code></pre>
+<p><a name="resuming-subscriptions"></a></p>
+<h3>恢复订阅</h3>
+<p>如果一个用户取消订阅之后，你可以使用 <code>resume</code> 方法来恢复他的订阅。该方法<strong>只适用于</strong>用户取消订阅之后的宽限期：</p>
+<pre><code>$user-&gt;subscription('main')-&gt;resume();</code></pre>
+<p>如果用户取消订阅之后，然后恢复订阅之时订阅已经到期，他们并不会被立即支付费用。代替的是，订阅会被简单进入重新激活的状态，需要按照原本的支付流程再次进行支付。</p>
+<p><a name="updating-credit-cards"></a></p>
+<h3>更新信用卡信息</h3>
+<p><code>updateCard</code> 方法被用于更新客户的信用卡信息。该方法会接受一个 Stripe 的 token，并设置一个新的信用卡作为默认的结算来源：</p>
+<pre><code>$user-&gt;updateCard($stripeToken);</code></pre>
+<p><a name="subscription-trials"></a></p>
+<h2>试用订阅</h2>
+<p><a name="with-credit-card-up-front"></a></p>
+<h3>必须提供信用卡信息</h3>
+<p>如果你想用户在选择试用订阅计划的时候必须提供信用卡信息，可以使用在创建订阅时使用 <code>trialDays</code> 方法：</p>
+<pre><code>$user = User::find(1);
+
+$user-&gt;newSubscription('main', 'monthly')
+            -&gt;trialDays(10)
+            -&gt;create($stripeToken);</code></pre>
+<p>该方法会设置一个试用期结束日期在数据库的订阅记录上，同时告知 Stripe / Braintree 在该日期之前并不开始结算。</p>
+<blockquote>
+<p>{note} 如果客户没有在试用期结束之前取消订阅，订阅会被自动结算，所以需要在试用期结束之前通知你的客户。</p>
+</blockquote>
+<p>你可以使用用户实例的 <code>onTrial</code> 方法来判断用户是否在试用期内，或者使用订阅实例上的 <code>onTrial</code>方法也可以。下面是示例：</p>
+<pre><code>if ($user-&gt;onTrial('main')) {
+    //
+}
+
+if ($user-&gt;subscription('main')-&gt;onTrial()) {
+    //
+}</code></pre>
+<p><a name="without-credit-card-up-front"></a></p>
+<h3>非必须提供信用卡</h3>
+<p>如果你打算提供一个试用期，并且不需要用户立马提交信用卡信息，你可以简单的在数据库的用户表记录中设置 <code>trial_ends_at</code> 列为你需要的试用期结束日期。这是用户注册过程中的典型手法：</p>
+<pre><code>$user = User::create([
+    // 填充其他用户属性...
+    'trial_ends_at' =&gt; Carbon::now()-&gt;addDays(10),
+]);</code></pre>
+<blockquote>
+<p>{note}  请确保在你的模型中已经为 <code>trial_ends_at</code> 添加<a href="eloquent-mutators.html#date-mutators">日期转换器</a>。</p>
+</blockquote>
+<p>Cashier 把这种类型的试用引用为「generic trial」, 因为它并没有关联任何已存在的订阅。<code>User</code> 实例上的 <code>onTrial</code> 会返回 <code>true</code> 值，只要当前的日期没有超过 <code>trial_ends_at</code> 的值：</p>
+<pre><code>if ($user-&gt;onTrial()) {
+    // 用户在试用期内...
+}</code></pre>
+<p>你可以使用 <code>onGenericTrial</code> 方法来判断用户是否在一个「generic」 试用期间，其实并没有创建任何真实的订阅：</p>
+<pre><code>if ($user-&gt;onGenericTrial()) {
+    // 用户在 「generic」 试用期内...
+}</code></pre>
+<p>一旦你准备创建一个真实的订阅给用户，你通常可以使用 <code>newSubscription</code> 方法：</p>
+<pre><code>$user = User::find(1);
+
+$user-&gt;newSubscription('main', 'monthly')-&gt;create($stripeToken);</code></pre>
+<p><a name="handling-stripe-webhooks"></a></p>
+<h2>处理 Stripe Webhooks</h2>
+<p>Stripe 和 Braintree 都能通过 webhooks 通知大量的事件给你的应用程序。为了处理 Stripe webhooks，定义一个路由指向 Cashier's webhook 控制器。该控制器会处理所有传来的请求并分发到合适的控制器方法：</p>
+<pre><code>Route::post(
+    'stripe/webhook',
+    '\Laravel\Cashier\Http\Controllers\WebhookController@handleWebhook'
+);</code></pre>
+<blockquote>
+<p>{note} 注册好路由之后，记得在 Stripe 的控制面板中配置好 webhook 跳转的 URL。</p>
+</blockquote>
+<p>Cashier 的控制器默认会在多次失败的支付尝试后自动取消该订阅（取决于你的 Stripe 设置）；但是，稍后你会发现，你可以根据自己的需要扩展该控制器。</p>
+<h4>Webhooks &amp; CSRF 保护</h4>
+<p>因为 Stripe webhooks 需要绕过 Laravel 的 <a href="csrf.html">CSRF 保护</a> ，所以需要确保将相关的 URI 作为例外添加到你的 <code>VerifyCsrfToken</code> 中间件或者在 <code>web</code> 中间件集合之外定义相关路由。</p>
+<pre><code>protected $except = [
+    'stripe/*',
+];</code></pre>
+<p><a name="defining-webhook-event-handlers"></a></p>
+<h3>定义 Webhook 事件处理器</h3>
+<p>Cashier 对于失败的支付自动进行取消订阅的处理，但是如果你想对 Stripe webhook 事件进行额外的处理，可以简单的扩展一下 Webhook 控制器。你的方法名称应该与 Cashier 的预设惯例一直，特别的是，方法名应该以 <code>handle</code> 为前缀，然后以 「驼峰」命名的方式加上你要处理的 Stripe webhook 的名称。比如，如果你希望去处理 <code>invoice.payment_succeeded</code> webhook, 你应该添加一个 <code>handleInvoicePaymentSucceeded</code> 方法到控制器：</p>
+<pre><code>&lt;?php
+
+namespace App\Http\Controllers;
+
+use Laravel\Cashier\Http\Controllers\WebhookController as CashierController;
+
+class WebhookController extends CashierController
+{
+    /**
+     * 处理 Stripe webhook。
+     *
+     * @param  array  $payload
+     * @return Response
+     */
+    public function handleInvoicePaymentSucceeded($payload)
+    {
+        // Handle The Event
+    }
+}</code></pre>
+<p><a name="handling-failed-subscriptions"></a></p>
+<h3>订阅失败</h3>
+<p>如果客户的信用卡过期了怎么办？不用担心 - Cashier 的 webhook 控制器会轻易的取消客户的订阅。像上面提到的，你所需要做的知识简单的指定一个路由到该控制器：</p>
+<pre><code>Route::post(
+    'stripe/webhook',
+    '\Laravel\Cashier\Http\Controllers\WebhookController@handleWebhook'
+);</code></pre>
+<p>就这么简单！失败的支付会被控制器捕捉、并处理。Cashier 控制器会自动取消客户的订阅当 Stripe 判断该订阅已经失败（正常会经过三次错误的支付尝试）。</p>
+<p><a name="handling-braintree-webhooks"></a></p>
+<h2>处理 Braintree Webhooks</h2>
+<p>Stripe 和 Braintree 都能通过 webhooks 通知大量的事件给你的应用程序。为了处理 Braintree webhooks，定义一个路由指向 Cashier's webhook 控制器。该控制器会处理所有传来的请求并分发到合适的控制器方法：</p>
+<pre><code>Route::post(
+    'braintree/webhook',
+    '\Laravel\Cashier\Http\Controllers\WebhookController@handleWebhook'
+);</code></pre>
+<blockquote>
+<p>{note} 注册好路由之后，记得在 Braintree 的控制面板中配置好 webhook 跳转的 URL。</p>
+</blockquote>
+<p>Cashier 的控制器默认会在多次失败的支付尝试后自动取消该订阅（取决于你的 Braintree 设置）；但是，稍后你会发现，你可以根据自己的需要扩展该控制器。</p>
+<h4>Braintree &amp; CSRF 保护</h4>
+<p>因为 Stripe webhooks 需要绕过 Laravel 的 <a href="csrf.html">CSRF 保护</a> ，所以需要确保将相关的 URI 作为例外添加到你的 <code>VerifyCsrfToken</code> 中间件或者在 <code>web</code> 中间件集合之外定义相关路由。</p>
+<pre><code>protected $except = [
+    'braintree/*',
+];</code></pre>
+<p><a name="defining-braintree-webhook-event-handlers"></a></p>
+<h3>定义 Webhook 事件处理器</h3>
+<p>Cashier 对于失败的支付自动进行取消订阅的处理，但是如果你想对 Braintree webhook 事件进行额外的处理，可以简单的扩展一下 Webhook 控制器。你的方法名称应该与 Cashier 的预设惯例一直，特别的是，方法名应该以 <code>handle</code> 为前缀，然后以 「驼峰」命名的方式加上你要处理的 Braintree webhook 的名称。比如，如果你希望去处理 <code>dispute_opened</code> webhook, 你应该添加一个 <code>handleDisputeOpened</code> 方法到控制器：</p>
+<pre><code>&lt;?php
+
+namespace App\Http\Controllers;
+
+use Braintree\WebhookNotification;
+use Laravel\Cashier\Http\Controllers\WebhookController as CashierController;
+
+class WebhookController extends CashierController
+{
+    /**
+     * 处理 Braintree webhook。
+     *
+     * @param  WebhookNotification  $webhook
+     * @return Response
+     */
+    public function handleDisputeOpened(WebhookNotification $notification)
+    {
+        // Handle The Event
+    }
+}</code></pre>
+<p><a name="handling-braintree-failed-subscriptions"></a></p>
+<h3>订阅失败</h3>
+<p>如果客户的信用卡过期了怎么办？不用担心 - Cashier 的 webhook 控制器会轻易的取消客户的订阅。像上面提到的，你所需要做的知识简单的指定一个路由到该控制器：</p>
+<pre><code>Route::post(
+    'braintree/webhook',
+    '\Laravel\Cashier\Http\Controllers\WebhookController@handleWebhook'
+);</code></pre>
+<p>就这么简单！失败的支付会被控制器捕捉、并处理。Cashier 控制器会自动取消客户的订阅当 Braintree 判断该订阅已经失败（正常会经过三次错误的支付尝试）。不要忘了：你需要在 Braintree 的控制面板正确配置 webhook URI。</p>
+<p><a name="single-charges"></a></p>
+<h2>一次性收费</h2>
+<h3>单次付费</h3>
+<blockquote>
+<p>{note} 使用 Stripe 时, <code>charge</code> 方法是以你当前货币的<strong>最小面值</strong>作为单位的。但是，使用 Braintree 时，你应该传递完整的美元金额给 <code>charge</code> 方法:</p>
+</blockquote>
+<p>如果你想对一个已订阅客户执行「单次」收费，你可以在 billable 模型实例上使用 <code>charge</code> 方法。</p>
+<pre><code>// Stripe 以美分结算...
+$user-&gt;charge(100);
+
+// Braintree 以美元结算...
+$user-&gt;charge(1);</code></pre>
+<p><code>charge</code> 方法可以接受一个数据作为第二个参数，允许你在 Stripe / Braintree 支付时传递任何可用的参数。查阅 Stripe 或 Braintree 的文档了解都有哪些可用的参数。</p>
+<pre><code>$user-&gt;charge(100, [
+    'custom_option' =&gt; $value,
+]);</code></pre>
+<p>当支付结算失败是 <code>charge</code> 方法会抛出一个异常。如果结算成功，会返回完成的 Stripe / Braintree 响应。</p>
+<pre><code>try {
+    $response = $user-&gt;charge(100);
+} catch (Exception $e) {
+    //
+}</code></pre>
+<h3>结算时生成发票</h3>
+<p>有时候你只是需要完成一个一次性的支付，但是也需要为结算生成一个发票信息，这样你可以提供 PDF 的票据给你的客户。<code>invoiceFor</code> 方法就是做这个的。例如，让我们给客户开具一个 $5.00 的「单次收费」发票：</p>
+<pre><code>// Stripe 以美分结算...
+$user-&gt;invoiceFor('One Time Fee', 500);
+
+// Braintree 以美元结算...
+$user-&gt;invoiceFor('One Time Fee', 5);</code></pre>
+<p>生成发票将立即对用户的信用卡收取费用。<code>invoiceFor</code> 方法可以接受一个数据作为第三个参数，允许你在 Stripe / Braintree 结算时传递任何可用的参数。</p>
+<pre><code>$user-&gt;invoiceFor('One Time Fee', 500, [
+    'custom-option' =&gt; $value,
+]);</code></pre>
+<blockquote>
+<p>{note} <code>invoiceFor</code> 方法在当多次尝试失败支付后也会产生一个 Stripe 发票。如果你不需要为失败重试的支付生成发票，你需要在第一次失败结算是就调用 Stripe 的 API 关闭它们。</p>
+</blockquote>
+<p><a name="invoices"></a></p>
+<h2>发票</h2>
+<p>你可以使用 <code>invoices</code> 方法轻松获取 billable 模型的所有发票信息：</p>
+<pre><code>$invoices = $user-&gt;invoices();
+
+// 在结果中包含待开发票...
+$invoices = $user-&gt;invoicesIncludingPending();</code></pre>
+<p>当将发票信息列出来给用户时，你可能需要使用发票的辅助函数来显示相关的发票信息。例如，你可能希望将发票列表以表格的形式显示，允许用户轻松的下载它们：</p>
+<pre><code>&lt;table&gt;
+    @foreach ($invoices as $invoice)
+        &lt;tr&gt;
+            &lt;td&gt;{{ $invoice-&gt;date()-&gt;toFormattedDateString() }}&lt;/td&gt;
+            &lt;td&gt;{{ $invoice-&gt;total() }}&lt;/td&gt;
+            &lt;td&gt;&lt;a href="/user/invoice/{{ $invoice-&gt;id }}"&gt;Download&lt;/a&gt;&lt;/td&gt;
+        &lt;/tr&gt;
+    @endforeach
+&lt;/table&gt;</code></pre>
+<p><a name="generating-invoice-pdfs"></a></p>
+<h3>生成发票的 PDFs</h3>
+<p>在生成发票的 PDF 文件之前，你需要先安装 <code>dompdf</code> PHP 库：</p>
+<pre><code>composer require dompdf/dompdf</code></pre>
+<p>然后，在路由或控制器内，使用 <code>downloadInvoice</code> 方法来生成一个发票的 PDF 的下载响应。浏览器会自动开始下载该文件：</p>
+<pre><code>use Illuminate\Http\Request;
+
+Route::get('user/invoice/{invoice}', function (Request $request, $invoiceId) {
+    return $request-&gt;user()-&gt;downloadInvoice($invoiceId, [
+        'vendor'  =&gt; 'Your Company',
+        'product' =&gt; 'Your Product',
+    ]);
+});</code></pre>
+<hr />
+<blockquote>
+<p>{note} 欢迎任何形式的转载，但请务必注明出处，尊重他人劳动共创开源社区。</p>
+<p>转载请注明：本文档由 Laravel China 社区 [laravel-china.org] 组织翻译，详见 <a href="https://laravel-china.org/topics/3810/laravel-54-document-translation-come-and-join-the-translation">翻译召集帖</a>。</p>
+<p>文档永久地址： <a href="../../index.html">http://d.laravel-china.org</a></p>
+</blockquote>
+		</div>
+
+		<div class="main-footer" style="border-top:1px dashed rgba(0, 0, 0, 0.1);padding-top: 30px;margin-top:30px;margin-bottom: 20px;">
+			<div class="prev-next-wrap clearfix">
+
+				
+			    &nbsp;
+							</div>
+		</div>
+
+	</article>
+</div>
+
+	<footer class="main">
+		<ul>
+			<li class="nav-docs"><a href="../5.4.html">文档</a></li>
+<li ><a href="https://laravel-china.org/news" class="no-pjax">Laravel 资讯</a></li>
+<li class="dropdown"><a href="https://laravel-china.org/">Laravel China 社区</a></li>
+<li class="nav-forge"><a href="https://laravel-china.org/categories/1">酷工作</a></li>
+<li class="nav-docs"><a href="http://lumen.laravel-china.org">Lumen</a></li>
+<li class="nav-forge"><a href="https://cs.laravel-china.org/">速查表</a></li>
+<li class="nav-forge"><a href="https://fsdhub.com/books/laravel-essential-training-5.5">《Laravel 入门教程》</a></li>
+		</ul>
+		<p>Laravel is a trademark of Taylor Otwell. Copyright &copy; Taylor Otwell.</p>
+            <div style="margin-top: 32px;">
+                <a href="https://www.upyun.com/" title="Composer 镜像赞助商">
+                    <img src="https://dn-phphub.qbox.me/uploads/banners/XPtLlZmIN1cQbLuDFEON.png" style="width: 200px;">
+                </a>
+            </div>
+            <p class="less-significant">
+            <a href="http://jackmcdade.com">
+                Designed by<br>
+                <svg version="1.1"
+	 xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:a="http://ns.adobe.com/AdobeSVGViewerExtensions/3.0/"
+	 x="0px" y="0px" width="128.2px" height="28px" viewBox="0 0 128.2 28" enable-background="new 0 0 128.2 28" xml:space="preserve"
+	>
+<defs>
+</defs>
+<g>
+	<path fill="#c3c3c3" d="M14.2,0.4c0,0.2,0,0.5,0,0.7c0,0.2,0,0.5,0,0.7l-1.4-0.3C12.9,3,13,4.5,13.1,6c0.1,1.5,0,3-0.1,4.5
+		c0,0.4-0.1,0.8-0.1,1.2c-0.1,0.4-0.1,0.8-0.3,1.2c-0.1,0.4-0.3,0.7-0.5,1.1c-0.2,0.3-0.5,0.6-0.9,0.9c-0.4,0.2-0.9,0.4-1.5,0.6
+		c-0.6,0.2-1.1,0.3-1.6,0.3c-0.6,0-1.2-0.1-1.6-0.3c-0.5-0.2-0.9-0.6-1.1-1c-0.3-0.5-0.5-1-0.6-1.6c-0.1-0.6-0.1-1.3,0-2.1
+		c0-0.2,0.1-0.5,0.2-0.7C4.9,9.9,5,9.7,5.1,9.5c0.1-0.2,0.2-0.4,0.3-0.6l1.1,0.4C6.7,9.3,7,9.4,7.3,9.5c0.3,0.1,0.5,0.1,0.6,0.2
+		c0,0.2,0,0.4-0.1,0.5c-0.1,0.2-0.1,0.3-0.2,0.4c-0.1,0.1-0.2,0.3-0.2,0.4c-0.1,0.2-0.1,0.3-0.1,0.5l-1.3-0.7
+		c-0.1,0.3-0.2,0.7-0.2,1.1c0,0.4,0.1,0.8,0.2,1.2c0.2,0.4,0.4,0.7,0.6,1c0.3,0.3,0.6,0.4,1,0.3c0.6,0,1.1-0.3,1.4-0.6
+		c0.3-0.4,0.5-0.9,0.7-1.7c0.1-0.7,0.2-1.6,0.2-2.8c0-1.1,0-2.4,0-3.9c0-0.6-0.1-1.3-0.1-2C9.7,2.8,9.6,2.1,9.5,1.4
+		c-0.2,0-0.5,0-0.8,0c-0.3,0-0.6,0-0.8,0c-0.8,0-1.5,0-2.2,0c-0.7,0-1.5,0-2.2,0.2c-0.3,0.1-0.6,0.2-1,0.4C2.2,2.1,1.9,2.4,1.6,2.6
+		C1.4,2.9,1.2,3.2,1.1,3.6C1,3.9,1,4.3,1.1,4.6c0.1,0.5,0.3,0.8,0.4,0.9V5.4c0-0.4,0.1-0.8,0.4-1c0.3-0.2,0.6-0.3,0.9-0.3
+		c0.3,0,0.6,0.1,0.9,0.3C4,4.6,4.1,5,4.1,5.4c0,0.4-0.1,0.8-0.4,1c-0.3,0.2-0.6,0.3-1,0.3H2.7C1.9,6.7,1.3,6.5,0.9,6
+		C0.5,5.6,0.2,5.1,0.1,4.5C0,4,0,3.4,0.2,2.7c0.2-0.6,0.5-1.1,1-1.5c0.4-0.3,0.8-0.5,1.2-0.7c0.4-0.1,0.9-0.2,1.4-0.3
+		c0.5-0.1,0.9-0.1,1.4-0.1c0.5,0,0.9,0,1.4,0h1.5c0.6,0,1.1,0,1.6,0.1c0.5,0,1,0.1,1.5,0.1c0.5,0,1,0.1,1.5,0.1
+		C13.1,0.5,13.6,0.5,14.2,0.4z"/>
+	<path fill="#c3c3c3" d="M25.2,14.3c0,0.2,0.1,0.4,0.1,0.6c0,0.2,0.1,0.4,0.1,0.7c-1-0.1-2-0.2-3-0.1c-1.1,0.1-2.1,0.2-3,0.4
+		c0-0.2-0.1-0.4-0.1-0.5c0-0.2-0.1-0.4-0.1-0.5c0.2,0,0.5-0.1,0.7-0.1c0.2,0,0.4-0.1,0.6-0.1c-0.1-1.5-0.3-3.1-0.5-4.6
+		c-0.5,0.1-0.9,0.1-1.4,0.2c-0.5,0.1-0.9,0.1-1.4,0.2c-0.2,0.7-0.3,1.3-0.5,2c-0.2,0.7-0.3,1.3-0.5,2c0.2,0,0.4,0,0.6,0
+		c0.1,0,0.3,0,0.4,0.1c0,0.2,0,0.3,0,0.5c0,0.1,0,0.2,0,0.4c0,0.1,0,0.2-0.1,0.3H14v-1.2h1c0.2-0.5,0.3-1,0.4-1.5
+		c0.1-0.5,0.3-1,0.4-1.5c0.2-0.6,0.3-1.2,0.5-1.7c0.2-0.6,0.3-1.2,0.5-1.7c0.2-1.1,0.4-2.1,0.6-3.2c0.2-1.1,0.3-2.1,0.4-3.2
+		c-0.2,0-0.5,0-0.7,0c-0.2,0-0.4,0-0.7,0c0-0.2,0.1-0.4,0.1-0.6c0-0.2,0-0.4,0.1-0.6c0.9,0,1.9,0,2.9,0c1,0,2,0,2.9,0l0.2,1.2
+		c-0.2,0-0.3,0-0.5,0c-0.2,0-0.3,0-0.5,0c0.3,2.1,0.7,4.3,1,6.5c0.3,2.2,0.7,4.4,1,6.5H25.2z M17.5,9c0.4-0.1,0.7-0.1,1.1-0.2
+		c0.4-0.1,0.8-0.1,1.2-0.2c-0.2-1-0.3-2-0.5-2.9c-0.2-1-0.4-1.9-0.6-2.9c-0.2,1-0.4,2.1-0.5,3.1C17.9,6.9,17.7,8,17.5,9z"/>
+	<path fill="#c3c3c3" d="M36.7,10.4c-0.1,0-0.2,0-0.3,0c-0.1,0-0.2,0-0.3,0c0,0.6,0,1.2-0.2,1.9c-0.2,0.6-0.5,1.2-1,1.6
+		c-0.5,0.5-1,0.9-1.6,1.1c-0.6,0.3-1.3,0.4-2,0.5c-0.6,0.1-1.1,0.1-1.8,0c-0.6-0.1-1.1-0.4-1.6-0.7c-0.2-0.2-0.5-0.4-0.8-0.7
+		c-0.3-0.3-0.5-0.5-0.6-0.8c-0.3-0.5-0.5-1-0.6-1.5c-0.2-0.5-0.3-0.9-0.4-1.4c-0.1-0.5-0.2-1-0.2-1.5c0-0.5,0-1,0.1-1.6
+		c0.2-1,0.4-2,0.8-2.9c0.4-0.9,0.8-1.7,1.4-2.3c0.5-0.7,1.2-1.2,1.9-1.6C30.2,0.2,30.9,0,31.7,0c0.3,0,0.5,0,0.8,0.1
+		c0.3,0.1,0.5,0.2,0.7,0.4c0.3,0.3,0.7,0.7,1,1.2c0.3,0.5,0.6,1.2,0.7,1.9c0.1,0,0.2,0,0.3,0c0.1,0,0.2,0,0.3,0c0,0.1,0,0.2,0,0.3
+		c0,0.1,0,0.2,0,0.3L33,4.6c-0.3,0.1-0.5,0.1-0.6,0c-0.1,0-0.2-0.1-0.2-0.2c-0.1-0.1-0.1-0.2,0-0.3c0.1,0,0.2,0,0.2,0
+		c0.1,0,0.1,0,0.2,0c0.2-0.2,0.3-0.3,0.3-0.6c0-0.2,0-0.5,0-0.7c0-0.5-0.2-0.9-0.5-1.3c-0.2-0.2-0.3-0.3-0.4-0.4
+		C31.8,1,31.6,1,31.4,1.1c-0.2,0-0.4,0.2-0.6,0.4c-0.2,0.2-0.4,0.5-0.5,0.9C30,2.6,29.9,3,29.8,3.3c-0.1,0.3-0.2,0.5-0.2,0.7
+		c-0.6,2.6-0.7,5.3-0.2,8c0.1,0.3,0.2,0.7,0.3,1s0.3,0.6,0.5,0.9c0.2,0.3,0.5,0.5,0.8,0.7c0.3,0.2,0.6,0.2,1,0.1
+		c0.6-0.1,1-0.4,1.4-1c0.3-0.5,0.6-1.1,0.7-1.8c0.1-0.3,0.1-0.6,0.1-0.9v-0.5c-0.2,0-0.4,0-0.6-0.1c-0.1-0.1-0.2-0.2-0.2-0.3
+		c0-0.1,0-0.2,0.1-0.3c0.6,0,1.2,0,1.7,0c0.6,0,1.2,0,1.7,0c0,0.1,0,0.2-0.1,0.3C36.7,10.2,36.7,10.3,36.7,10.4z"/>
+	<path fill="#c3c3c3" d="M48,14.2c0.1,0.2,0.3,0.3,0.5,0.4c0.2,0.1,0.5,0.1,0.7,0c0.1,0.1,0.1,0.2,0.1,0.4c0,0.2-0.1,0.3-0.2,0.4
+		c-0.1,0.1-0.2,0.2-0.4,0.2c-0.2,0-0.3,0-0.4,0c-0.3,0-0.7,0-1,0c-0.3,0-0.7,0-1-0.1c-0.3-0.1-0.7-0.2-1-0.4
+		c-0.3-0.2-0.5-0.4-0.7-0.7c-0.2-0.3-0.3-0.6-0.3-1c0-0.3,0-0.7,0-1.1V9.9c0-0.1,0-0.3,0-0.4c0-0.2-0.1-0.3-0.2-0.5
+		c-0.1-0.2-0.3-0.3-0.4-0.4c-0.2-0.1-0.4-0.1-0.7-0.1c-0.1,0-0.2,0-0.5,0.1c-0.2,0.3-0.3,0.5-0.5,0.8c-0.2,0.3-0.3,0.5-0.5,0.7
+		c0,0.8,0,1.5-0.1,2.2c0,0.7-0.1,1.5-0.1,2.1h1.4v1.1c-0.5,0-0.9,0.1-1.3,0c-0.4,0-0.8,0-1.2-0.1c-0.4,0-0.8-0.1-1.2-0.1
+		c-0.4,0-0.8,0-1.3,0c-0.1,0-0.3,0-0.4,0c-0.1,0-0.2,0-0.3-0.1c-0.1,0-0.1-0.1-0.1-0.2c0-0.1-0.1-0.3-0.1-0.4c0-0.1,0-0.3,0-0.4
+		c0-0.1,0.1-0.2,0.1-0.2c0.2,0.1,0.4,0.2,0.6,0.1s0.4-0.2,0.5-0.4c0-0.1,0.1-0.3,0.1-0.7c0-0.4,0-0.9,0.1-1.6c0-0.6,0.1-1.3,0.1-2.1
+		c0-0.8,0-1.6,0.1-2.4c0-0.8,0-1.5,0.1-2.3c0-0.7,0.1-1.3,0.1-1.8c0-0.2,0-0.5,0-0.7c0-0.2-0.1-0.4-0.2-0.6
+		c-0.1-0.2-0.3-0.3-0.5-0.4c-0.2-0.1-0.4,0-0.6,0.1c0-0.2-0.1-0.5-0.1-0.7c0-0.2,0-0.4-0.1-0.7c1,0,2,0.1,3,0.1c0.9,0,1.9,0.1,3,0.1
+		c0,0.1,0,0.2,0,0.3c0,0.1,0,0.3,0.1,0.4c0,0.1,0,0.3,0,0.4c0,0.1,0,0.2-0.1,0.2c-0.1,0.1-0.2,0.1-0.3,0.1c-0.1,0-0.2,0-0.4-0.1
+		c-0.1-0.1-0.3-0.1-0.4-0.2c-0.1-0.1-0.3-0.1-0.3-0.1c-0.1,0.9-0.1,1.9-0.1,2.9c0,1-0.1,2-0.1,3.1c0.7-1.2,1.4-2.5,2-3.8
+		c0.2-0.3,0.3-0.6,0.4-0.9c0.1-0.3,0.3-0.6,0.5-0.9c0.2-0.3,0.4-0.5,0.7-0.7C45.4,1,45.7,0.9,46,0.8c0.3-0.1,0.7-0.1,1,0
+		c0.3,0.1,0.6,0.2,0.9,0.5c0.2,0.3,0.4,0.6,0.4,1c0,0.4,0.1,0.8,0,1.1c0,0.2,0,0.3,0,0.5c0,0.2-0.1,0.3-0.2,0.4
+		c-0.1,0.2-0.2,0.3-0.4,0.4c-0.2,0.1-0.4,0.1-0.5,0.2c-0.1,0-0.3,0.1-0.4,0.1c-0.1,0-0.3,0-0.4,0C46.2,4.7,46,4.6,46,4.4
+		c-0.1-0.2-0.1-0.4,0-0.5c0.1-0.2,0.2-0.3,0.3-0.3c0.1,0,0.2-0.1,0.4-0.1c0.2-0.1,0.3-0.2,0.3-0.3c0.1-0.2,0.1-0.3,0.1-0.5
+		C47.1,2.4,47,2.2,47,2c-0.1-0.2-0.2-0.3-0.3-0.3c-0.2,0-0.3,0-0.5,0.1C46,1.9,45.9,2,45.7,2.2c-0.2,0.2-0.3,0.4-0.4,0.6
+		C45.2,3,45,3.3,44.9,3.5c-0.1,0.3-0.3,0.6-0.4,0.8c-0.2,0.2-0.3,0.5-0.4,0.8c-0.4,0.9-0.8,1.7-1.2,2.5c0.3,0,0.6-0.1,1,0
+		c0.4,0,0.7,0,1,0c0.3,0,0.7,0.1,1,0.2c0.3,0.1,0.6,0.3,0.8,0.6c0.3,0.3,0.4,0.6,0.5,1c0.1,0.4,0.1,0.8,0.2,1.1l0.2,2.1
+		c0,0.2,0.1,0.5,0.1,0.7C47.7,13.7,47.8,14,48,14.2z"/>
+	<path fill="#c3c3c3" d="M71.7,13.9c0.2,0.2,0.4,0.4,0.7,0.5c0.3,0.1,0.5,0,0.8-0.1c0,0.2,0.1,0.3,0.1,0.6c0.1,0.2,0.1,0.4,0.1,0.6
+		c-0.3,0-0.7,0-1.1,0s-0.8,0-1.3,0.1c-0.4,0-0.9,0-1.3,0c-0.4,0-0.8,0-1,0c0-0.1,0-0.1,0-0.2c0-0.1,0.1-0.2,0.2-0.3
+		c0.1-0.1,0.2-0.2,0.4-0.3c0.2-0.1,0.3-0.1,0.6-0.1c0.1,0,0.1-0.2,0.1-0.7c0-0.4,0-1,0-1.6c0-0.6,0-1.2-0.1-1.9s0-1.1,0-1.5
+		c0-1,0-1.9,0-2.6c0-0.7,0.1-1.5,0.1-2.2c-0.6,1.3-1.1,2.7-1.6,4.1c-0.5,1.5-1,3-1.5,4.4c0,0,0.1,0.1,0.1,0.2c-0.2,0-0.4,0-0.7,0.1
+		c-0.3,0.1-0.5,0.1-0.7,0.1c-0.5-1.9-1.1-3.7-1.6-5.5c-0.5-1.8-1.1-3.6-1.6-5.5c-0.1,1-0.1,2-0.1,3c0,1.1-0.1,2.1-0.1,3.2
+		c0,1.1,0,2.1-0.1,3.2c0,1-0.1,2-0.1,3h1.4v1.1c-0.5,0-0.9,0.1-1.3,0c-0.4,0-0.8,0-1.2-0.1c-0.4,0-0.8-0.1-1.2-0.1
+		c-0.4,0-0.8,0-1.3,0c-0.1,0-0.3,0-0.4,0c-0.1,0-0.2,0-0.3-0.1c-0.1,0-0.1-0.1-0.1-0.2c0-0.1-0.1-0.3-0.1-0.4c0-0.1,0-0.3,0-0.4
+		c0-0.1,0.1-0.2,0.1-0.2c0.2,0.1,0.4,0.2,0.6,0.1s0.4-0.2,0.5-0.4c0-0.1,0.1-0.3,0.1-0.7c0-0.4,0-0.9,0.1-1.6c0-0.6,0.1-1.3,0.1-2.1
+		C59,8.8,59,8,59,7.2c0-0.8,0-1.5,0.1-2.3c0-0.7,0.1-1.3,0.1-1.8c0-0.2,0-0.5,0-0.7c0-0.2-0.1-0.4-0.2-0.6c-0.1-0.2-0.3-0.3-0.5-0.4
+		c-0.2-0.1-0.4,0-0.6,0.1c0-0.2-0.1-0.5-0.1-0.7c0-0.2,0-0.4-0.1-0.7c1,0,2,0.1,3,0.1c0.9,0,1.9,0.1,3,0.1c0,0.3-0.1,0.5-0.4,0.7
+		c0.3,1.3,0.6,2.6,1,3.9c0.4,1.3,0.8,2.6,1.2,3.9c0.2-0.6,0.4-1.3,0.6-1.9c0.2-0.6,0.4-1.2,0.6-1.8C67,4.6,67.2,4,67.5,3.4
+		c0.2-0.6,0.4-1.3,0.6-2c-0.1,0-0.3,0-0.4-0.1c-0.1,0-0.2,0-0.4-0.1c-0.1,0-0.1-0.1-0.1-0.3c0-0.1,0.1-0.2,0.1-0.3
+		c0.1-0.1,0.2-0.1,0.3-0.1c0.1,0,0.2,0,0.3,0c0.4,0,0.7,0,1,0s0.6,0,0.9,0c0.3,0,0.6,0,0.9,0c0.3,0,0.6,0,1,0c0.1,0,0.3,0,0.4,0
+		c0.1,0,0.3,0.1,0.4,0.2c0.1,0.1,0.2,0.2,0.2,0.4c0,0.2,0,0.3-0.2,0.3c-0.1-0.1-0.2-0.1-0.3-0.1c-0.1,0-0.2,0.1-0.3,0.1
+		c-0.2,0.4-0.3,0.8-0.4,1.3c-0.1,0.5-0.1,0.9-0.1,1.4c-0.2,2.8-0.2,5.6,0,8.4c0,0.3,0,0.5,0.1,0.7C71.4,13.5,71.5,13.7,71.7,13.9z"
+		/>
+	<path fill="#c3c3c3" d="M81.7,12c-0.1,0-0.1,0-0.2,0c-0.1,0-0.1,0-0.2,0c0,0.4,0,0.9-0.2,1.3c-0.1,0.4-0.4,0.8-0.7,1.1
+		c-0.3,0.3-0.7,0.6-1.1,0.8c-0.4,0.2-0.9,0.3-1.3,0.4c-0.4,0.1-0.8,0-1.2,0c-0.4-0.1-0.8-0.2-1.1-0.5c-0.2-0.1-0.3-0.3-0.5-0.5
+		c-0.2-0.2-0.3-0.4-0.4-0.6c-0.2-0.4-0.3-0.7-0.4-1c-0.1-0.3-0.2-0.6-0.3-1C74,11.7,74,11.4,74,11c0-0.3,0-0.7,0.1-1.1
+		c0.1-0.7,0.3-1.4,0.5-2c0.3-0.6,0.6-1.1,0.9-1.6s0.8-0.8,1.3-1.1c0.5-0.3,1-0.4,1.5-0.4c0.2,0,0.4,0,0.6,0.1
+		c0.2,0.1,0.3,0.1,0.5,0.3C79.6,5.4,79.8,5.6,80,6c0.2,0.4,0.4,0.8,0.5,1.3c0.1,0,0.1,0,0.2,0c0.1,0,0.1,0,0.2,0c0,0.1,0,0.1,0,0.2
+		c0,0.1,0,0.1,0,0.2L79.2,8c-0.2,0.1-0.3,0.1-0.4,0c-0.1,0-0.1-0.1-0.2-0.2c0-0.1,0-0.1,0-0.2c0.1,0,0.1,0,0.2,0c0,0,0.1,0,0.2,0
+		c0.1-0.1,0.2-0.2,0.2-0.4c0-0.2,0-0.3,0-0.5c0-0.3-0.1-0.6-0.3-0.9c-0.1-0.1-0.2-0.2-0.3-0.3c-0.1-0.1-0.2-0.1-0.4,0
+		c-0.1,0-0.3,0.1-0.4,0.3c-0.1,0.2-0.3,0.4-0.4,0.6c-0.1,0.2-0.2,0.4-0.3,0.6c-0.1,0.2-0.1,0.4-0.1,0.5c-0.4,1.8-0.5,3.6-0.1,5.5
+		c0.1,0.2,0.1,0.4,0.2,0.7c0.1,0.2,0.2,0.4,0.3,0.6c0.1,0.2,0.3,0.3,0.6,0.5c0.2,0.1,0.4,0.1,0.7,0.1c0.4-0.1,0.7-0.3,1-0.7
+		c0.2-0.4,0.4-0.8,0.5-1.2c0-0.2,0.1-0.4,0.1-0.6v-0.3c-0.2,0-0.3,0-0.4,0c-0.1,0-0.1-0.1-0.1-0.2c0-0.1,0-0.2,0.1-0.2
+		c0.4,0,0.8,0,1.2,0c0.4,0,0.8,0,1.2,0c0,0.1,0,0.1,0,0.2C81.8,11.8,81.8,11.9,81.7,12z"/>
+	<path fill="#c3c3c3" d="M83.5,14.2c0.2-4.3,0.3-8.5,0.2-12.8c-0.3,0-0.6,0-0.9,0c-0.3,0-0.6,0-0.9,0c0-0.2,0-0.3,0-0.5s0-0.3,0-0.5
+		c0.7,0,1.3,0,2-0.1c0.7,0,1.3,0,2-0.1c0.8-0.2,1.6-0.2,2.4-0.1c0.8,0.1,1.6,0.3,2.4,0.5c0.7,0.3,1.4,0.7,1.9,1.2
+		c0.5,0.5,0.9,1.1,1.1,1.8C94,4.9,94.1,6.1,94,7.4C94,8.6,93.8,9.8,93.7,11c0,0.4-0.1,0.8-0.2,1.2c-0.1,0.4-0.3,0.8-0.5,1.1
+		c-0.3,0.5-0.8,1-1.3,1.3c-0.5,0.3-1.1,0.5-1.7,0.6c-0.5,0.1-0.9,0.2-1.4,0.1c-0.5,0-0.9,0-1.4-0.1v0c-0.2,0-0.3,0-0.5,0
+		s-0.4,0-0.5,0l-0.1,0c0,0,0,0,0,0c-0.6,0-1.3,0-1.9,0c-0.6,0-1.3,0-1.9,0c-0.2-0.4-0.1-0.8,0.2-1.1c0.2-0.2,0.3-0.2,0.5-0.3
+		C83.2,14.1,83.4,14.1,83.5,14.2z M89.4,1.9c-0.4-0.3-0.8-0.5-1.3-0.6c-0.5-0.1-1-0.1-1.5-0.1c-0.3,4.5-0.2,9.1,0.4,13.6
+		c0.2,0,0.4,0,0.5-0.1c0.2,0,0.4-0.1,0.6-0.1c0.3-0.1,0.6-0.2,0.9-0.4c0.3-0.2,0.6-0.4,0.8-0.7c0.2-0.3,0.4-0.6,0.5-1
+		s0.2-0.7,0.2-1.1c0.4-2.1,0.4-4.2,0.2-6.3c-0.1-0.6-0.2-1.2-0.4-1.9C90.3,2.8,89.9,2.3,89.4,1.9z"/>
+	<path fill="#c3c3c3" d="M102.4,9.7c-0.6-0.1-1.3-0.1-2,0c-0.7,0.1-1.4,0.4-2,0.8l-0.2-1.4L99.1,9c0-0.4-0.1-0.7-0.1-1
+		c0-0.2-0.1-0.5-0.1-0.9c-0.3,0-0.6,0.1-0.9,0.1c-0.3,0-0.6,0.1-1,0.1c-0.2,0.7-0.3,1.3-0.4,1.8c-0.1,0.5-0.2,1.1-0.4,1.6l0.2-0.1
+		l0.7,0.6c-0.4,0.2-0.8,0.6-1.2,1.1c-0.4,0.5-0.7,1-0.9,1.5l-0.9-0.5c0-0.1,0.1-0.2,0.2-0.4c0.1-0.2,0.2-0.3,0.2-0.4
+		c0.1-0.2,0.2-0.5,0.3-1c0.1-0.4,0.2-0.9,0.4-1.3c0.1-0.5,0.2-0.9,0.3-1.3c0.1-0.4,0.2-0.7,0.2-0.9c0.1-0.4,0.2-0.8,0.3-1.2
+		c0.1-0.4,0.2-0.8,0.3-1.2c0.2-0.7,0.3-1.4,0.4-2.1c0.1-0.7,0.2-1.4,0.3-2.2c-0.1,0-0.2,0-0.3,0c-0.1,0-0.2,0-0.3,0l0.1-0.8l4-0.1
+		l0.1,0.8c-0.1,0-0.2,0-0.2,0c0,0-0.1,0-0.2,0c0.1,0.7,0.2,1.4,0.3,2c0.1,0.6,0.2,1.2,0.3,1.8c0.1,0.6,0.2,1.2,0.3,1.8
+		c0.1,0.6,0.2,1.3,0.4,2c0.2,0,0.3,0,0.3,0c0,0,0.1,0,0.3,0L102.4,9.7z M98.8,6.1c-0.1-0.7-0.2-1.3-0.3-2c-0.1-0.6-0.3-1.3-0.4-2
+		c-0.1,0.6-0.2,1.3-0.4,2.1c-0.1,0.7-0.3,1.5-0.5,2.2L98.8,6.1z"/>
+	<path fill="#c3c3c3" d="M124.9,20.1c0-0.3,0.1-0.6,0.3-0.8c0.2-0.2,0.4-0.3,0.7-0.4c0.3-0.1,0.5,0,0.8,0.1c0.3,0.1,0.5,0.3,0.6,0.5
+		c0.3,0.4,0.6,0.9,0.7,1.4c0.2,0.5,0.2,1,0.2,1.5c0,0.5-0.1,1-0.3,1.5c-0.2,0.5-0.4,1-0.7,1.4c-0.6,0.9-1.4,1.6-2.4,2
+		c-1,0.5-2,0.7-3,0.7c-1.5,0-2.8-0.3-3.9-1s-2.1-1.4-3-2.4c-0.9-1-1.8-2.1-2.5-3.2c-0.8-1.2-1.5-2.3-2.3-3.5c-1.1,1.2-2.4,2.2-3.9,3
+		c-1.5,0.8-3,1.1-4.5,1c-1.1,0-2.1-0.1-3-0.5c-0.9-0.3-1.6-0.8-2.2-1.4c-0.6-0.6-0.9-1.3-1.1-2.2c-0.2-0.8-0.1-1.7,0.2-2.7
+		c0.3-0.9,0.7-1.6,1.3-2.2c0.6-0.6,1.2-1.1,2-1.5c0.7-0.4,1.5-0.6,2.4-0.7c0.8-0.1,1.7,0,2.6,0.2c0-1.7,0-3.4,0-5c0-1.7,0-3.2,0-4.6
+		c-0.3,0-0.6,0-0.9,0c-0.3,0-0.6,0-0.9,0c0-0.2,0-0.3,0-0.5s0-0.3,0-0.5l3.7-0.1c0.8-0.2,1.6-0.2,2.4-0.1c0.8,0.1,1.6,0.3,2.4,0.5
+		c0.7,0.3,1.4,0.7,1.9,1.2c0.5,0.5,0.9,1.1,1.1,1.8c0.3,1.2,0.4,2.4,0.3,3.6c-0.1,1.2-0.2,2.5-0.4,3.7c-0.1,1-0.4,2-0.8,3
+		c-0.5,1-1,2-1.7,2.9c0.3,0.4,0.6,0.8,0.8,1.2c0.3,0.4,0.5,0.8,0.8,1.2c0.5,0.8,1.1,1.6,1.7,2.5c0.6,0.8,1.3,1.6,2,2.4
+		c0.7,0.7,1.5,1.3,2.4,1.8s1.8,0.7,2.9,0.8c1.1,0,2.1-0.2,3-0.7c0.9-0.5,1.6-1.2,2.1-2.2c0.2-0.4,0.3-0.8,0.4-1.3
+		c0.1-0.5,0-0.9-0.1-1.3c-0.2,0.1-0.4,0.2-0.6,0.2c-0.2,0-0.4,0-0.6-0.1c-0.2-0.1-0.4-0.2-0.5-0.4S124.9,20.4,124.9,20.1z M102.9,21
+		c1.5-0.4,2.8-1,3.7-1.8c0.9-0.8,1.7-1.7,2.3-2.8c-0.2-0.2-0.3-0.5-0.6-0.7c-0.6-0.7-1.2-1.4-1.9-1.9c0,0.6,0.1,1.2,0.1,1.8
+		c0,0.6,0.1,1.1,0.2,1.6h0v0.1c-0.5,0-0.9,0-1.3,0c-0.4,0-0.8,0-1.2,0c-0.3,0-0.6,0-0.9,0c-0.3,0-0.6,0-0.9,0
+		c-0.1-0.2-0.1-0.4,0-0.7c0-0.2,0.1-0.3,0.3-0.5c0.3-0.3,0.7-0.4,1.1-0.2l0.1-3.5c-0.5-0.2-1-0.3-1.5-0.3c-0.5,0-1.1,0-1.6,0.1
+		c-0.6,0.1-1.1,0.3-1.6,0.6c-0.5,0.3-0.9,0.7-1.3,1.1c-0.4,0.4-0.7,0.9-0.9,1.5c-0.2,0.5-0.3,1.1-0.3,1.6c0,0.7,0.2,1.3,0.6,1.8
+		c0.4,0.5,0.9,0.9,1.4,1.4c0.2,0.2,0.5,0.3,0.8,0.5c0.3,0.1,0.7,0.2,1.1,0.3c0.4,0.1,0.8,0.1,1.2,0.1
+		C102.1,21.1,102.5,21.1,102.9,21z M109.3,1.9c-0.4-0.3-0.8-0.5-1.2-0.6c-0.5-0.1-0.9-0.1-1.4-0.1c-0.1,1.7-0.2,3.4-0.3,5.3
+		c-0.1,1.9-0.1,3.7,0,5.6c0.6,0.4,1.2,0.8,1.7,1.4c0.5,0.5,1,1.1,1.5,1.6c0.2-0.6,0.4-1.2,0.6-1.9c0.2-0.6,0.3-1.2,0.3-1.7
+		c0.2-1.1,0.2-2.1,0.3-3.1c0-1,0-2.1-0.1-3.1c-0.1-0.6-0.2-1.2-0.4-1.9C110.1,2.8,109.8,2.3,109.3,1.9z"/>
+	<path fill="#c3c3c3" d="M116.5,1.2c-0.3,0-0.6,0-0.9,0c-0.3,0-0.6,0-0.9,0V0.4c0.5,0,0.9,0,1.2-0.1s0.7,0,1.1,0c0.4,0,0.7,0,1.1,0
+		s0.8,0,1.3-0.1c0.9,0,1.8,0,2.8-0.1c0.9,0,1.8,0,2.8-0.1c0,0.6,0,1.2,0,1.8c0,0.6,0,1.2,0,1.8c-0.2,0-0.3,0-0.5,0
+		c-0.2,0-0.3,0-0.5,0c-0.1,0-0.2,0-0.3,0c-0.1,0-0.1-0.1,0-0.1c0.1-0.2,0.1-0.4,0.1-0.6s0-0.4-0.1-0.6c-0.1-0.2-0.2-0.4-0.3-0.6
+		c-0.1-0.2-0.2-0.3-0.4-0.4c-0.2-0.1-0.4-0.2-0.6-0.2c-0.2,0-0.5,0-0.7,0c-0.3,0-0.5,0.1-0.8,0.1c-0.3,0.1-0.5,0.2-0.6,0.4
+		c-0.1,0.2-0.1,0.3-0.1,0.3c0,0.1,0,0.2,0,0.3c0,0.7-0.1,1.3-0.1,2c0,0.6-0.1,1.3-0.1,1.9c0,0.2,0,0.3,0,0.5c0,0.2,0,0.3,0,0.5
+		c0.6-0.2,1.2-0.3,1.9-0.4c0.6-0.1,1.2-0.3,1.9-0.4c0,0.1,0.1,0.2,0.1,0.3c0,0.1,0,0.3,0,0.4c0,0.2-0.1,0.3-0.1,0.4
+		c-0.1,0.1-0.1,0.2-0.1,0.3c-0.1,0.1-0.2,0.1-0.4,0.2c-0.1,0-0.3,0.1-0.4,0.1c-0.5,0.1-0.9,0.2-1.4,0.3c-0.5,0.1-0.9,0.1-1.4,0.2
+		c0,1-0.1,2-0.2,2.9c-0.1,1-0.1,1.9-0.2,2.9c0.8,0.2,1.5,0.3,2,0.1c0.6-0.2,1.2-0.5,1.9-1c0.2-0.1,0.2-0.3,0.2-0.5
+		c0-0.2,0-0.5,0-0.7c0-0.2,0.1-0.5,0.2-0.6c0.1-0.2,0.3-0.3,0.7-0.4c0.4,0,0.6,0.1,0.7,0.4c0.1,0.3,0.2,0.7,0.2,1.1
+		c0,0.5,0,0.9-0.1,1.4c-0.1,0.5-0.1,0.9,0,1.2c-0.5,0-1,0-1.4,0c-0.4,0-0.8,0-1.2,0.1c-0.4,0-0.8,0-1.2,0.1c-0.4,0-0.9,0-1.3,0
+		c-0.9,0-1.7,0-2.5,0.1c-0.7,0.1-1.6,0.1-2.4,0.1c-0.2-0.2-0.2-0.4-0.2-0.7c0-0.2,0.1-0.5,0.3-0.6c0.2-0.2,0.3-0.3,0.6-0.3
+		c0.2-0.1,0.5,0,0.7,0.1c0.1-2.1,0.2-4.3,0.1-6.5C116.3,5.5,116.3,3.4,116.5,1.2z"/>
+</g>
+</svg>
+
+            </a>
+        </p>
+	</footer>
+
+	<script>
+		var algolia_app_id      = 'FU55RWGNDN';
+		var algolia_search_key  = 'c41c5de31ca55044dbb0bde815d35121';
+				var version             = '5.4';
+			</script>
+
+	<script id="search_suggestion_template" type="text/template">
+	<div class="autocomplete-wrapper">
+		{{#_highlightResult.h1}}
+		<div class="h1">
+			{{{ _highlightResult.h1.value }}}
+		</div>
+		{{/_highlightResult.h1}}
+
+		<div class="sub-section">
+			{{#_highlightResult.h2}}
+			<div class="h2">
+				<span class="hash">#</span> {{{ _highlightResult.h2.value }}}
+			</div>
+			{{/_highlightResult.h2}}
+
+			{{#_highlightResult.h3}}
+			<div class="h3">
+				> {{{ _highlightResult.h3.value }}}
+			</div>
+			{{/_highlightResult.h3}}
+
+			{{#_highlightResult.h4}}
+			<div class="h4">
+				> {{{ _highlightResult.h4.value }}}
+			</div>
+			{{/_highlightResult.h4}}
+		</div>
+
+		{{#_highlightResult.content}}
+		<div class="content">
+			{{{ _highlightResult.content.value }}}
+		</div>
+		{{/_highlightResult.content}}
+	</div>
+</script>
+
+<script id="search_empty_template" type="text/template">
+	<div class="autocomplete-wrapper empty">
+		<div class="h2">We didn't find any result for "{{query}}". Sorry!</div>
+	</div>
+</script>
+
+<script id="search_footer_template" type="text/template">
+	<div class="footer">
+		<a target="_blank" href="https://www.algolia.com/referrals/5a08e6a4/join">
+			<img width="50" src="/docs/assets/img/algolia-logo.png">
+			<div class="powered">powered by</div>
+			<div style="clear: both"></div>
+		</a>
+	</div>
+</script>
+
+	<script src="../../build/assets/js/laravel-be3cb5d7de.js"></script>
+	<script src="../../assets/js/viewport-units-buggyfill.js"></script>
+
+	<script>window.viewportUnitsBuggyfill.init();</script>
+    <script>
+          ga('create', 'UA-53903425-7', 'auto');
+          ga('send', 'pageview');
+    </script>
+</body>
+</html>

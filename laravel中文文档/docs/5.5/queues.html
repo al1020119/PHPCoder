@@ -1,0 +1,1281 @@
+<!doctype html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<title>Laravel 的队列系统介绍 | Laravel 5.5 中文文档
+</title>
+	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+	<meta name="author" content="Taylor Otwell">
+	<meta name="description" content="Laravel 的队列系统介绍,简介,连接 Vs. 队列,驱动的必要设置,创建任务类,生成任务类,任务类结构,分发任务,延迟分发,工作链,自定义队列 &amp; 连接,指定任务最大尝试次数 / 超时值,错误处理,运行队列处理器,队列优先...
+">
+	<meta name="keywords" content="laravel,laravel中国,laravel中文,laravel框架中文,laravel文档,laravel框架中国,laravel中文文档">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+			<link rel="canonical" href="queues.html" />
+		<!--[if lte IE 9]>
+		<script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+	<![endif]-->
+	<link rel="stylesheet" href="../../build/assets/css/laravel-4bbf92d154.css">
+	<link rel="apple-touch-icon" href="../../favicon.png.jpeg">
+    <style>
+        .list-group-item img.media-object {
+            width: 20px;
+            border-radius: 2px;
+            margin-right: 4px;
+            display: inline-block;
+        }
+    </style>
+</head>
+<body class="docs language-php">
+
+	<span class="overlay"></span>
+
+	<nav class="main">
+		<a href="../../index.html" class="brand nav-block">
+			<svg version="1.1"
+	 xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:a="http://ns.adobe.com/AdobeSVGViewerExtensions/3.0/"
+	 x="0px" y="0px" width="84.1px" height="57.6px" viewBox="0 0 84.1 57.6" enable-background="new 0 0 84.1 57.6"
+	 xml:space="preserve">
+<defs>
+</defs>
+<path fill="#FB503B" d="M83.8,26.9c-0.6-0.6-8.3-10.3-9.6-11.9c-1.4-1.6-2-1.3-2.9-1.2s-10.6,1.8-11.7,1.9c-1.1,0.2-1.8,0.6-1.1,1.6
+	c0.6,0.9,7,9.9,8.4,12l-25.5,6.1L21.2,1.5c-0.8-1.2-1-1.6-2.8-1.5C16.6,0.1,2.5,1.3,1.5,1.3c-1,0.1-2.1,0.5-1.1,2.9
+	c1,2.4,17,36.8,17.4,37.8c0.4,1,1.6,2.6,4.3,2c2.8-0.7,12.4-3.2,17.7-4.6c2.8,5,8.4,15.2,9.5,16.7c1.4,2,2.4,1.6,4.5,1
+	c1.7-0.5,26.2-9.3,27.3-9.8c1.1-0.5,1.8-0.8,1-1.9c-0.6-0.8-7-9.5-10.4-14c2.3-0.6,10.6-2.8,11.5-3.1C84.2,28,84.4,27.5,83.8,26.9z
+	 M37.5,36.4c-0.3,0.1-14.6,3.5-15.3,3.7c-0.8,0.2-0.8,0.1-0.8-0.2C21.2,39.6,4.4,4.8,4.1,4.4c-0.2-0.4-0.2-0.8,0-0.8
+	c0.2,0,13.5-1.2,13.9-1.2c0.5,0,0.4,0.1,0.6,0.4c0,0,18.7,32.3,19,32.8C38,36.1,37.8,36.3,37.5,36.4z M77.7,43.9
+	c0.2,0.4,0.5,0.6-0.3,0.8c-0.7,0.3-24.1,8.2-24.6,8.4c-0.5,0.2-0.8,0.3-1.4-0.6s-8.2-14-8.2-14L68.1,32c0.6-0.2,0.8-0.3,1.2,0.3
+	C69.7,33,77.5,43.6,77.7,43.9z M79.3,26.3c-0.6,0.1-9.7,2.4-9.7,2.4l-7.5-10.2c-0.2-0.3-0.4-0.6,0.1-0.7c0.5-0.1,9-1.6,9.4-1.7
+	c0.4-0.1,0.7-0.2,1.2,0.5c0.5,0.6,6.9,8.8,7.2,9.1C80.3,26,79.9,26.2,79.3,26.3z"/>
+</svg>
+
+			<span>Laravel</span>
+		</a>
+
+        <div class="search nav-block">
+            <svg version="1.1"
+	 xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:a="http://ns.adobe.com/AdobeSVGViewerExtensions/3.0/"
+	 x="0px" y="0px" width="16px" height="16px" viewBox="0 0 16 16" enable-background="new 0 0 16 16" xml:space="preserve">
+<defs>
+</defs>
+<g>
+	<g>
+		<path fill="#A1A1A1" d="M5.8,11.7c-1.6,0-3-0.6-4.1-1.7S0,7.4,0,5.8s0.6-3,1.7-4.1C2.8,0.6,4.3,0,5.8,0s3,0.6,4.1,1.7
+			c2.3,2.3,2.3,6,0,8.3C8.9,11.1,7.4,11.7,5.8,11.7z M5.8,1C4.5,1,3.3,1.5,2.4,2.4C1.5,3.3,1,4.5,1,5.8s0.5,2.5,1.4,3.4
+			c0.9,0.9,2.1,1.4,3.4,1.4s2.5-0.5,3.4-1.4c1.9-1.9,1.9-5,0-6.9C8.4,1.5,7.1,1,5.8,1z"/>
+	</g>
+	<g>
+		<path fill="#A1A1A1" d="M15.5,16c-0.1,0-0.3,0-0.3-0.1L9.3,10c-0.2-0.2-0.2-0.5,0-0.7s0.5-0.2,0.7,0l5.9,5.9
+			c0.2,0.2,0.2,0.5,0,0.7C15.8,16,15.6,16,15.5,16z"/>
+	</g>
+</g>
+</svg>
+
+            <input placeholder="搜索文档" type="text" v-model="search" id="search-input" v-on:blur="reset" />
+        </div>
+
+		<ul class="main-nav" v-if="! search">
+			<li class="nav-docs"><a href="../5.4.html">文档</a></li>
+<li ><a href="https://laravel-china.org/news" class="no-pjax">Laravel 资讯</a></li>
+<li class="dropdown"><a href="https://laravel-china.org/">Laravel China 社区</a></li>
+<li class="nav-forge"><a href="https://laravel-china.org/categories/1">酷工作</a></li>
+<li class="nav-docs"><a href="http://lumen.laravel-china.org">Lumen</a></li>
+<li class="nav-forge"><a href="https://cs.laravel-china.org/">速查表</a></li>
+<li class="nav-forge"><a href="https://fsdhub.com/books/laravel-essential-training-5.5">《Laravel 入门教程》</a></li>
+		</ul>
+
+        			<div class="switcher">
+	<div class="dropdown">
+		<button class="btn dropdown-toggle btn-inverted" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-expanded="true">
+			<!--<span class="faint">v</span> -->
+			5.5
+			<span class="caret"></span>
+		</button>
+		<ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu1">
+							<li role="presentation">
+					<a role="menuitem" tabindex="-1" href="queues.html">5.5</a>
+				</li>
+							<li role="presentation">
+					<a role="menuitem" tabindex="-1" href="../5.4/queues.html">5.4</a>
+				</li>
+							<li role="presentation">
+					<a role="menuitem" tabindex="-1" href="../5.3/queues.html">5.3</a>
+				</li>
+							<li role="presentation">
+					<a role="menuitem" tabindex="-1" href="../5.2/queues.html">5.2</a>
+				</li>
+							<li role="presentation">
+					<a role="menuitem" tabindex="-1" href="../5.1/queues.html">5.1</a>
+				</li>
+					</ul>
+	</div>
+</div>
+		
+        <div class="responsive-sidebar-nav">
+			<a href="queues.html#" class="toggle-slide menu-link btn">&#9776;</a>
+		</div>
+	</nav>
+
+	<nav id="slide-menu" class="slide-menu" role="navigation">
+
+	<div class="brand">
+		<a href="../../index.html">
+			<img src="../../assets/img/laravel-logo-white.png" height="50">
+		</a>
+	</div>
+
+	<ul class="slide-main-nav">
+		<li><a href="../../index.html">Home</a></li>
+		<li class="nav-docs"><a href="../5.4.html">文档</a></li>
+<li ><a href="https://laravel-china.org/news" class="no-pjax">Laravel 资讯</a></li>
+<li class="dropdown"><a href="https://laravel-china.org/">Laravel China 社区</a></li>
+<li class="nav-forge"><a href="https://laravel-china.org/categories/1">酷工作</a></li>
+<li class="nav-docs"><a href="http://lumen.laravel-china.org">Lumen</a></li>
+<li class="nav-forge"><a href="https://cs.laravel-china.org/">速查表</a></li>
+<li class="nav-forge"><a href="https://fsdhub.com/books/laravel-essential-training-5.5">《Laravel 入门教程》</a></li>
+	</ul>
+
+	<div class="slide-docs-nav">
+		<h2>Documentation</h2>
+		<ul>
+<li>
+<h2>前言</h2>
+<ul>
+<li><a href="about.html">翻译说明</a></li>
+<li><a href="releases.html">发行说明</a></li>
+<li><a href="upgrade.html">升级说明</a></li>
+<li><a href="contributions.html">贡献导引</a></li>
+<li><a href="http://d.laravel-china.org/api/5.5">API 文档</a></li>
+</ul>
+</li>
+<li>
+<h2>入门指南</h2>
+<ul>
+<li><a href="installation.html">安装</a></li>
+<li><a href="configuration.html">配置信息</a></li>
+<li><a href="structure.html">文件夹结构</a></li>
+<li><a href="homestead.html">Homestead</a></li>
+<li><a href="valet.html">Valet</a></li>
+</ul>
+</li>
+<li>
+<h2>核心架构</h2>
+<ul>
+<li><a href="lifecycle.html">请求周期</a></li>
+<li><a href="container.html">服务容器</a></li>
+<li><a href="providers.html">服务提供者</a></li>
+<li><a href="facades.html">Facades</a></li>
+<li><a href="contracts.html">Contracts</a></li>
+</ul>
+</li>
+<li>
+<h2>基础功能</h2>
+<ul>
+<li><a href="routing.html">路由</a></li>
+<li><a href="middleware.html">中间件</a></li>
+<li><a href="csrf.html">CSRF 保护</a></li>
+<li><a href="controllers.html">控制器</a></li>
+<li><a href="requests.html">请求</a></li>
+<li><a href="responses.html">响应</a></li>
+<li><a href="views.html">视图</a></li>
+<li><a href="redirects.html">重定向</a></li>
+<li><a href="session.html">Session</a></li>
+<li><a href="validation.html">表单验证</a></li>
+<li><a href="errors.html">错误与日志</a></li>
+</ul>
+</li>
+<li>
+<h2>前端开发</h2>
+<ul>
+<li><a href="blade.html">Blade 模板</a></li>
+<li><a href="localization.html">本地化</a></li>
+<li><a href="frontend.html">前端指南</a></li>
+<li><a href="mix.html">编辑资源 Mix</a></li>
+</ul>
+</li>
+<li>
+<h2>安全相关</h2>
+<ul>
+<li><a href="authentication.html">用户认证</a></li>
+<li><a href="passport.html">API 认证</a></li>
+<li><a href="authorization.html">用户授权</a></li>
+<li><a href="encryption.html">加密解密</a></li>
+<li><a href="hashing.html">哈希</a></li>
+<li><a href="passwords.html">重置密码</a></li>
+</ul>
+</li>
+<li>
+<h2>综合话题</h2>
+<ul>
+<li><a href="artisan.html">Artisan 命令行</a></li>
+<li><a href="broadcasting.html">广播系统</a></li>
+<li><a href="cache.html">缓存系统</a></li>
+<li><a href="collections.html">集合</a></li>
+<li><a href="events.html">事件系统</a></li>
+<li><a href="filesystem.html">文件存储</a></li>
+<li><a href="helpers.html">辅助函数</a></li>
+<li><a href="mail.html">邮件发送</a></li>
+<li><a href="notifications.html">消息通知</a></li>
+<li><a href="packages.html">扩展包开发</a></li>
+<li><a href="queues.html">队列</a></li>
+<li><a href="scheduling.html">任务调度</a></li>
+</ul>
+</li>
+<li>
+<h2>数据库</h2>
+<ul>
+<li><a href="database.html">快速入门</a></li>
+<li><a href="queries.html">查询构造器</a></li>
+<li><a href="pagination.html">分页</a></li>
+<li><a href="migrations.html">数据库迁移</a></li>
+<li><a href="seeding.html">数据填充</a></li>
+<li><a href="redis.html">Redis</a></li>
+</ul>
+</li>
+<li>
+<h2>Eloquent ORM</h2>
+<ul>
+<li><a href="eloquent.html">快速入门</a></li>
+<li><a href="eloquent-relationships.html">模型关联</a></li>
+<li><a href="eloquent-collections.html">Eloquent 集合</a></li>
+<li><a href="eloquent-mutators.html">修改器</a></li>
+<li><a href="eloquent-resources.html">API 资源</a></li>
+<li><a href="eloquent-serialization.html">序列化</a></li>
+</ul>
+</li>
+<li>
+<h2>测试相关</h2>
+<ul>
+<li><a href="testing.html">快速入门</a></li>
+<li><a href="http-tests.html">HTTP 测试</a></li>
+<li><a href="dusk.html">浏览器测试 Dusk</a></li>
+<li><a href="database-testing.html">数据库测试</a></li>
+<li><a href="mocking.html">测试模拟器</a></li>
+</ul>
+</li>
+<li>
+<h2>官方扩展包</h2>
+<ul>
+<li><a href="billing.html">Cashier 交易工具包</a></li>
+<li><a href="envoy.html">Envoy 部署工具</a></li>
+<li><a href="horizon.html">Horizon</a></li>
+<li><a href="passport.html">Passport OAuth 认证</a></li>
+<li><a href="scout.html">Scout 全文搜索</a></li>
+<li><a href="socialite.html">Socialite 社会化登录</a></li>
+</ul>
+</li>
+</ul>
+	</div>
+
+</nav>
+
+<div class="docs-wrapper container">
+
+	<section class="sidebar">
+
+            <div class="header">
+              <a type="button" class="btn btn-primary btn-inverted btn-lg btn-block turnofflight"><i class="fa fa-lightbulb-o"></i> 夜间模式 </a>
+              <br>
+              <div class="versions text-center ">
+                <a class="doc-btn btn-inverted active" href="../5.5.html" title="Laravel 5.5 中文文档">C5.5</a>
+                <a class="doc-btn btn-inverted " href="../5.4.html" title="Laravel 5.4 中文文档">C5.4</a>
+                <a class="doc-btn btn-inverted " href="../5.1.html" title="Laravel 5.1 中文文档">C5.1</a>
+              </div>
+            </div>
+
+            <a href="https://laravel-china.org/topics/3383" target="_blank" rel="nofollow" title="" style="display: block;margin-bottom: 23px;">
+                <img src="https://dn-phphub.qbox.me/uploads/images/201612/10/1/k7wwMpJduq.jpg" style="width: 100%;border: 1px solid #d8d3d3;box-shadow: 0 0 30px #d4d4d4;-moz-box-shadow: 0 0 30px #ccc;-webkit-box-shadow: 0 0 30px #d4d4d4;margin-bottom: 30px;margin-top: 10px;border-radius: 4px;">
+            </a>
+
+            <small><a href="queues.html#" id="doc-expand" style="font-size: 9px; color: #525252;">▶</a></small>
+
+		<ul>
+<li>
+<h2>前言</h2>
+<ul>
+<li><a href="about.html">翻译说明</a></li>
+<li><a href="releases.html">发行说明</a></li>
+<li><a href="upgrade.html">升级说明</a></li>
+<li><a href="contributions.html">贡献导引</a></li>
+<li><a href="http://d.laravel-china.org/api/5.5">API 文档</a></li>
+</ul>
+</li>
+<li>
+<h2>入门指南</h2>
+<ul>
+<li><a href="installation.html">安装</a></li>
+<li><a href="configuration.html">配置信息</a></li>
+<li><a href="structure.html">文件夹结构</a></li>
+<li><a href="homestead.html">Homestead</a></li>
+<li><a href="valet.html">Valet</a></li>
+</ul>
+</li>
+<li>
+<h2>核心架构</h2>
+<ul>
+<li><a href="lifecycle.html">请求周期</a></li>
+<li><a href="container.html">服务容器</a></li>
+<li><a href="providers.html">服务提供者</a></li>
+<li><a href="facades.html">Facades</a></li>
+<li><a href="contracts.html">Contracts</a></li>
+</ul>
+</li>
+<li>
+<h2>基础功能</h2>
+<ul>
+<li><a href="routing.html">路由</a></li>
+<li><a href="middleware.html">中间件</a></li>
+<li><a href="csrf.html">CSRF 保护</a></li>
+<li><a href="controllers.html">控制器</a></li>
+<li><a href="requests.html">请求</a></li>
+<li><a href="responses.html">响应</a></li>
+<li><a href="views.html">视图</a></li>
+<li><a href="redirects.html">重定向</a></li>
+<li><a href="session.html">Session</a></li>
+<li><a href="validation.html">表单验证</a></li>
+<li><a href="errors.html">错误与日志</a></li>
+</ul>
+</li>
+<li>
+<h2>前端开发</h2>
+<ul>
+<li><a href="blade.html">Blade 模板</a></li>
+<li><a href="localization.html">本地化</a></li>
+<li><a href="frontend.html">前端指南</a></li>
+<li><a href="mix.html">编辑资源 Mix</a></li>
+</ul>
+</li>
+<li>
+<h2>安全相关</h2>
+<ul>
+<li><a href="authentication.html">用户认证</a></li>
+<li><a href="passport.html">API 认证</a></li>
+<li><a href="authorization.html">用户授权</a></li>
+<li><a href="encryption.html">加密解密</a></li>
+<li><a href="hashing.html">哈希</a></li>
+<li><a href="passwords.html">重置密码</a></li>
+</ul>
+</li>
+<li>
+<h2>综合话题</h2>
+<ul>
+<li><a href="artisan.html">Artisan 命令行</a></li>
+<li><a href="broadcasting.html">广播系统</a></li>
+<li><a href="cache.html">缓存系统</a></li>
+<li><a href="collections.html">集合</a></li>
+<li><a href="events.html">事件系统</a></li>
+<li><a href="filesystem.html">文件存储</a></li>
+<li><a href="helpers.html">辅助函数</a></li>
+<li><a href="mail.html">邮件发送</a></li>
+<li><a href="notifications.html">消息通知</a></li>
+<li><a href="packages.html">扩展包开发</a></li>
+<li><a href="queues.html">队列</a></li>
+<li><a href="scheduling.html">任务调度</a></li>
+</ul>
+</li>
+<li>
+<h2>数据库</h2>
+<ul>
+<li><a href="database.html">快速入门</a></li>
+<li><a href="queries.html">查询构造器</a></li>
+<li><a href="pagination.html">分页</a></li>
+<li><a href="migrations.html">数据库迁移</a></li>
+<li><a href="seeding.html">数据填充</a></li>
+<li><a href="redis.html">Redis</a></li>
+</ul>
+</li>
+<li>
+<h2>Eloquent ORM</h2>
+<ul>
+<li><a href="eloquent.html">快速入门</a></li>
+<li><a href="eloquent-relationships.html">模型关联</a></li>
+<li><a href="eloquent-collections.html">Eloquent 集合</a></li>
+<li><a href="eloquent-mutators.html">修改器</a></li>
+<li><a href="eloquent-resources.html">API 资源</a></li>
+<li><a href="eloquent-serialization.html">序列化</a></li>
+</ul>
+</li>
+<li>
+<h2>测试相关</h2>
+<ul>
+<li><a href="testing.html">快速入门</a></li>
+<li><a href="http-tests.html">HTTP 测试</a></li>
+<li><a href="dusk.html">浏览器测试 Dusk</a></li>
+<li><a href="database-testing.html">数据库测试</a></li>
+<li><a href="mocking.html">测试模拟器</a></li>
+</ul>
+</li>
+<li>
+<h2>官方扩展包</h2>
+<ul>
+<li><a href="billing.html">Cashier 交易工具包</a></li>
+<li><a href="envoy.html">Envoy 部署工具</a></li>
+<li><a href="horizon.html">Horizon</a></li>
+<li><a href="passport.html">Passport OAuth 认证</a></li>
+<li><a href="scout.html">Scout 全文搜索</a></li>
+<li><a href="socialite.html">Socialite 社会化登录</a></li>
+</ul>
+</li>
+</ul>
+
+		<hr>
+            <ul>
+              <li>社交账号</li>
+                <ul class="social-account">
+                  <li><a href="http://weibo.com/1837553744/profile?topnav=1&wvr=6&is_all=1">Summer 的微博</a></li>
+                  <li>新手 QQ 群：282196078</li>
+                </ul>
+
+            </ul>
+
+            <ul>
+              <li>
+              微信订阅号
+                <ul>
+                  <li>
+<img class="image-border popover-with-html" data-content="" src="https://dn-phphub.qbox.me/uploads/images/201708/06/1/4zgVR8dNCt.png" style="width: 148px;height: 148px;border:1px solid #ccc;padding:2px;border-radius:3px;margin-top:5px;" data-original-title="" title="">
+                  </li>
+                </ul>
+                </li>
+            </ul>
+
+            <ul>
+              <li>推荐资源
+              <ul class="list list-group resource-links">
+                    <li class="list-group-item ">
+                <a href="../../index.html" class="no-pjax" title="Laravel 中文文档">
+                    <img class="media-object inline-block " src="https://dn-phphub.qbox.me/uploads/banners/ql9XtosRhTe4v8HVC3TV.jpg">
+                    Laravel 中文文档
+                </a>
+            </li>
+                    <li class="list-group-item ">
+                <a href="https://lumen.laravel-china.org" class="no-pjax" title="Lumen 中文文档">
+                    <img class="media-object inline-block " src="https://dn-phphub.qbox.me/uploads/banners/bcMFkfsJZpetLgKFwWqY.jpg">
+                    Lumen 中文文档
+                </a>
+            </li>
+                    <li class="list-group-item ">
+                <a href="https://cs.laravel-china.org/" class="no-pjax" title="Laravel 速查表">
+                    <img class="media-object inline-block " src="https://dn-phphub.qbox.me/uploads/banners/cV55gsrH70qz6VdKr502.jpg">
+                    Laravel 速查表
+                </a>
+            </li>
+                    <li class="list-group-item ">
+                <a href="http://yousails.mikecrm.com/4Dh5uWU" class="no-pjax" title="Laravel 软件外包服务">
+                    <img class="media-object inline-block " src="https://dn-phphub.qbox.me/uploads/banners/v89tIQ6vjceA6g7JmrQB.png">
+                    Laravel 软件外包
+                </a>
+            </li>
+                    <li class="list-group-item ">
+                <a href="https://laravel-china.org/topics/3626" class="no-pjax" title="Laravel 远程工作 ">
+                    <img class="media-object inline-block " src="https://dn-phphub.qbox.me/uploads/banners/Xlq6s7wLxvX8FlTP4qZe.png">
+                    Laravel 远程工作
+                </a>
+            </li>
+                    <li class="list-group-item ">
+                <a href="https://laravel-china.github.io/php-the-right-way/" class="no-pjax" title="PHP 之道 - PHPer 必读">
+                    <img class="media-object inline-block " src="https://dn-phphub.qbox.me/uploads/banners/vA50AYuscu2RCMowq7ee.png">
+                    PHP 之道
+                </a>
+            </li>
+                    <li class="list-group-item ">
+                <a href="https://laravel-china.org/composer" class="no-pjax" title="Composer 中文全量镜像">
+                    <img class="media-object inline-block " src="https://dn-phphub.qbox.me/uploads/banners/KltcLb6leMa12dvTAxD7.png">
+                    Composer 镜像
+                </a>
+            </li>
+            </ul>
+              </li>
+            </ul>
+
+	</section>
+
+	
+
+	<article>
+
+		<div class="alert alert-warning" role="alert">
+			一小时同步一次，更多信息请查阅 <a href="https://laravel-china.org/topics/2095">文档导读</a>。
+			发现瑕疵？你也可以
+				<a href="https://github.com/laravel-china/laravel-docs/edit/5.5/queues.md"><i class="fa fa-pencil-square-o"></i> 改进本文</a>
+			。<a href="https://laravel-china.org/topics/4026" target="_blank"><i class="fa fa-cloud-download" aria-hidden="true"></i> 离线版本下载</a>
+		</div>
+
+		<div class="main-content">
+			<h1>Laravel 的队列系统介绍</h1>
+<ul>
+<li><a href="queues.html#introduction">简介</a>
+<ul>
+<li><a href="queues.html#connections-vs-queues">连接 Vs. 队列</a></li>
+<li><a href="queues.html#driver-prerequisites">驱动的必要设置</a></li>
+</ul></li>
+<li><a href="queues.html#creating-jobs">创建任务类</a>
+<ul>
+<li><a href="queues.html#generating-job-classes">生成任务类</a></li>
+<li><a href="queues.html#class-structure">任务类结构</a></li>
+</ul></li>
+<li><a href="queues.html#dispatching-jobs">分发任务</a>
+<ul>
+<li><a href="queues.html#delayed-dispatching">延迟分发</a></li>
+<li><a href="queues.html#job-chaining">工作链</a></li>
+<li><a href="queues.html#customizing-the-queue-and-connection">自定义队列 &amp; 连接</a></li>
+<li><a href="queues.html#max-job-attempts-and-timeout">指定任务最大尝试次数 / 超时值</a></li>
+<li><a href="queues.html#error-handling">错误处理</a></li>
+</ul></li>
+<li><a href="queues.html#running-the-queue-worker">运行队列处理器</a>
+<ul>
+<li><a href="queues.html#queue-priorities">队列优先级</a></li>
+<li><a href="queues.html#queue-workers-and-deployment">队列处理器 &amp; 部署</a></li>
+<li><a href="queues.html#job-expirations-and-timeouts">任务过期 &amp; 超时</a></li>
+</ul></li>
+<li><a href="queues.html#supervisor-configuration">Supervisor 配置</a></li>
+<li><a href="queues.html#dealing-with-failed-jobs">处理失败的任务</a>
+<ul>
+<li><a href="queues.html#cleaning-up-after-failed-jobs">清除失败任务</a></li>
+<li><a href="queues.html#failed-job-events">任务失败事件</a></li>
+<li><a href="queues.html#retrying-failed-jobs">重试失败的任务</a></li>
+</ul></li>
+<li><a href="queues.html#job-events">任务事件</a></li>
+</ul>
+<p><a name="introduction"></a></p>
+<h2>简介</h2>
+<blockquote>
+<p>{tip} Laravel 现在为你的 Redis 队列 提供了 Horizon，一个漂亮的仪表盘和配置系统。查看完整的 <a href="horizon.html">Horizon 文档</a> 了解更多信息。</p>
+</blockquote>
+<p>Laravel 队列为不同的后台队列服务提供统一的 API，例如 Beanstalk，Amazon SQS，Redis，甚至其他基于关系型数据库的队列。队列的目的是将耗时的任务延时处理，比如发送邮件，从而大幅度缩短 Web 请求和相应的时间。</p>
+<p>队列配置文件存放在 <code>config/queue.php</code> 。每一种队列驱动的配置都可以在该文件中找到，包括数据库，<a href="https://kr.github.io/beanstalkd/">Beanstalkd</a> ，<a href="https://aws.amazon.com/sqs/">Amazon SQS</a>，<a href="http://redis.io">Redis</a>，以及同步（本地使用）驱动。其中还包含了一个 <code>null</code> 队列驱动用于那些放弃队列的任务。</p>
+<p><a name="connections-vs-queues"></a></p>
+<h3>连接 Vs. 队列</h3>
+<p>在开始使用 Laravel 队列前，弄明白 「连接」 和 「队列」 的区别是很重要的。在你的 <code>config/queue.php</code> 配置文件里，有一个 <code>connections</code> 配置选项。这个选项给 Amazon SQS，Beanstalk，或者 Redis 这样的后端服务定义了一个特有的连接。不管是哪一种，一个给定的连接可能会有多个 「队列」，而 「队列」 可以被认为是不同的栈或者大量的队列任务。</p>
+<p>要注意的是，<code>queue</code> 配置文件中每个连接的配置示例中都包含一个 <code>queue</code> 属性。这是默认队列任务被发给指定连接的时候会被分发到这个队列中。换句话说，如果你分发任务的时候没有显式定义队列，那么它就会被放到连接配置中 <code>queue</code> 属性所定义的队列中：</p>
+<pre><code>// 这个任务将被分发到默认队列...
+Job::dispatch();
+
+// 这个任务将被发送到「emails」队列...
+Job::dispatch()-&gt;onQueue('emails');</code></pre>
+<p>有些应用可能不需要把任务发到不同的队列，而只发到一个简单的队列中就行了。但是把任务推到不同的队列仍然是非常有用的，因为 Laravel 队列处理器允许你定义队列的优先级，所以你能给不同的队列划分不同的优先级或者区分不同任务的不同处理方式了。比如说，如果你把任务推到 <code>high</code> 队列中，你就能让队列处理器优先处理这些任务了：</p>
+<pre><code>php artisan queue:work --queue=high,default</code></pre>
+<p><a name="driver-prerequisites"></a></p>
+<h3>驱动的必要设置</h3>
+<h4>数据库</h4>
+<p>要使用 <code>database</code> 这个队列驱动的话，你需要创建一个数据表来存储任务。你可以用 <code>queue:table</code> 这个 Artisan 命令来创建这个数据表的迁移。当迁移创建好以后,就可以用 <code>migrate</code> 这条命令来创建数据表：</p>
+<pre><code>php artisan queue:table
+
+php artisan migrate</code></pre>
+<h4>Redis</h4>
+<p>为了使用 <code>redis</code> 队列驱动，你需要在你的配置文件 <code>config/database.php</code> 中配置Redis的数据库连接。</p>
+<p>如果你的 Redis 队列连接使用的是 Redis 集群，你的队列名称必须包含 <a href="https://redis.io/topics/cluster-spec#keys-hash-tags">key hash tag</a>。这是为了确保所有的 Redis 键对于一个给定的队列都置于同一哈希中：</p>
+<pre><code>'redis' =&gt; [
+    'driver' =&gt; 'redis',
+    'connection' =&gt; 'default',
+    'queue' =&gt; '{default}',
+    'retry_after' =&gt; 90,
+],</code></pre>
+<h4>其它队列驱动的依赖扩展包</h4>
+<p>在使用列表里的队列服务前，必须安装以下依赖扩展包：</p>
+<div class="content-list">
+<ul>
+<li>Amazon SQS: <code>aws/aws-sdk-php ~3.0</code></li>
+<li>Beanstalkd: <code>pda/pheanstalk ~3.0</code></li>
+<li>Redis: <code>predis/predis ~1.0</code></li>
+</ul>
+</div>
+<p><a name="creating-jobs"></a></p>
+<h2>创建任务</h2>
+<p><a name="generating-job-classes"></a></p>
+<h3>生成任务类</h3>
+<p>在你的应用程序中，队列的任务类都默认放在 <code>app/Jobs</code> 目录下。如果这个目录不存在，那当你运行 <code>make:job</code> Artisan 命令时目录就会被自动创建。你可以用以下的 Artisan 命令来生成一个新的队列任务：</p>
+<pre><code>php artisan make:job SendReminderEmail</code></pre>
+<p>生成的类实现了 <code>Illuminate\Contracts\Queue\ShouldQueue</code> 接口，这意味着这个任务将会被推送到队列中，而不是同步执行。</p>
+<p><a name="class-structure"></a></p>
+<h3>任务类结构</h3>
+<p>任务类的结构很简单，一般来说只会包含一个让队列用来调用此任务的 <code>handle</code> 方法。我们来看一个示例的任务类。这个示例里，假设我们管理着一个播客发布服务，在发布之前需要处理上传播客文件：</p>
+<pre><code>&lt;?php
+
+namespace App\Jobs;
+
+use App\Podcast;
+use App\AudioProcessor;
+use Illuminate\Bus\Queueable;
+use Illuminate\Queue\SerializesModels;
+use Illuminate\Queue\InteractsWithQueue;
+use Illuminate\Contracts\Queue\ShouldQueue;
+use Illuminate\Foundation\Bus\Dispatchable;
+
+class ProcessPodcast implements ShouldQueue
+{
+    use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
+
+    protected $podcast;
+
+    /**
+     * 创建一个新的任务实例。
+     *
+     * @param  Podcast  $podcast
+     * @return void
+     */
+    public function __construct(Podcast $podcast)
+    {
+        $this-&gt;podcast = $podcast;
+    }
+
+    /**
+     * 运行任务。
+     *
+     * @param  AudioProcessor  $processor
+     * @return void
+     */
+    public function handle(AudioProcessor $processor)
+    {
+        // Process uploaded podcast...</code></pre>
+<p>}    }</p>
+<p>注意，在这个例子中，我们在任务类的构造器中直接传递了一个 <a href="eloquent.html">Eloquent 模型</a>。因为我们在任务类里引用了 <code>SerializesModels</code> 这个 trait，使得 Eloquent 模型在处理任务时可以被优雅地序列化和反序列化。如果你的队列任务类在构造器中接收了一个 Eloquent 模型，那么只有可识别出该模型的属性会被序列化到队列里。当任务被实际运行时，队列系统便会自动从数据库中重新取回完整的模型。这整个过程对你的应用程序来说是完全透明的，这样可以避免在序列化完整的 Eloquent 模式实例时所带来的一些问题。</p>
+<p>在队列处理任务时，会调用 <code>handle</code> 方法，而这里我们也可以通过 <code>handle</code> 方法的参数类型提示，让 Laravel 的 <a href="container.html">服务容器</a> 自动注入依赖对象。</p>
+<blockquote>
+<p>{note} 像图片内容这种二进制数据，在放入队列任务之前必须使用 <code>base64_encode</code> 方法转换一下。否则，当这项任务放置到队列中时，可能无法正确序列化为 JSON。</p>
+</blockquote>
+<p><a name="dispatching-jobs"></a></p>
+<h2>分发任务</h2>
+<p>你写好任务类后，就能通过 <code>dispatch</code> 辅助函数来分发它了。唯一需要传递给 <code>dispatch</code> 的参数是这个任务类的实例：</p>
+<pre><code>&lt;?php
+
+namespace App\Http\Controllers;
+
+use App\Jobs\ProcessPodcast;
+use Illuminate\Http\Request;
+use App\Http\Controllers\Controller;
+
+class PodcastController extends Controller
+{
+    /**
+     * 保存播客。
+     *
+     * @param  Request  $request
+     * @return Response
+     */
+    public function store(Request $request)
+    {
+        // 创建播客...
+
+        ProcessPodcast::dispatch($podcast);
+    }
+}</code></pre>
+<p><a name="delayed-dispatching"></a></p>
+<h3>延迟分发</h3>
+<p>如果你想延迟执行一个队列中的任务，你可以用任务实例的 <code>delay</code> 方法。例如，我们指定一个任务在分配后 10 分钟内不可被处理：</p>
+<pre><code>&lt;?php
+
+namespace App\Http\Controllers;
+
+use Carbon\Carbon;
+use App\Jobs\ProcessPodcast;
+use Illuminate\Http\Request;
+use App\Http\Controllers\Controller;
+
+class PodcastController extends Controller
+{
+    /**
+     * 保存一个新的播客。
+     *
+     * @param  Request  $request
+     * @return Response
+     */
+    public function store(Request $request)
+    {
+        // 创建播客...
+
+        ProcessPodcast::dispatch($podcast)
+                -&gt;delay(Carbon::now()-&gt;addMinutes(10));
+    }
+}</code></pre>
+<blockquote>
+<p>{note} Amazon SQS 队列服务最大延迟 15 分钟。</p>
+</blockquote>
+<p><a name="job-chaining"></a></p>
+<h3>工作链</h3>
+<p>工作链允许你指定应该按顺序运行的队列列表。如果一个任务失败了，则其余任务将不会运行。你可以在分发任务的时候使用 <code>withChain</code> 方法来执行具有工作链的队列任务。</p>
+<pre><code>ProcessPodcast::withChain([
+    new OptimizePodcast,
+    new ReleasePodcast
+])-&gt;dispatch();</code></pre>
+<p><a name="customizing-the-queue-and-connection"></a></p>
+<h3>自定义队列 &amp; 连接</h3>
+<h4>分发任务到指定队列</h4>
+<p>通过推送任务到不同的队列，你可以给队列任务分类，甚至可以控制给不同的队列分配多少任务。记住，这个并不是要推送任务到队列配置文件中不同的 「connections」 里，而是推送到一个连接中不同的队列里。要指定队列的话，就调用任务实例的 <code>onQueue</code> 方法：</p>
+<pre><code>&lt;?php
+
+namespace App\Http\Controllers;
+
+use App\Jobs\ProcessPodcast;
+use Illuminate\Http\Request;
+use App\Http\Controllers\Controller;
+
+class PodcastController extends Controller
+{
+    /**
+     * 保存一个新的播客。
+     *
+     * @param  Request  $request
+     * @return Response
+     */
+    public function store(Request $request)
+    {
+        // 创建播客...
+
+        ProcessPodcast::dispatch($podcast)-&gt;onQueue('processing');
+    }
+}</code></pre>
+<h4>分发任务到指定连接</h4>
+<p>如果你使用了多个队列连接，你可以将任务推到指定连接。要指定连接的话，你可以在分发任务的时候使用 <code>onConnection</code> 方法：</p>
+<pre><code>&lt;?php
+
+namespace App\Http\Controllers;
+
+use App\Jobs\ProcessPodcast;
+use Illuminate\Http\Request;
+use App\Http\Controllers\Controller;
+
+class PodcastController extends Controller
+{
+    /**
+     * 保存一个新的播客。
+     *
+     * @param  Request  $request
+     * @return Response
+     */
+    public function store(Request $request)
+    {
+        // 创建播客...
+
+        ProcessPodcast::dispatch($podcast)-&gt;onConnection('sqs');
+    }
+}</code></pre>
+<p>当然，你可以链式调用 <code>onConnection</code> 和 <code>onQueue</code> 方法 来同时指定任务的连接和队列：</p>
+<pre><code>ProcessPodcast::dispatch($podcast)
+              -&gt;onConnection('sqs')
+              -&gt;onQueue('processing');</code></pre>
+<p><a name="max-job-attempts-and-timeout"></a></p>
+<h3>指定任务最大尝试次数 / 超时值</h3>
+<h4>最大尝试次数</h4>
+<p>在一项任务中指定最大的尝试次数可以尝试通过 Artisan 命令行 <code>--tries</code> 来设置：</p>
+<pre><code>php artisan queue:work --tries=3</code></pre>
+<p>但是，你可以采取更为精致的方法来完成这项工作比如说在任务类中定义最大尝试次数。如果在类和命令行中都定义了最大尝试次数，Laravel 会优先执行任务类中的值：</p>
+<pre><code>&lt;?php
+
+namespace App\Jobs;
+
+class ProcessPodcast implements ShouldQueue
+{
+    /**
+     * 任务最大尝试次数。
+     *
+     * @var int
+     */
+    public $tries = 5;
+}</code></pre>
+<h4>超时</h4>
+<blockquote>
+<p>{note} <code>timeout</code> 功能针对 PHP 7.1+ 和 <code>pcntl</code> PHP 扩展进行了优化。</p>
+</blockquote>
+<p>同样的，任务可以运行的最大秒数可以使用 Artisan 命令行上的 <code>--timeout</code> 开关指定：</p>
+<pre><code>php artisan queue:work --timeout=30</code></pre>
+<p>然而，你也可以在任务类中定义一个变量来设置可运行的最大描述，如果在类和命令行中都定义了最大尝试次数，Laravel 会优先执行任务类中的值：</p>
+<pre><code>&lt;?php
+
+namespace App\Jobs;
+
+class ProcessPodcast implements ShouldQueue
+{
+    /**
+     * 任务运行的超时时间。
+     *
+     * @var int
+     */
+    public $timeout = 120;
+}</code></pre>
+<p><a name="error-handling"></a></p>
+<h3>错误处理</h3>
+<p>如果任务运行的时候抛出异常，这个任务就自动被释放回队列，这样它就能被再重新运行了。如果继续抛出异常，这个任务会继续被释放回队列，直到重试次数达到你应用允许的最多次数。这个最多次数是在调用 <code>queue:work</code> Artisan 命令时通过 <code>--tries</code> 参数或在类中定义变量来指定的。更多队列处理器的信息可以 <a href="queues.html#running-the-queue-worker">在下面看到</a>。</p>
+<p><a name="running-the-queue-worker"></a></p>
+<h2>运行队列处理器</h2>
+<p>Laravel 包含一个队列处理器，当新任务被推到队列中时它能处理这些任务。你可以通过 <code>queue:work</code> 命令来运行处理器。要注意，一旦 <code>queue:work</code> 命令开始，它将一直运行，直到你手动停止或者你关闭控制台：</p>
+<pre><code>php artisan queue:work</code></pre>
+<blockquote>
+<p>{tip} 要让 <code>queue:work</code> 进程永久在后台运行，你应该使用进程监控工具，比如 <a href="queues.html#supervisor-configuration">Supervisor</a> 来保证队列处理器没有停止运行。</p>
+</blockquote>
+<p>一定要记得，队列处理器是长时间运行的进程，并在内存里保存着已经启动的应用状态。这样的结果就是，处理器运行后如果你修改代码那这些改变是不会应用到处理器中的。所以在你重新部署过程中，一定要 <a href="queues.html#queue-workers-and-deployment">重启队列处理器</a> 。</p>
+<h4>处理单一任务</h4>
+<p>你可以使用 <code>--once</code> 选项来指定仅对队列中的单一任务进行处理：</p>
+<pre><code>php artisan queue:work --once</code></pre>
+<h4>指定连接 &amp; 队列</h4>
+<p>你可以指定队列处理器所使用的连接。你在 <code>config/queue.php</code> 配置文件里定义了多个连接，而你传递给 <code>work</code> 命令的连接名字要至少跟它们其中一个是一致的：</p>
+<pre><code>php artisan queue:work redis</code></pre>
+<p>你可以自定义队列处理器，方式是处理给定连接的特定队列。举例来说，如果你所有的邮件都是在 <code>redis</code> 连接中的 <code>emails</code> 队列中处理的，你就能通过以下命令启动一个只处理那个特定队列的队列处理器了：</p>
+<pre><code>php artisan queue:work redis --queue=emails</code></pre>
+<h4>资源注意事项</h4>
+<p>守护程序队列不会在处理每个作业之前 「重新启动」 框架。因此，在每个任务完成后，您应该释放任何占用过大的资源。例如，如果你使用 GD 库进行图像处理，你应该在完成后用 <code>imagedestroy</code> 释放内存。</p>
+<p><a name="queue-priorities"></a></p>
+<h3>队列优先级</h3>
+<p>有时候你希望设置处理队列的优先级。比如在 <code>config/queue.php</code> 里你可能设置了 <code>redis</code> 连接队列的默认邮件及为 <code>low</code>，但是你可能偶尔希望把一个任务推到 <code>high</code> 优先级的队列中，像这样：</p>
+<pre><code>dispatch((new Job)-&gt;onQueue('high'));</code></pre>
+<p>要验证 <code>high</code> 队列中的任务都是在 <code>low</code> 队列中的任务之前处理的，你要启动一个队列处理器，传递给它队列名字的列表并以英文逗号，间隔：</p>
+<pre><code>php artisan queue:work --queue=high,low</code></pre>
+<p><a name="queue-workers-and-deployment"></a></p>
+<h3>队列处理器 &amp; 部署</h3>
+<p>因为队列处理器都是 「常驻」 进程，如果代码改变而队列处理器没有重启，他们是不能应用新代码的。所以最简单的方式就是重新部署过程中要重启队列处理器。你可以很优雅地只输入 <code>queue:restart</code> 来重启所有队列处理器。</p>
+<pre><code>php artisan queue:restart</code></pre>
+<p>这个命令将会告诉所有队列处理器在执行完当前任务后结束进程，这样才不会有任务丢失。因为队列处理器在执行 <code>queue:restart</code> 命令时对结束进程，你应该运行一个进程管理器，比如 <a href="queues.html#supervisor-configuration">Supervisor</a> 来自动重新启动队列处理器。</p>
+<blockquote>
+<p>{tip} 队列使用 <a href="cache.html">缓存</a> 来存储重新启动信号，所以在使用此功能之前，你应该确保应用程序的缓存驱动程序已正确配置。</p>
+</blockquote>
+<p><a name="job-expirations-and-timeouts"></a></p>
+<h3>任务过期 &amp; 超时</h3>
+<h4>任务过期</h4>
+<p><code>config/queue.php</code> 配置文件里，每一个队列连接都定义了一个 <code>retry_after</code> 选项。这个选项指定了任务最多处理多少秒后就被当做失败重试了。比如说，如果这个选项设置为 <code>90</code>，那么当这个任务持续执行了 <code>90</code> 秒而没有被删除，那么它将被释放回队列。通常情况下，你应该把 <code>retry_after</code> 设置为最长耗时的任务所对应的时间。</p>
+<blockquote>
+<p>{note} 唯一没有 <code>retry_after</code> 选项的连接是 Amazon SQS。当用 Amazon SQS 时，你必须通过 <a href="https://docs.aws.amazon.com/AWSSimpleQueueService/latest/SQSDeveloperGuide/AboutVT.html">Amazon</a> 命令行来配置这个重试阈值。</p>
+</blockquote>
+<h4>队列处理器超时</h4>
+<p><code>queue:work</code> Artisan 命令对外有一个 <code>--timeout</code> 选项。这个选项指定了 <code>Laravel</code> 队列处理器最多执行多长时间后就应该被关闭掉。有时候一个队列的子进程会因为很多原因僵死，比如一个外部的 HTTP 请求没有响应。这个 <code>--timeout</code> 选项会移除超出指定事件限制的僵死进程：</p>
+<pre><code>php artisan queue:work --timeout=60</code></pre>
+<p><code>retry_after</code> 配置选项和 <code>--timeout</code> 命令行选项是不一样的，但是可以同时工作来保证任务不会丢失并且不会重复执行。</p>
+<blockquote>
+<p>{note} <code>--timeout</code> 应该永远都要比 <code>retry_after</code> 短至少几秒钟的时间。这样就能保证任务进程总能在失败重试前就被杀死了。如果你的 <code>--timeout</code> 选项大于 <code>retry_after</code> 配置选项，你的任务可能被执行两次。</p>
+</blockquote>
+<h4>队列进程睡眠时间</h4>
+<p>当队列需要处理任务时，进程将继续处理任务，它们之间没有延迟。但是，如果没有新的工作可用，<code>sleep</code> 参数决定了工作进程将 「睡眠」 多长时间：</p>
+<pre><code>php artisan queue:work --sleep=3</code></pre>
+<p><a name="supervisor-configuration"></a></p>
+<h2>Supervisor 配置</h2>
+<h4>安装 Supervisor</h4>
+<p>Supervisor 是一个 Linux 操作系统上的进程监控软件，它会在 <code>queue:listen</code> 或 <code>queue:work</code> 命令发生失败后自动重启它们。在 Ubuntu 安装 Supervisor，可以用以下命令：</p>
+<pre><code>sudo apt-get install supervisor</code></pre>
+<blockquote>
+<p>{tip} 如果自己手动配置 Supervisor 听起来有点难以应付，可以考虑使用 <a href="https://forge.laravel.com">Laravel Forge</a>，它能给你的 Laravel 项目自动安装与配置 Supervisor。</p>
+</blockquote>
+<h4>配置 Supervisor</h4>
+<p>Supervisor 的配置文件一般是放在 <code>/etc/supervisor/conf.d</code> 目录下。在这个目录中你可以创建任意数量的配置文件来要求 Supervisor 怎样监控你的进程。例如我们创建一个 <code>laravel-worker.conf</code> 来启动与监控一个 <code>queue:work</code> 进程：</p>
+<pre><code>[program:laravel-worker]
+process_name=%(program_name)s_%(process_num)02d
+command=php /home/forge/app.com/artisan queue:work sqs --sleep=3 --tries=3
+autostart=true
+autorestart=true
+user=forge
+numprocs=8
+redirect_stderr=true
+stdout_logfile=/home/forge/app.com/worker.log</code></pre>
+<p>这个例子里的 <code>numprocs</code> 命令会要求 Supervisor 运行并监控 8 个 <code>queue:work</code>  进程，并且在它们运行失败后重新启动。当然，你必须更改 <code>command</code> 命令的 <code>queue:work sqs</code> ，以显示你所选择的队列驱动。</p>
+<h4>启动 Supervisor</h4>
+<p>当这个配置文件被创建后，你需要更新 Supervisor 的配置，并用以下命令来启动该进程：</p>
+<pre><code>sudo supervisorctl reread
+
+sudo supervisorctl update
+
+sudo supervisorctl start laravel-worker:*</code></pre>
+<p>更多有关 Supervisor 的设置与使用，请参考 <a href="http://supervisord.org/index.html">Supervisor 官方文档</a>。</p>
+<p><a name="dealing-with-failed-jobs"></a></p>
+<h2>处理失败的任务</h2>
+<p>有时候你队列中的任务会失败。不要担心，本来事情就不会一帆风顺。Laravel 内置了一个方便的方式来指定任务重试的最大次数。当任务超出这个重试次数后，它就会被插入到 <code>failed_jobs</code> 数据表里面。要创建 <code>failed_jobs</code> 表的迁移文件，你可以用 <code>queue:failed-table</code> 命令，接着使用 <code>migrate</code> Artisan 命令生成 <code>failed_jobs</code> 表：</p>
+<pre><code>php artisan queue:failed-table
+
+php artisan migrate</code></pre>
+<p>然后运行队列处理器，在调用 <a href="queues.html#running-the-queue-worker">queue worker</a>，命令时你应该通过 <code>--tries</code> 参数指定任务的最大重试次数。如果不指定，任务就会永久重试：</p>
+<pre><code>php artisan queue:work redis --tries=3</code></pre>
+<p><a name="cleaning-up-after-failed-jobs"></a></p>
+<h3>清除失败任务</h3>
+<p>你可以在任务类里直接定义 <code>failed</code> 方法，它能在任务失败时运行任务的清除逻辑。这个地方用来发一条警告给用户或者重置任务执行的操作等再好不过了。导致任务失败的异常信息会被传递到 <code>failed</code> 方法：</p>
+<pre><code>&lt;?php
+
+namespace App\Jobs;
+
+use Exception;
+use App\Podcast;
+use App\AudioProcessor;
+use Illuminate\Bus\Queueable;
+use Illuminate\Queue\SerializesModels;
+use Illuminate\Queue\InteractsWithQueue;
+use Illuminate\Contracts\Queue\ShouldQueue;
+
+class ProcessPodcast implements ShouldQueue
+{
+    use InteractsWithQueue, Queueable, SerializesModels;
+
+    protected $podcast;
+
+    /**
+     * 创建一个新的任务实例。
+     *
+     * @param  Podcast  $podcast
+     * @return void
+     */
+    public function __construct(Podcast $podcast)
+    {
+        $this-&gt;podcast = $podcast;
+    }
+
+    /**
+     * 执行任务。
+     *
+     * @param  AudioProcessor  $processor
+     * @return void
+     */
+    public function handle(AudioProcessor $processor)
+    {
+        // 处理上传播客...
+    }
+
+    /**
+     * 要处理的失败任务。
+     *
+     * @param  Exception  $exception
+     * @return void
+     */
+    public function failed(Exception $exception)
+    {
+        // 给用户发送失败通知，等等...
+    }
+}</code></pre>
+<p><a name="failed-job-events"></a></p>
+<h3>任务失败事件</h3>
+<p>如果你想注册一个当队列任务失败时会被调用的事件，则可以用 <code>Queue::failing</code> 方法。这样你就有机会通过这个事件来用 e-mail 或 <a href="https://www.hipchat.com">HipChat</a> 通知你的团队。例如我们可以在 Laravel 内置的 <code>AppServiceProvider</code> 中对这个事件附加一个回调函数：</p>
+<pre><code>&lt;?php
+
+namespace App\Providers;
+
+use Illuminate\Support\Facades\Queue;
+use Illuminate\Queue\Events\JobFailed;
+use Illuminate\Support\ServiceProvider;
+
+class AppServiceProvider extends ServiceProvider
+{
+    /**
+     * 启动任意应用程序的服务。
+     *
+     * @return void
+     */
+    public function boot()
+    {
+        Queue::failing(function (JobFailed $event) {
+            // $event-&gt;connectionName
+            // $event-&gt;job
+            // $event-&gt;exception
+        });
+    }
+
+    /**
+     * 注册服务提供者。
+     *
+     * @return void
+     */
+    public function register()
+    {
+        //
+    }
+}</code></pre>
+<p><a name="retrying-failed-jobs"></a></p>
+<h3>重试失败任务</h3>
+<p>要查看你在 <code>failed_jobs</code> 数据表中的所有失败任务，则可以用 <code>queue:failed</code> 这个 Artisan 命令：</p>
+<pre><code>php artisan queue:failed</code></pre>
+<p><code>queue:failed</code> 命令会列出所有任务的 ID、连接、队列以及失败时间，任务 ID 可以被用在重试失败的任务上。例如要重试一个 ID 为 <code>5</code> 的失败任务，其命令如下：</p>
+<pre><code>php artisan queue:retry 5</code></pre>
+<p>要重试所有失败的任务，可以使用 <code>queue:retry</code> 并使用 <code>all</code> 作为 ID：</p>
+<pre><code>php artisan queue:retry all</code></pre>
+<p>如果你想删除掉一个失败任务，可以用 <code>queue:forget</code> 命令：</p>
+<pre><code>php artisan queue:forget 5</code></pre>
+<p><code>queue:flush</code> 命令可以让你删除所有失败的任务：</p>
+<pre><code>php artisan queue:flush</code></pre>
+<p><a name="job-events"></a></p>
+<h2>任务事件</h2>
+<p>使用队列的 <code>before</code> 和 <code>after</code> 方法，你能指定任务处理前和处理后的回调处理。在这些回调里正是实现额外的日志记录或者增加统计数据的好时机。通常情况下，你应该在 <a href="providers.html">服务容器</a> 中调用这些方法。例如，我们使用 Laravel 中的 <code>AppServiceProvider</code>：</p>
+<pre><code>&lt;?php
+
+namespace App\Providers;
+
+use Illuminate\Support\Facades\Queue;
+use Illuminate\Support\ServiceProvider;
+use Illuminate\Queue\Events\JobProcessed;
+use Illuminate\Queue\Events\JobProcessing;
+
+class AppServiceProvider extends ServiceProvider
+{
+    /**
+     * 启动任意服务。
+     *
+     * @return void
+     */
+    public function boot()
+    {
+        Queue::before(function (JobProcessing $event) {
+            // $event-&gt;connectionName
+            // $event-&gt;job
+            // $event-&gt;job-&gt;payload()
+        });
+
+        Queue::after(function (JobProcessed $event) {
+            // $event-&gt;connectionName
+            // $event-&gt;job
+            // $event-&gt;job-&gt;payload()
+        });
+    }
+
+    /**
+     * 注册服务提供者。
+     *
+     * @return void
+     */
+    public function register()
+    {
+        //
+    }
+}</code></pre>
+<p>在 <code>队列</code> <a href="facades.html">facade</a> 中使用 <code>looping</code> 方法，你可以尝试在队列获取任务之前执行指定的回调方法。举个例子，你可以用闭包来回滚之前已失败任务的事务。</p>
+<pre><code>Queue::looping(function () {
+    while (DB::transactionLevel() &gt; 0) {
+        DB::rollBack();
+    }
+});</code></pre>
+<hr />
+<blockquote>
+<p>{note} 欢迎任何形式的转载，但请务必注明出处，尊重他人劳动共创开源社区。</p>
+<p>转载请注明：本文档由 Laravel China 社区 <a href="https://laravel-china.org">laravel-china.org</a> 组织翻译，详见 <a href="https://laravel-china.org/topics/5756/laravel-55-document-translation-call-come-and-join-the-translation">翻译召集帖</a>。</p>
+<p>文档永久地址： <a href="../../index.html">https://d.laravel-china.org</a></p>
+</blockquote>
+		</div>
+
+		<div class="main-footer" style="border-top:1px dashed rgba(0, 0, 0, 0.1);padding-top: 30px;margin-top:30px;margin-bottom: 20px;">
+			<div class="prev-next-wrap clearfix">
+
+									<a class="btn btn-primary pull-left btn-inverted" href="packages.html"><i class="fa fa-arrow-left"></i> 扩展包开发</a>
+				
+			    &nbsp;
+								    <a class="btn btn-primary pull-right btn-inverted" href="scheduling.html">任务调度 <i class="fa fa-arrow-right"></i></a>
+							</div>
+		</div>
+
+	</article>
+</div>
+
+	<footer class="main">
+		<ul>
+			<li class="nav-docs"><a href="../5.4.html">文档</a></li>
+<li ><a href="https://laravel-china.org/news" class="no-pjax">Laravel 资讯</a></li>
+<li class="dropdown"><a href="https://laravel-china.org/">Laravel China 社区</a></li>
+<li class="nav-forge"><a href="https://laravel-china.org/categories/1">酷工作</a></li>
+<li class="nav-docs"><a href="http://lumen.laravel-china.org">Lumen</a></li>
+<li class="nav-forge"><a href="https://cs.laravel-china.org/">速查表</a></li>
+<li class="nav-forge"><a href="https://fsdhub.com/books/laravel-essential-training-5.5">《Laravel 入门教程》</a></li>
+		</ul>
+		<p>Laravel is a trademark of Taylor Otwell. Copyright &copy; Taylor Otwell.</p>
+            <div style="margin-top: 32px;">
+                <a href="https://www.upyun.com/" title="Composer 镜像赞助商">
+                    <img src="https://dn-phphub.qbox.me/uploads/banners/XPtLlZmIN1cQbLuDFEON.png" style="width: 200px;">
+                </a>
+            </div>
+            <p class="less-significant">
+            <a href="http://jackmcdade.com">
+                Designed by<br>
+                <svg version="1.1"
+	 xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:a="http://ns.adobe.com/AdobeSVGViewerExtensions/3.0/"
+	 x="0px" y="0px" width="128.2px" height="28px" viewBox="0 0 128.2 28" enable-background="new 0 0 128.2 28" xml:space="preserve"
+	>
+<defs>
+</defs>
+<g>
+	<path fill="#c3c3c3" d="M14.2,0.4c0,0.2,0,0.5,0,0.7c0,0.2,0,0.5,0,0.7l-1.4-0.3C12.9,3,13,4.5,13.1,6c0.1,1.5,0,3-0.1,4.5
+		c0,0.4-0.1,0.8-0.1,1.2c-0.1,0.4-0.1,0.8-0.3,1.2c-0.1,0.4-0.3,0.7-0.5,1.1c-0.2,0.3-0.5,0.6-0.9,0.9c-0.4,0.2-0.9,0.4-1.5,0.6
+		c-0.6,0.2-1.1,0.3-1.6,0.3c-0.6,0-1.2-0.1-1.6-0.3c-0.5-0.2-0.9-0.6-1.1-1c-0.3-0.5-0.5-1-0.6-1.6c-0.1-0.6-0.1-1.3,0-2.1
+		c0-0.2,0.1-0.5,0.2-0.7C4.9,9.9,5,9.7,5.1,9.5c0.1-0.2,0.2-0.4,0.3-0.6l1.1,0.4C6.7,9.3,7,9.4,7.3,9.5c0.3,0.1,0.5,0.1,0.6,0.2
+		c0,0.2,0,0.4-0.1,0.5c-0.1,0.2-0.1,0.3-0.2,0.4c-0.1,0.1-0.2,0.3-0.2,0.4c-0.1,0.2-0.1,0.3-0.1,0.5l-1.3-0.7
+		c-0.1,0.3-0.2,0.7-0.2,1.1c0,0.4,0.1,0.8,0.2,1.2c0.2,0.4,0.4,0.7,0.6,1c0.3,0.3,0.6,0.4,1,0.3c0.6,0,1.1-0.3,1.4-0.6
+		c0.3-0.4,0.5-0.9,0.7-1.7c0.1-0.7,0.2-1.6,0.2-2.8c0-1.1,0-2.4,0-3.9c0-0.6-0.1-1.3-0.1-2C9.7,2.8,9.6,2.1,9.5,1.4
+		c-0.2,0-0.5,0-0.8,0c-0.3,0-0.6,0-0.8,0c-0.8,0-1.5,0-2.2,0c-0.7,0-1.5,0-2.2,0.2c-0.3,0.1-0.6,0.2-1,0.4C2.2,2.1,1.9,2.4,1.6,2.6
+		C1.4,2.9,1.2,3.2,1.1,3.6C1,3.9,1,4.3,1.1,4.6c0.1,0.5,0.3,0.8,0.4,0.9V5.4c0-0.4,0.1-0.8,0.4-1c0.3-0.2,0.6-0.3,0.9-0.3
+		c0.3,0,0.6,0.1,0.9,0.3C4,4.6,4.1,5,4.1,5.4c0,0.4-0.1,0.8-0.4,1c-0.3,0.2-0.6,0.3-1,0.3H2.7C1.9,6.7,1.3,6.5,0.9,6
+		C0.5,5.6,0.2,5.1,0.1,4.5C0,4,0,3.4,0.2,2.7c0.2-0.6,0.5-1.1,1-1.5c0.4-0.3,0.8-0.5,1.2-0.7c0.4-0.1,0.9-0.2,1.4-0.3
+		c0.5-0.1,0.9-0.1,1.4-0.1c0.5,0,0.9,0,1.4,0h1.5c0.6,0,1.1,0,1.6,0.1c0.5,0,1,0.1,1.5,0.1c0.5,0,1,0.1,1.5,0.1
+		C13.1,0.5,13.6,0.5,14.2,0.4z"/>
+	<path fill="#c3c3c3" d="M25.2,14.3c0,0.2,0.1,0.4,0.1,0.6c0,0.2,0.1,0.4,0.1,0.7c-1-0.1-2-0.2-3-0.1c-1.1,0.1-2.1,0.2-3,0.4
+		c0-0.2-0.1-0.4-0.1-0.5c0-0.2-0.1-0.4-0.1-0.5c0.2,0,0.5-0.1,0.7-0.1c0.2,0,0.4-0.1,0.6-0.1c-0.1-1.5-0.3-3.1-0.5-4.6
+		c-0.5,0.1-0.9,0.1-1.4,0.2c-0.5,0.1-0.9,0.1-1.4,0.2c-0.2,0.7-0.3,1.3-0.5,2c-0.2,0.7-0.3,1.3-0.5,2c0.2,0,0.4,0,0.6,0
+		c0.1,0,0.3,0,0.4,0.1c0,0.2,0,0.3,0,0.5c0,0.1,0,0.2,0,0.4c0,0.1,0,0.2-0.1,0.3H14v-1.2h1c0.2-0.5,0.3-1,0.4-1.5
+		c0.1-0.5,0.3-1,0.4-1.5c0.2-0.6,0.3-1.2,0.5-1.7c0.2-0.6,0.3-1.2,0.5-1.7c0.2-1.1,0.4-2.1,0.6-3.2c0.2-1.1,0.3-2.1,0.4-3.2
+		c-0.2,0-0.5,0-0.7,0c-0.2,0-0.4,0-0.7,0c0-0.2,0.1-0.4,0.1-0.6c0-0.2,0-0.4,0.1-0.6c0.9,0,1.9,0,2.9,0c1,0,2,0,2.9,0l0.2,1.2
+		c-0.2,0-0.3,0-0.5,0c-0.2,0-0.3,0-0.5,0c0.3,2.1,0.7,4.3,1,6.5c0.3,2.2,0.7,4.4,1,6.5H25.2z M17.5,9c0.4-0.1,0.7-0.1,1.1-0.2
+		c0.4-0.1,0.8-0.1,1.2-0.2c-0.2-1-0.3-2-0.5-2.9c-0.2-1-0.4-1.9-0.6-2.9c-0.2,1-0.4,2.1-0.5,3.1C17.9,6.9,17.7,8,17.5,9z"/>
+	<path fill="#c3c3c3" d="M36.7,10.4c-0.1,0-0.2,0-0.3,0c-0.1,0-0.2,0-0.3,0c0,0.6,0,1.2-0.2,1.9c-0.2,0.6-0.5,1.2-1,1.6
+		c-0.5,0.5-1,0.9-1.6,1.1c-0.6,0.3-1.3,0.4-2,0.5c-0.6,0.1-1.1,0.1-1.8,0c-0.6-0.1-1.1-0.4-1.6-0.7c-0.2-0.2-0.5-0.4-0.8-0.7
+		c-0.3-0.3-0.5-0.5-0.6-0.8c-0.3-0.5-0.5-1-0.6-1.5c-0.2-0.5-0.3-0.9-0.4-1.4c-0.1-0.5-0.2-1-0.2-1.5c0-0.5,0-1,0.1-1.6
+		c0.2-1,0.4-2,0.8-2.9c0.4-0.9,0.8-1.7,1.4-2.3c0.5-0.7,1.2-1.2,1.9-1.6C30.2,0.2,30.9,0,31.7,0c0.3,0,0.5,0,0.8,0.1
+		c0.3,0.1,0.5,0.2,0.7,0.4c0.3,0.3,0.7,0.7,1,1.2c0.3,0.5,0.6,1.2,0.7,1.9c0.1,0,0.2,0,0.3,0c0.1,0,0.2,0,0.3,0c0,0.1,0,0.2,0,0.3
+		c0,0.1,0,0.2,0,0.3L33,4.6c-0.3,0.1-0.5,0.1-0.6,0c-0.1,0-0.2-0.1-0.2-0.2c-0.1-0.1-0.1-0.2,0-0.3c0.1,0,0.2,0,0.2,0
+		c0.1,0,0.1,0,0.2,0c0.2-0.2,0.3-0.3,0.3-0.6c0-0.2,0-0.5,0-0.7c0-0.5-0.2-0.9-0.5-1.3c-0.2-0.2-0.3-0.3-0.4-0.4
+		C31.8,1,31.6,1,31.4,1.1c-0.2,0-0.4,0.2-0.6,0.4c-0.2,0.2-0.4,0.5-0.5,0.9C30,2.6,29.9,3,29.8,3.3c-0.1,0.3-0.2,0.5-0.2,0.7
+		c-0.6,2.6-0.7,5.3-0.2,8c0.1,0.3,0.2,0.7,0.3,1s0.3,0.6,0.5,0.9c0.2,0.3,0.5,0.5,0.8,0.7c0.3,0.2,0.6,0.2,1,0.1
+		c0.6-0.1,1-0.4,1.4-1c0.3-0.5,0.6-1.1,0.7-1.8c0.1-0.3,0.1-0.6,0.1-0.9v-0.5c-0.2,0-0.4,0-0.6-0.1c-0.1-0.1-0.2-0.2-0.2-0.3
+		c0-0.1,0-0.2,0.1-0.3c0.6,0,1.2,0,1.7,0c0.6,0,1.2,0,1.7,0c0,0.1,0,0.2-0.1,0.3C36.7,10.2,36.7,10.3,36.7,10.4z"/>
+	<path fill="#c3c3c3" d="M48,14.2c0.1,0.2,0.3,0.3,0.5,0.4c0.2,0.1,0.5,0.1,0.7,0c0.1,0.1,0.1,0.2,0.1,0.4c0,0.2-0.1,0.3-0.2,0.4
+		c-0.1,0.1-0.2,0.2-0.4,0.2c-0.2,0-0.3,0-0.4,0c-0.3,0-0.7,0-1,0c-0.3,0-0.7,0-1-0.1c-0.3-0.1-0.7-0.2-1-0.4
+		c-0.3-0.2-0.5-0.4-0.7-0.7c-0.2-0.3-0.3-0.6-0.3-1c0-0.3,0-0.7,0-1.1V9.9c0-0.1,0-0.3,0-0.4c0-0.2-0.1-0.3-0.2-0.5
+		c-0.1-0.2-0.3-0.3-0.4-0.4c-0.2-0.1-0.4-0.1-0.7-0.1c-0.1,0-0.2,0-0.5,0.1c-0.2,0.3-0.3,0.5-0.5,0.8c-0.2,0.3-0.3,0.5-0.5,0.7
+		c0,0.8,0,1.5-0.1,2.2c0,0.7-0.1,1.5-0.1,2.1h1.4v1.1c-0.5,0-0.9,0.1-1.3,0c-0.4,0-0.8,0-1.2-0.1c-0.4,0-0.8-0.1-1.2-0.1
+		c-0.4,0-0.8,0-1.3,0c-0.1,0-0.3,0-0.4,0c-0.1,0-0.2,0-0.3-0.1c-0.1,0-0.1-0.1-0.1-0.2c0-0.1-0.1-0.3-0.1-0.4c0-0.1,0-0.3,0-0.4
+		c0-0.1,0.1-0.2,0.1-0.2c0.2,0.1,0.4,0.2,0.6,0.1s0.4-0.2,0.5-0.4c0-0.1,0.1-0.3,0.1-0.7c0-0.4,0-0.9,0.1-1.6c0-0.6,0.1-1.3,0.1-2.1
+		c0-0.8,0-1.6,0.1-2.4c0-0.8,0-1.5,0.1-2.3c0-0.7,0.1-1.3,0.1-1.8c0-0.2,0-0.5,0-0.7c0-0.2-0.1-0.4-0.2-0.6
+		c-0.1-0.2-0.3-0.3-0.5-0.4c-0.2-0.1-0.4,0-0.6,0.1c0-0.2-0.1-0.5-0.1-0.7c0-0.2,0-0.4-0.1-0.7c1,0,2,0.1,3,0.1c0.9,0,1.9,0.1,3,0.1
+		c0,0.1,0,0.2,0,0.3c0,0.1,0,0.3,0.1,0.4c0,0.1,0,0.3,0,0.4c0,0.1,0,0.2-0.1,0.2c-0.1,0.1-0.2,0.1-0.3,0.1c-0.1,0-0.2,0-0.4-0.1
+		c-0.1-0.1-0.3-0.1-0.4-0.2c-0.1-0.1-0.3-0.1-0.3-0.1c-0.1,0.9-0.1,1.9-0.1,2.9c0,1-0.1,2-0.1,3.1c0.7-1.2,1.4-2.5,2-3.8
+		c0.2-0.3,0.3-0.6,0.4-0.9c0.1-0.3,0.3-0.6,0.5-0.9c0.2-0.3,0.4-0.5,0.7-0.7C45.4,1,45.7,0.9,46,0.8c0.3-0.1,0.7-0.1,1,0
+		c0.3,0.1,0.6,0.2,0.9,0.5c0.2,0.3,0.4,0.6,0.4,1c0,0.4,0.1,0.8,0,1.1c0,0.2,0,0.3,0,0.5c0,0.2-0.1,0.3-0.2,0.4
+		c-0.1,0.2-0.2,0.3-0.4,0.4c-0.2,0.1-0.4,0.1-0.5,0.2c-0.1,0-0.3,0.1-0.4,0.1c-0.1,0-0.3,0-0.4,0C46.2,4.7,46,4.6,46,4.4
+		c-0.1-0.2-0.1-0.4,0-0.5c0.1-0.2,0.2-0.3,0.3-0.3c0.1,0,0.2-0.1,0.4-0.1c0.2-0.1,0.3-0.2,0.3-0.3c0.1-0.2,0.1-0.3,0.1-0.5
+		C47.1,2.4,47,2.2,47,2c-0.1-0.2-0.2-0.3-0.3-0.3c-0.2,0-0.3,0-0.5,0.1C46,1.9,45.9,2,45.7,2.2c-0.2,0.2-0.3,0.4-0.4,0.6
+		C45.2,3,45,3.3,44.9,3.5c-0.1,0.3-0.3,0.6-0.4,0.8c-0.2,0.2-0.3,0.5-0.4,0.8c-0.4,0.9-0.8,1.7-1.2,2.5c0.3,0,0.6-0.1,1,0
+		c0.4,0,0.7,0,1,0c0.3,0,0.7,0.1,1,0.2c0.3,0.1,0.6,0.3,0.8,0.6c0.3,0.3,0.4,0.6,0.5,1c0.1,0.4,0.1,0.8,0.2,1.1l0.2,2.1
+		c0,0.2,0.1,0.5,0.1,0.7C47.7,13.7,47.8,14,48,14.2z"/>
+	<path fill="#c3c3c3" d="M71.7,13.9c0.2,0.2,0.4,0.4,0.7,0.5c0.3,0.1,0.5,0,0.8-0.1c0,0.2,0.1,0.3,0.1,0.6c0.1,0.2,0.1,0.4,0.1,0.6
+		c-0.3,0-0.7,0-1.1,0s-0.8,0-1.3,0.1c-0.4,0-0.9,0-1.3,0c-0.4,0-0.8,0-1,0c0-0.1,0-0.1,0-0.2c0-0.1,0.1-0.2,0.2-0.3
+		c0.1-0.1,0.2-0.2,0.4-0.3c0.2-0.1,0.3-0.1,0.6-0.1c0.1,0,0.1-0.2,0.1-0.7c0-0.4,0-1,0-1.6c0-0.6,0-1.2-0.1-1.9s0-1.1,0-1.5
+		c0-1,0-1.9,0-2.6c0-0.7,0.1-1.5,0.1-2.2c-0.6,1.3-1.1,2.7-1.6,4.1c-0.5,1.5-1,3-1.5,4.4c0,0,0.1,0.1,0.1,0.2c-0.2,0-0.4,0-0.7,0.1
+		c-0.3,0.1-0.5,0.1-0.7,0.1c-0.5-1.9-1.1-3.7-1.6-5.5c-0.5-1.8-1.1-3.6-1.6-5.5c-0.1,1-0.1,2-0.1,3c0,1.1-0.1,2.1-0.1,3.2
+		c0,1.1,0,2.1-0.1,3.2c0,1-0.1,2-0.1,3h1.4v1.1c-0.5,0-0.9,0.1-1.3,0c-0.4,0-0.8,0-1.2-0.1c-0.4,0-0.8-0.1-1.2-0.1
+		c-0.4,0-0.8,0-1.3,0c-0.1,0-0.3,0-0.4,0c-0.1,0-0.2,0-0.3-0.1c-0.1,0-0.1-0.1-0.1-0.2c0-0.1-0.1-0.3-0.1-0.4c0-0.1,0-0.3,0-0.4
+		c0-0.1,0.1-0.2,0.1-0.2c0.2,0.1,0.4,0.2,0.6,0.1s0.4-0.2,0.5-0.4c0-0.1,0.1-0.3,0.1-0.7c0-0.4,0-0.9,0.1-1.6c0-0.6,0.1-1.3,0.1-2.1
+		C59,8.8,59,8,59,7.2c0-0.8,0-1.5,0.1-2.3c0-0.7,0.1-1.3,0.1-1.8c0-0.2,0-0.5,0-0.7c0-0.2-0.1-0.4-0.2-0.6c-0.1-0.2-0.3-0.3-0.5-0.4
+		c-0.2-0.1-0.4,0-0.6,0.1c0-0.2-0.1-0.5-0.1-0.7c0-0.2,0-0.4-0.1-0.7c1,0,2,0.1,3,0.1c0.9,0,1.9,0.1,3,0.1c0,0.3-0.1,0.5-0.4,0.7
+		c0.3,1.3,0.6,2.6,1,3.9c0.4,1.3,0.8,2.6,1.2,3.9c0.2-0.6,0.4-1.3,0.6-1.9c0.2-0.6,0.4-1.2,0.6-1.8C67,4.6,67.2,4,67.5,3.4
+		c0.2-0.6,0.4-1.3,0.6-2c-0.1,0-0.3,0-0.4-0.1c-0.1,0-0.2,0-0.4-0.1c-0.1,0-0.1-0.1-0.1-0.3c0-0.1,0.1-0.2,0.1-0.3
+		c0.1-0.1,0.2-0.1,0.3-0.1c0.1,0,0.2,0,0.3,0c0.4,0,0.7,0,1,0s0.6,0,0.9,0c0.3,0,0.6,0,0.9,0c0.3,0,0.6,0,1,0c0.1,0,0.3,0,0.4,0
+		c0.1,0,0.3,0.1,0.4,0.2c0.1,0.1,0.2,0.2,0.2,0.4c0,0.2,0,0.3-0.2,0.3c-0.1-0.1-0.2-0.1-0.3-0.1c-0.1,0-0.2,0.1-0.3,0.1
+		c-0.2,0.4-0.3,0.8-0.4,1.3c-0.1,0.5-0.1,0.9-0.1,1.4c-0.2,2.8-0.2,5.6,0,8.4c0,0.3,0,0.5,0.1,0.7C71.4,13.5,71.5,13.7,71.7,13.9z"
+		/>
+	<path fill="#c3c3c3" d="M81.7,12c-0.1,0-0.1,0-0.2,0c-0.1,0-0.1,0-0.2,0c0,0.4,0,0.9-0.2,1.3c-0.1,0.4-0.4,0.8-0.7,1.1
+		c-0.3,0.3-0.7,0.6-1.1,0.8c-0.4,0.2-0.9,0.3-1.3,0.4c-0.4,0.1-0.8,0-1.2,0c-0.4-0.1-0.8-0.2-1.1-0.5c-0.2-0.1-0.3-0.3-0.5-0.5
+		c-0.2-0.2-0.3-0.4-0.4-0.6c-0.2-0.4-0.3-0.7-0.4-1c-0.1-0.3-0.2-0.6-0.3-1C74,11.7,74,11.4,74,11c0-0.3,0-0.7,0.1-1.1
+		c0.1-0.7,0.3-1.4,0.5-2c0.3-0.6,0.6-1.1,0.9-1.6s0.8-0.8,1.3-1.1c0.5-0.3,1-0.4,1.5-0.4c0.2,0,0.4,0,0.6,0.1
+		c0.2,0.1,0.3,0.1,0.5,0.3C79.6,5.4,79.8,5.6,80,6c0.2,0.4,0.4,0.8,0.5,1.3c0.1,0,0.1,0,0.2,0c0.1,0,0.1,0,0.2,0c0,0.1,0,0.1,0,0.2
+		c0,0.1,0,0.1,0,0.2L79.2,8c-0.2,0.1-0.3,0.1-0.4,0c-0.1,0-0.1-0.1-0.2-0.2c0-0.1,0-0.1,0-0.2c0.1,0,0.1,0,0.2,0c0,0,0.1,0,0.2,0
+		c0.1-0.1,0.2-0.2,0.2-0.4c0-0.2,0-0.3,0-0.5c0-0.3-0.1-0.6-0.3-0.9c-0.1-0.1-0.2-0.2-0.3-0.3c-0.1-0.1-0.2-0.1-0.4,0
+		c-0.1,0-0.3,0.1-0.4,0.3c-0.1,0.2-0.3,0.4-0.4,0.6c-0.1,0.2-0.2,0.4-0.3,0.6c-0.1,0.2-0.1,0.4-0.1,0.5c-0.4,1.8-0.5,3.6-0.1,5.5
+		c0.1,0.2,0.1,0.4,0.2,0.7c0.1,0.2,0.2,0.4,0.3,0.6c0.1,0.2,0.3,0.3,0.6,0.5c0.2,0.1,0.4,0.1,0.7,0.1c0.4-0.1,0.7-0.3,1-0.7
+		c0.2-0.4,0.4-0.8,0.5-1.2c0-0.2,0.1-0.4,0.1-0.6v-0.3c-0.2,0-0.3,0-0.4,0c-0.1,0-0.1-0.1-0.1-0.2c0-0.1,0-0.2,0.1-0.2
+		c0.4,0,0.8,0,1.2,0c0.4,0,0.8,0,1.2,0c0,0.1,0,0.1,0,0.2C81.8,11.8,81.8,11.9,81.7,12z"/>
+	<path fill="#c3c3c3" d="M83.5,14.2c0.2-4.3,0.3-8.5,0.2-12.8c-0.3,0-0.6,0-0.9,0c-0.3,0-0.6,0-0.9,0c0-0.2,0-0.3,0-0.5s0-0.3,0-0.5
+		c0.7,0,1.3,0,2-0.1c0.7,0,1.3,0,2-0.1c0.8-0.2,1.6-0.2,2.4-0.1c0.8,0.1,1.6,0.3,2.4,0.5c0.7,0.3,1.4,0.7,1.9,1.2
+		c0.5,0.5,0.9,1.1,1.1,1.8C94,4.9,94.1,6.1,94,7.4C94,8.6,93.8,9.8,93.7,11c0,0.4-0.1,0.8-0.2,1.2c-0.1,0.4-0.3,0.8-0.5,1.1
+		c-0.3,0.5-0.8,1-1.3,1.3c-0.5,0.3-1.1,0.5-1.7,0.6c-0.5,0.1-0.9,0.2-1.4,0.1c-0.5,0-0.9,0-1.4-0.1v0c-0.2,0-0.3,0-0.5,0
+		s-0.4,0-0.5,0l-0.1,0c0,0,0,0,0,0c-0.6,0-1.3,0-1.9,0c-0.6,0-1.3,0-1.9,0c-0.2-0.4-0.1-0.8,0.2-1.1c0.2-0.2,0.3-0.2,0.5-0.3
+		C83.2,14.1,83.4,14.1,83.5,14.2z M89.4,1.9c-0.4-0.3-0.8-0.5-1.3-0.6c-0.5-0.1-1-0.1-1.5-0.1c-0.3,4.5-0.2,9.1,0.4,13.6
+		c0.2,0,0.4,0,0.5-0.1c0.2,0,0.4-0.1,0.6-0.1c0.3-0.1,0.6-0.2,0.9-0.4c0.3-0.2,0.6-0.4,0.8-0.7c0.2-0.3,0.4-0.6,0.5-1
+		s0.2-0.7,0.2-1.1c0.4-2.1,0.4-4.2,0.2-6.3c-0.1-0.6-0.2-1.2-0.4-1.9C90.3,2.8,89.9,2.3,89.4,1.9z"/>
+	<path fill="#c3c3c3" d="M102.4,9.7c-0.6-0.1-1.3-0.1-2,0c-0.7,0.1-1.4,0.4-2,0.8l-0.2-1.4L99.1,9c0-0.4-0.1-0.7-0.1-1
+		c0-0.2-0.1-0.5-0.1-0.9c-0.3,0-0.6,0.1-0.9,0.1c-0.3,0-0.6,0.1-1,0.1c-0.2,0.7-0.3,1.3-0.4,1.8c-0.1,0.5-0.2,1.1-0.4,1.6l0.2-0.1
+		l0.7,0.6c-0.4,0.2-0.8,0.6-1.2,1.1c-0.4,0.5-0.7,1-0.9,1.5l-0.9-0.5c0-0.1,0.1-0.2,0.2-0.4c0.1-0.2,0.2-0.3,0.2-0.4
+		c0.1-0.2,0.2-0.5,0.3-1c0.1-0.4,0.2-0.9,0.4-1.3c0.1-0.5,0.2-0.9,0.3-1.3c0.1-0.4,0.2-0.7,0.2-0.9c0.1-0.4,0.2-0.8,0.3-1.2
+		c0.1-0.4,0.2-0.8,0.3-1.2c0.2-0.7,0.3-1.4,0.4-2.1c0.1-0.7,0.2-1.4,0.3-2.2c-0.1,0-0.2,0-0.3,0c-0.1,0-0.2,0-0.3,0l0.1-0.8l4-0.1
+		l0.1,0.8c-0.1,0-0.2,0-0.2,0c0,0-0.1,0-0.2,0c0.1,0.7,0.2,1.4,0.3,2c0.1,0.6,0.2,1.2,0.3,1.8c0.1,0.6,0.2,1.2,0.3,1.8
+		c0.1,0.6,0.2,1.3,0.4,2c0.2,0,0.3,0,0.3,0c0,0,0.1,0,0.3,0L102.4,9.7z M98.8,6.1c-0.1-0.7-0.2-1.3-0.3-2c-0.1-0.6-0.3-1.3-0.4-2
+		c-0.1,0.6-0.2,1.3-0.4,2.1c-0.1,0.7-0.3,1.5-0.5,2.2L98.8,6.1z"/>
+	<path fill="#c3c3c3" d="M124.9,20.1c0-0.3,0.1-0.6,0.3-0.8c0.2-0.2,0.4-0.3,0.7-0.4c0.3-0.1,0.5,0,0.8,0.1c0.3,0.1,0.5,0.3,0.6,0.5
+		c0.3,0.4,0.6,0.9,0.7,1.4c0.2,0.5,0.2,1,0.2,1.5c0,0.5-0.1,1-0.3,1.5c-0.2,0.5-0.4,1-0.7,1.4c-0.6,0.9-1.4,1.6-2.4,2
+		c-1,0.5-2,0.7-3,0.7c-1.5,0-2.8-0.3-3.9-1s-2.1-1.4-3-2.4c-0.9-1-1.8-2.1-2.5-3.2c-0.8-1.2-1.5-2.3-2.3-3.5c-1.1,1.2-2.4,2.2-3.9,3
+		c-1.5,0.8-3,1.1-4.5,1c-1.1,0-2.1-0.1-3-0.5c-0.9-0.3-1.6-0.8-2.2-1.4c-0.6-0.6-0.9-1.3-1.1-2.2c-0.2-0.8-0.1-1.7,0.2-2.7
+		c0.3-0.9,0.7-1.6,1.3-2.2c0.6-0.6,1.2-1.1,2-1.5c0.7-0.4,1.5-0.6,2.4-0.7c0.8-0.1,1.7,0,2.6,0.2c0-1.7,0-3.4,0-5c0-1.7,0-3.2,0-4.6
+		c-0.3,0-0.6,0-0.9,0c-0.3,0-0.6,0-0.9,0c0-0.2,0-0.3,0-0.5s0-0.3,0-0.5l3.7-0.1c0.8-0.2,1.6-0.2,2.4-0.1c0.8,0.1,1.6,0.3,2.4,0.5
+		c0.7,0.3,1.4,0.7,1.9,1.2c0.5,0.5,0.9,1.1,1.1,1.8c0.3,1.2,0.4,2.4,0.3,3.6c-0.1,1.2-0.2,2.5-0.4,3.7c-0.1,1-0.4,2-0.8,3
+		c-0.5,1-1,2-1.7,2.9c0.3,0.4,0.6,0.8,0.8,1.2c0.3,0.4,0.5,0.8,0.8,1.2c0.5,0.8,1.1,1.6,1.7,2.5c0.6,0.8,1.3,1.6,2,2.4
+		c0.7,0.7,1.5,1.3,2.4,1.8s1.8,0.7,2.9,0.8c1.1,0,2.1-0.2,3-0.7c0.9-0.5,1.6-1.2,2.1-2.2c0.2-0.4,0.3-0.8,0.4-1.3
+		c0.1-0.5,0-0.9-0.1-1.3c-0.2,0.1-0.4,0.2-0.6,0.2c-0.2,0-0.4,0-0.6-0.1c-0.2-0.1-0.4-0.2-0.5-0.4S124.9,20.4,124.9,20.1z M102.9,21
+		c1.5-0.4,2.8-1,3.7-1.8c0.9-0.8,1.7-1.7,2.3-2.8c-0.2-0.2-0.3-0.5-0.6-0.7c-0.6-0.7-1.2-1.4-1.9-1.9c0,0.6,0.1,1.2,0.1,1.8
+		c0,0.6,0.1,1.1,0.2,1.6h0v0.1c-0.5,0-0.9,0-1.3,0c-0.4,0-0.8,0-1.2,0c-0.3,0-0.6,0-0.9,0c-0.3,0-0.6,0-0.9,0
+		c-0.1-0.2-0.1-0.4,0-0.7c0-0.2,0.1-0.3,0.3-0.5c0.3-0.3,0.7-0.4,1.1-0.2l0.1-3.5c-0.5-0.2-1-0.3-1.5-0.3c-0.5,0-1.1,0-1.6,0.1
+		c-0.6,0.1-1.1,0.3-1.6,0.6c-0.5,0.3-0.9,0.7-1.3,1.1c-0.4,0.4-0.7,0.9-0.9,1.5c-0.2,0.5-0.3,1.1-0.3,1.6c0,0.7,0.2,1.3,0.6,1.8
+		c0.4,0.5,0.9,0.9,1.4,1.4c0.2,0.2,0.5,0.3,0.8,0.5c0.3,0.1,0.7,0.2,1.1,0.3c0.4,0.1,0.8,0.1,1.2,0.1
+		C102.1,21.1,102.5,21.1,102.9,21z M109.3,1.9c-0.4-0.3-0.8-0.5-1.2-0.6c-0.5-0.1-0.9-0.1-1.4-0.1c-0.1,1.7-0.2,3.4-0.3,5.3
+		c-0.1,1.9-0.1,3.7,0,5.6c0.6,0.4,1.2,0.8,1.7,1.4c0.5,0.5,1,1.1,1.5,1.6c0.2-0.6,0.4-1.2,0.6-1.9c0.2-0.6,0.3-1.2,0.3-1.7
+		c0.2-1.1,0.2-2.1,0.3-3.1c0-1,0-2.1-0.1-3.1c-0.1-0.6-0.2-1.2-0.4-1.9C110.1,2.8,109.8,2.3,109.3,1.9z"/>
+	<path fill="#c3c3c3" d="M116.5,1.2c-0.3,0-0.6,0-0.9,0c-0.3,0-0.6,0-0.9,0V0.4c0.5,0,0.9,0,1.2-0.1s0.7,0,1.1,0c0.4,0,0.7,0,1.1,0
+		s0.8,0,1.3-0.1c0.9,0,1.8,0,2.8-0.1c0.9,0,1.8,0,2.8-0.1c0,0.6,0,1.2,0,1.8c0,0.6,0,1.2,0,1.8c-0.2,0-0.3,0-0.5,0
+		c-0.2,0-0.3,0-0.5,0c-0.1,0-0.2,0-0.3,0c-0.1,0-0.1-0.1,0-0.1c0.1-0.2,0.1-0.4,0.1-0.6s0-0.4-0.1-0.6c-0.1-0.2-0.2-0.4-0.3-0.6
+		c-0.1-0.2-0.2-0.3-0.4-0.4c-0.2-0.1-0.4-0.2-0.6-0.2c-0.2,0-0.5,0-0.7,0c-0.3,0-0.5,0.1-0.8,0.1c-0.3,0.1-0.5,0.2-0.6,0.4
+		c-0.1,0.2-0.1,0.3-0.1,0.3c0,0.1,0,0.2,0,0.3c0,0.7-0.1,1.3-0.1,2c0,0.6-0.1,1.3-0.1,1.9c0,0.2,0,0.3,0,0.5c0,0.2,0,0.3,0,0.5
+		c0.6-0.2,1.2-0.3,1.9-0.4c0.6-0.1,1.2-0.3,1.9-0.4c0,0.1,0.1,0.2,0.1,0.3c0,0.1,0,0.3,0,0.4c0,0.2-0.1,0.3-0.1,0.4
+		c-0.1,0.1-0.1,0.2-0.1,0.3c-0.1,0.1-0.2,0.1-0.4,0.2c-0.1,0-0.3,0.1-0.4,0.1c-0.5,0.1-0.9,0.2-1.4,0.3c-0.5,0.1-0.9,0.1-1.4,0.2
+		c0,1-0.1,2-0.2,2.9c-0.1,1-0.1,1.9-0.2,2.9c0.8,0.2,1.5,0.3,2,0.1c0.6-0.2,1.2-0.5,1.9-1c0.2-0.1,0.2-0.3,0.2-0.5
+		c0-0.2,0-0.5,0-0.7c0-0.2,0.1-0.5,0.2-0.6c0.1-0.2,0.3-0.3,0.7-0.4c0.4,0,0.6,0.1,0.7,0.4c0.1,0.3,0.2,0.7,0.2,1.1
+		c0,0.5,0,0.9-0.1,1.4c-0.1,0.5-0.1,0.9,0,1.2c-0.5,0-1,0-1.4,0c-0.4,0-0.8,0-1.2,0.1c-0.4,0-0.8,0-1.2,0.1c-0.4,0-0.9,0-1.3,0
+		c-0.9,0-1.7,0-2.5,0.1c-0.7,0.1-1.6,0.1-2.4,0.1c-0.2-0.2-0.2-0.4-0.2-0.7c0-0.2,0.1-0.5,0.3-0.6c0.2-0.2,0.3-0.3,0.6-0.3
+		c0.2-0.1,0.5,0,0.7,0.1c0.1-2.1,0.2-4.3,0.1-6.5C116.3,5.5,116.3,3.4,116.5,1.2z"/>
+</g>
+</svg>
+
+            </a>
+        </p>
+	</footer>
+
+	<script>
+		var algolia_app_id      = 'FU55RWGNDN';
+		var algolia_search_key  = 'c41c5de31ca55044dbb0bde815d35121';
+				var version             = '5.5';
+			</script>
+
+	<script id="search_suggestion_template" type="text/template">
+	<div class="autocomplete-wrapper">
+		{{#_highlightResult.h1}}
+		<div class="h1">
+			{{{ _highlightResult.h1.value }}}
+		</div>
+		{{/_highlightResult.h1}}
+
+		<div class="sub-section">
+			{{#_highlightResult.h2}}
+			<div class="h2">
+				<span class="hash">#</span> {{{ _highlightResult.h2.value }}}
+			</div>
+			{{/_highlightResult.h2}}
+
+			{{#_highlightResult.h3}}
+			<div class="h3">
+				> {{{ _highlightResult.h3.value }}}
+			</div>
+			{{/_highlightResult.h3}}
+
+			{{#_highlightResult.h4}}
+			<div class="h4">
+				> {{{ _highlightResult.h4.value }}}
+			</div>
+			{{/_highlightResult.h4}}
+		</div>
+
+		{{#_highlightResult.content}}
+		<div class="content">
+			{{{ _highlightResult.content.value }}}
+		</div>
+		{{/_highlightResult.content}}
+	</div>
+</script>
+
+<script id="search_empty_template" type="text/template">
+	<div class="autocomplete-wrapper empty">
+		<div class="h2">We didn't find any result for "{{query}}". Sorry!</div>
+	</div>
+</script>
+
+<script id="search_footer_template" type="text/template">
+	<div class="footer">
+		<a target="_blank" href="https://www.algolia.com/referrals/5a08e6a4/join">
+			<img width="50" src="/docs/assets/img/algolia-logo.png">
+			<div class="powered">powered by</div>
+			<div style="clear: both"></div>
+		</a>
+	</div>
+</script>
+
+	<script src="../../build/assets/js/laravel-be3cb5d7de.js"></script>
+	<script src="../../assets/js/viewport-units-buggyfill.js"></script>
+
+	<script>window.viewportUnitsBuggyfill.init();</script>
+    <script>
+          ga('create', 'UA-53903425-7', 'auto');
+          ga('send', 'pageview');
+    </script>
+</body>
+</html>

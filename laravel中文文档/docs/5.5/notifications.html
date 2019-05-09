@@ -1,0 +1,1526 @@
+<!doctype html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<title>Laravel 的消息通知系统 | Laravel 5.5 中文文档
+</title>
+	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+	<meta name="author" content="Taylor Otwell">
+	<meta name="description" content="Laravel 的消息通知系统,简介,创建通知,发送通知,使用 Notifiable Trait,使用 Notification Facade,指定发送频道,队列化通知,按需通知,邮件通知,格式化邮件消息,自定义接受者,自定义主题,自定义模板,Markdown 邮件通...
+">
+	<meta name="keywords" content="laravel,laravel中国,laravel中文,laravel框架中文,laravel文档,laravel框架中国,laravel中文文档">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+			<link rel="canonical" href="notifications.html" />
+		<!--[if lte IE 9]>
+		<script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+	<![endif]-->
+	<link rel="stylesheet" href="../../build/assets/css/laravel-4bbf92d154.css">
+	<link rel="apple-touch-icon" href="../../favicon.png.jpeg">
+    <style>
+        .list-group-item img.media-object {
+            width: 20px;
+            border-radius: 2px;
+            margin-right: 4px;
+            display: inline-block;
+        }
+    </style>
+</head>
+<body class="docs language-php">
+
+	<span class="overlay"></span>
+
+	<nav class="main">
+		<a href="../../index.html" class="brand nav-block">
+			<svg version="1.1"
+	 xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:a="http://ns.adobe.com/AdobeSVGViewerExtensions/3.0/"
+	 x="0px" y="0px" width="84.1px" height="57.6px" viewBox="0 0 84.1 57.6" enable-background="new 0 0 84.1 57.6"
+	 xml:space="preserve">
+<defs>
+</defs>
+<path fill="#FB503B" d="M83.8,26.9c-0.6-0.6-8.3-10.3-9.6-11.9c-1.4-1.6-2-1.3-2.9-1.2s-10.6,1.8-11.7,1.9c-1.1,0.2-1.8,0.6-1.1,1.6
+	c0.6,0.9,7,9.9,8.4,12l-25.5,6.1L21.2,1.5c-0.8-1.2-1-1.6-2.8-1.5C16.6,0.1,2.5,1.3,1.5,1.3c-1,0.1-2.1,0.5-1.1,2.9
+	c1,2.4,17,36.8,17.4,37.8c0.4,1,1.6,2.6,4.3,2c2.8-0.7,12.4-3.2,17.7-4.6c2.8,5,8.4,15.2,9.5,16.7c1.4,2,2.4,1.6,4.5,1
+	c1.7-0.5,26.2-9.3,27.3-9.8c1.1-0.5,1.8-0.8,1-1.9c-0.6-0.8-7-9.5-10.4-14c2.3-0.6,10.6-2.8,11.5-3.1C84.2,28,84.4,27.5,83.8,26.9z
+	 M37.5,36.4c-0.3,0.1-14.6,3.5-15.3,3.7c-0.8,0.2-0.8,0.1-0.8-0.2C21.2,39.6,4.4,4.8,4.1,4.4c-0.2-0.4-0.2-0.8,0-0.8
+	c0.2,0,13.5-1.2,13.9-1.2c0.5,0,0.4,0.1,0.6,0.4c0,0,18.7,32.3,19,32.8C38,36.1,37.8,36.3,37.5,36.4z M77.7,43.9
+	c0.2,0.4,0.5,0.6-0.3,0.8c-0.7,0.3-24.1,8.2-24.6,8.4c-0.5,0.2-0.8,0.3-1.4-0.6s-8.2-14-8.2-14L68.1,32c0.6-0.2,0.8-0.3,1.2,0.3
+	C69.7,33,77.5,43.6,77.7,43.9z M79.3,26.3c-0.6,0.1-9.7,2.4-9.7,2.4l-7.5-10.2c-0.2-0.3-0.4-0.6,0.1-0.7c0.5-0.1,9-1.6,9.4-1.7
+	c0.4-0.1,0.7-0.2,1.2,0.5c0.5,0.6,6.9,8.8,7.2,9.1C80.3,26,79.9,26.2,79.3,26.3z"/>
+</svg>
+
+			<span>Laravel</span>
+		</a>
+
+        <div class="search nav-block">
+            <svg version="1.1"
+	 xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:a="http://ns.adobe.com/AdobeSVGViewerExtensions/3.0/"
+	 x="0px" y="0px" width="16px" height="16px" viewBox="0 0 16 16" enable-background="new 0 0 16 16" xml:space="preserve">
+<defs>
+</defs>
+<g>
+	<g>
+		<path fill="#A1A1A1" d="M5.8,11.7c-1.6,0-3-0.6-4.1-1.7S0,7.4,0,5.8s0.6-3,1.7-4.1C2.8,0.6,4.3,0,5.8,0s3,0.6,4.1,1.7
+			c2.3,2.3,2.3,6,0,8.3C8.9,11.1,7.4,11.7,5.8,11.7z M5.8,1C4.5,1,3.3,1.5,2.4,2.4C1.5,3.3,1,4.5,1,5.8s0.5,2.5,1.4,3.4
+			c0.9,0.9,2.1,1.4,3.4,1.4s2.5-0.5,3.4-1.4c1.9-1.9,1.9-5,0-6.9C8.4,1.5,7.1,1,5.8,1z"/>
+	</g>
+	<g>
+		<path fill="#A1A1A1" d="M15.5,16c-0.1,0-0.3,0-0.3-0.1L9.3,10c-0.2-0.2-0.2-0.5,0-0.7s0.5-0.2,0.7,0l5.9,5.9
+			c0.2,0.2,0.2,0.5,0,0.7C15.8,16,15.6,16,15.5,16z"/>
+	</g>
+</g>
+</svg>
+
+            <input placeholder="搜索文档" type="text" v-model="search" id="search-input" v-on:blur="reset" />
+        </div>
+
+		<ul class="main-nav" v-if="! search">
+			<li class="nav-docs"><a href="../5.4.html">文档</a></li>
+<li ><a href="https://laravel-china.org/news" class="no-pjax">Laravel 资讯</a></li>
+<li class="dropdown"><a href="https://laravel-china.org/">Laravel China 社区</a></li>
+<li class="nav-forge"><a href="https://laravel-china.org/categories/1">酷工作</a></li>
+<li class="nav-docs"><a href="http://lumen.laravel-china.org">Lumen</a></li>
+<li class="nav-forge"><a href="https://cs.laravel-china.org/">速查表</a></li>
+<li class="nav-forge"><a href="https://fsdhub.com/books/laravel-essential-training-5.5">《Laravel 入门教程》</a></li>
+		</ul>
+
+        			<div class="switcher">
+	<div class="dropdown">
+		<button class="btn dropdown-toggle btn-inverted" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-expanded="true">
+			<!--<span class="faint">v</span> -->
+			5.5
+			<span class="caret"></span>
+		</button>
+		<ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu1">
+							<li role="presentation">
+					<a role="menuitem" tabindex="-1" href="notifications.html">5.5</a>
+				</li>
+							<li role="presentation">
+					<a role="menuitem" tabindex="-1" href="../5.4/notifications.html">5.4</a>
+				</li>
+							<li role="presentation">
+					<a role="menuitem" tabindex="-1" href="../5.3/notifications.html">5.3</a>
+				</li>
+							<li role="presentation">
+					<a role="menuitem" tabindex="-1" href="http://d.laravel-china.org/docs/5.2/notifications">5.2</a>
+				</li>
+							<li role="presentation">
+					<a role="menuitem" tabindex="-1" href="http://d.laravel-china.org/docs/5.1/notifications">5.1</a>
+				</li>
+					</ul>
+	</div>
+</div>
+		
+        <div class="responsive-sidebar-nav">
+			<a href="notifications.html#" class="toggle-slide menu-link btn">&#9776;</a>
+		</div>
+	</nav>
+
+	<nav id="slide-menu" class="slide-menu" role="navigation">
+
+	<div class="brand">
+		<a href="../../index.html">
+			<img src="../../assets/img/laravel-logo-white.png" height="50">
+		</a>
+	</div>
+
+	<ul class="slide-main-nav">
+		<li><a href="../../index.html">Home</a></li>
+		<li class="nav-docs"><a href="../5.4.html">文档</a></li>
+<li ><a href="https://laravel-china.org/news" class="no-pjax">Laravel 资讯</a></li>
+<li class="dropdown"><a href="https://laravel-china.org/">Laravel China 社区</a></li>
+<li class="nav-forge"><a href="https://laravel-china.org/categories/1">酷工作</a></li>
+<li class="nav-docs"><a href="http://lumen.laravel-china.org">Lumen</a></li>
+<li class="nav-forge"><a href="https://cs.laravel-china.org/">速查表</a></li>
+<li class="nav-forge"><a href="https://fsdhub.com/books/laravel-essential-training-5.5">《Laravel 入门教程》</a></li>
+	</ul>
+
+	<div class="slide-docs-nav">
+		<h2>Documentation</h2>
+		<ul>
+<li>
+<h2>前言</h2>
+<ul>
+<li><a href="about.html">翻译说明</a></li>
+<li><a href="releases.html">发行说明</a></li>
+<li><a href="upgrade.html">升级说明</a></li>
+<li><a href="contributions.html">贡献导引</a></li>
+<li><a href="http://d.laravel-china.org/api/5.5">API 文档</a></li>
+</ul>
+</li>
+<li>
+<h2>入门指南</h2>
+<ul>
+<li><a href="installation.html">安装</a></li>
+<li><a href="configuration.html">配置信息</a></li>
+<li><a href="structure.html">文件夹结构</a></li>
+<li><a href="homestead.html">Homestead</a></li>
+<li><a href="valet.html">Valet</a></li>
+</ul>
+</li>
+<li>
+<h2>核心架构</h2>
+<ul>
+<li><a href="lifecycle.html">请求周期</a></li>
+<li><a href="container.html">服务容器</a></li>
+<li><a href="providers.html">服务提供者</a></li>
+<li><a href="facades.html">Facades</a></li>
+<li><a href="contracts.html">Contracts</a></li>
+</ul>
+</li>
+<li>
+<h2>基础功能</h2>
+<ul>
+<li><a href="routing.html">路由</a></li>
+<li><a href="middleware.html">中间件</a></li>
+<li><a href="csrf.html">CSRF 保护</a></li>
+<li><a href="controllers.html">控制器</a></li>
+<li><a href="requests.html">请求</a></li>
+<li><a href="responses.html">响应</a></li>
+<li><a href="views.html">视图</a></li>
+<li><a href="redirects.html">重定向</a></li>
+<li><a href="session.html">Session</a></li>
+<li><a href="validation.html">表单验证</a></li>
+<li><a href="errors.html">错误与日志</a></li>
+</ul>
+</li>
+<li>
+<h2>前端开发</h2>
+<ul>
+<li><a href="blade.html">Blade 模板</a></li>
+<li><a href="localization.html">本地化</a></li>
+<li><a href="frontend.html">前端指南</a></li>
+<li><a href="mix.html">编辑资源 Mix</a></li>
+</ul>
+</li>
+<li>
+<h2>安全相关</h2>
+<ul>
+<li><a href="authentication.html">用户认证</a></li>
+<li><a href="passport.html">API 认证</a></li>
+<li><a href="authorization.html">用户授权</a></li>
+<li><a href="encryption.html">加密解密</a></li>
+<li><a href="hashing.html">哈希</a></li>
+<li><a href="passwords.html">重置密码</a></li>
+</ul>
+</li>
+<li>
+<h2>综合话题</h2>
+<ul>
+<li><a href="artisan.html">Artisan 命令行</a></li>
+<li><a href="broadcasting.html">广播系统</a></li>
+<li><a href="cache.html">缓存系统</a></li>
+<li><a href="collections.html">集合</a></li>
+<li><a href="events.html">事件系统</a></li>
+<li><a href="filesystem.html">文件存储</a></li>
+<li><a href="helpers.html">辅助函数</a></li>
+<li><a href="mail.html">邮件发送</a></li>
+<li><a href="notifications.html">消息通知</a></li>
+<li><a href="packages.html">扩展包开发</a></li>
+<li><a href="queues.html">队列</a></li>
+<li><a href="scheduling.html">任务调度</a></li>
+</ul>
+</li>
+<li>
+<h2>数据库</h2>
+<ul>
+<li><a href="database.html">快速入门</a></li>
+<li><a href="queries.html">查询构造器</a></li>
+<li><a href="pagination.html">分页</a></li>
+<li><a href="migrations.html">数据库迁移</a></li>
+<li><a href="seeding.html">数据填充</a></li>
+<li><a href="redis.html">Redis</a></li>
+</ul>
+</li>
+<li>
+<h2>Eloquent ORM</h2>
+<ul>
+<li><a href="eloquent.html">快速入门</a></li>
+<li><a href="eloquent-relationships.html">模型关联</a></li>
+<li><a href="eloquent-collections.html">Eloquent 集合</a></li>
+<li><a href="eloquent-mutators.html">修改器</a></li>
+<li><a href="eloquent-resources.html">API 资源</a></li>
+<li><a href="eloquent-serialization.html">序列化</a></li>
+</ul>
+</li>
+<li>
+<h2>测试相关</h2>
+<ul>
+<li><a href="testing.html">快速入门</a></li>
+<li><a href="http-tests.html">HTTP 测试</a></li>
+<li><a href="dusk.html">浏览器测试 Dusk</a></li>
+<li><a href="database-testing.html">数据库测试</a></li>
+<li><a href="mocking.html">测试模拟器</a></li>
+</ul>
+</li>
+<li>
+<h2>官方扩展包</h2>
+<ul>
+<li><a href="billing.html">Cashier 交易工具包</a></li>
+<li><a href="envoy.html">Envoy 部署工具</a></li>
+<li><a href="horizon.html">Horizon</a></li>
+<li><a href="passport.html">Passport OAuth 认证</a></li>
+<li><a href="scout.html">Scout 全文搜索</a></li>
+<li><a href="socialite.html">Socialite 社会化登录</a></li>
+</ul>
+</li>
+</ul>
+	</div>
+
+</nav>
+
+<div class="docs-wrapper container">
+
+	<section class="sidebar">
+
+            <div class="header">
+              <a type="button" class="btn btn-primary btn-inverted btn-lg btn-block turnofflight"><i class="fa fa-lightbulb-o"></i> 夜间模式 </a>
+              <br>
+              <div class="versions text-center ">
+                <a class="doc-btn btn-inverted active" href="../5.5.html" title="Laravel 5.5 中文文档">C5.5</a>
+                <a class="doc-btn btn-inverted " href="../5.4.html" title="Laravel 5.4 中文文档">C5.4</a>
+                <a class="doc-btn btn-inverted " href="../5.1.html" title="Laravel 5.1 中文文档">C5.1</a>
+              </div>
+            </div>
+
+            <a href="https://laravel-china.org/topics/3383" target="_blank" rel="nofollow" title="" style="display: block;margin-bottom: 23px;">
+                <img src="https://dn-phphub.qbox.me/uploads/images/201612/10/1/k7wwMpJduq.jpg" style="width: 100%;border: 1px solid #d8d3d3;box-shadow: 0 0 30px #d4d4d4;-moz-box-shadow: 0 0 30px #ccc;-webkit-box-shadow: 0 0 30px #d4d4d4;margin-bottom: 30px;margin-top: 10px;border-radius: 4px;">
+            </a>
+
+            <small><a href="notifications.html#" id="doc-expand" style="font-size: 9px; color: #525252;">▶</a></small>
+
+		<ul>
+<li>
+<h2>前言</h2>
+<ul>
+<li><a href="about.html">翻译说明</a></li>
+<li><a href="releases.html">发行说明</a></li>
+<li><a href="upgrade.html">升级说明</a></li>
+<li><a href="contributions.html">贡献导引</a></li>
+<li><a href="http://d.laravel-china.org/api/5.5">API 文档</a></li>
+</ul>
+</li>
+<li>
+<h2>入门指南</h2>
+<ul>
+<li><a href="installation.html">安装</a></li>
+<li><a href="configuration.html">配置信息</a></li>
+<li><a href="structure.html">文件夹结构</a></li>
+<li><a href="homestead.html">Homestead</a></li>
+<li><a href="valet.html">Valet</a></li>
+</ul>
+</li>
+<li>
+<h2>核心架构</h2>
+<ul>
+<li><a href="lifecycle.html">请求周期</a></li>
+<li><a href="container.html">服务容器</a></li>
+<li><a href="providers.html">服务提供者</a></li>
+<li><a href="facades.html">Facades</a></li>
+<li><a href="contracts.html">Contracts</a></li>
+</ul>
+</li>
+<li>
+<h2>基础功能</h2>
+<ul>
+<li><a href="routing.html">路由</a></li>
+<li><a href="middleware.html">中间件</a></li>
+<li><a href="csrf.html">CSRF 保护</a></li>
+<li><a href="controllers.html">控制器</a></li>
+<li><a href="requests.html">请求</a></li>
+<li><a href="responses.html">响应</a></li>
+<li><a href="views.html">视图</a></li>
+<li><a href="redirects.html">重定向</a></li>
+<li><a href="session.html">Session</a></li>
+<li><a href="validation.html">表单验证</a></li>
+<li><a href="errors.html">错误与日志</a></li>
+</ul>
+</li>
+<li>
+<h2>前端开发</h2>
+<ul>
+<li><a href="blade.html">Blade 模板</a></li>
+<li><a href="localization.html">本地化</a></li>
+<li><a href="frontend.html">前端指南</a></li>
+<li><a href="mix.html">编辑资源 Mix</a></li>
+</ul>
+</li>
+<li>
+<h2>安全相关</h2>
+<ul>
+<li><a href="authentication.html">用户认证</a></li>
+<li><a href="passport.html">API 认证</a></li>
+<li><a href="authorization.html">用户授权</a></li>
+<li><a href="encryption.html">加密解密</a></li>
+<li><a href="hashing.html">哈希</a></li>
+<li><a href="passwords.html">重置密码</a></li>
+</ul>
+</li>
+<li>
+<h2>综合话题</h2>
+<ul>
+<li><a href="artisan.html">Artisan 命令行</a></li>
+<li><a href="broadcasting.html">广播系统</a></li>
+<li><a href="cache.html">缓存系统</a></li>
+<li><a href="collections.html">集合</a></li>
+<li><a href="events.html">事件系统</a></li>
+<li><a href="filesystem.html">文件存储</a></li>
+<li><a href="helpers.html">辅助函数</a></li>
+<li><a href="mail.html">邮件发送</a></li>
+<li><a href="notifications.html">消息通知</a></li>
+<li><a href="packages.html">扩展包开发</a></li>
+<li><a href="queues.html">队列</a></li>
+<li><a href="scheduling.html">任务调度</a></li>
+</ul>
+</li>
+<li>
+<h2>数据库</h2>
+<ul>
+<li><a href="database.html">快速入门</a></li>
+<li><a href="queries.html">查询构造器</a></li>
+<li><a href="pagination.html">分页</a></li>
+<li><a href="migrations.html">数据库迁移</a></li>
+<li><a href="seeding.html">数据填充</a></li>
+<li><a href="redis.html">Redis</a></li>
+</ul>
+</li>
+<li>
+<h2>Eloquent ORM</h2>
+<ul>
+<li><a href="eloquent.html">快速入门</a></li>
+<li><a href="eloquent-relationships.html">模型关联</a></li>
+<li><a href="eloquent-collections.html">Eloquent 集合</a></li>
+<li><a href="eloquent-mutators.html">修改器</a></li>
+<li><a href="eloquent-resources.html">API 资源</a></li>
+<li><a href="eloquent-serialization.html">序列化</a></li>
+</ul>
+</li>
+<li>
+<h2>测试相关</h2>
+<ul>
+<li><a href="testing.html">快速入门</a></li>
+<li><a href="http-tests.html">HTTP 测试</a></li>
+<li><a href="dusk.html">浏览器测试 Dusk</a></li>
+<li><a href="database-testing.html">数据库测试</a></li>
+<li><a href="mocking.html">测试模拟器</a></li>
+</ul>
+</li>
+<li>
+<h2>官方扩展包</h2>
+<ul>
+<li><a href="billing.html">Cashier 交易工具包</a></li>
+<li><a href="envoy.html">Envoy 部署工具</a></li>
+<li><a href="horizon.html">Horizon</a></li>
+<li><a href="passport.html">Passport OAuth 认证</a></li>
+<li><a href="scout.html">Scout 全文搜索</a></li>
+<li><a href="socialite.html">Socialite 社会化登录</a></li>
+</ul>
+</li>
+</ul>
+
+		<hr>
+            <ul>
+              <li>社交账号</li>
+                <ul class="social-account">
+                  <li><a href="http://weibo.com/1837553744/profile?topnav=1&wvr=6&is_all=1">Summer 的微博</a></li>
+                  <li>新手 QQ 群：282196078</li>
+                </ul>
+
+            </ul>
+
+            <ul>
+              <li>
+              微信订阅号
+                <ul>
+                  <li>
+<img class="image-border popover-with-html" data-content="" src="https://dn-phphub.qbox.me/uploads/images/201708/06/1/4zgVR8dNCt.png" style="width: 148px;height: 148px;border:1px solid #ccc;padding:2px;border-radius:3px;margin-top:5px;" data-original-title="" title="">
+                  </li>
+                </ul>
+                </li>
+            </ul>
+
+            <ul>
+              <li>推荐资源
+              <ul class="list list-group resource-links">
+                    <li class="list-group-item ">
+                <a href="../../index.html" class="no-pjax" title="Laravel 中文文档">
+                    <img class="media-object inline-block " src="https://dn-phphub.qbox.me/uploads/banners/ql9XtosRhTe4v8HVC3TV.jpg">
+                    Laravel 中文文档
+                </a>
+            </li>
+                    <li class="list-group-item ">
+                <a href="https://lumen.laravel-china.org" class="no-pjax" title="Lumen 中文文档">
+                    <img class="media-object inline-block " src="https://dn-phphub.qbox.me/uploads/banners/bcMFkfsJZpetLgKFwWqY.jpg">
+                    Lumen 中文文档
+                </a>
+            </li>
+                    <li class="list-group-item ">
+                <a href="https://cs.laravel-china.org/" class="no-pjax" title="Laravel 速查表">
+                    <img class="media-object inline-block " src="https://dn-phphub.qbox.me/uploads/banners/cV55gsrH70qz6VdKr502.jpg">
+                    Laravel 速查表
+                </a>
+            </li>
+                    <li class="list-group-item ">
+                <a href="http://yousails.mikecrm.com/4Dh5uWU" class="no-pjax" title="Laravel 软件外包服务">
+                    <img class="media-object inline-block " src="https://dn-phphub.qbox.me/uploads/banners/v89tIQ6vjceA6g7JmrQB.png">
+                    Laravel 软件外包
+                </a>
+            </li>
+                    <li class="list-group-item ">
+                <a href="https://laravel-china.org/topics/3626" class="no-pjax" title="Laravel 远程工作 ">
+                    <img class="media-object inline-block " src="https://dn-phphub.qbox.me/uploads/banners/Xlq6s7wLxvX8FlTP4qZe.png">
+                    Laravel 远程工作
+                </a>
+            </li>
+                    <li class="list-group-item ">
+                <a href="https://laravel-china.github.io/php-the-right-way/" class="no-pjax" title="PHP 之道 - PHPer 必读">
+                    <img class="media-object inline-block " src="https://dn-phphub.qbox.me/uploads/banners/vA50AYuscu2RCMowq7ee.png">
+                    PHP 之道
+                </a>
+            </li>
+                    <li class="list-group-item ">
+                <a href="https://laravel-china.org/composer" class="no-pjax" title="Composer 中文全量镜像">
+                    <img class="media-object inline-block " src="https://dn-phphub.qbox.me/uploads/banners/KltcLb6leMa12dvTAxD7.png">
+                    Composer 镜像
+                </a>
+            </li>
+            </ul>
+              </li>
+            </ul>
+
+	</section>
+
+	
+
+	<article>
+
+		<div class="alert alert-warning" role="alert">
+			一小时同步一次，更多信息请查阅 <a href="https://laravel-china.org/topics/2095">文档导读</a>。
+			发现瑕疵？你也可以
+				<a href="https://github.com/laravel-china/laravel-docs/edit/5.5/notifications.md"><i class="fa fa-pencil-square-o"></i> 改进本文</a>
+			。<a href="https://laravel-china.org/topics/4026" target="_blank"><i class="fa fa-cloud-download" aria-hidden="true"></i> 离线版本下载</a>
+		</div>
+
+		<div class="main-content">
+			<h1>Laravel 的消息通知系统</h1>
+<ul>
+<li><a href="notifications.html#introduction">简介</a></li>
+<li><a href="notifications.html#creating-notifications">创建通知</a></li>
+<li><a href="notifications.html#sending-notifications">发送通知</a>
+<ul>
+<li><a href="notifications.html#using-the-notifiable-trait">使用 Notifiable Trait</a></li>
+<li><a href="notifications.html#using-the-notification-facade">使用 Notification Facade</a></li>
+<li><a href="notifications.html#specifying-delivery-channels">指定发送频道</a></li>
+<li><a href="notifications.html#queueing-notifications">队列化通知</a></li>
+<li><a href="notifications.html#on-demand-notifications">按需通知</a></li>
+</ul></li>
+<li><a href="notifications.html#mail-notifications">邮件通知</a>
+<ul>
+<li><a href="notifications.html#formatting-mail-messages">格式化邮件消息</a></li>
+<li><a href="notifications.html#customizing-the-recipient">自定义接受者</a></li>
+<li><a href="notifications.html#customizing-the-subject">自定义主题</a></li>
+<li><a href="notifications.html#customizing-the-templates">自定义模板</a></li>
+</ul></li>
+<li><a href="notifications.html#markdown-mail-notifications">Markdown 邮件通知</a>
+<ul>
+<li><a href="notifications.html#generating-the-message">生成消息</a></li>
+<li><a href="notifications.html#writing-the-message">写消息</a></li>
+<li><a href="notifications.html#customizing-the-components">自定义组件</a></li>
+</ul></li>
+<li><a href="notifications.html#database-notifications">数据库通知</a>
+<ul>
+<li><a href="notifications.html#database-prerequisites">先决条件</a></li>
+<li><a href="notifications.html#formatting-database-notifications">格式化数据库通知</a></li>
+<li><a href="notifications.html#accessing-the-notifications">访问通知</a></li>
+<li><a href="notifications.html#marking-notifications-as-read">标为已读</a></li>
+</ul></li>
+<li><a href="notifications.html#broadcast-notifications">广播通知</a>
+<ul>
+<li><a href="notifications.html#broadcast-prerequisites">先决条件</a></li>
+<li><a href="notifications.html#formatting-broadcast-notifications">格式化广播通知</a></li>
+<li><a href="notifications.html#listening-for-notifications">监听通知</a></li>
+</ul></li>
+<li><a href="notifications.html#sms-notifications">短信通知</a>
+<ul>
+<li><a href="notifications.html#sms-prerequisites">先决条件</a></li>
+<li><a href="notifications.html#formatting-sms-notifications">格式化短信通知</a></li>
+<li><a href="notifications.html#customizing-the-from-number">自定义 <code>From</code> 号码</a></li>
+<li><a href="notifications.html#routing-sms-notifications">路由短信通知</a></li>
+</ul></li>
+<li><a href="notifications.html#slack-notifications">Slack 通知</a>
+<ul>
+<li><a href="notifications.html#slack-prerequisites">先决条件</a></li>
+<li><a href="notifications.html#formatting-slack-notifications">格式化 Slack 通知</a></li>
+<li><a href="notifications.html#slack-attachments">Slack Attachments</a></li>
+<li><a href="notifications.html#routing-slack-notifications">路由 Slack 通知</a></li>
+</ul></li>
+<li><a href="notifications.html#notification-events">通知事件</a></li>
+<li><a href="notifications.html#custom-channels">自定义发送频道</a></li>
+</ul>
+<p><a name="introduction"></a></p>
+<h2>简介</h2>
+<p>除了 <a href="mail.html">发送邮件</a>，Laravel 还支持通过多种频道发送通知，包括邮件、短信（通过 <a href="https://www.nexmo.com/">Nexmo</a>）以及 <a href="https://slack.com">Slack</a> 。通知还能存到数据库，这样就能在网页界面上显示了。</p>
+<p>通常情况下，通知应该是简短、有信息量的消息来通知用户你的应用发生了什么。举例来说，如果你在编写一个在线交易应用，你应该会通过邮件和短信频道来给用户发送一条 「账单已付」 的通知。</p>
+<p><a name="creating-notifications"></a></p>
+<h2>创建通知</h2>
+<p>Laravel 中一条通知就是一个类（通常存在 <code>app/Notifications</code> 文件夹里）。看不到的话不要担心，运行一下 <code>make:notification</code> 命令就能创建了：</p>
+<pre><code>php artisan make:notification InvoicePaid</code></pre>
+<p>这个命令会在 <code>app/Notifications</code> 目录下生成一个新的通知类。这个类包含 <code>via</code> 方法和几个消息构建方法（比如 <code>toMail</code> 或 <code>toDatabase</code>），它们会针对指定的渠道把通知转换过为对应的消息。</p>
+<p><a name="sending-notifications"></a></p>
+<h2>发送通知</h2>
+<p><a name="using-the-notifiable-trait"></a></p>
+<h3>使用 Notifiable Trait</h3>
+<p>通知可以通过两种方法发送： <code>Notifiable</code> trait 的 <code>notify</code> 方法或 <code>Notification</code> <a href="facades.html">facade</a> 。首先，让我们探索使用 trait ：</p>
+<pre><code>&lt;?php
+
+namespace App;
+
+use Illuminate\Notifications\Notifiable;
+use Illuminate\Foundation\Auth\User as Authenticatable;
+
+class User extends Authenticatable
+{
+    use Notifiable;
+}</code></pre>
+<p>默认的 <code>App\User</code> 模型中使用了这个 trait，它包含着一个可以用来发通知的方法：<code>notify</code> 。 <code>notify</code> 方法需要一个通知实例做参数：</p>
+<pre><code>use App\Notifications\InvoicePaid;
+
+$user-&gt;notify(new InvoicePaid($invoice));</code></pre>
+<blockquote>
+<p>{tip} 记住，你可以在任意模型中使用 <code>Illuminate\Notifications\Notifiable</code> trait，而不仅仅是在 <code>User</code> 模型中。</p>
+</blockquote>
+<p><a name="using-the-notification-facade"></a></p>
+<h3>使用 Notification Facade</h3>
+<p>另外，你可以通过 <code>Notification</code> <a href="facades.html">facade</a> 来发送通知。它主要用在当你给多个可接收通知的实体发送通知的时候，比如给用户集合发通知。要用 facade 发送通知的话，要把可接收通知的实体和通知的实例传递给 <code>send</code> 方法：</p>
+<pre><code>Notification::send($users, new InvoicePaid($invoice));</code></pre>
+<p><a name="specifying-delivery-channels"></a></p>
+<h3>指定发送频道</h3>
+<p>每个通知类都有个 <code>via</code> 方法，它决定了通知在哪个频道上发送。开箱即用的通知频道有 <code>mail</code>, <code>database</code>, <code>broadcast</code>, <code>nexmo</code>, 和 <code>slack</code> 。</p>
+<blockquote>
+<p>{tip} 如果你想用其他的频道比如 Telegram 或者 Pusher ，可以去看下社区驱动的 <a href="http://laravel-notification-channels.com">Laravel 通知频道网站</a> 。</p>
+</blockquote>
+<p><code>via</code> 方法受到一个 <code>$notifiable</code> 实例，它是接收通知的类实例。你可以用 <code>$notifiable</code> 来决定通知用哪个频道来发送：</p>
+<pre><code>/**
+ * 获取通知发送频道
+ *
+ * @param  mixed  $notifiable
+ * @return array
+ */
+public function via($notifiable)
+{
+    return $notifiable-&gt;prefers_sms ? ['nexmo'] : ['mail', 'database'];
+}</code></pre>
+<p><a name="queueing-notifications"></a></p>
+<h3>队列化通知</h3>
+<blockquote>
+<p>{note} 在队列化通知前你需要配置队列，并 <a href="queues.html">运行队列处理器</a>。</p>
+</blockquote>
+<p>发送通知可能会花很长时间，尤其是发送频道需要调用外部 API 的时候。要加速应用响应的话，可以通过添加 <code>ShouldQueue</code> 接口和 <code>Queueable</code> trait 把通知加入队列。它们两个在使用 <code>make:notification</code> 命令来生成通知文件的时候就已经被导入了，所以你只需要添加到你的通知类就行了：</p>
+<pre><code>&lt;?php
+
+namespace App\Notifications;
+
+use Illuminate\Bus\Queueable;
+use Illuminate\Notifications\Notification;
+use Illuminate\Contracts\Queue\ShouldQueue;
+
+class InvoicePaid extends Notification implements ShouldQueue
+{
+    use Queueable;
+
+    // ...
+}</code></pre>
+<p>一旦加入 <code>ShouldQueue</code> 接口，你就能像平常那样发送通知了。Laravel 会检测 <code>ShouldQueue</code> 接口并自动将通知的发送放入队列中。</p>
+<pre><code>$user-&gt;notify(new InvoicePaid($invoice));</code></pre>
+<p>如果你想延迟发送，你可以通过 <code>delay</code> 方法来链式操作你的通知实例：</p>
+<pre><code>$when = Carbon::now()-&gt;addMinutes(10);
+
+$user-&gt;notify((new InvoicePaid($invoice))-&gt;delay($when));</code></pre>
+<p><a name="on-demand-notifications"></a></p>
+<h3>按需通知</h3>
+<p>有时候你可能需要将通知发送给某个不是以”用户”身份存储在你的应用中的人。使用<code>Notification::route</code> 方法，你可以在发送通知之前指定 ad-hoc 通知路由信息：</p>
+<pre><code>Notification::route('mail', 'taylor@laravel.com')
+            -&gt;route('nexmo', '5555555555')
+            -&gt;send(new InvoicePaid($invoice));</code></pre>
+<p><a name="mail-notifications"></a></p>
+<h2>邮件通知</h2>
+<p><a name="formatting-mail-messages"></a></p>
+<h3>格式化邮件消息</h3>
+<p>如果一条通知支持以邮件发送，你应该在通知类里定义一个 <code>toMail</code> 方法。这个方法将收到一个 <code>$notifiable</code> 实体并返回一个 <code>Illuminate\Notifications\Messages\MailMessage</code> 实例。邮件消息可以包含多行文本也可以是引导链接。我们来看一个 <code>toMail</code> 方法的例子：</p>
+<pre><code>/**
+ * 获取通知的邮件展示方式
+ *
+ * @param  mixed  $notifiable
+ * @return \Illuminate\Notifications\Messages\MailMessage
+ */
+public function toMail($notifiable)
+{
+    $url = url('/invoice/'.$this-&gt;invoice-&gt;id);
+
+    return (new MailMessage)
+                -&gt;line('One of your invoices has been paid!')
+                -&gt;action('View Invoice', $url)
+                -&gt;line('Thank you for using our application!');
+}</code></pre>
+<blockquote>
+<p>{tip} 注意我们在方法中用了 <code>$this-&gt;invoice-&gt;id</code> ，其实你可以传递应用所需要的任何数据来传递给通知的构造器。</p>
+</blockquote>
+<p>在这个例子中，我们注册了一行文本，引导链接 ，然后又是一行文本。 <code>MailMessage</code> 提供的这些方法简化了对小的事务性的邮件进行格式化操作。邮件频道将会把这些消息组件转换成漂亮的响应式的 HTML 邮件模板并附上文本。下面是个 <code>mail</code> 频道生成的邮件示例：</p>
+<img src="https://laravel.com/assets/img/notification-example.png" width="551" height="596">
+<blockquote>
+<p>{tip} 发送邮件通知前，请在 <code>config/app.php</code> 中设置 <code>name</code> 值。 这将会在邮件通知消息的头部和尾部中被使用。</p>
+</blockquote>
+<h4>其他通知格式选项</h4>
+<p>你可以使用 <code>view</code> 方法来指定一个应用于渲染通知电子邮件的自定义模板，而不是在通知类中定义文本的「模板」：</p>
+<pre><code>/**
+ * 获取通知的邮件展示方式
+ *
+ * @param  mixed  $notifiable
+ * @return \Illuminate\Notifications\Messages\MailMessage
+ */
+public function toMail($notifiable)
+{
+    return (new MailMessage)-&gt;view(
+        'emails.name', ['invoice' =&gt; $this-&gt;invoice]
+    );
+}</code></pre>
+<p>另外，你可以从 <code>toMail</code> 方法中返回一个 <a href="mail.html">mailable 对象</a> ：</p>
+<pre><code>use App\Mail\InvoicePaid as Mailable;
+
+/**
+ * 获取通知的邮件展示方式
+ *
+ * @param  mixed  $notifiable
+ * @return Mailable
+ */
+public function toMail($notifiable)
+{
+    return (new Mailable($this-&gt;invoice))-&gt;to($this-&gt;user-&gt;email);
+}</code></pre>
+<p><a name="error-messages"></a></p>
+<h4>错误消息</h4>
+<p>有些通知是给用户提示错误，比如账单支付失败的提示。你可以通过调用 <code>error</code> 方法来指定这条邮件消息被当做一个错误提示。当邮件消息使用了 <code>error</code> 方法后，引导链接按钮会变成红色而非蓝色：</p>
+<pre><code>/**
+ * 获取通知的邮件展示方式
+ *
+ * @param  mixed  $notifiable
+ * @return \Illuminate\Notifications\Messages\MailMessage
+ */
+public function toMail($notifiable)
+{
+   return (new MailMessage)
+                -&gt;error()
+                -&gt;subject('Notification Subject')
+                -&gt;line('...');
+}</code></pre>
+<p><a name="customizing-the-recipient"></a></p>
+<h3>自定义接收者</h3>
+<p>当通过 <code>mail</code> 频道来发送通知的时候，通知系统将会自动寻找你的 notifiable 实体中的 <code>email</code> 属性。你可以通过在实体中定义 <code>routeNotificationForMail</code> 方法来自定义邮件地址。</p>
+<pre><code>&lt;?php
+
+namespace App;
+
+use Illuminate\Notifications\Notifiable;
+use Illuminate\Foundation\Auth\User as Authenticatable;
+
+class User extends Authenticatable
+{
+    use Notifiable;
+
+    /**
+     * 邮件频道的路由
+     *
+     * @return string
+     */
+    public function routeNotificationForMail()
+    {
+        return $this-&gt;email_address;
+    }
+}</code></pre>
+<p><a name="customizing-the-subject"></a></p>
+<h3>自定义主题</h3>
+<p>默认情况下，邮件主题是格式化成了标题格式的通知类的类名。所以如果你对通知类名为 <code>InvoicePaid</code> ，邮件主题将会是 <code>Invoice Paid</code> 。如果你想显式指定消息的主题，你可以在构建消息时调用 <code>subject</code> 方法：</p>
+<pre><code>/**
+ * 获取通知的邮件展示方式
+ *
+ * @param  mixed  $notifiable
+ * @return \Illuminate\Notifications\Messages\MailMessage
+ */
+public function toMail($notifiable)
+{
+    return (new MailMessage)
+                -&gt;subject('Notification Subject')
+                -&gt;line('...');
+}</code></pre>
+<p><a name="customizing-the-templates"></a></p>
+<h3>自定义模板</h3>
+<p>你可以通过发布通知包的资源来修改 HTML 模板和纯文本模板。运行这个命令后，邮件通知模板就被放在了 <code>resources/views/vendor/notifications</code> 文件夹下：</p>
+<pre><code>php artisan vendor:publish --tag=laravel-notifications</code></pre>
+<p><a name="markdown-mail-notifications"></a></p>
+<h2>Markdown 邮件通知</h2>
+<p>Markdown 邮件通知可让您利用邮件通知的预先构建的模板，同时给予您更多自由地撰写更长的自定义邮件。 由于消息是用 Markdown 编写的， Laravel 能够为消息呈现漂亮，响应的 HTML 模板，同时还自动生成纯文本对应。</p>
+<p><a name="generating-the-message"></a></p>
+<h3>生成消息</h3>
+<p>要使用相应的 Markdown 模板生成通知，您可以使用 <code>make：notification</code> Artisan命令的 <code>--markdown</code> 选项：</p>
+<pre><code>php artisan make:notification InvoicePaid --markdown=mail.invoice.paid</code></pre>
+<p>与所有其他邮件通知一样，使用 Markdown 模板的通知应在其通知类上定义一个 <code>toMail</code> 方法。 但是，不使用 <code>line</code> 和 <code>action</code> 方法来构造通知，而是使用 <code>markdown</code> 方法来指定应该使用的 Markdown 模板的名称：</p>
+<pre><code>/**
+ * 获取通知的邮件展示方式
+ *
+ * @param  mixed  $notifiable
+ * @return \Illuminate\Notifications\Messages\MailMessage
+ */
+public function toMail($notifiable)
+{
+    $url = url('/invoice/'.$this-&gt;invoice-&gt;id);
+
+    return (new MailMessage)
+                -&gt;subject('Invoice Paid')
+                -&gt;markdown('mail.invoice.paid', ['url' =&gt; $url]);
+}</code></pre>
+<p><a name="writing-the-message"></a></p>
+<h3>写消息</h3>
+<p>Markdown 邮件通知使用 Blade 组件和Markdown语法的组合，允许您轻松构建通知，同时利用Laravel的预制通知组件：</p>
+<pre><code>@component('mail::message')
+# Invoice Paid
+
+Your invoice has been paid!
+
+@component('mail::button', ['url' =&gt; $url])
+View Invoice
+@endcomponent
+
+Thanks,&lt;br&gt;
+{{ config('app.name') }}
+@endcomponent</code></pre>
+<h4>按钮组件</h4>
+<p>按钮组件渲染了一个居中的链接按钮。组件有两个参数， <code>url</code> 和一个可选的参数 <code>color</code> 。支持的颜色有 <code>blue</code> ， <code>green</code> ， 和 <code>red</code> 。你可以根据你的需要向通知中添加任意数量的按钮组件：</p>
+<pre><code>@component('mail::button', ['url' =&gt; $url, 'color' =&gt; 'green'])
+View Invoice
+@endcomponent</code></pre>
+<h4>面板组件</h4>
+<p>面板部件在面板中呈现给定文本块，该面板具有与通知的其余部分稍微不同的背景颜色。 这将会允许你将给定的文本块引起注意：</p>
+<pre><code>@component('mail::panel')
+This is the panel content.
+@endcomponent</code></pre>
+<h4>表格组件</h4>
+<p>表格组件允许你将一个 Markdown 表格转化成一个 HTML 表格。表格组件接受 Markdown 表格作为内容。支持使用默认的 Markdown 表格对齐语法使表列对齐：</p>
+<pre><code>@component('mail::table')
+| Laravel       | Table         | Example  |
+| ------------- |:-------------:| --------:|
+| Col 2 is      | Centered      | $10      |
+| Col 3 is      | Right-Aligned | $20      |
+@endcomponent</code></pre>
+<p><a name="customizing-the-components"></a></p>
+<h3>自定义组件</h3>
+<p>您可以将所有 Markdown 通知组件导出到您自己的应用程序中进行自定义。 要导出组件，请使用 <code>vendor：publish</code> Artisan命令来发布 <code>laravel-mail</code> 标签：</p>
+<pre><code>php artisan vendor:publish --tag=laravel-mail</code></pre>
+<p>此命令将 Markdown 邮件组件发布到 <code>resources/views/vendor/mail</code> 目录。 <code>mail</code> 目录将包含一个 <code>html</code> 和一个 <code>markdown</code> 目录，每个目录包含它们各自可用组件的展示方式。 您可以随意自定义这些组件。</p>
+<h4>自定义CSS</h4>
+<p>导出组件后， <code>resources/views/vendor/mail/html/themes</code> 目录将包含一个 <code>default.css</code> 文件。 您可以在此文件中自定义 CSS ，并且您的样式将自动内嵌在 Markdown 通知的HTML展示中。</p>
+<blockquote>
+<p>{tip} 如果您想为 Markdown 组件构建一个全新的主题，只需在 <code>html/themes</code> 目录中写一个新的 CSS 文件，并更改 <code>mail</code> 配置文件中的 <code>theme</code> 选项。</p>
+</blockquote>
+<p><a name="database-notifications"></a></p>
+<h2>数据库通知</h2>
+<p><a name="database-prerequisites"></a></p>
+<h3>先决条件</h3>
+<p><code>database</code> 通知频道在一张数据表里存储通知信息。这张表包含了比如通知类型、JSON 格式数据等描述通知的信息。</p>
+<p>你可以查询这张表的内容在应用界面上展示通知。但是在这之前，你需要先创建一个数据表来保存通知。你可以用 <code>notifications:table</code> 命令来生成迁移表：</p>
+<pre><code>php artisan notifications:table
+
+php artisan migrate</code></pre>
+<p><a name="formatting-database-notifications"></a></p>
+<h3>格式化数据库通知</h3>
+<p>如果通知支持被存储到数据表中，你应该在通知类中定义一个 <code>toDatabase</code> 或 <code>toArray</code> 方法。这个方法接收 <code>$notifiable</code> 实体参数并返回一个普通的 PHP 数组。这个返回的数组将被转成 JSON 格式并存储到通知数据表的 <code>data</code> 列。我们来看一个 <code>toArray</code> 的例子：</p>
+<pre><code>/**
+ * 获取通知的数组展示方式
+ *
+ * @param  mixed  $notifiable
+ * @return array
+ */
+public function toArray($notifiable)
+{
+    return [
+        'invoice_id' =&gt; $this-&gt;invoice-&gt;id,
+        'amount' =&gt; $this-&gt;invoice-&gt;amount,
+    ];
+}</code></pre>
+<h4><code>toDatabase</code> Vs <code>toArray</code></h4>
+<p><code>toArray</code> 方法在 <code>broadcast</code> 频道也用到了，它用来决定广播给 JavaScript 客户端的数据。如果你想在 <code>database</code> 和 <code>broadcast</code> 频道中采用两种不同的数组展示方式，你应该定义 <code>toDatabase</code> 方法而非 <code>toArray</code> 方法。</p>
+<p><a name="accessing-the-notifications"></a></p>
+<h3>访问通知</h3>
+<p>一旦通知被存到数据库中，你需要一种方便的方式来从通知实体中访问它们。 <code>Illuminate\Notifications\Notifiable</code> trait 包含一个可以返回这个实体所有通知的 <code>notifications</code> Eloquent 关联。要获取这些通知，你可以像用其他 Eloquent 关联一样来使用这个方法。默认情况下，通知将会以 <code>created_at</code> 时间戳来排序：</p>
+<pre><code>$user = App\User::find(1);
+
+foreach ($user-&gt;notifications as $notification) {
+    echo $notification-&gt;type;
+}</code></pre>
+<p>如果你只想检索未读通知，你可以使用 <code>unreadNotifications</code> 关联。检索出来的通知也是以 <code>created_at</code> 时间戳来排序的：</p>
+<pre><code>$user = App\User::find(1);
+
+foreach ($user-&gt;unreadNotifications as $notification) {
+    echo $notification-&gt;type;
+}</code></pre>
+<blockquote>
+<p>{tip} 要从 JavaScript 客户端来访问通知的话，你应该定义一个通知控制器来给可通知的实体返回通知，比如给当前用户返回通知。然后你就可以在 JavaScript 客户端来发起对应 URI 的 HTTP 请求了。</p>
+</blockquote>
+<p><a name="marking-notifications-as-read"></a></p>
+<h3>标为已读</h3>
+<p>通常情况下，当用户查看了通知时，你就希望把通知标为已读。<code>Illuminate\Notifications\Notifiable</code> trait 提供了一个 <code>markAsRead</code> 方法，它能在对应的数据库记录里更新 <code>read_at</code> 列：</p>
+<pre><code>$user = App\User::find(1);
+
+foreach ($user-&gt;unreadNotifications as $notification) {
+    $notification-&gt;markAsRead();
+}</code></pre>
+<p>你可以使用 <code>markAsRead</code> 方法直接操作一个通知集合，而不是一条条遍历每个通知：</p>
+<pre><code>$user-&gt;unreadNotifications-&gt;markAsRead();</code></pre>
+<p>你可以用批量更新的方式来把所有通知标为已读，而不用在数据库里检索：</p>
+<pre><code>$user = App\User::find(1);
+
+$user-&gt;unreadNotifications()-&gt;update(['read_at' =&gt; Carbon::now()]);</code></pre>
+<p>当然，你可以通过 <code>delete</code> 通知来把它们从数据库删除：</p>
+<pre><code>$user-&gt;notifications()-&gt;delete();</code></pre>
+<p><a name="broadcast-notifications"></a></p>
+<h2>广播通知</h2>
+<p><a name="broadcast-prerequisites"></a></p>
+<h3>先决条件</h3>
+<p>在广播通知前，你应该配置并熟悉 Laravel <a href="broadcasting.html">事件广播</a> 服务。事件广播提供了一种 JavaScript 客户端响应服务端 Laravel 事件的机制。</p>
+<p><a name="formatting-broadcast-notifications"></a></p>
+<h3>格式化广播通知</h3>
+<p><code>broadcast</code> 频道使用 Laravel  <a href="broadcasting.html">事件广播</a> 服务来广播通知，它使得 JavaScript 客户端可以实时捕捉通知。如果一条通知支持广播，你应该在通知类里定义一个 <code>toBroadcast</code> 或 <code>toArray</code> 方法。这个方法将收到一个 <code>$notifiable</code> 实体并返回一个普通的 PHP 数组。返回的数组会被编码成 JSON 格式并广播给你的 JavaScript 客户端。我们来看个 <code>toArray</code> 方法的例子：</p>
+<pre><code>use Illuminate\Notifications\Messages\BroadcastMessage;
+
+/**
+ * 获取通知的数组展示方式
+ *
+ * @param  mixed  $notifiable
+ * @return BroadcastMessage
+ */
+public function toBroadcast($notifiable)
+{
+    return new BroadcastMessage([
+        'invoice_id' =&gt; $this-&gt;invoice-&gt;id,
+        'amount' =&gt; $this-&gt;invoice-&gt;amount,
+    ]);
+}</code></pre>
+<h4>广播队列配置</h4>
+<p>所有广播通知都排队等待广播。 如果要配置用于广播队列操作的队列连接或队列名称，你可以使用 <code>BroadcastMessage</code> 的 <code>onConnection</code> 和 <code>onQueue</code> 方法：</p>
+<pre><code>return new BroadcastMessage($data)
+                -&gt;onConnection('sqs')
+                -&gt;onQueue('broadcasts');</code></pre>
+<blockquote>
+<p>{tip} 除了你指定的数据外，广播通知也包含一个 <code>type</code> 字段，这个字段包含了通知类的类名。</p>
+</blockquote>
+<p><a name="listening-for-notifications"></a></p>
+<h3>监听通知</h3>
+<p>通知将会在一个私有频道里进行广播，频道格式为 <code>{notifiable}.{id}</code>。所以，如果你给 ID 为 <code>1</code> 的 <code>App\User</code> 实例发送通知，这个通知就在 <code>App.User.1</code> 私有频道里被发送。当你使用 <a href="broadcasting.html">Laravel Echo</a> 的时候，你可以很简单地使用 <code>notification</code> 辅助函数来监听一个频道的通知：</p>
+<pre><code>Echo.private('App.User.' + userId)
+    .notification((notification) =&gt; {
+        console.log(notification.type);
+    });</code></pre>
+<h4>自定义通知通道</h4>
+<p>如果您想自定义应通知实体接收其广播通知的渠道，您可以定义一个 <code>receiveBroadcastNotificationsOn</code> 方法：</p>
+<pre><code>&lt;?php
+
+namespace App;
+
+use Illuminate\Notifications\Notifiable;
+use Illuminate\Broadcasting\PrivateChannel;
+use Illuminate\Foundation\Auth\User as Authenticatable;
+
+class User extends Authenticatable
+{
+    use Notifiable;
+
+    /**
+     * 用户接收的通知广播
+     *
+     * @return array
+     */
+    public function receivesBroadcastNotificationsOn()
+    {
+        return [
+            new PrivateChannel('users.'.$this-&gt;id),
+        ];
+    }
+}</code></pre>
+<p><a name="sms-notifications"></a></p>
+<h2>短信通知</h2>
+<p><a name="sms-prerequisites"></a></p>
+<h3>先决条件</h3>
+<p>在 Laravel 中发送短信通知是基于 <a href="https://www.nexmo.com/">Nexmo</a> 服务的。在通过 Nexmo 发送短信通知前，你需要安装 <code>nexmo/client</code> Composer 包并在 <code>config/services.php</code> 配置文件中添加几个配置选项。你可以复制下面的配置示例来开始使用：</p>
+<pre><code>'nexmo' =&gt; [
+    'key' =&gt; env('NEXMO_KEY'),
+    'secret' =&gt; env('NEXMO_SECRET'),
+    'sms_from' =&gt; '15556666666',
+],</code></pre>
+<p><code>sms_from</code> 选项是短信消息发送者的手机号码。你可以在 Nexmo 控制面板中生成一个手机号码。</p>
+<p><a name="formatting-sms-notifications"></a></p>
+<h3>格式化短信通知</h3>
+<p>如果通知支持以短信方式发送，你应该在通知类里定义一个 <code>toNexmo</code> 方法。这个方法将会收到一个  <code>$notifiable</code> 实体并返回一个 <code>Illuminate\Notifications\Messages\NexmoMessage</code> 实例：</p>
+<pre><code>/**
+ * 获取通知的 Nexmo / 短信展示方式
+ *
+ * @param  mixed  $notifiable
+ * @return NexmoMessage
+ */
+public function toNexmo($notifiable)
+{
+    return (new NexmoMessage)
+                -&gt;content('Your SMS message content');
+}</code></pre>
+<h4>Unicode 内容</h4>
+<p>如果您的 SMS 消息包含 unicode 字符，您应该在构建 <code>NexmoMessage</code> 实例时调用 <code>unicode</code> 方法：</p>
+<pre><code>/**
+ * 获取通知的 Nexmo / 短信展示方式
+ *
+ * @param  mixed  $notifiable
+ * @return NexmoMessage
+ */
+public function toNexmo($notifiable)
+{
+    return (new NexmoMessage)
+                -&gt;content('Your unicode message')
+                -&gt;unicode();
+}</code></pre>
+<p><a name="customizing-the-from-number"></a></p>
+<h3>自定义 <code>From</code> 号码</h3>
+<p>如果你想通过一个手机号来发送某些通知，而这个手机号不同于你的 <code>config/services.php</code> 配置文件中指定的话，你可以在 <code>NexmoMessage</code> 实例中使用 <code>from</code>：</p>
+<pre><code>/**
+ * 获取通知的 Nexmo / 短信展示方式
+ *
+ * @param  mixed  $notifiable
+ * @return NexmoMessage
+ */
+public function toNexmo($notifiable)
+{
+    return (new NexmoMessage)
+                -&gt;content('Your SMS message content')
+                -&gt;from('15554443333');
+}</code></pre>
+<p><a name="routing-sms-notifications"></a></p>
+<h3>路由短信通知</h3>
+<p>当通过 <code>nexmo</code> 频道来发送通知的时候，通知系统会自动寻找通知实体的 <code>phone_number</code> 属性。如果你想自定义通知被发送的手机号码，你要在通知实体里定义一个 <code>routeNotificationForNexmo</code> 方法。</p>
+<pre><code>&lt;?php
+
+namespace App;
+
+use Illuminate\Notifications\Notifiable;
+use Illuminate\Foundation\Auth\User as Authenticatable;
+
+class User extends Authenticatable
+{
+    use Notifiable;
+
+    /**
+     * Nexmo 频道的路由通知
+     *
+     * @return string
+     */
+    public function routeNotificationForNexmo()
+    {
+        return $this-&gt;phone;
+    }
+}</code></pre>
+<p><a name="slack-notifications"></a></p>
+<h2>Slack 通知</h2>
+<p><a name="slack-prerequisites"></a></p>
+<h3>先决条件</h3>
+<p>通过 Slack 发送通知前，你必须通过 Composer 安装 Guzzle HTTP 库：</p>
+<pre><code>composer require guzzlehttp/guzzle</code></pre>
+<p>你还需要给 Slack 组配置 「Incoming Webhook」 。它将提供你使用 <a href="notifications.html#routing-slack-notifications">路由 Slack 通知</a> 时用到的 URL。</p>
+<p><a name="formatting-slack-notifications"></a></p>
+<h3>格式化 Slack 通知</h3>
+<p>如果通知支持被当做 Slack 消息发送，你应该在通知类里定义一个 <code>toSlack</code> 方法。这个方法将收到一个 <code>$notifiable</code> 实体并且返回一个 <code>Illuminate\Notifications\Messages\SlackMessage</code> 实例。Slack 消息可以包含文本内容以及一个 「attachment」 用来格式化额外文本或者字段数组。我们来看个基本的 <code>toSlack</code> 例子：</p>
+<pre><code>/**
+ * 获取通知的 Slack 展示方式
+ *
+ * @param  mixed  $notifiable
+ * @return SlackMessage
+ */
+public function toSlack($notifiable)
+{
+    return (new SlackMessage)
+                -&gt;content('One of your invoices has been paid!');
+}</code></pre>
+<p>这个例子中，我们只发送了一行文本给 Slack，这会创建类似下面的一条消息：</p>
+<img src="https://laravel.com/assets/img/basic-slack-notification.png">
+<h4>自定义发件人和收件人</h4>
+<p>您可以使用 <code>from</code> 和 <code>to</code> 方法来自定义发件人和收件人。 <code>from</code> 方法接受用户名和表情符号标识符，而 <code>to</code> 方法接受一个频道或用户名：</p>
+<pre><code>/**
+ * 获取通知的 Slack 展示方式
+ *
+ * @param  mixed  $notifiable
+ * @return SlackMessage
+ */
+public function toSlack($notifiable)
+{
+    return (new SlackMessage)
+                -&gt;from('Ghost', ':ghost:')
+                -&gt;to('#other')
+                -&gt;content('This will be sent to #other');
+}</code></pre>
+<p>你也可以不使用表情符号，改为使用图片作为你的 logo：</p>
+<pre><code>/**
+ * 获取通知的 Slack 展示方式
+ *
+ * @param  mixed  $notifiable
+ * @return SlackMessage
+ */
+public function toSlack($notifiable)
+{
+    return (new SlackMessage)
+                -&gt;from('Laravel')
+                -&gt;image('https://laravel.com/favicon.png')
+                -&gt;content('This will display the Laravel logo next to the message');
+}</code></pre>
+<p><a name="slack-attachments"></a></p>
+<h3>Slack 附加项 (Attachments)</h3>
+<p>你可以给 Slack 消息添加 &quot;附加项&quot;。附加项提供了比简单文本消息更丰富的格式化选项。在这个例子中，我们将发送一条有关应用中异常的错误通知，它里面有个可以查看这个异常更多详情的链接：</p>
+<pre><code>/**
+ * 获取通知的 Slack 展示方式。
+ *
+ * @param  mixed  $notifiable
+ * @return SlackMessage
+ */
+public function toSlack($notifiable)
+{
+    $url = url('/exceptions/'.$this-&gt;exception-&gt;id);
+
+    return (new SlackMessage)
+                -&gt;error()
+                -&gt;content('Whoops! Something went wrong.')
+                -&gt;attachment(function ($attachment) use ($url) {
+                    $attachment-&gt;title('Exception: File Not Found', $url)
+                               -&gt;content('File [background.jpg] was not found.');
+                });
+}</code></pre>
+<p>上面这个例子将会生成一条类似下面的 Slack 消息：</p>
+<img src="https://laravel.com/assets/img/basic-slack-attachment.png">
+<p>附加项也允许你指定一个应该被展示给用户的数据的数组。给定的数据将会以表格样式展示出来，这能方便阅读：</p>
+<pre><code>/**
+ * 获取通知的 Slack 展示方式
+ *
+ * @param  mixed  $notifiable
+ * @return SlackMessage
+ */
+public function toSlack($notifiable)
+{
+    $url = url('/invoices/'.$this-&gt;invoice-&gt;id);
+
+    return (new SlackMessage)
+                -&gt;success()
+                -&gt;content('One of your invoices has been paid!')
+                -&gt;attachment(function ($attachment) use ($url) {
+                    $attachment-&gt;title('Invoice 1322', $url)
+                               -&gt;fields([
+                                    'Title' =&gt; 'Server Expenses',
+                                    'Amount' =&gt; '$1,234',
+                                    'Via' =&gt; 'American Express',
+                                    'Was Overdue' =&gt; ':-1:',
+                                ]);
+                });
+}</code></pre>
+<p>上面的例子将会生成一条类似下面的 Slack 消息：</p>
+<img src="https://laravel.com/assets/img/slack-fields-attachment.png">
+<h4>Markdown 附件内容</h4>
+<p>如果一些附件字段包含 Markdown ，您可以使用 <code>markdown</code> 方法指示 Slack 解析并将给定的附件字段显示为 Markdown 格式的文本：</p>
+<pre><code>/**
+ * 获取通知的 Slack 展示方式
+ *
+ * @param  mixed  $notifiable
+ * @return SlackMessage
+ */
+public function toSlack($notifiable)
+{
+    $url = url('/exceptions/'.$this-&gt;exception-&gt;id);
+
+    return (new SlackMessage)
+                -&gt;error()
+                -&gt;content('Whoops! Something went wrong.')
+                -&gt;attachment(function ($attachment) use ($url) {
+                    $attachment-&gt;title('Exception: File Not Found', $url)
+                               -&gt;content('File [background.jpg] was **not found**.')
+                               -&gt;markdown(['title', 'text']);
+                });
+}</code></pre>
+<p><a name="routing-slack-notifications"></a></p>
+<h3>路由 Slack 通知</h3>
+<p>要把 Slack 通知路由到正确的位置，你要在通知实体中定义 <code>routeNotificationForSlack</code> 方法。它返回通知要被发往的 URL 回调地址。URL 可以通过在 Slack 组里面添加 &quot;Incoming Webhook&quot; 服务来生成。</p>
+<pre><code>&lt;?php
+
+namespace App;
+
+use Illuminate\Notifications\Notifiable;
+use Illuminate\Foundation\Auth\User as Authenticatable;
+
+class User extends Authenticatable
+{
+    use Notifiable;
+
+    /**
+     * Slack 频道的通知路由
+     *
+     * @return string
+     */
+    public function routeNotificationForSlack()
+    {
+        return $this-&gt;slack_webhook_url;
+    }
+}</code></pre>
+<p><a name="notification-events"></a></p>
+<h2>通知事件</h2>
+<p>当通知发送后，通知系统就会触发 <code>Illuminate\Notifications\Events\NotificationSent</code> 事件。它包含了 「notifiable」 实体和通知实例本身。你应该在 <code>EventServiceProvider</code> 中注册监听器：</p>
+<pre><code>/**
+ * 应用中的事件监听映射
+ *
+ * @var array
+ */
+protected $listen = [
+    'Illuminate\Notifications\Events\NotificationSent' =&gt; [
+        'App\Listeners\LogNotification',
+    ],
+];</code></pre>
+<blockquote>
+<p>{tip} 注册完监听器后，使用 <code>event:generate</code> Artisan 命令来快速生成监听器类。</p>
+</blockquote>
+<p>在事件监听器中，你可以访问事件中的 <code>notifiable</code>, <code>notification</code>, 和 <code>channel</code> 属性，来了解通知接收者和通知本身：</p>
+<pre><code>/**
+ * 处理事件
+ *
+ * @param  NotificationSent  $event
+ * @return void
+ */
+public function handle(NotificationSent $event)
+{
+    // $event-&gt;channel
+    // $event-&gt;notifiable
+    // $event-&gt;notification
+}</code></pre>
+<p><a name="custom-channels"></a></p>
+<h2>自定义频道</h2>
+<p>Laravel 提供了开箱即用的通知频道，但是你可能会想编写自己的驱动来通过其他频道发送通知。Laravel 很容易实现。首先，定义一个包含 <code>send</code> 方法的类。这个方法应该收到两个参数：<code>$notifiable</code> 和 <code>$notification</code>:</p>
+<pre><code>&lt;?php
+
+namespace App\Channels;
+
+use Illuminate\Notifications\Notification;
+
+class VoiceChannel
+{
+    /**
+     * 发送给定通知
+     *
+     * @param  mixed  $notifiable
+     * @param  \Illuminate\Notifications\Notification  $notification
+     * @return void
+     */
+    public function send($notifiable, Notification $notification)
+    {
+        $message = $notification-&gt;toVoice($notifiable);
+
+        // 将通知发送给 $notifiable 实例
+    }
+}</code></pre>
+<p>一旦定义了通知频道类，你应该在所有通知里通过 <code>via</code> 方法来简单地返回这个频道的类名。</p>
+<pre><code>&lt;?php
+
+namespace App\Notifications;
+
+use Illuminate\Bus\Queueable;
+use App\Channels\VoiceChannel;
+use App\Channels\Messages\VoiceMessage;
+use Illuminate\Notifications\Notification;
+use Illuminate\Contracts\Queue\ShouldQueue;
+
+class InvoicePaid extends Notification
+{
+    use Queueable;
+
+    /**
+     * 获取通知频道
+     *
+     * @param  mixed  $notifiable
+     * @return array|string
+     */
+    public function via($notifiable)
+    {
+        return [VoiceChannel::class];
+    }
+
+    /**
+     * 获取通知的声音展示方式
+     *
+     * @param  mixed  $notifiable
+     * @return VoiceMessage
+     */
+    public function toVoice($notifiable)
+    {
+        // ...
+    }
+}</code></pre>
+<h2>译者署名</h2>
+<table>
+<thead>
+<tr>
+<th>用户名</th>
+<th>头像</th>
+<th>职能</th>
+<th>签名</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><a href="https://laravel-china.org/users/7283">@carlclone</a></td>
+<td><img class="avatar-66 rm-style" src="https://dn-phphub.qbox.me/uploads/avatars/7283_1481302280.jpeg?imageView2/1/w/200/h/200"></td>
+<td>翻译</td>
+<td><a href="https://github.com/carlclone">@carlclone</a> at Github</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<blockquote>
+<p>{note} 欢迎任何形式的转载，但请务必注明出处，尊重他人劳动共创开源社区。</p>
+<p>转载请注明：本文档由 Laravel China 社区 <a href="https://laravel-china.org">laravel-china.org</a> 组织翻译，详见 <a href="https://laravel-china.org/topics/5756/laravel-55-document-translation-call-come-and-join-the-translation">翻译召集帖</a>。</p>
+<p>文档永久地址： <a href="../../index.html">https://d.laravel-china.org</a></p>
+</blockquote>
+		</div>
+
+		<div class="main-footer" style="border-top:1px dashed rgba(0, 0, 0, 0.1);padding-top: 30px;margin-top:30px;margin-bottom: 20px;">
+			<div class="prev-next-wrap clearfix">
+
+									<a class="btn btn-primary pull-left btn-inverted" href="mail.html"><i class="fa fa-arrow-left"></i> 邮件发送</a>
+				
+			    &nbsp;
+								    <a class="btn btn-primary pull-right btn-inverted" href="packages.html">扩展包开发 <i class="fa fa-arrow-right"></i></a>
+							</div>
+		</div>
+
+	</article>
+</div>
+
+	<footer class="main">
+		<ul>
+			<li class="nav-docs"><a href="../5.4.html">文档</a></li>
+<li ><a href="https://laravel-china.org/news" class="no-pjax">Laravel 资讯</a></li>
+<li class="dropdown"><a href="https://laravel-china.org/">Laravel China 社区</a></li>
+<li class="nav-forge"><a href="https://laravel-china.org/categories/1">酷工作</a></li>
+<li class="nav-docs"><a href="http://lumen.laravel-china.org">Lumen</a></li>
+<li class="nav-forge"><a href="https://cs.laravel-china.org/">速查表</a></li>
+<li class="nav-forge"><a href="https://fsdhub.com/books/laravel-essential-training-5.5">《Laravel 入门教程》</a></li>
+		</ul>
+		<p>Laravel is a trademark of Taylor Otwell. Copyright &copy; Taylor Otwell.</p>
+            <div style="margin-top: 32px;">
+                <a href="https://www.upyun.com/" title="Composer 镜像赞助商">
+                    <img src="https://dn-phphub.qbox.me/uploads/banners/XPtLlZmIN1cQbLuDFEON.png" style="width: 200px;">
+                </a>
+            </div>
+            <p class="less-significant">
+            <a href="http://jackmcdade.com">
+                Designed by<br>
+                <svg version="1.1"
+	 xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:a="http://ns.adobe.com/AdobeSVGViewerExtensions/3.0/"
+	 x="0px" y="0px" width="128.2px" height="28px" viewBox="0 0 128.2 28" enable-background="new 0 0 128.2 28" xml:space="preserve"
+	>
+<defs>
+</defs>
+<g>
+	<path fill="#c3c3c3" d="M14.2,0.4c0,0.2,0,0.5,0,0.7c0,0.2,0,0.5,0,0.7l-1.4-0.3C12.9,3,13,4.5,13.1,6c0.1,1.5,0,3-0.1,4.5
+		c0,0.4-0.1,0.8-0.1,1.2c-0.1,0.4-0.1,0.8-0.3,1.2c-0.1,0.4-0.3,0.7-0.5,1.1c-0.2,0.3-0.5,0.6-0.9,0.9c-0.4,0.2-0.9,0.4-1.5,0.6
+		c-0.6,0.2-1.1,0.3-1.6,0.3c-0.6,0-1.2-0.1-1.6-0.3c-0.5-0.2-0.9-0.6-1.1-1c-0.3-0.5-0.5-1-0.6-1.6c-0.1-0.6-0.1-1.3,0-2.1
+		c0-0.2,0.1-0.5,0.2-0.7C4.9,9.9,5,9.7,5.1,9.5c0.1-0.2,0.2-0.4,0.3-0.6l1.1,0.4C6.7,9.3,7,9.4,7.3,9.5c0.3,0.1,0.5,0.1,0.6,0.2
+		c0,0.2,0,0.4-0.1,0.5c-0.1,0.2-0.1,0.3-0.2,0.4c-0.1,0.1-0.2,0.3-0.2,0.4c-0.1,0.2-0.1,0.3-0.1,0.5l-1.3-0.7
+		c-0.1,0.3-0.2,0.7-0.2,1.1c0,0.4,0.1,0.8,0.2,1.2c0.2,0.4,0.4,0.7,0.6,1c0.3,0.3,0.6,0.4,1,0.3c0.6,0,1.1-0.3,1.4-0.6
+		c0.3-0.4,0.5-0.9,0.7-1.7c0.1-0.7,0.2-1.6,0.2-2.8c0-1.1,0-2.4,0-3.9c0-0.6-0.1-1.3-0.1-2C9.7,2.8,9.6,2.1,9.5,1.4
+		c-0.2,0-0.5,0-0.8,0c-0.3,0-0.6,0-0.8,0c-0.8,0-1.5,0-2.2,0c-0.7,0-1.5,0-2.2,0.2c-0.3,0.1-0.6,0.2-1,0.4C2.2,2.1,1.9,2.4,1.6,2.6
+		C1.4,2.9,1.2,3.2,1.1,3.6C1,3.9,1,4.3,1.1,4.6c0.1,0.5,0.3,0.8,0.4,0.9V5.4c0-0.4,0.1-0.8,0.4-1c0.3-0.2,0.6-0.3,0.9-0.3
+		c0.3,0,0.6,0.1,0.9,0.3C4,4.6,4.1,5,4.1,5.4c0,0.4-0.1,0.8-0.4,1c-0.3,0.2-0.6,0.3-1,0.3H2.7C1.9,6.7,1.3,6.5,0.9,6
+		C0.5,5.6,0.2,5.1,0.1,4.5C0,4,0,3.4,0.2,2.7c0.2-0.6,0.5-1.1,1-1.5c0.4-0.3,0.8-0.5,1.2-0.7c0.4-0.1,0.9-0.2,1.4-0.3
+		c0.5-0.1,0.9-0.1,1.4-0.1c0.5,0,0.9,0,1.4,0h1.5c0.6,0,1.1,0,1.6,0.1c0.5,0,1,0.1,1.5,0.1c0.5,0,1,0.1,1.5,0.1
+		C13.1,0.5,13.6,0.5,14.2,0.4z"/>
+	<path fill="#c3c3c3" d="M25.2,14.3c0,0.2,0.1,0.4,0.1,0.6c0,0.2,0.1,0.4,0.1,0.7c-1-0.1-2-0.2-3-0.1c-1.1,0.1-2.1,0.2-3,0.4
+		c0-0.2-0.1-0.4-0.1-0.5c0-0.2-0.1-0.4-0.1-0.5c0.2,0,0.5-0.1,0.7-0.1c0.2,0,0.4-0.1,0.6-0.1c-0.1-1.5-0.3-3.1-0.5-4.6
+		c-0.5,0.1-0.9,0.1-1.4,0.2c-0.5,0.1-0.9,0.1-1.4,0.2c-0.2,0.7-0.3,1.3-0.5,2c-0.2,0.7-0.3,1.3-0.5,2c0.2,0,0.4,0,0.6,0
+		c0.1,0,0.3,0,0.4,0.1c0,0.2,0,0.3,0,0.5c0,0.1,0,0.2,0,0.4c0,0.1,0,0.2-0.1,0.3H14v-1.2h1c0.2-0.5,0.3-1,0.4-1.5
+		c0.1-0.5,0.3-1,0.4-1.5c0.2-0.6,0.3-1.2,0.5-1.7c0.2-0.6,0.3-1.2,0.5-1.7c0.2-1.1,0.4-2.1,0.6-3.2c0.2-1.1,0.3-2.1,0.4-3.2
+		c-0.2,0-0.5,0-0.7,0c-0.2,0-0.4,0-0.7,0c0-0.2,0.1-0.4,0.1-0.6c0-0.2,0-0.4,0.1-0.6c0.9,0,1.9,0,2.9,0c1,0,2,0,2.9,0l0.2,1.2
+		c-0.2,0-0.3,0-0.5,0c-0.2,0-0.3,0-0.5,0c0.3,2.1,0.7,4.3,1,6.5c0.3,2.2,0.7,4.4,1,6.5H25.2z M17.5,9c0.4-0.1,0.7-0.1,1.1-0.2
+		c0.4-0.1,0.8-0.1,1.2-0.2c-0.2-1-0.3-2-0.5-2.9c-0.2-1-0.4-1.9-0.6-2.9c-0.2,1-0.4,2.1-0.5,3.1C17.9,6.9,17.7,8,17.5,9z"/>
+	<path fill="#c3c3c3" d="M36.7,10.4c-0.1,0-0.2,0-0.3,0c-0.1,0-0.2,0-0.3,0c0,0.6,0,1.2-0.2,1.9c-0.2,0.6-0.5,1.2-1,1.6
+		c-0.5,0.5-1,0.9-1.6,1.1c-0.6,0.3-1.3,0.4-2,0.5c-0.6,0.1-1.1,0.1-1.8,0c-0.6-0.1-1.1-0.4-1.6-0.7c-0.2-0.2-0.5-0.4-0.8-0.7
+		c-0.3-0.3-0.5-0.5-0.6-0.8c-0.3-0.5-0.5-1-0.6-1.5c-0.2-0.5-0.3-0.9-0.4-1.4c-0.1-0.5-0.2-1-0.2-1.5c0-0.5,0-1,0.1-1.6
+		c0.2-1,0.4-2,0.8-2.9c0.4-0.9,0.8-1.7,1.4-2.3c0.5-0.7,1.2-1.2,1.9-1.6C30.2,0.2,30.9,0,31.7,0c0.3,0,0.5,0,0.8,0.1
+		c0.3,0.1,0.5,0.2,0.7,0.4c0.3,0.3,0.7,0.7,1,1.2c0.3,0.5,0.6,1.2,0.7,1.9c0.1,0,0.2,0,0.3,0c0.1,0,0.2,0,0.3,0c0,0.1,0,0.2,0,0.3
+		c0,0.1,0,0.2,0,0.3L33,4.6c-0.3,0.1-0.5,0.1-0.6,0c-0.1,0-0.2-0.1-0.2-0.2c-0.1-0.1-0.1-0.2,0-0.3c0.1,0,0.2,0,0.2,0
+		c0.1,0,0.1,0,0.2,0c0.2-0.2,0.3-0.3,0.3-0.6c0-0.2,0-0.5,0-0.7c0-0.5-0.2-0.9-0.5-1.3c-0.2-0.2-0.3-0.3-0.4-0.4
+		C31.8,1,31.6,1,31.4,1.1c-0.2,0-0.4,0.2-0.6,0.4c-0.2,0.2-0.4,0.5-0.5,0.9C30,2.6,29.9,3,29.8,3.3c-0.1,0.3-0.2,0.5-0.2,0.7
+		c-0.6,2.6-0.7,5.3-0.2,8c0.1,0.3,0.2,0.7,0.3,1s0.3,0.6,0.5,0.9c0.2,0.3,0.5,0.5,0.8,0.7c0.3,0.2,0.6,0.2,1,0.1
+		c0.6-0.1,1-0.4,1.4-1c0.3-0.5,0.6-1.1,0.7-1.8c0.1-0.3,0.1-0.6,0.1-0.9v-0.5c-0.2,0-0.4,0-0.6-0.1c-0.1-0.1-0.2-0.2-0.2-0.3
+		c0-0.1,0-0.2,0.1-0.3c0.6,0,1.2,0,1.7,0c0.6,0,1.2,0,1.7,0c0,0.1,0,0.2-0.1,0.3C36.7,10.2,36.7,10.3,36.7,10.4z"/>
+	<path fill="#c3c3c3" d="M48,14.2c0.1,0.2,0.3,0.3,0.5,0.4c0.2,0.1,0.5,0.1,0.7,0c0.1,0.1,0.1,0.2,0.1,0.4c0,0.2-0.1,0.3-0.2,0.4
+		c-0.1,0.1-0.2,0.2-0.4,0.2c-0.2,0-0.3,0-0.4,0c-0.3,0-0.7,0-1,0c-0.3,0-0.7,0-1-0.1c-0.3-0.1-0.7-0.2-1-0.4
+		c-0.3-0.2-0.5-0.4-0.7-0.7c-0.2-0.3-0.3-0.6-0.3-1c0-0.3,0-0.7,0-1.1V9.9c0-0.1,0-0.3,0-0.4c0-0.2-0.1-0.3-0.2-0.5
+		c-0.1-0.2-0.3-0.3-0.4-0.4c-0.2-0.1-0.4-0.1-0.7-0.1c-0.1,0-0.2,0-0.5,0.1c-0.2,0.3-0.3,0.5-0.5,0.8c-0.2,0.3-0.3,0.5-0.5,0.7
+		c0,0.8,0,1.5-0.1,2.2c0,0.7-0.1,1.5-0.1,2.1h1.4v1.1c-0.5,0-0.9,0.1-1.3,0c-0.4,0-0.8,0-1.2-0.1c-0.4,0-0.8-0.1-1.2-0.1
+		c-0.4,0-0.8,0-1.3,0c-0.1,0-0.3,0-0.4,0c-0.1,0-0.2,0-0.3-0.1c-0.1,0-0.1-0.1-0.1-0.2c0-0.1-0.1-0.3-0.1-0.4c0-0.1,0-0.3,0-0.4
+		c0-0.1,0.1-0.2,0.1-0.2c0.2,0.1,0.4,0.2,0.6,0.1s0.4-0.2,0.5-0.4c0-0.1,0.1-0.3,0.1-0.7c0-0.4,0-0.9,0.1-1.6c0-0.6,0.1-1.3,0.1-2.1
+		c0-0.8,0-1.6,0.1-2.4c0-0.8,0-1.5,0.1-2.3c0-0.7,0.1-1.3,0.1-1.8c0-0.2,0-0.5,0-0.7c0-0.2-0.1-0.4-0.2-0.6
+		c-0.1-0.2-0.3-0.3-0.5-0.4c-0.2-0.1-0.4,0-0.6,0.1c0-0.2-0.1-0.5-0.1-0.7c0-0.2,0-0.4-0.1-0.7c1,0,2,0.1,3,0.1c0.9,0,1.9,0.1,3,0.1
+		c0,0.1,0,0.2,0,0.3c0,0.1,0,0.3,0.1,0.4c0,0.1,0,0.3,0,0.4c0,0.1,0,0.2-0.1,0.2c-0.1,0.1-0.2,0.1-0.3,0.1c-0.1,0-0.2,0-0.4-0.1
+		c-0.1-0.1-0.3-0.1-0.4-0.2c-0.1-0.1-0.3-0.1-0.3-0.1c-0.1,0.9-0.1,1.9-0.1,2.9c0,1-0.1,2-0.1,3.1c0.7-1.2,1.4-2.5,2-3.8
+		c0.2-0.3,0.3-0.6,0.4-0.9c0.1-0.3,0.3-0.6,0.5-0.9c0.2-0.3,0.4-0.5,0.7-0.7C45.4,1,45.7,0.9,46,0.8c0.3-0.1,0.7-0.1,1,0
+		c0.3,0.1,0.6,0.2,0.9,0.5c0.2,0.3,0.4,0.6,0.4,1c0,0.4,0.1,0.8,0,1.1c0,0.2,0,0.3,0,0.5c0,0.2-0.1,0.3-0.2,0.4
+		c-0.1,0.2-0.2,0.3-0.4,0.4c-0.2,0.1-0.4,0.1-0.5,0.2c-0.1,0-0.3,0.1-0.4,0.1c-0.1,0-0.3,0-0.4,0C46.2,4.7,46,4.6,46,4.4
+		c-0.1-0.2-0.1-0.4,0-0.5c0.1-0.2,0.2-0.3,0.3-0.3c0.1,0,0.2-0.1,0.4-0.1c0.2-0.1,0.3-0.2,0.3-0.3c0.1-0.2,0.1-0.3,0.1-0.5
+		C47.1,2.4,47,2.2,47,2c-0.1-0.2-0.2-0.3-0.3-0.3c-0.2,0-0.3,0-0.5,0.1C46,1.9,45.9,2,45.7,2.2c-0.2,0.2-0.3,0.4-0.4,0.6
+		C45.2,3,45,3.3,44.9,3.5c-0.1,0.3-0.3,0.6-0.4,0.8c-0.2,0.2-0.3,0.5-0.4,0.8c-0.4,0.9-0.8,1.7-1.2,2.5c0.3,0,0.6-0.1,1,0
+		c0.4,0,0.7,0,1,0c0.3,0,0.7,0.1,1,0.2c0.3,0.1,0.6,0.3,0.8,0.6c0.3,0.3,0.4,0.6,0.5,1c0.1,0.4,0.1,0.8,0.2,1.1l0.2,2.1
+		c0,0.2,0.1,0.5,0.1,0.7C47.7,13.7,47.8,14,48,14.2z"/>
+	<path fill="#c3c3c3" d="M71.7,13.9c0.2,0.2,0.4,0.4,0.7,0.5c0.3,0.1,0.5,0,0.8-0.1c0,0.2,0.1,0.3,0.1,0.6c0.1,0.2,0.1,0.4,0.1,0.6
+		c-0.3,0-0.7,0-1.1,0s-0.8,0-1.3,0.1c-0.4,0-0.9,0-1.3,0c-0.4,0-0.8,0-1,0c0-0.1,0-0.1,0-0.2c0-0.1,0.1-0.2,0.2-0.3
+		c0.1-0.1,0.2-0.2,0.4-0.3c0.2-0.1,0.3-0.1,0.6-0.1c0.1,0,0.1-0.2,0.1-0.7c0-0.4,0-1,0-1.6c0-0.6,0-1.2-0.1-1.9s0-1.1,0-1.5
+		c0-1,0-1.9,0-2.6c0-0.7,0.1-1.5,0.1-2.2c-0.6,1.3-1.1,2.7-1.6,4.1c-0.5,1.5-1,3-1.5,4.4c0,0,0.1,0.1,0.1,0.2c-0.2,0-0.4,0-0.7,0.1
+		c-0.3,0.1-0.5,0.1-0.7,0.1c-0.5-1.9-1.1-3.7-1.6-5.5c-0.5-1.8-1.1-3.6-1.6-5.5c-0.1,1-0.1,2-0.1,3c0,1.1-0.1,2.1-0.1,3.2
+		c0,1.1,0,2.1-0.1,3.2c0,1-0.1,2-0.1,3h1.4v1.1c-0.5,0-0.9,0.1-1.3,0c-0.4,0-0.8,0-1.2-0.1c-0.4,0-0.8-0.1-1.2-0.1
+		c-0.4,0-0.8,0-1.3,0c-0.1,0-0.3,0-0.4,0c-0.1,0-0.2,0-0.3-0.1c-0.1,0-0.1-0.1-0.1-0.2c0-0.1-0.1-0.3-0.1-0.4c0-0.1,0-0.3,0-0.4
+		c0-0.1,0.1-0.2,0.1-0.2c0.2,0.1,0.4,0.2,0.6,0.1s0.4-0.2,0.5-0.4c0-0.1,0.1-0.3,0.1-0.7c0-0.4,0-0.9,0.1-1.6c0-0.6,0.1-1.3,0.1-2.1
+		C59,8.8,59,8,59,7.2c0-0.8,0-1.5,0.1-2.3c0-0.7,0.1-1.3,0.1-1.8c0-0.2,0-0.5,0-0.7c0-0.2-0.1-0.4-0.2-0.6c-0.1-0.2-0.3-0.3-0.5-0.4
+		c-0.2-0.1-0.4,0-0.6,0.1c0-0.2-0.1-0.5-0.1-0.7c0-0.2,0-0.4-0.1-0.7c1,0,2,0.1,3,0.1c0.9,0,1.9,0.1,3,0.1c0,0.3-0.1,0.5-0.4,0.7
+		c0.3,1.3,0.6,2.6,1,3.9c0.4,1.3,0.8,2.6,1.2,3.9c0.2-0.6,0.4-1.3,0.6-1.9c0.2-0.6,0.4-1.2,0.6-1.8C67,4.6,67.2,4,67.5,3.4
+		c0.2-0.6,0.4-1.3,0.6-2c-0.1,0-0.3,0-0.4-0.1c-0.1,0-0.2,0-0.4-0.1c-0.1,0-0.1-0.1-0.1-0.3c0-0.1,0.1-0.2,0.1-0.3
+		c0.1-0.1,0.2-0.1,0.3-0.1c0.1,0,0.2,0,0.3,0c0.4,0,0.7,0,1,0s0.6,0,0.9,0c0.3,0,0.6,0,0.9,0c0.3,0,0.6,0,1,0c0.1,0,0.3,0,0.4,0
+		c0.1,0,0.3,0.1,0.4,0.2c0.1,0.1,0.2,0.2,0.2,0.4c0,0.2,0,0.3-0.2,0.3c-0.1-0.1-0.2-0.1-0.3-0.1c-0.1,0-0.2,0.1-0.3,0.1
+		c-0.2,0.4-0.3,0.8-0.4,1.3c-0.1,0.5-0.1,0.9-0.1,1.4c-0.2,2.8-0.2,5.6,0,8.4c0,0.3,0,0.5,0.1,0.7C71.4,13.5,71.5,13.7,71.7,13.9z"
+		/>
+	<path fill="#c3c3c3" d="M81.7,12c-0.1,0-0.1,0-0.2,0c-0.1,0-0.1,0-0.2,0c0,0.4,0,0.9-0.2,1.3c-0.1,0.4-0.4,0.8-0.7,1.1
+		c-0.3,0.3-0.7,0.6-1.1,0.8c-0.4,0.2-0.9,0.3-1.3,0.4c-0.4,0.1-0.8,0-1.2,0c-0.4-0.1-0.8-0.2-1.1-0.5c-0.2-0.1-0.3-0.3-0.5-0.5
+		c-0.2-0.2-0.3-0.4-0.4-0.6c-0.2-0.4-0.3-0.7-0.4-1c-0.1-0.3-0.2-0.6-0.3-1C74,11.7,74,11.4,74,11c0-0.3,0-0.7,0.1-1.1
+		c0.1-0.7,0.3-1.4,0.5-2c0.3-0.6,0.6-1.1,0.9-1.6s0.8-0.8,1.3-1.1c0.5-0.3,1-0.4,1.5-0.4c0.2,0,0.4,0,0.6,0.1
+		c0.2,0.1,0.3,0.1,0.5,0.3C79.6,5.4,79.8,5.6,80,6c0.2,0.4,0.4,0.8,0.5,1.3c0.1,0,0.1,0,0.2,0c0.1,0,0.1,0,0.2,0c0,0.1,0,0.1,0,0.2
+		c0,0.1,0,0.1,0,0.2L79.2,8c-0.2,0.1-0.3,0.1-0.4,0c-0.1,0-0.1-0.1-0.2-0.2c0-0.1,0-0.1,0-0.2c0.1,0,0.1,0,0.2,0c0,0,0.1,0,0.2,0
+		c0.1-0.1,0.2-0.2,0.2-0.4c0-0.2,0-0.3,0-0.5c0-0.3-0.1-0.6-0.3-0.9c-0.1-0.1-0.2-0.2-0.3-0.3c-0.1-0.1-0.2-0.1-0.4,0
+		c-0.1,0-0.3,0.1-0.4,0.3c-0.1,0.2-0.3,0.4-0.4,0.6c-0.1,0.2-0.2,0.4-0.3,0.6c-0.1,0.2-0.1,0.4-0.1,0.5c-0.4,1.8-0.5,3.6-0.1,5.5
+		c0.1,0.2,0.1,0.4,0.2,0.7c0.1,0.2,0.2,0.4,0.3,0.6c0.1,0.2,0.3,0.3,0.6,0.5c0.2,0.1,0.4,0.1,0.7,0.1c0.4-0.1,0.7-0.3,1-0.7
+		c0.2-0.4,0.4-0.8,0.5-1.2c0-0.2,0.1-0.4,0.1-0.6v-0.3c-0.2,0-0.3,0-0.4,0c-0.1,0-0.1-0.1-0.1-0.2c0-0.1,0-0.2,0.1-0.2
+		c0.4,0,0.8,0,1.2,0c0.4,0,0.8,0,1.2,0c0,0.1,0,0.1,0,0.2C81.8,11.8,81.8,11.9,81.7,12z"/>
+	<path fill="#c3c3c3" d="M83.5,14.2c0.2-4.3,0.3-8.5,0.2-12.8c-0.3,0-0.6,0-0.9,0c-0.3,0-0.6,0-0.9,0c0-0.2,0-0.3,0-0.5s0-0.3,0-0.5
+		c0.7,0,1.3,0,2-0.1c0.7,0,1.3,0,2-0.1c0.8-0.2,1.6-0.2,2.4-0.1c0.8,0.1,1.6,0.3,2.4,0.5c0.7,0.3,1.4,0.7,1.9,1.2
+		c0.5,0.5,0.9,1.1,1.1,1.8C94,4.9,94.1,6.1,94,7.4C94,8.6,93.8,9.8,93.7,11c0,0.4-0.1,0.8-0.2,1.2c-0.1,0.4-0.3,0.8-0.5,1.1
+		c-0.3,0.5-0.8,1-1.3,1.3c-0.5,0.3-1.1,0.5-1.7,0.6c-0.5,0.1-0.9,0.2-1.4,0.1c-0.5,0-0.9,0-1.4-0.1v0c-0.2,0-0.3,0-0.5,0
+		s-0.4,0-0.5,0l-0.1,0c0,0,0,0,0,0c-0.6,0-1.3,0-1.9,0c-0.6,0-1.3,0-1.9,0c-0.2-0.4-0.1-0.8,0.2-1.1c0.2-0.2,0.3-0.2,0.5-0.3
+		C83.2,14.1,83.4,14.1,83.5,14.2z M89.4,1.9c-0.4-0.3-0.8-0.5-1.3-0.6c-0.5-0.1-1-0.1-1.5-0.1c-0.3,4.5-0.2,9.1,0.4,13.6
+		c0.2,0,0.4,0,0.5-0.1c0.2,0,0.4-0.1,0.6-0.1c0.3-0.1,0.6-0.2,0.9-0.4c0.3-0.2,0.6-0.4,0.8-0.7c0.2-0.3,0.4-0.6,0.5-1
+		s0.2-0.7,0.2-1.1c0.4-2.1,0.4-4.2,0.2-6.3c-0.1-0.6-0.2-1.2-0.4-1.9C90.3,2.8,89.9,2.3,89.4,1.9z"/>
+	<path fill="#c3c3c3" d="M102.4,9.7c-0.6-0.1-1.3-0.1-2,0c-0.7,0.1-1.4,0.4-2,0.8l-0.2-1.4L99.1,9c0-0.4-0.1-0.7-0.1-1
+		c0-0.2-0.1-0.5-0.1-0.9c-0.3,0-0.6,0.1-0.9,0.1c-0.3,0-0.6,0.1-1,0.1c-0.2,0.7-0.3,1.3-0.4,1.8c-0.1,0.5-0.2,1.1-0.4,1.6l0.2-0.1
+		l0.7,0.6c-0.4,0.2-0.8,0.6-1.2,1.1c-0.4,0.5-0.7,1-0.9,1.5l-0.9-0.5c0-0.1,0.1-0.2,0.2-0.4c0.1-0.2,0.2-0.3,0.2-0.4
+		c0.1-0.2,0.2-0.5,0.3-1c0.1-0.4,0.2-0.9,0.4-1.3c0.1-0.5,0.2-0.9,0.3-1.3c0.1-0.4,0.2-0.7,0.2-0.9c0.1-0.4,0.2-0.8,0.3-1.2
+		c0.1-0.4,0.2-0.8,0.3-1.2c0.2-0.7,0.3-1.4,0.4-2.1c0.1-0.7,0.2-1.4,0.3-2.2c-0.1,0-0.2,0-0.3,0c-0.1,0-0.2,0-0.3,0l0.1-0.8l4-0.1
+		l0.1,0.8c-0.1,0-0.2,0-0.2,0c0,0-0.1,0-0.2,0c0.1,0.7,0.2,1.4,0.3,2c0.1,0.6,0.2,1.2,0.3,1.8c0.1,0.6,0.2,1.2,0.3,1.8
+		c0.1,0.6,0.2,1.3,0.4,2c0.2,0,0.3,0,0.3,0c0,0,0.1,0,0.3,0L102.4,9.7z M98.8,6.1c-0.1-0.7-0.2-1.3-0.3-2c-0.1-0.6-0.3-1.3-0.4-2
+		c-0.1,0.6-0.2,1.3-0.4,2.1c-0.1,0.7-0.3,1.5-0.5,2.2L98.8,6.1z"/>
+	<path fill="#c3c3c3" d="M124.9,20.1c0-0.3,0.1-0.6,0.3-0.8c0.2-0.2,0.4-0.3,0.7-0.4c0.3-0.1,0.5,0,0.8,0.1c0.3,0.1,0.5,0.3,0.6,0.5
+		c0.3,0.4,0.6,0.9,0.7,1.4c0.2,0.5,0.2,1,0.2,1.5c0,0.5-0.1,1-0.3,1.5c-0.2,0.5-0.4,1-0.7,1.4c-0.6,0.9-1.4,1.6-2.4,2
+		c-1,0.5-2,0.7-3,0.7c-1.5,0-2.8-0.3-3.9-1s-2.1-1.4-3-2.4c-0.9-1-1.8-2.1-2.5-3.2c-0.8-1.2-1.5-2.3-2.3-3.5c-1.1,1.2-2.4,2.2-3.9,3
+		c-1.5,0.8-3,1.1-4.5,1c-1.1,0-2.1-0.1-3-0.5c-0.9-0.3-1.6-0.8-2.2-1.4c-0.6-0.6-0.9-1.3-1.1-2.2c-0.2-0.8-0.1-1.7,0.2-2.7
+		c0.3-0.9,0.7-1.6,1.3-2.2c0.6-0.6,1.2-1.1,2-1.5c0.7-0.4,1.5-0.6,2.4-0.7c0.8-0.1,1.7,0,2.6,0.2c0-1.7,0-3.4,0-5c0-1.7,0-3.2,0-4.6
+		c-0.3,0-0.6,0-0.9,0c-0.3,0-0.6,0-0.9,0c0-0.2,0-0.3,0-0.5s0-0.3,0-0.5l3.7-0.1c0.8-0.2,1.6-0.2,2.4-0.1c0.8,0.1,1.6,0.3,2.4,0.5
+		c0.7,0.3,1.4,0.7,1.9,1.2c0.5,0.5,0.9,1.1,1.1,1.8c0.3,1.2,0.4,2.4,0.3,3.6c-0.1,1.2-0.2,2.5-0.4,3.7c-0.1,1-0.4,2-0.8,3
+		c-0.5,1-1,2-1.7,2.9c0.3,0.4,0.6,0.8,0.8,1.2c0.3,0.4,0.5,0.8,0.8,1.2c0.5,0.8,1.1,1.6,1.7,2.5c0.6,0.8,1.3,1.6,2,2.4
+		c0.7,0.7,1.5,1.3,2.4,1.8s1.8,0.7,2.9,0.8c1.1,0,2.1-0.2,3-0.7c0.9-0.5,1.6-1.2,2.1-2.2c0.2-0.4,0.3-0.8,0.4-1.3
+		c0.1-0.5,0-0.9-0.1-1.3c-0.2,0.1-0.4,0.2-0.6,0.2c-0.2,0-0.4,0-0.6-0.1c-0.2-0.1-0.4-0.2-0.5-0.4S124.9,20.4,124.9,20.1z M102.9,21
+		c1.5-0.4,2.8-1,3.7-1.8c0.9-0.8,1.7-1.7,2.3-2.8c-0.2-0.2-0.3-0.5-0.6-0.7c-0.6-0.7-1.2-1.4-1.9-1.9c0,0.6,0.1,1.2,0.1,1.8
+		c0,0.6,0.1,1.1,0.2,1.6h0v0.1c-0.5,0-0.9,0-1.3,0c-0.4,0-0.8,0-1.2,0c-0.3,0-0.6,0-0.9,0c-0.3,0-0.6,0-0.9,0
+		c-0.1-0.2-0.1-0.4,0-0.7c0-0.2,0.1-0.3,0.3-0.5c0.3-0.3,0.7-0.4,1.1-0.2l0.1-3.5c-0.5-0.2-1-0.3-1.5-0.3c-0.5,0-1.1,0-1.6,0.1
+		c-0.6,0.1-1.1,0.3-1.6,0.6c-0.5,0.3-0.9,0.7-1.3,1.1c-0.4,0.4-0.7,0.9-0.9,1.5c-0.2,0.5-0.3,1.1-0.3,1.6c0,0.7,0.2,1.3,0.6,1.8
+		c0.4,0.5,0.9,0.9,1.4,1.4c0.2,0.2,0.5,0.3,0.8,0.5c0.3,0.1,0.7,0.2,1.1,0.3c0.4,0.1,0.8,0.1,1.2,0.1
+		C102.1,21.1,102.5,21.1,102.9,21z M109.3,1.9c-0.4-0.3-0.8-0.5-1.2-0.6c-0.5-0.1-0.9-0.1-1.4-0.1c-0.1,1.7-0.2,3.4-0.3,5.3
+		c-0.1,1.9-0.1,3.7,0,5.6c0.6,0.4,1.2,0.8,1.7,1.4c0.5,0.5,1,1.1,1.5,1.6c0.2-0.6,0.4-1.2,0.6-1.9c0.2-0.6,0.3-1.2,0.3-1.7
+		c0.2-1.1,0.2-2.1,0.3-3.1c0-1,0-2.1-0.1-3.1c-0.1-0.6-0.2-1.2-0.4-1.9C110.1,2.8,109.8,2.3,109.3,1.9z"/>
+	<path fill="#c3c3c3" d="M116.5,1.2c-0.3,0-0.6,0-0.9,0c-0.3,0-0.6,0-0.9,0V0.4c0.5,0,0.9,0,1.2-0.1s0.7,0,1.1,0c0.4,0,0.7,0,1.1,0
+		s0.8,0,1.3-0.1c0.9,0,1.8,0,2.8-0.1c0.9,0,1.8,0,2.8-0.1c0,0.6,0,1.2,0,1.8c0,0.6,0,1.2,0,1.8c-0.2,0-0.3,0-0.5,0
+		c-0.2,0-0.3,0-0.5,0c-0.1,0-0.2,0-0.3,0c-0.1,0-0.1-0.1,0-0.1c0.1-0.2,0.1-0.4,0.1-0.6s0-0.4-0.1-0.6c-0.1-0.2-0.2-0.4-0.3-0.6
+		c-0.1-0.2-0.2-0.3-0.4-0.4c-0.2-0.1-0.4-0.2-0.6-0.2c-0.2,0-0.5,0-0.7,0c-0.3,0-0.5,0.1-0.8,0.1c-0.3,0.1-0.5,0.2-0.6,0.4
+		c-0.1,0.2-0.1,0.3-0.1,0.3c0,0.1,0,0.2,0,0.3c0,0.7-0.1,1.3-0.1,2c0,0.6-0.1,1.3-0.1,1.9c0,0.2,0,0.3,0,0.5c0,0.2,0,0.3,0,0.5
+		c0.6-0.2,1.2-0.3,1.9-0.4c0.6-0.1,1.2-0.3,1.9-0.4c0,0.1,0.1,0.2,0.1,0.3c0,0.1,0,0.3,0,0.4c0,0.2-0.1,0.3-0.1,0.4
+		c-0.1,0.1-0.1,0.2-0.1,0.3c-0.1,0.1-0.2,0.1-0.4,0.2c-0.1,0-0.3,0.1-0.4,0.1c-0.5,0.1-0.9,0.2-1.4,0.3c-0.5,0.1-0.9,0.1-1.4,0.2
+		c0,1-0.1,2-0.2,2.9c-0.1,1-0.1,1.9-0.2,2.9c0.8,0.2,1.5,0.3,2,0.1c0.6-0.2,1.2-0.5,1.9-1c0.2-0.1,0.2-0.3,0.2-0.5
+		c0-0.2,0-0.5,0-0.7c0-0.2,0.1-0.5,0.2-0.6c0.1-0.2,0.3-0.3,0.7-0.4c0.4,0,0.6,0.1,0.7,0.4c0.1,0.3,0.2,0.7,0.2,1.1
+		c0,0.5,0,0.9-0.1,1.4c-0.1,0.5-0.1,0.9,0,1.2c-0.5,0-1,0-1.4,0c-0.4,0-0.8,0-1.2,0.1c-0.4,0-0.8,0-1.2,0.1c-0.4,0-0.9,0-1.3,0
+		c-0.9,0-1.7,0-2.5,0.1c-0.7,0.1-1.6,0.1-2.4,0.1c-0.2-0.2-0.2-0.4-0.2-0.7c0-0.2,0.1-0.5,0.3-0.6c0.2-0.2,0.3-0.3,0.6-0.3
+		c0.2-0.1,0.5,0,0.7,0.1c0.1-2.1,0.2-4.3,0.1-6.5C116.3,5.5,116.3,3.4,116.5,1.2z"/>
+</g>
+</svg>
+
+            </a>
+        </p>
+	</footer>
+
+	<script>
+		var algolia_app_id      = 'FU55RWGNDN';
+		var algolia_search_key  = 'c41c5de31ca55044dbb0bde815d35121';
+				var version             = '5.5';
+			</script>
+
+	<script id="search_suggestion_template" type="text/template">
+	<div class="autocomplete-wrapper">
+		{{#_highlightResult.h1}}
+		<div class="h1">
+			{{{ _highlightResult.h1.value }}}
+		</div>
+		{{/_highlightResult.h1}}
+
+		<div class="sub-section">
+			{{#_highlightResult.h2}}
+			<div class="h2">
+				<span class="hash">#</span> {{{ _highlightResult.h2.value }}}
+			</div>
+			{{/_highlightResult.h2}}
+
+			{{#_highlightResult.h3}}
+			<div class="h3">
+				> {{{ _highlightResult.h3.value }}}
+			</div>
+			{{/_highlightResult.h3}}
+
+			{{#_highlightResult.h4}}
+			<div class="h4">
+				> {{{ _highlightResult.h4.value }}}
+			</div>
+			{{/_highlightResult.h4}}
+		</div>
+
+		{{#_highlightResult.content}}
+		<div class="content">
+			{{{ _highlightResult.content.value }}}
+		</div>
+		{{/_highlightResult.content}}
+	</div>
+</script>
+
+<script id="search_empty_template" type="text/template">
+	<div class="autocomplete-wrapper empty">
+		<div class="h2">We didn't find any result for "{{query}}". Sorry!</div>
+	</div>
+</script>
+
+<script id="search_footer_template" type="text/template">
+	<div class="footer">
+		<a target="_blank" href="https://www.algolia.com/referrals/5a08e6a4/join">
+			<img width="50" src="/docs/assets/img/algolia-logo.png">
+			<div class="powered">powered by</div>
+			<div style="clear: both"></div>
+		</a>
+	</div>
+</script>
+
+	<script src="../../build/assets/js/laravel-be3cb5d7de.js"></script>
+	<script src="../../assets/js/viewport-units-buggyfill.js"></script>
+
+	<script>window.viewportUnitsBuggyfill.init();</script>
+    <script>
+          ga('create', 'UA-53903425-7', 'auto');
+          ga('send', 'pageview');
+    </script>
+</body>
+</html>

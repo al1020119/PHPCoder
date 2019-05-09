@@ -1,0 +1,1524 @@
+<!doctype html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<title>Validation | Laravel 5.3 中文文档
+</title>
+	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+	<meta name="author" content="Taylor Otwell">
+	<meta name="description" content="Validation,简介,验证快速上手,定义路由,创建控制器,编写验证逻辑,显示验证错误,表单请求验证,创建表单请求,授权表单请求,自定义错误格式,自定义错误信息,手动创建验证程序,自动重定向,命名错误包,验证后钩子,处理错...
+">
+	<meta name="keywords" content="laravel,laravel中国,laravel中文,laravel框架中文,laravel文档,laravel框架中国,laravel中文文档">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+			<link rel="canonical" href="../5.5/validation.html" />
+		<!--[if lte IE 9]>
+		<script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+	<![endif]-->
+	<link rel="stylesheet" href="../../build/assets/css/laravel-4bbf92d154.css">
+	<link rel="apple-touch-icon" href="../../favicon.png.jpeg">
+    <style>
+        .list-group-item img.media-object {
+            width: 20px;
+            border-radius: 2px;
+            margin-right: 4px;
+            display: inline-block;
+        }
+    </style>
+</head>
+<body class="docs language-php">
+
+	<span class="overlay"></span>
+
+	<nav class="main">
+		<a href="../../index.html" class="brand nav-block">
+			<svg version="1.1"
+	 xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:a="http://ns.adobe.com/AdobeSVGViewerExtensions/3.0/"
+	 x="0px" y="0px" width="84.1px" height="57.6px" viewBox="0 0 84.1 57.6" enable-background="new 0 0 84.1 57.6"
+	 xml:space="preserve">
+<defs>
+</defs>
+<path fill="#FB503B" d="M83.8,26.9c-0.6-0.6-8.3-10.3-9.6-11.9c-1.4-1.6-2-1.3-2.9-1.2s-10.6,1.8-11.7,1.9c-1.1,0.2-1.8,0.6-1.1,1.6
+	c0.6,0.9,7,9.9,8.4,12l-25.5,6.1L21.2,1.5c-0.8-1.2-1-1.6-2.8-1.5C16.6,0.1,2.5,1.3,1.5,1.3c-1,0.1-2.1,0.5-1.1,2.9
+	c1,2.4,17,36.8,17.4,37.8c0.4,1,1.6,2.6,4.3,2c2.8-0.7,12.4-3.2,17.7-4.6c2.8,5,8.4,15.2,9.5,16.7c1.4,2,2.4,1.6,4.5,1
+	c1.7-0.5,26.2-9.3,27.3-9.8c1.1-0.5,1.8-0.8,1-1.9c-0.6-0.8-7-9.5-10.4-14c2.3-0.6,10.6-2.8,11.5-3.1C84.2,28,84.4,27.5,83.8,26.9z
+	 M37.5,36.4c-0.3,0.1-14.6,3.5-15.3,3.7c-0.8,0.2-0.8,0.1-0.8-0.2C21.2,39.6,4.4,4.8,4.1,4.4c-0.2-0.4-0.2-0.8,0-0.8
+	c0.2,0,13.5-1.2,13.9-1.2c0.5,0,0.4,0.1,0.6,0.4c0,0,18.7,32.3,19,32.8C38,36.1,37.8,36.3,37.5,36.4z M77.7,43.9
+	c0.2,0.4,0.5,0.6-0.3,0.8c-0.7,0.3-24.1,8.2-24.6,8.4c-0.5,0.2-0.8,0.3-1.4-0.6s-8.2-14-8.2-14L68.1,32c0.6-0.2,0.8-0.3,1.2,0.3
+	C69.7,33,77.5,43.6,77.7,43.9z M79.3,26.3c-0.6,0.1-9.7,2.4-9.7,2.4l-7.5-10.2c-0.2-0.3-0.4-0.6,0.1-0.7c0.5-0.1,9-1.6,9.4-1.7
+	c0.4-0.1,0.7-0.2,1.2,0.5c0.5,0.6,6.9,8.8,7.2,9.1C80.3,26,79.9,26.2,79.3,26.3z"/>
+</svg>
+
+			<span>Laravel</span>
+		</a>
+
+        <div class="search nav-block">
+            <svg version="1.1"
+	 xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:a="http://ns.adobe.com/AdobeSVGViewerExtensions/3.0/"
+	 x="0px" y="0px" width="16px" height="16px" viewBox="0 0 16 16" enable-background="new 0 0 16 16" xml:space="preserve">
+<defs>
+</defs>
+<g>
+	<g>
+		<path fill="#A1A1A1" d="M5.8,11.7c-1.6,0-3-0.6-4.1-1.7S0,7.4,0,5.8s0.6-3,1.7-4.1C2.8,0.6,4.3,0,5.8,0s3,0.6,4.1,1.7
+			c2.3,2.3,2.3,6,0,8.3C8.9,11.1,7.4,11.7,5.8,11.7z M5.8,1C4.5,1,3.3,1.5,2.4,2.4C1.5,3.3,1,4.5,1,5.8s0.5,2.5,1.4,3.4
+			c0.9,0.9,2.1,1.4,3.4,1.4s2.5-0.5,3.4-1.4c1.9-1.9,1.9-5,0-6.9C8.4,1.5,7.1,1,5.8,1z"/>
+	</g>
+	<g>
+		<path fill="#A1A1A1" d="M15.5,16c-0.1,0-0.3,0-0.3-0.1L9.3,10c-0.2-0.2-0.2-0.5,0-0.7s0.5-0.2,0.7,0l5.9,5.9
+			c0.2,0.2,0.2,0.5,0,0.7C15.8,16,15.6,16,15.5,16z"/>
+	</g>
+</g>
+</svg>
+
+            <input placeholder="搜索文档" type="text" v-model="search" id="search-input" v-on:blur="reset" />
+        </div>
+
+		<ul class="main-nav" v-if="! search">
+			<li class="nav-docs"><a href="../5.4.html">文档</a></li>
+<li ><a href="https://laravel-china.org/news" class="no-pjax">Laravel 资讯</a></li>
+<li class="dropdown"><a href="https://laravel-china.org/">Laravel China 社区</a></li>
+<li class="nav-forge"><a href="https://laravel-china.org/categories/1">酷工作</a></li>
+<li class="nav-docs"><a href="http://lumen.laravel-china.org">Lumen</a></li>
+<li class="nav-forge"><a href="https://cs.laravel-china.org/">速查表</a></li>
+<li class="nav-forge"><a href="https://fsdhub.com/books/laravel-essential-training-5.5">《Laravel 入门教程》</a></li>
+		</ul>
+
+        			<div class="switcher">
+	<div class="dropdown">
+		<button class="btn dropdown-toggle btn-inverted" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-expanded="true">
+			<!--<span class="faint">v</span> -->
+			5.3
+			<span class="caret"></span>
+		</button>
+		<ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu1">
+							<li role="presentation">
+					<a role="menuitem" tabindex="-1" href="../5.5/validation.html">5.5</a>
+				</li>
+							<li role="presentation">
+					<a role="menuitem" tabindex="-1" href="../5.4/validation.html">5.4</a>
+				</li>
+							<li role="presentation">
+					<a role="menuitem" tabindex="-1" href="validation.html">5.3</a>
+				</li>
+							<li role="presentation">
+					<a role="menuitem" tabindex="-1" href="../5.2/validation.html">5.2</a>
+				</li>
+							<li role="presentation">
+					<a role="menuitem" tabindex="-1" href="../5.1/validation.html">5.1</a>
+				</li>
+					</ul>
+	</div>
+</div>
+		
+        <div class="responsive-sidebar-nav">
+			<a href="validation.html#" class="toggle-slide menu-link btn">&#9776;</a>
+		</div>
+	</nav>
+
+	<nav id="slide-menu" class="slide-menu" role="navigation">
+
+	<div class="brand">
+		<a href="../../index.html">
+			<img src="../../assets/img/laravel-logo-white.png" height="50">
+		</a>
+	</div>
+
+	<ul class="slide-main-nav">
+		<li><a href="../../index.html">Home</a></li>
+		<li class="nav-docs"><a href="../5.4.html">文档</a></li>
+<li ><a href="https://laravel-china.org/news" class="no-pjax">Laravel 资讯</a></li>
+<li class="dropdown"><a href="https://laravel-china.org/">Laravel China 社区</a></li>
+<li class="nav-forge"><a href="https://laravel-china.org/categories/1">酷工作</a></li>
+<li class="nav-docs"><a href="http://lumen.laravel-china.org">Lumen</a></li>
+<li class="nav-forge"><a href="https://cs.laravel-china.org/">速查表</a></li>
+<li class="nav-forge"><a href="https://fsdhub.com/books/laravel-essential-training-5.5">《Laravel 入门教程》</a></li>
+	</ul>
+
+	<div class="slide-docs-nav">
+		<h2>Documentation</h2>
+		<ul>
+<li>
+<h2>前言</h2>
+<ul>
+<li><a href="about.html">翻译说明</a></li>
+<li><a href="releases.html">发行说明</a></li>
+<li><a href="upgrade.html">升级说明</a></li>
+<li><a href="contributions.html">贡献导引</a></li>
+<li><a href="../../api/5.3/index.html">API 文档</a></li>
+</ul>
+</li>
+<li>
+<h2>入门指南</h2>
+<ul>
+<li><a href="installation.html">安装</a></li>
+<li><a href="configuration.html">配置信息</a></li>
+<li><a href="structure.html">文件夹结构</a></li>
+<li><a href="errors.html">错误与日志</a></li>
+</ul>
+</li>
+<li>
+<h2>开发环境部署</h2>
+<ul>
+<li><a href="homestead.html">Homestead</a></li>
+<li><a href="valet.html">Valet</a></li>
+</ul>
+</li>
+<li>
+<h2>核心概念</h2>
+<ul>
+<li><a href="container.html">服务容器</a></li>
+<li><a href="providers.html">服务提供者</a></li>
+<li><a href="facades.html">Facades</a></li>
+<li><a href="contracts.html">Contracts</a></li>
+</ul>
+</li>
+<li>
+<h2>HTTP 层</h2>
+<ul>
+<li><a href="routing.html">路由</a></li>
+<li><a href="middleware.html">中间件</a></li>
+<li><a href="csrf.html">CSRF 保护</a></li>
+<li><a href="controllers.html">控制器</a></li>
+<li><a href="requests.html">请求</a></li>
+<li><a href="responses.html">响应</a></li>
+<li><a href="session.html">Session</a></li>
+<li><a href="validation.html">表单验证</a></li>
+</ul>
+</li>
+<li>
+<h2>视图和模板</h2>
+<ul>
+<li><a href="views.html">视图</a></li>
+<li><a href="blade.html">Blade 模板</a></li>
+<li><a href="localization.html">本地化</a></li>
+</ul>
+</li>
+<li>
+<h2>JavaScript 与 CSS</h2>
+<ul>
+<li><a href="frontend.html">入门指南</a></li>
+<li><a href="elixir.html">Elixir</a></li>
+</ul>
+</li>
+<li>
+<h2>安全</h2>
+<ul>
+<li><a href="authentication.html">用户认证</a></li>
+<li><a href="authorization.html">用户授权</a></li>
+<li><a href="passwords.html">重置密码</a></li>
+<li><a href="passport.html">API 认证</a></li>
+<li><a href="encryption.html">加密解密</a></li>
+<li><a href="hashing.html">哈希</a></li>
+</ul>
+</li>
+<li>
+<h2>综合话题</h2>
+<ul>
+<li><a href="broadcasting.html">广播系统</a></li>
+<li><a href="cache.html">缓存系统</a></li>
+<li><a href="events.html">事件系统</a></li>
+<li><a href="filesystem.html">文件存储</a></li>
+<li><a href="mail.html">邮件发送</a></li>
+<li><a href="notifications.html">消息通知</a></li>
+<li><a href="queues.html">队列</a></li>
+</ul>
+</li>
+<li>
+<h2>数据库</h2>
+<ul>
+<li><a href="database.html">快速入门</a></li>
+<li><a href="queries.html">查询构造器</a></li>
+<li><a href="pagination.html">分页</a></li>
+<li><a href="migrations.html">数据库迁移</a></li>
+<li><a href="seeding.html">数据填充</a></li>
+<li><a href="redis.html">Redis</a></li>
+</ul>
+</li>
+<li>
+<h2>Eloquent ORM</h2>
+<ul>
+<li><a href="eloquent.html">快速入门</a></li>
+<li><a href="eloquent-relationships.html">模型关联</a></li>
+<li><a href="eloquent-collections.html">Eloquent 集合</a></li>
+<li><a href="eloquent-mutators.html">修改器</a></li>
+<li><a href="eloquent-serialization.html">序列化</a></li>
+</ul>
+</li>
+<li>
+<h2>Artisan 控制台</h2>
+<ul>
+<li><a href="artisan.html">Artisan 命令行</a></li>
+<li><a href="scheduling.html">任务调度</a></li>
+</ul>
+</li>
+<li>
+<h2>测试</h2>
+<ul>
+<li><a href="testing.html">快速入门</a></li>
+<li><a href="application-testing.html">应用程序测试</a></li>
+<li><a href="database-testing.html">数据库</a></li>
+<li><a href="mocking.html">模拟器</a></li>
+</ul>
+</li>
+<li>
+<h2>官方扩展包</h2>
+<ul>
+<li><a href="billing.html">Cashier 交易工具包</a></li>
+<li><a href="envoy.html">Envoy 部署工具</a></li>
+<li><a href="passport.html">Passport OAuth 认证</a></li>
+<li><a href="scout.html">Scout 全文搜索</a></li>
+<li><a href="https://github.com/laravel/socialite">Socialite 社会化登录</a></li>
+</ul>
+</li>
+<li>
+<h2>附录</h2>
+<ul>
+<li><a href="collections.html">集合</a></li>
+<li><a href="helpers.html">辅助函数</a></li>
+<li><a href="packages.html">扩展包开发</a></li>
+</ul>
+</li>
+</ul>
+	</div>
+
+</nav>
+
+<div class="docs-wrapper container">
+
+	<section class="sidebar">
+
+            <div class="header">
+              <a type="button" class="btn btn-primary btn-inverted btn-lg btn-block turnofflight"><i class="fa fa-lightbulb-o"></i> 夜间模式 </a>
+              <br>
+              <div class="versions text-center ">
+                <a class="doc-btn btn-inverted " href="../5.5.html" title="Laravel 5.5 中文文档">C5.5</a>
+                <a class="doc-btn btn-inverted " href="../5.4.html" title="Laravel 5.4 中文文档">C5.4</a>
+                <a class="doc-btn btn-inverted " href="../5.1.html" title="Laravel 5.1 中文文档">C5.1</a>
+              </div>
+            </div>
+
+            <a href="https://laravel-china.org/topics/3383" target="_blank" rel="nofollow" title="" style="display: block;margin-bottom: 23px;">
+                <img src="https://dn-phphub.qbox.me/uploads/images/201612/10/1/k7wwMpJduq.jpg" style="width: 100%;border: 1px solid #d8d3d3;box-shadow: 0 0 30px #d4d4d4;-moz-box-shadow: 0 0 30px #ccc;-webkit-box-shadow: 0 0 30px #d4d4d4;margin-bottom: 30px;margin-top: 10px;border-radius: 4px;">
+            </a>
+
+            <small><a href="validation.html#" id="doc-expand" style="font-size: 9px; color: #525252;">▶</a></small>
+
+		<ul>
+<li>
+<h2>前言</h2>
+<ul>
+<li><a href="about.html">翻译说明</a></li>
+<li><a href="releases.html">发行说明</a></li>
+<li><a href="upgrade.html">升级说明</a></li>
+<li><a href="contributions.html">贡献导引</a></li>
+<li><a href="../../api/5.3/index.html">API 文档</a></li>
+</ul>
+</li>
+<li>
+<h2>入门指南</h2>
+<ul>
+<li><a href="installation.html">安装</a></li>
+<li><a href="configuration.html">配置信息</a></li>
+<li><a href="structure.html">文件夹结构</a></li>
+<li><a href="errors.html">错误与日志</a></li>
+</ul>
+</li>
+<li>
+<h2>开发环境部署</h2>
+<ul>
+<li><a href="homestead.html">Homestead</a></li>
+<li><a href="valet.html">Valet</a></li>
+</ul>
+</li>
+<li>
+<h2>核心概念</h2>
+<ul>
+<li><a href="container.html">服务容器</a></li>
+<li><a href="providers.html">服务提供者</a></li>
+<li><a href="facades.html">Facades</a></li>
+<li><a href="contracts.html">Contracts</a></li>
+</ul>
+</li>
+<li>
+<h2>HTTP 层</h2>
+<ul>
+<li><a href="routing.html">路由</a></li>
+<li><a href="middleware.html">中间件</a></li>
+<li><a href="csrf.html">CSRF 保护</a></li>
+<li><a href="controllers.html">控制器</a></li>
+<li><a href="requests.html">请求</a></li>
+<li><a href="responses.html">响应</a></li>
+<li><a href="session.html">Session</a></li>
+<li><a href="validation.html">表单验证</a></li>
+</ul>
+</li>
+<li>
+<h2>视图和模板</h2>
+<ul>
+<li><a href="views.html">视图</a></li>
+<li><a href="blade.html">Blade 模板</a></li>
+<li><a href="localization.html">本地化</a></li>
+</ul>
+</li>
+<li>
+<h2>JavaScript 与 CSS</h2>
+<ul>
+<li><a href="frontend.html">入门指南</a></li>
+<li><a href="elixir.html">Elixir</a></li>
+</ul>
+</li>
+<li>
+<h2>安全</h2>
+<ul>
+<li><a href="authentication.html">用户认证</a></li>
+<li><a href="authorization.html">用户授权</a></li>
+<li><a href="passwords.html">重置密码</a></li>
+<li><a href="passport.html">API 认证</a></li>
+<li><a href="encryption.html">加密解密</a></li>
+<li><a href="hashing.html">哈希</a></li>
+</ul>
+</li>
+<li>
+<h2>综合话题</h2>
+<ul>
+<li><a href="broadcasting.html">广播系统</a></li>
+<li><a href="cache.html">缓存系统</a></li>
+<li><a href="events.html">事件系统</a></li>
+<li><a href="filesystem.html">文件存储</a></li>
+<li><a href="mail.html">邮件发送</a></li>
+<li><a href="notifications.html">消息通知</a></li>
+<li><a href="queues.html">队列</a></li>
+</ul>
+</li>
+<li>
+<h2>数据库</h2>
+<ul>
+<li><a href="database.html">快速入门</a></li>
+<li><a href="queries.html">查询构造器</a></li>
+<li><a href="pagination.html">分页</a></li>
+<li><a href="migrations.html">数据库迁移</a></li>
+<li><a href="seeding.html">数据填充</a></li>
+<li><a href="redis.html">Redis</a></li>
+</ul>
+</li>
+<li>
+<h2>Eloquent ORM</h2>
+<ul>
+<li><a href="eloquent.html">快速入门</a></li>
+<li><a href="eloquent-relationships.html">模型关联</a></li>
+<li><a href="eloquent-collections.html">Eloquent 集合</a></li>
+<li><a href="eloquent-mutators.html">修改器</a></li>
+<li><a href="eloquent-serialization.html">序列化</a></li>
+</ul>
+</li>
+<li>
+<h2>Artisan 控制台</h2>
+<ul>
+<li><a href="artisan.html">Artisan 命令行</a></li>
+<li><a href="scheduling.html">任务调度</a></li>
+</ul>
+</li>
+<li>
+<h2>测试</h2>
+<ul>
+<li><a href="testing.html">快速入门</a></li>
+<li><a href="application-testing.html">应用程序测试</a></li>
+<li><a href="database-testing.html">数据库</a></li>
+<li><a href="mocking.html">模拟器</a></li>
+</ul>
+</li>
+<li>
+<h2>官方扩展包</h2>
+<ul>
+<li><a href="billing.html">Cashier 交易工具包</a></li>
+<li><a href="envoy.html">Envoy 部署工具</a></li>
+<li><a href="passport.html">Passport OAuth 认证</a></li>
+<li><a href="scout.html">Scout 全文搜索</a></li>
+<li><a href="https://github.com/laravel/socialite">Socialite 社会化登录</a></li>
+</ul>
+</li>
+<li>
+<h2>附录</h2>
+<ul>
+<li><a href="collections.html">集合</a></li>
+<li><a href="helpers.html">辅助函数</a></li>
+<li><a href="packages.html">扩展包开发</a></li>
+</ul>
+</li>
+</ul>
+
+		<hr>
+            <ul>
+              <li>社交账号</li>
+                <ul class="social-account">
+                  <li><a href="http://weibo.com/1837553744/profile?topnav=1&wvr=6&is_all=1">Summer 的微博</a></li>
+                  <li>新手 QQ 群：282196078</li>
+                </ul>
+
+            </ul>
+
+            <ul>
+              <li>
+              微信订阅号
+                <ul>
+                  <li>
+<img class="image-border popover-with-html" data-content="" src="https://dn-phphub.qbox.me/uploads/images/201708/06/1/4zgVR8dNCt.png" style="width: 148px;height: 148px;border:1px solid #ccc;padding:2px;border-radius:3px;margin-top:5px;" data-original-title="" title="">
+                  </li>
+                </ul>
+                </li>
+            </ul>
+
+            <ul>
+              <li>推荐资源
+              <ul class="list list-group resource-links">
+                    <li class="list-group-item ">
+                <a href="../../index.html" class="no-pjax" title="Laravel 中文文档">
+                    <img class="media-object inline-block " src="https://dn-phphub.qbox.me/uploads/banners/ql9XtosRhTe4v8HVC3TV.jpg">
+                    Laravel 中文文档
+                </a>
+            </li>
+                    <li class="list-group-item ">
+                <a href="https://lumen.laravel-china.org" class="no-pjax" title="Lumen 中文文档">
+                    <img class="media-object inline-block " src="https://dn-phphub.qbox.me/uploads/banners/bcMFkfsJZpetLgKFwWqY.jpg">
+                    Lumen 中文文档
+                </a>
+            </li>
+                    <li class="list-group-item ">
+                <a href="https://cs.laravel-china.org/" class="no-pjax" title="Laravel 速查表">
+                    <img class="media-object inline-block " src="https://dn-phphub.qbox.me/uploads/banners/cV55gsrH70qz6VdKr502.jpg">
+                    Laravel 速查表
+                </a>
+            </li>
+                    <li class="list-group-item ">
+                <a href="http://yousails.mikecrm.com/4Dh5uWU" class="no-pjax" title="Laravel 软件外包服务">
+                    <img class="media-object inline-block " src="https://dn-phphub.qbox.me/uploads/banners/v89tIQ6vjceA6g7JmrQB.png">
+                    Laravel 软件外包
+                </a>
+            </li>
+                    <li class="list-group-item ">
+                <a href="https://laravel-china.org/topics/3626" class="no-pjax" title="Laravel 远程工作 ">
+                    <img class="media-object inline-block " src="https://dn-phphub.qbox.me/uploads/banners/Xlq6s7wLxvX8FlTP4qZe.png">
+                    Laravel 远程工作
+                </a>
+            </li>
+                    <li class="list-group-item ">
+                <a href="https://laravel-china.github.io/php-the-right-way/" class="no-pjax" title="PHP 之道 - PHPer 必读">
+                    <img class="media-object inline-block " src="https://dn-phphub.qbox.me/uploads/banners/vA50AYuscu2RCMowq7ee.png">
+                    PHP 之道
+                </a>
+            </li>
+                    <li class="list-group-item ">
+                <a href="https://laravel-china.org/composer" class="no-pjax" title="Composer 中文全量镜像">
+                    <img class="media-object inline-block " src="https://dn-phphub.qbox.me/uploads/banners/KltcLb6leMa12dvTAxD7.png">
+                    Composer 镜像
+                </a>
+            </li>
+            </ul>
+              </li>
+            </ul>
+
+	</section>
+
+	
+
+	<article>
+
+		<div class="alert alert-warning" role="alert">
+			一小时同步一次，更多信息请查阅 <a href="https://laravel-china.org/topics/2095">文档导读</a>。
+			发现瑕疵？你也可以
+				<a href="https://github.com/laravel-china/laravel-docs/edit/5.3/validation.md"><i class="fa fa-pencil-square-o"></i> 改进本文</a>
+			。<a href="https://laravel-china.org/topics/4026" target="_blank"><i class="fa fa-cloud-download" aria-hidden="true"></i> 离线版本下载</a>
+		</div>
+
+		<div class="main-content">
+			<h1>Validation</h1>
+<ul>
+<li><a href="validation.html#introduction">简介</a></li>
+<li><a href="validation.html#validation-quickstart">验证快速上手</a>
+<ul>
+<li><a href="validation.html#quick-defining-the-routes">定义路由</a></li>
+<li><a href="validation.html#quick-creating-the-controller">创建控制器</a></li>
+<li><a href="validation.html#quick-writing-the-validation-logic">编写验证逻辑</a></li>
+<li><a href="validation.html#quick-displaying-the-validation-errors">显示验证错误</a></li>
+</ul></li>
+<li><a href="validation.html#form-request-validation">表单请求验证</a>
+<ul>
+<li><a href="validation.html#creating-form-requests">创建表单请求</a></li>
+<li><a href="validation.html#authorizing-form-requests">授权表单请求</a></li>
+<li><a href="validation.html#customizing-the-error-format">自定义错误格式</a></li>
+<li><a href="validation.html#customizing-the-error-messages">自定义错误信息</a></li>
+</ul></li>
+<li><a href="validation.html#manually-creating-validators">手动创建验证程序</a>
+<ul>
+<li><a href="validation.html#automatic-redirection">自动重定向</a></li>
+<li><a href="validation.html#named-error-bags">命名错误包</a></li>
+<li><a href="validation.html#after-validation-hook">验证后钩子</a></li>
+</ul></li>
+<li><a href="validation.html#working-with-error-messages">处理错误信息</a>
+<ul>
+<li><a href="validation.html#custom-error-messages">自定义错误消息</a></li>
+</ul></li>
+<li><a href="validation.html#available-validation-rules">可用的验证规则</a></li>
+<li><a href="validation.html#conditionally-adding-rules">按条件增加规则</a></li>
+<li><a href="validation.html#validating-arrays">验证数组</a></li>
+<li><a href="validation.html#custom-validation-rules">自定义验证规则</a></li>
+</ul>
+<p><a name="introduction"></a></p>
+<h2>简介</h2>
+<p>Laravel 提供了多种不同的处理方法来对应用程序传入的数据进行验证。默认情况下，Laravel 的基底控制器类使用了 <code>ValidatesRequests</code> trait，其提供了一种便利的方法来使用各种强大的验证规则验证传入的 HTTP 请求。</p>
+<p><a name="validation-quickstart"></a></p>
+<h2>验证快速上手</h2>
+<p>要了解 Laravel 相关的强大验证特色，先让我们来看看一个完整的表单验证示例以及返回错误消息给用户。</p>
+<p><a name="quick-defining-the-routes"></a></p>
+<h3>定义路由</h3>
+<p>首先，我们假设在 <code>routes/web.php</code> 文件中定义了以下路由：</p>
+<pre><code>// 显示一个创建博客文章的表单...
+Route::get('post/create', 'PostController@create');
+
+// 保存一个新的博客文章...
+Route::post('post', 'PostController@store');</code></pre>
+<p><code>GET</code> 路由会显示一个用于创建新博客文章的表单，<code>POST</code> 路由则会将新的博客文章保存到数据库。</p>
+<p><a name="quick-creating-the-controller"></a></p>
+<h3>创建控制器</h3>
+<p>接下来，让我们来看下操作这些路由的控制器。我们先让 <code>store</code> 方法空着：</p>
+<pre><code>&lt;?php
+
+namespace App\Http\Controllers;
+
+use Illuminate\Http\Request;
+use App\Http\Controllers\Controller;
+
+class PostController extends Controller
+{
+    /**
+     * 显示创建博客文章的表单。
+     *
+     * @return Response
+     */
+    public function create()
+    {
+        return view('post.create');
+    }
+
+    /**
+     * 保存一个新的博客文章。
+     *
+     * @param  Request  $request
+     * @return Response
+     */
+    public function store(Request $request)
+    {
+        // 验证以及保存博客发表文章...
+    }
+}</code></pre>
+<p><a name="quick-writing-the-validation-logic"></a></p>
+<h3>编写验证逻辑</h3>
+<p>现在我们准备开始填写我们的 <code>store</code> 逻辑方法来验证我们博客发布的新文章。检查应用程序的基底控制器 (<code>App\Http\Controllers\Controller</code>) 类你会看到这个类使用了 <code>ValidatesRequests</code> trait。这个 trait 在你所有的控制器里提供了方便的 <code>validate</code> 验证方法。</p>
+<p><code>validate</code> 方法会接收 HTTP 传入的请求以及验证的规则。如果验证通过，你的代码就可以正常的运行。若验证失败，则会抛出异常错误消息并自动将其返回给用户。在一般的 HTTP 请求下，都会生成一个重定向响应，对于 AJAX 请求则会发送 JSON 响应。</p>
+<p>让我们接着回到 <code>store</code> 方法来深入理解 <code>validate</code> 方法：</p>
+<pre><code>/**
+ * 保存一篇新的博客文章。
+ *
+ * @param  Request  $request
+ * @return Response
+ */
+public function store(Request $request)
+{
+    $this-&gt;validate($request, [
+        'title' =&gt; 'required|unique:posts|max:255',
+        'body' =&gt; 'required',
+    ]);
+
+    // The blog post is valid, store in database...
+}</code></pre>
+<p>如你所见，我们将本次 HTTP 请求及所需的验证规则传递至 <code>validate</code> 方法中。另外再提醒一次，如果验证失败，将会自动生成一个对应的响应。如果验证通过，那我们的控制器将会继续正常运行。</p>
+<h4>在第一次验证失败后停止</h4>
+<p>有的时候，你希望在某个属性第一次验证失败后停止运行验证规则。为了达到这个目的，附加 <code>bail</code> 规则到该属性：</p>
+<pre><code>$this-&gt;validate($request, [
+    'title' =&gt; 'bail|required|unique:posts|max:255',
+    'body' =&gt; 'required',
+]);</code></pre>
+<p>在这个例子中，如果 <code>title</code> 属性中的 <code>required</code> 规则没有得到满足，那么将不会再去检查   <code>unique</code> 规则。规则的检验顺序根据规则的添加顺序执行。</p>
+<h4>嵌套属性的注解</h4>
+<p>如果你的 HTTP 请求包含一个 「嵌套的」 参数，你可以在验证规则中通过 「点」 语法来指定这些参数。</p>
+<pre><code>$this-&gt;validate($request, [
+    'title' =&gt; 'required|unique:posts|max:255',
+    'author.name' =&gt; 'required',
+    'author.description' =&gt; 'required',
+]);</code></pre>
+<p><a name="quick-displaying-the-validation-errors"></a></p>
+<h3>显示验证错误</h3>
+<p>如果本次请求的参数未通过我们指定的验证规则呢？正如前面所提到的，Laravel 会自动把用户重定向到先前的位置。另外，所有的验证错误会被自动 <a href="session.html#flash-data">闪存至 session</a>。</p>
+<p>再者，请注意在 <code>GET</code> 路由中，我们无需显式的将错误信息和视图绑定起来。这是因为 Lavarel 会检查在 session 数据中的错误信息，然后如果对应的视图存在的话，自动将它们绑定起来。变量 <code>$errors</code> 会成为 <code>Illuminate\Support\MessageBag</code> 的一个实例对象。要获取关于这个对象的更多信息， <a href="validation.html#working-with-error-messages">请查阅这个文档</a> 。</p>
+<blockquote>
+<p>{tip} <code>$errors</code> 变量被 <code>Illuminate\View\Middleware\ShareErrorsFromSession</code> 中间件绑定到视图，该中间件由 <code>web</code> 中间件组提供。<strong>当这个中间件被应用后，在你的视图中就可以获取到 <code>$error</code> 变量</strong>，使得你方便的假设 <code>$errors</code> 变量总是已经被定义好并且可以安全的使用。</p>
+</blockquote>
+<p>所以，在我们的例子中，当验证失败的时候，用户将会被重定向到 <code>create</code> 方法，让我们在视图中显示错误信息：</p>
+<pre><code>&lt;!-- /resources/views/post/create.blade.php --&gt;
+
+&lt;h1&gt;创建文章&lt;/h1&gt;
+
+@if (count($errors) &gt; 0)
+    &lt;div class="alert alert-danger"&gt;
+        &lt;ul&gt;
+            @foreach ($errors-&gt;all() as $error)
+                &lt;li&gt;{{ $error }}&lt;/li&gt;
+            @endforeach
+        &lt;/ul&gt;
+    &lt;/div&gt;
+@endif
+
+&lt;!-- 创建文章的表单 --&gt;</code></pre>
+<p><a name="quick-customizing-the-flashed-error-format"></a></p>
+<h4>自定义闪存的错误消息格式</h4>
+<p>当验证失败时，如果你想要在闪存上自定义验证的错误格式，则需在控制器中重写 <code>formatValidationErrors</code>。别忘了将 <code>Illuminate\Contracts\Validation\Validator</code> 类引入到文件上方：</p>
+<pre><code>&lt;?php
+
+namespace App\Http\Controllers;
+
+use Illuminate\Foundation\Bus\DispatchesJobs;
+use Illuminate\Contracts\Validation\Validator;
+use Illuminate\Routing\Controller as BaseController;
+use Illuminate\Foundation\Validation\ValidatesRequests;
+
+abstract class Controller extends BaseController
+{
+    use DispatchesJobs, ValidatesRequests;
+
+    /**
+     * {@inheritdoc}
+     */
+    protected function formatValidationErrors(Validator $validator)
+    {
+        return $validator-&gt;errors()-&gt;all();
+    }
+}</code></pre>
+<p><a name="quick-ajax-requests-and-validation"></a></p>
+<h4>AJAX 请求和验证</h4>
+<p>在这个例子中，我们使用一种传统的方式来将数据发送到应用程序上。当我们在 AJAX 的请求中使用 <code>validate</code> 方法时，Laravel 并不会生成一个重定向响应，而是会生成一个包含所有错误验证的 JSON 响应。这个 JSON 响应会发送一个 422 HTTP 状态码。</p>
+<p><a name="form-request-validation"></a></p>
+<h2>表单请求验证</h2>
+<p><a name="creating-form-requests"></a></p>
+<h3>创建表单请求</h3>
+<p>在更复杂的验证情境中，你可能会想要创建一个「表单请求（ form request ）」。表单请求是一个自定义的请求类，里面包含着验证逻辑。要创建一个表单请求类，可使用 Artisan 命令行命令 <code>make:request</code> ：</p>
+<pre><code>php artisan make:request StoreBlogPost</code></pre>
+<p>新生成的类保存在 <code>app/Http/Requests</code> 目录下。如果这个目录不存在，那么将会在你运行 <code>make:request</code> 命令时创建出来。让我们添加一些验证规则到 <code>rules</code> 方法中：</p>
+<pre><code>/**
+ *  获取适用于请求的验证规则。
+ *
+ * @return array
+ */
+public function rules()
+{
+    return [
+        'title' =&gt; 'required|unique:posts|max:255',
+        'body' =&gt; 'required',
+    ];
+}</code></pre>
+<p>怎样才能较好的运行验证规则呢？你所需要做的就是在控制器方法中利用类型提示传入请求。传入的请求会在控制器方法被调用前进行验证，意思就是说你不会因为验证逻辑而把控制器弄得一团糟：</p>
+<pre><code>/**
+ * 保存传入的博客文章。
+ *
+ * @param  StoreBlogPost  $request
+ * @return Response
+ */
+public function store(StoreBlogPost $request)
+{
+    // 传入的请求是有效的...
+}</code></pre>
+<p>如果验证失败，就会生成一个重定向响应把用户返回到先前的位置。这些错误会被闪存到 session，所以这些错误都可以被显示。如果进来的是 AJAX 请求的话，则会传回一个 HTTP 响应，其中包含了 422 状态码和验证错误的 JSON 数据。</p>
+<p><a name="authorizing-form-requests"></a></p>
+<h3>授权表单请求</h3>
+<p>表单的请求类内包含了 <code>authorize</code> 方法。在这个方法中，你可以确认用户是否真的通过了授权，以便更新指定数据。比方说，有一个用户想试图去更新一篇文章的评论，你能保证他确实是这篇评论的拥有者吗？具体代码如下：</p>
+<pre><code>/**
+ * 判断用户是否有权限做出此请求。
+ *
+ * @return bool
+ */
+public function authorize()
+{
+    $comment = Comment::find($this-&gt;route('comment'));
+
+    return $comment &amp;&amp; $this-&gt;user()-&gt;can('update', $comment);
+}</code></pre>
+<p>由于所有的表单请求都是扩展于基础的 Laravel 请求类，所以我们可以使用 <code>user</code> 方法去获取当前认证登录的用户。同时请注意上述例子中对 <code>route</code> 方法的调用。这个方法授权你获取调用的路由规则中的 URI 参数，譬如下面例子中的 <code>｛comment｝</code> 参数：</p>
+<pre><code>Route::post('comment/{comment}');</code></pre>
+<p>如果 <code>authorize</code> 方法返回 <code>false</code>，则会自动返回一个 HTTP 响应，其中包含 403 状态码，而你的控制器方法也将不会被运行。</p>
+<p>如果你打算在应用程序的其它部分处理授权逻辑，只需从 <code>authorize</code> 方法返回 <code>true</code> ：</p>
+<pre><code>/**
+ * 判断用户是否有权限做出此请求。
+ *
+ * @return bool
+ */
+public function authorize()
+{
+    return true;
+}</code></pre>
+<p><a name="customizing-the-error-format"></a></p>
+<h3>自定义闪存的错误消息格式</h3>
+<p>如果你想要自定义验证失败时闪存到 session 的验证错误格式，可在你的基底请求 (<code>App\Http\Requests\Request</code>) 中重写 <code>formatErrors</code>。别忘了文件上方引入 <code>Illuminate\Contracts\Validation\Validator</code> 类：</p>
+<pre><code>/**
+ * {@inheritdoc}
+ */
+protected function formatErrors(Validator $validator)
+{
+    return $validator-&gt;errors()-&gt;all();
+}</code></pre>
+<p><a name="customizing-the-error-messages"></a></p>
+<h3>自定义错误消息</h3>
+<p>你可以通过重写表单请求的 <code>messages</code> 方法来自定义错误消息。此方法必须返回一个数组，其中含有成对的属性或规则以及对应的错误消息：</p>
+<pre><code>/**
+ * 获取已定义验证规则的错误消息。
+ *
+ * @return array
+ */
+public function messages()
+{
+    return [
+        'title.required' =&gt; 'A title is required',
+        'body.required'  =&gt; 'A message is required',
+    ];
+}</code></pre>
+<p><a name="manually-creating-validators"></a></p>
+<h2>手动创建验证程序</h2>
+<p>如果你不想要使用 <code>ValidatesRequests</code> trait 的 <code>validate</code> 方法，你可以手动创建一个 validator 实例并通过 <code>Validator::make</code> 方法在 <a href="facades.html">facade</a> 生成一个新的 validator 实例：</p>
+<pre><code>&lt;?php
+
+namespace App\Http\Controllers;
+
+use Validator;
+use Illuminate\Http\Request;
+use App\Http\Controllers\Controller;
+
+class PostController extends Controller
+{
+    /**
+     * 保存一篇新的博客文章。
+     *
+     * @param  Request  $request
+     * @return Response
+     */
+    public function store(Request $request)
+    {
+        $validator = Validator::make($request-&gt;all(), [
+            'title' =&gt; 'required|unique:posts|max:255',
+            'body' =&gt; 'required',
+        ]);
+
+        if ($validator-&gt;fails()) {
+            return redirect('post/create')
+                        -&gt;withErrors($validator)
+                        -&gt;withInput();
+        }
+
+        // Store the blog post...
+    }
+}</code></pre>
+<p>第一个传给 <code>make</code> 方法的参数是验证数据。第二个参数则是数据的验证规则。</p>
+<p>如果请求没有通过验证，则可以使用 <code>withErrors</code> 方法把错误消息闪存到 session。在进行重定向之后，<code>$errors</code> 变量可以在视图中自动共用，让你可以轻松地显示这些消息并返回给用户。<code>withErrors</code> 方法接收 validator、<code>MessageBag</code>，或 PHP <code>array</code>。</p>
+<p><a name="automatic-redirection"></a></p>
+<h3>自动重定向</h3>
+<p>如果你手动创建一个验证器实例，但希望继续享用 <code>ValidatesRequest</code>  特性提供的自动跳转功能，那么你可以调用一个现存的验证器实例中的 <code>validate</code> 方法。如果验证失败了，用户会被自动化重定向，或者在AJAX请求中，一个JSON格式的响应将会被返回：</p>
+<pre><code>Validator::make($request-&gt;all(), [
+    'title' =&gt; 'required|unique:posts|max:255',
+    'body' =&gt; 'required',
+])-&gt;validate();</code></pre>
+<p><a name="named-error-bags"></a></p>
+<h3>命名错误包</h3>
+<p>如果你有多个表单在一个单页面中，你也许会希望命名错误信息包 <code>MessageBag</code> ，错误信息包允许你从指定的表单中接收错误信息。简单的给 <code>withErrors</code> 方法传递一个名字作为第二个参数：</p>
+<pre><code>return redirect('register')
+            -&gt;withErrors($validator, 'login');</code></pre>
+<p>然后你能从 <code>$errors</code> 变量中获取到 <code>MessageBag</code> 实例：</p>
+<pre><code>{{ $errors-&gt;login-&gt;first('email') }}</code></pre>
+<p><a name="after-validation-hook"></a></p>
+<h3>验证后钩子</h3>
+<p>验证器允许你在验证完成之后附加回调函数。这使得你可以容易的添加进一步的验证，甚至可以在消息集合中添加更多的错误信息。首先，在一个验证实例中使用 <code>after</code> 方法：</p>
+<pre><code>$validator = Validator::make(...);
+
+$validator-&gt;after(function($validator) {
+    if ($this-&gt;somethingElseIsInvalid()) {
+        $validator-&gt;errors()-&gt;add('field', 'Something is wrong with this field!');
+    }
+});
+
+if ($validator-&gt;fails()) {
+    //
+}</code></pre>
+<p><a name="working-with-error-messages"></a></p>
+<h2>处理错误消息</h2>
+<p>调用一个 <code>Validator</code> 实例的 <code>errors</code> 方法，会得到一个 <code>Illuminate\Support\MessageBag</code> 的实例，里面有许多可让你操作错误消息的便利方法。<code>$errors</code> 变量可以自动的被所有的视图获取，并且是一个MessageBag类的实例。</p>
+<h4>查看特定字段的第一个错误消息</h4>
+<p>如果要查看特定字段的第一个错误消息，可以使用 <code>first</code> 方法：</p>
+<pre><code>$errors = $validator-&gt;errors();
+
+echo $errors-&gt;first('email');</code></pre>
+<h4>查看特定字段的所有错误消息</h4>
+<p>如果你想通过指定字段来简单的获取所有消息中的一个数组，则可以使用 <code>get</code> 方法：</p>
+<pre><code>foreach ($errors-&gt;get('email') as $message) {
+    //
+}</code></pre>
+<p>如果你正在验证一个数组的表单字段，你可以使用 <code>*</code> 来获取每个元素的所有错误信息:</p>
+<pre><code>foreach ($errors-&gt;get('attachments.*') as $message) {
+    //
+}</code></pre>
+<h4>查看所有字段的所有错误消息</h4>
+<p>如果你想要得到所有字段的消息数组，则可以使用 <code>all</code> 方法：</p>
+<pre><code>foreach ($errors-&gt;all() as $message) {
+    //
+}</code></pre>
+<h4>判断特定字段是否含有错误消息</h4>
+<p>可以使用 <code>has</code> 方法来检测一个给定的字段是否存在错误信息:</p>
+<pre><code>if ($errors-&gt;has('email')) {
+    //
+}</code></pre>
+<p><a name="custom-error-messages"></a></p>
+<h3>自定义错误消息</h3>
+<p>如果有需要的话，你也可以自定义错误的验证消息来取代默认的验证消息。有几种方法可以来自定义指定的消息。首先，你需要先通过传递三个参数到 <code>Validator::make</code> 方法来自定义验证消息：</p>
+<pre><code>$messages = [
+    'required' =&gt; ':attribute 的字段是必要的。',
+];
+
+$validator = Validator::make($input, $rules, $messages);</code></pre>
+<p>在这个例子中，<code>:attribute</code> 占位符会被通过验证的字段实际名称所取代。除此之外，你还可以使用其它默认字段的验证消息。例如：</p>
+<pre><code>$messages = [
+    'same'    =&gt; ':attribute 和 :other 必须相同。',
+    'size'    =&gt; ':attribute 必须是 :size。',
+    'between' =&gt; ':attribute 必须介于 :min - :max。',
+    'in'      =&gt; ':attribute 必须是以下的类型之一： :values。',
+];</code></pre>
+<h4>指定自定义消息到特定的属性</h4>
+<p>有时候你可能想要对特定的字段来自定义错误消息。只需在属性名称后加上「.」符号和指定验证的规则即可：</p>
+<pre><code>$messages = [
+    'email.required' =&gt; '我们需要知道你的 e-mail 地址！',
+];</code></pre>
+<p><a name="localization"></a></p>
+<h4>在语言文件中指定自定义的属性</h4>
+<p>在大部分的情况下，你可能在语言文件中指定自定义的信息，而不是将定制的信息传递给  <code>Validator</code> 。这样做，在语言文件 <code>resources/lang/xx/validation.php</code> 中，将定制的消息添加到 <code>custom</code> 数组。</p>
+<pre><code>'custom' =&gt; [
+    'email' =&gt; [
+        'required' =&gt; '我们需要知道你的 e-mail 地址！',
+    ],
+],</code></pre>
+<p><a name="available-validation-rules"></a></p>
+<h2>可用的验证规则</h2>
+<p>以下是所有可用的验证规则清单与功能：</p>
+<style>
+    .collection-method-list > p {
+        column-count: 3; -moz-column-count: 3; -webkit-column-count: 3;
+        column-gap: 2em; -moz-column-gap: 2em; -webkit-column-gap: 2em;
+    }
+
+    .collection-method-list a {
+        display: block;
+    }
+</style>
+<div class="collection-method-list">
+<p><a href="validation.html#rule-accepted">Accepted</a>
+<a href="validation.html#rule-active-url">Active URL</a>
+<a href="validation.html#rule-after">After (Date)</a>
+<a href="validation.html#rule-alpha">Alpha</a>
+<a href="validation.html#rule-alpha-dash">Alpha Dash</a>
+<a href="validation.html#rule-alpha-num">Alpha Numeric</a>
+<a href="validation.html#rule-array">Array</a>
+<a href="validation.html#rule-before">Before (Date)</a>
+<a href="validation.html#rule-between">Between</a>
+<a href="validation.html#rule-boolean">Boolean</a>
+<a href="validation.html#rule-confirmed">Confirmed</a>
+<a href="validation.html#rule-date">Date</a>
+<a href="validation.html#rule-date-format">Date Format</a>
+<a href="validation.html#rule-different">Different</a>
+<a href="validation.html#rule-digits">Digits</a>
+<a href="validation.html#rule-digits-between">Digits Between</a>
+<a href="validation.html#rule-dimensions">Dimensions (Image Files)</a>
+<a href="validation.html#rule-distinct">Distinct</a>
+<a href="validation.html#rule-email">E-Mail</a>
+<a href="validation.html#rule-exists">Exists (Database)</a>
+<a href="validation.html#rule-file">File</a>
+<a href="validation.html#rule-filled">Filled</a>
+<a href="validation.html#rule-image">Image (File)</a>
+<a href="validation.html#rule-in">In</a>
+<a href="validation.html#rule-in-array">In Array</a>
+<a href="validation.html#rule-integer">Integer</a>
+<a href="validation.html#rule-ip">IP Address</a>
+<a href="validation.html#rule-json">JSON</a>
+<a href="validation.html#rule-max">Max</a>
+<a href="validation.html#rule-mimetypes">MIME Types</a>
+<a href="validation.html#rule-mimes">MIME Type By File Extension</a>
+<a href="validation.html#rule-min">Min</a>
+<a href="validation.html#rule-nullable">Nullable</a>
+<a href="validation.html#rule-not-in">Not In</a>
+<a href="validation.html#rule-numeric">Numeric</a>
+<a href="validation.html#rule-present">Present</a>
+<a href="validation.html#rule-regex">Regular Expression</a>
+<a href="validation.html#rule-required">Required</a>
+<a href="validation.html#rule-required-if">Required If</a>
+<a href="validation.html#rule-required-unless">Required Unless</a>
+<a href="validation.html#rule-required-with">Required With</a>
+<a href="validation.html#rule-required-with-all">Required With All</a>
+<a href="validation.html#rule-required-without">Required Without</a>
+<a href="validation.html#rule-required-without-all">Required Without All</a>
+<a href="validation.html#rule-same">Same</a>
+<a href="validation.html#rule-size">Size</a>
+<a href="validation.html#rule-string">String</a>
+<a href="validation.html#rule-timezone">Timezone</a>
+<a href="validation.html#rule-unique">Unique (Database)</a>
+<a href="validation.html#rule-url">URL</a></p>
+</div>
+<p><a name="rule-accepted"></a></p>
+<h4>accepted</h4>
+<p>验证字段值是否为 <em>yes</em>、<em>on</em>、<em>1</em>、或 <em>true</em>。这在确认「服务条款」是否同意时相当有用。</p>
+<p><a name="rule-active-url"></a></p>
+<h4>active_url</h4>
+<p>验证字段值是否为一个有效的网址，会通过 PHP 的 <code>checkdnsrr</code> 函数来验证。</p>
+<p><a name="rule-after"></a></p>
+<h4>after:<em>date</em></h4>
+<p>验证字段是否是在指定日期之后。这个日期将会通过 <code>strtotime</code> 函数来验证。</p>
+<pre><code>'start_date' =&gt; 'required|date|after:tomorrow'</code></pre>
+<p>作为替换 <code>strtotime</code> 传递的日期字符串，你可以指定其它的字段来比较日期：</p>
+<pre><code>'finish_date' =&gt; 'required|date|after:start_date'</code></pre>
+<p><a name="rule-alpha"></a></p>
+<h4>alpha</h4>
+<p>验证字段值是否仅包含字母字符。</p>
+<p><a name="rule-alpha-dash"></a></p>
+<h4>alpha_dash</h4>
+<p>验证字段值是否仅包含字母、数字、破折号（ - ）以及下划线（ _ ）。</p>
+<p><a name="rule-alpha-num"></a></p>
+<h4>alpha_num</h4>
+<p>验证字段值是否仅包含字母、数字。</p>
+<p><a name="rule-array"></a></p>
+<h4>array</h4>
+<p>验证字段必须是一个 PHP <code>array</code>。</p>
+<p><a name="rule-before"></a></p>
+<h4>before:<em>date</em></h4>
+<p>验证字段是否是在指定日期之前。这个日期将会使用 PHP <code>strtotime</code> 函数来验证。</p>
+<p><a name="rule-between"></a></p>
+<h4>between:<em>min</em>,<em>max</em></h4>
+<p>验证字段值的大小是否介于指定的 <em>min</em> 和 <em>max</em> 之间。字符串、数值或是文件大小的计算方式和 <a href="validation.html#rule-size"><code>size</code></a> 规则相同。</p>
+<p><a name="rule-boolean"></a></p>
+<h4>boolean</h4>
+<p>验证字段值是否能够转换为布尔值。可接受的参数为 <code>true</code>、<code>false</code>、<code>1</code>、<code>0</code>、<code>"1"</code> 以及 <code>"0"</code>。</p>
+<p><a name="rule-confirmed"></a></p>
+<h4>confirmed</h4>
+<p>验证字段值必须和 <code>foo_confirmation</code> 的字段值一致。例如，如果要验证的字段是 <code>password</code>，就必须和输入数据里的 <code>password_confirmation</code> 的值保持一致。</p>
+<p><a name="rule-date"></a></p>
+<h4>date</h4>
+<p>验证字段值是否为有效日期，会根据 PHP 的 <code>strtotime</code> 函数来做验证。</p>
+<p><a name="rule-date-format"></a></p>
+<h4>date_format:<em>format</em></h4>
+<p>验证字段值符合定义的日期<em>格式</em>，通过 PHP 的 <code>date_parse_from_format</code> 函数来验证。你应该只使用 <code>date</code> 或 <code>date_format</code> 当中的<strong>其中一个</strong>用于验证，而不应该同时使用两者。</p>
+<p><a name="rule-different"></a></p>
+<h4>different:<em>field</em></h4>
+<p>验证字段值是否和指定_字段（ field ）_不同。</p>
+<p><a name="rule-digits"></a></p>
+<h4>digits:<em>value</em></h4>
+<p>验证字段值是否为 <em>numeric</em> 且长度为 <em>value</em>。</p>
+<p><a name="rule-digits-between"></a></p>
+<h4>digits_between:<em>min</em>,<em>max</em></h4>
+<p>验证字段值的长度是否在 <em>min</em> 和 <em>max</em> 之间。</p>
+<p><a name="rule-dimensions"></a></p>
+<h4>dimensions</h4>
+<p>验证的文件必须是图片并且图片比例必须符合规则：</p>
+<pre><code>'avatar' =&gt; 'dimensions:min_width=100,min_height=200'</code></pre>
+<p>可用的规则为： <em>min_width</em>, <em>max_width</em>, <em>min_height</em>, <em>max_height</em>, <em>width</em>, <em>height</em>, <em>ratio</em>。</p>
+<p>比例应该使用宽度除以高度的方式出现。能够使用3/2这样的形式设置，也可以使用1.5这样的浮点方式：</p>
+<pre><code>'avatar' =&gt; 'dimensions:ratio=3/2'</code></pre>
+<p><a name="rule-distinct"></a></p>
+<h4>distinct</h4>
+<p>当你在验证数组的时候，你可以指定某个值必须是唯一的：</p>
+<pre><code>'foo.*.id' =&gt; 'distinct'</code></pre>
+<p><a name="rule-email"></a></p>
+<h4>email</h4>
+<p>验证字段值是否符合 e-mail 格式。</p>
+<p><a name="rule-exists"></a></p>
+<h4>exists:<em>table</em>,<em>column</em></h4>
+<p>验证字段值是否存在指定的数据表中。</p>
+<h4>Exists 规则的基本使用方法</h4>
+<pre><code>'state' =&gt; 'exists:states'</code></pre>
+<h4>指定一个特定的字段名称</h4>
+<pre><code>'state' =&gt; 'exists:states,abbreviation'</code></pre>
+<p>也可以指定更多的条件，它们会被加到「where」查询语句中：</p>
+<pre><code>'email' =&gt; 'exists:staff,email,account_id,1'</code></pre>
+<p>这些条件可以使用叹号 <code>!</code> 表示否定：</p>
+<pre><code>'email' =&gt; 'exists:staff,email,role,!admin'</code></pre>
+<p>你也可以传递 <code>NULL</code> 或 <code>NOT_NULL</code> 至「where」语句：</p>
+<pre><code>'email' =&gt; 'exists:staff,email,deleted_at,NULL'
+
+'email' =&gt; 'exists:staff,email,deleted_at,NOT_NULL'</code></pre>
+<p>有时候，你可能需要设置一个特定的数据库连接用于 <code>exists</code> 的查询。你可以在使用点号「.」语法将数据库连接名称添加到数据表前面来实现这个目的：</p>
+<pre><code>'email' =&gt; 'exists:connection.staff,email'</code></pre>
+<p><a name="rule-file"></a></p>
+<h4>file</h4>
+<p>必须是成功上传的文件。</p>
+<p><a name="rule-filled"></a></p>
+<h4>filled</h4>
+<p>验证的字段必须带有内容。</p>
+<p><a name="rule-image"></a></p>
+<h4>image</h4>
+<p>验证字段文件必须为图片格式（ jpeg、png、bmp、gif、 或 svg ）。</p>
+<p><a name="rule-in"></a></p>
+<h4>in:<em>foo</em>,<em>bar</em>,...</h4>
+<p>验证字段值是否有在指定的列表里面。</p>
+<p><a name="rule-in-array"></a></p>
+<h4>in_array:<em>anotherfield</em></h4>
+<p>The field under validation must exist in <em>anotherfield</em>'s values.</p>
+<p><a name="rule-integer"></a></p>
+<h4>integer</h4>
+<p>验证字段值是否是整数。</p>
+<p><a name="rule-ip"></a></p>
+<h4>ip</h4>
+<p>验证字段值是否符合 IP address 的格式。</p>
+<p><a name="rule-json"></a></p>
+<h4>json</h4>
+<p>验证字段是否是一个有效的 JSON 字符串。</p>
+<p><a name="rule-max"></a></p>
+<h4>max:<em>value</em></h4>
+<p>字段值必须小于或等于 <em>value</em> 。字符串、数值或是文件大小的计算方式和 <a href="validation.html#rule-size"><code>size</code></a> 规则相同。</p>
+<p><a name="rule-mimetypes"></a></p>
+<h4>mimetypes:<em>text/plain</em>,...</h4>
+<p>验证的文件必须是这些 MIME 类型中的一个:</p>
+<pre><code>'video' =&gt; 'mimetypes:video/avi,video/mpeg,video/quicktime'</code></pre>
+<p>框架会通过阅读文件内容来推测 MIME 类型，有时候会与客户端的不一致。</p>
+<p><a name="rule-mimes"></a></p>
+<h4>mimes:<em>foo</em>,<em>bar</em>,...</h4>
+<p>验证字段文件的 MIME 类型是否符合列表中指定的格式。</p>
+<h4>MIME 规则基本用法</h4>
+<pre><code>'photo' =&gt; 'mimes:jpeg,bmp,png'</code></pre>
+<p>即使你可能只需要验证指定扩展名，但此规则实际上会验证文件的 MIME 类型，其通过读取文件的内容以猜测它的 MIME 类型。</p>
+<p>完整的 MIME 类型及对应的扩展名列表可以在下方链接找到：
+<a href="http://svn.apache.org/repos/asf/httpd/httpd/trunk/docs/conf/mime.types"><a href="http://svn.apache.org/repos/asf/httpd/httpd/trunk/docs/conf/mime.types">http://svn.apache.org/repos/asf/httpd/httpd/trunk/docs/conf/mime.types</a></a></p>
+<p><a name="rule-min"></a></p>
+<h4>min:<em>value</em></h4>
+<p>字段值必须大于或等于 <em>value</em>。字符串、数值或是文件大小的计算方式和 <a href="validation.html#rule-size"><code>size</code></a> 规则相同。</p>
+<p><a name="rule-nullable"></a></p>
+<h4>nullable</h4>
+<p>验证的字段可以为null。这在验证基本数据类型，如字符串和整型这些能包含null值的数据类型中特别有用。</p>
+<p><a name="rule-not-in"></a></p>
+<h4>not_in:<em>foo</em>,<em>bar</em>,...</h4>
+<p>验证字段值是否不在指定的列表里。</p>
+<p><a name="rule-numeric"></a></p>
+<h4>numeric</h4>
+<p>验证字段值是否为数值。</p>
+<p><a name="rule-present"></a></p>
+<h4>present</h4>
+<p>验证的字段必须出现，并且数据可以为空。</p>
+<p><a name="rule-regex"></a></p>
+<h4>regex:<em>pattern</em></h4>
+<p>验证字段值是否符合指定的正则表达式。</p>
+<p><strong>注意：</strong>当使用 <code>regex</code> 规则时，你必须使用数组，而不是使用管道分隔规则，特别是当正则表达式含有管道符号时。</p>
+<p><a name="rule-required"></a></p>
+<h4>required</h4>
+<p>验证字段必须存在输入数据，且不为空。字段符合下方任一条件时即为「空」：</p>
+<div class="content-list">
+<ul>
+<li>该值为 <code>null</code>。</li>
+<li>该值为空字符串。</li>
+<li>该值为空数组或空的<code>可数</code>对象。</li>
+<li>该值为没有路径的上传文件。</li>
+</ul>
+</div>
+<p><a name="rule-required-if"></a></p>
+<h4>required_if:<em>anotherfield</em>,<em>value</em>,...</h4>
+<p>如果指定的<em>其它字段</em>（ anotherfield ）等于任何一个 <em>value</em> 时，此字段为必填。</p>
+<p><a name="rule-required-unless"></a></p>
+<h4>required_unless:<em>anotherfield</em>,<em>value</em>,...</h4>
+<p>如果指定的<em>其它字段</em>（ anotherfield ）等于任何一个 <em>value</em> 时，则此字段为不必填。</p>
+<p><a name="rule-required-with"></a></p>
+<h4>required_with:<em>foo</em>,<em>bar</em>,...</h4>
+<p>如果指定的字段中的 <em>任意一个</em> 有值，则此字段为必填。</p>
+<p><a name="rule-required-with-all"></a></p>
+<h4>required_with_all:<em>foo</em>,<em>bar</em>,...</h4>
+<p>如果指定的 <em>所有</em> 字段都有值，则此字段为必填。</p>
+<p><a name="rule-required-without"></a></p>
+<h4>required_without:<em>foo</em>,<em>bar</em>,...</h4>
+<p>如果缺少任意一个指定的字段，则此字段为必填。</p>
+<p><a name="rule-required-without-all"></a></p>
+<h4>required_without_all:<em>foo</em>,<em>bar</em>,...</h4>
+<p>如果所有指定的字段都没有值，则此字段为必填。</p>
+<p><a name="rule-same"></a></p>
+<h4>same:<em>field</em></h4>
+<p>验证字段值和指定的 <em>字段（ field ）</em> 值是否相同。</p>
+<p><a name="rule-size"></a></p>
+<h4>size:<em>value</em></h4>
+<p>验证字段值的大小是否符合指定的 <em>value</em> 值。对于字符串来说，<em>value</em> 为字符数。对于数字来说，<em>value</em> 为某个整数值。对文件来说，<em>size</em> 对应的是文件大小（单位 kb ）。</p>
+<p><a name="rule-string"></a></p>
+<h4>string</h4>
+<p>验证字段值的类型是否为字符串。如果你允许字段的值为 <code>null</code> ，那么你应该将 <code>nullable</code> 规则附加到字段中。</p>
+<p><a name="rule-timezone"></a></p>
+<h4>timezone</h4>
+<p>验证字段值是否是有效的时区，会根据 PHP 的 <code>timezone_identifiers_list</code> 函数来判断。</p>
+<p><a name="rule-unique"></a></p>
+<h4>unique:<em>table</em>,<em>column</em>,<em>except</em>,<em>idColumn</em></h4>
+<p>在指定的数据表中，验证字段必须是唯一的。如果没有指定 <code>column</code>，将会使用字段本身的名称。</p>
+<p><strong>指定一个特定的字段名称：</strong></p>
+<pre><code>'email' =&gt; 'unique:users,email_address'</code></pre>
+<p><strong>自定义数据库连接</strong></p>
+<p>有时候你可能需要自定义一个连接，来通过 Validator 对数据库进行查找。如上面所示，设置 <code>unique:users</code> 作为验证规则，通过默认数据库连接来做数据库查找。如果要修改数据库连接，可在指定的连接的表单名称后面加上「.」：</p>
+<pre><code>'email' =&gt; 'unique:connection.users,email_address'</code></pre>
+<p><strong>强迫 Unique 规则忽略指定 ID：</strong></p>
+<p>有时候，你希望在验证字段时对指定 ID 进行忽略。例如，在「更新个人资料」页面会包含用户名、邮箱等字段。这时你会想要验证更新的 e-mail 值是否为唯一的。如果用户仅更改了名称字段而不是 e-mail 字段，就不需要抛出验证错误，因为此用户已经是这个 e-mail 的拥有者了。若要用指定规则来忽略用户 ID，则应该把要发送的 ID 当作第三个参数：</p>
+<pre><code>'email' =&gt; 'unique:users,email_address,'.$user-&gt;id</code></pre>
+<p>如果你的数据表使用的主键名称不是 <code>id</code>，那么你可以在第四个参数中来指定它：</p>
+<pre><code>'email' =&gt; 'unique:users,email_address,'.$user-&gt;id.',user_id'</code></pre>
+<p><strong>增加额外的 Where 语句：</strong></p>
+<p>你也可以指定更多的条件到「where」查询语句：</p>
+<pre><code>'email' =&gt; 'unique:users,email_address,NULL,id,account_id,1'</code></pre>
+<p>上述规则中，只有 <code>account_id</code> 为 <code>1</code> 的数据列会被包含在 unique 规则的验证。</p>
+<p><a name="rule-url"></a></p>
+<h4>url</h4>
+<p>根据 PHP 的 <code>filter_var</code> 函数来验证字段是否符合 URL 格式。</p>
+<p><a name="conditionally-adding-rules"></a></p>
+<h2>按条件增加规则</h2>
+<h4>当字段存在的时候进行验证</h4>
+<p>在某些情况下，你可能<strong>只想</strong>在输入数据中有此字段时才进行验证。可通过增加 <code>sometimes</code> 规则到规则列表来实现：</p>
+<pre><code>$v = Validator::make($data, [
+    'email' =&gt; 'sometimes|required|email',
+]);</code></pre>
+<p>在上面的例子中，<code>email</code> 字段的验证只会在 <code>$data</code> 数组有此字段时才会进行。</p>
+<h4>复杂的条件验证</h4>
+<p>有时候你可能希望增加更复杂的验证条件，例如，你可以希望某个指定字段在另一个字段的值超过 100 时才为必填。或者当某个指定字段有值时，另外两个字段要拥有符合的特定值。增加这样的验证条件并不难。首先，利用你熟悉的 <em>static rules</em> 来创建一个 <code>Validator</code> 实例：</p>
+<pre><code>$v = Validator::make($data, [
+    'email' =&gt; 'required|email',
+    'games' =&gt; 'required|numeric',
+]);</code></pre>
+<p>假设我们有一个专为游戏收藏家所设计的网页应用程序。如果游戏收藏家收藏超过一百款游戏，我们会希望他们来说明下为什么他们会拥有这么多游戏。比如说他们有可能经营了一家二手游戏商店，或者只是为了享受收集的乐趣。为了在特定条件下加入此验证需求，可以在 <code>Validator</code> 实例中使用 <code>sometimes</code> 方法。</p>
+<pre><code>$v-&gt;sometimes('reason', 'required|max:500', function($input) {
+    return $input-&gt;games &gt;= 100;
+});</code></pre>
+<p>传入 <code>sometimes</code> 方法的第一个参数是我们要用条件认证的字段名称。第二个参数是我们想使用的验证规则。<code>闭包</code> 作为第三个参数传入，如果其返回 <code>true</code>，则额外的规则就会被加入。这个方法可以轻松的创建复杂的条件式验证。你甚至可以一次对多个字段增加条件式验证：</p>
+<pre><code>$v-&gt;sometimes(['reason', 'cost'], 'required', function($input) {
+    return $input-&gt;games &gt;= 100;
+});</code></pre>
+<blockquote>
+<p>{tip} 传入<code>闭包</code>的 <code>$input</code> 参数是 <code>Illuminate\Support\Fluent</code> 实例，可用来访问你的输入或文件对象。</p>
+</blockquote>
+<p><a name="validating-arrays"></a></p>
+<h2>验证数组</h2>
+<p>验证基于数组的表单输入字段并不一定是一件痛苦的事情。要验证指定数组输入字段中的每一个 email 是否唯一，可以这么做：</p>
+<pre><code>$validator = Validator::make($request-&gt;all(), [
+    'person.*.email' =&gt; 'email|unique:users',
+    'person.*.first_name' =&gt; 'required_with:person.*.last_name',
+]);</code></pre>
+<p>同样的，你在语言文件定义验证信息的时候可以使用星号 <code>*</code> 字符，可以更加容易的在基于数组格式的字段中使用相同的验证信息：</p>
+<pre><code>'custom' =&gt; [
+    'person.*.email' =&gt; [
+        'unique' =&gt; 'Each person must have a unique e-mail address',
+    ]
+],</code></pre>
+<p><a name="custom-validation-rules"></a></p>
+<h2>自定义验证规则</h2>
+<p>Laravel 提供了许多有用的验证规则。但你可能想自定义一些规则。注册自定义验证规则的方法之一，就是使用 Validator <a href="facades.html">facade</a> 中的 <code>extend</code> 方法，让我们在 <a href="providers.html">服务提供者</a> 中使用这个方法来注册自定义的验证规则：</p>
+<pre><code>&lt;?php
+
+namespace App\Providers;
+
+use Illuminate\Support\ServiceProvider;
+use Illuminate\Support\Facades\Validator;
+
+class AppServiceProvider extends ServiceProvider
+{
+    /**
+     * 启动任意应用程序服务。
+     *
+     * @return void
+     */
+    public function boot()
+    {
+        Validator::extend('foo', function($attribute, $value, $parameters, $validator) {
+            return $value == 'foo';
+        });
+    }
+
+    /**
+     * 注册服务提供者。
+     *
+     * @return void
+     */
+    public function register()
+    {
+        //
+    }
+}</code></pre>
+<p>自定义的验证闭包接收四个参数：要被验证的属性名称 <code>$attribute</code>，属性的值 <code>$value</code>，传入验证规则的参数数组 <code>$parameters</code>，及 <code>Validator</code> 实例。</p>
+<p>除了使用闭包，你也可以传入类和方法到 <code>extend</code> 方法中：</p>
+<pre><code>Validator::extend('foo', 'FooValidator@validate');</code></pre>
+<h4>自定义错误消息</h4>
+<p>另外你可能还需要为自定义规则来定义一个错误消息。这可以通过使用自定义内联消息数组或是在验证语言包中加入新的规则来实现。此消息应该被放在数组的第一级，而不是被放在 <code>custom</code> 数组内，这是仅针对特定属性的错误消息:</p>
+<pre><code>"foo" =&gt; "你的输入是无效的！",
+
+"accepted" =&gt; ":attribute 必须被接受。",
+
+// 其余的验证错误消息...</code></pre>
+<p>当你在创建自定义验证规则时，你可能需要定义占位符来取代错误消息。你可以像上面所描述的那样通过 <code>Validator</code> facade 来使用 <code>replacer</code> 方法创建一个自定义验证器。通过 <a href="providers.html">服务提供者</a> 中的 <code>boot</code> 方法可以实现：</p>
+<pre><code>/**
+ * 启动任意应用程序服务。
+ *
+ * @return void
+ */
+public function boot()
+{
+    Validator::extend(...);
+
+    Validator::replacer('foo', function($message, $attribute, $rule, $parameters) {
+        return str_replace(...);
+    });
+}</code></pre>
+<h4>隐式扩展功能</h4>
+<p>默认情况下，若有一个类似 <a href="validation.html#rule-required"><code>required</code></a> 这样的规则，当此规则被验证的属性不存在或包含空值时，其一般的验证规则（包括自定扩展功能）都将不会被运行。例如，当 <a href="validation.html#rule-integer"><code>integer</code></a> 规则的值为 <code>null</code> 时将不会被运行：</p>
+<pre><code>$rules = ['name' =&gt; 'unique'];
+
+$input = ['name' =&gt; null];
+
+Validator::make($input, $rules)-&gt;passes(); // true</code></pre>
+<p>如果要在属性为空时依然运行此规则，则此规则必须暗示该属性为必填。要创建一个「隐式」扩展功能，可以使用 <code>Validator::extendImplicit()</code> 方法：</p>
+<pre><code>Validator::extendImplicit('foo', function($attribute, $value, $parameters, $validator) {
+    return $value == 'foo';
+});</code></pre>
+<blockquote>
+<p>{note} 一个「隐式」扩展功能只会 <em>暗示</em> 该属性为必填。它的实际属性是否为无效属性或空属性主要取决于你。</p>
+</blockquote>
+<hr />
+<blockquote>
+<p>{note} 欢迎任何形式的转载，但请务必注明出处，尊重他人劳动共创开源社区。</p>
+<p>转载请注明：本文档由 Laravel China 社区 [laravel-china.org] 组织翻译，详见 <a href="https://laravel-china.org/topics/2752/laravel-53-document-translation-completed">翻译召集帖</a>。</p>
+<p>文档永久地址： <a href="../../index.html">http://d.laravel-china.org</a></p>
+</blockquote>
+		</div>
+
+		<div class="main-footer" style="border-top:1px dashed rgba(0, 0, 0, 0.1);padding-top: 30px;margin-top:30px;margin-bottom: 20px;">
+			<div class="prev-next-wrap clearfix">
+
+									<a class="btn btn-primary pull-left btn-inverted" href="session.html"><i class="fa fa-arrow-left"></i> Session</a>
+				
+			    &nbsp;
+								    <a class="btn btn-primary pull-right btn-inverted" href="views.html">视图 <i class="fa fa-arrow-right"></i></a>
+							</div>
+		</div>
+
+	</article>
+</div>
+
+	<footer class="main">
+		<ul>
+			<li class="nav-docs"><a href="../5.4.html">文档</a></li>
+<li ><a href="https://laravel-china.org/news" class="no-pjax">Laravel 资讯</a></li>
+<li class="dropdown"><a href="https://laravel-china.org/">Laravel China 社区</a></li>
+<li class="nav-forge"><a href="https://laravel-china.org/categories/1">酷工作</a></li>
+<li class="nav-docs"><a href="http://lumen.laravel-china.org">Lumen</a></li>
+<li class="nav-forge"><a href="https://cs.laravel-china.org/">速查表</a></li>
+<li class="nav-forge"><a href="https://fsdhub.com/books/laravel-essential-training-5.5">《Laravel 入门教程》</a></li>
+		</ul>
+		<p>Laravel is a trademark of Taylor Otwell. Copyright &copy; Taylor Otwell.</p>
+            <div style="margin-top: 32px;">
+                <a href="https://www.upyun.com/" title="Composer 镜像赞助商">
+                    <img src="https://dn-phphub.qbox.me/uploads/banners/XPtLlZmIN1cQbLuDFEON.png" style="width: 200px;">
+                </a>
+            </div>
+            <p class="less-significant">
+            <a href="http://jackmcdade.com">
+                Designed by<br>
+                <svg version="1.1"
+	 xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:a="http://ns.adobe.com/AdobeSVGViewerExtensions/3.0/"
+	 x="0px" y="0px" width="128.2px" height="28px" viewBox="0 0 128.2 28" enable-background="new 0 0 128.2 28" xml:space="preserve"
+	>
+<defs>
+</defs>
+<g>
+	<path fill="#c3c3c3" d="M14.2,0.4c0,0.2,0,0.5,0,0.7c0,0.2,0,0.5,0,0.7l-1.4-0.3C12.9,3,13,4.5,13.1,6c0.1,1.5,0,3-0.1,4.5
+		c0,0.4-0.1,0.8-0.1,1.2c-0.1,0.4-0.1,0.8-0.3,1.2c-0.1,0.4-0.3,0.7-0.5,1.1c-0.2,0.3-0.5,0.6-0.9,0.9c-0.4,0.2-0.9,0.4-1.5,0.6
+		c-0.6,0.2-1.1,0.3-1.6,0.3c-0.6,0-1.2-0.1-1.6-0.3c-0.5-0.2-0.9-0.6-1.1-1c-0.3-0.5-0.5-1-0.6-1.6c-0.1-0.6-0.1-1.3,0-2.1
+		c0-0.2,0.1-0.5,0.2-0.7C4.9,9.9,5,9.7,5.1,9.5c0.1-0.2,0.2-0.4,0.3-0.6l1.1,0.4C6.7,9.3,7,9.4,7.3,9.5c0.3,0.1,0.5,0.1,0.6,0.2
+		c0,0.2,0,0.4-0.1,0.5c-0.1,0.2-0.1,0.3-0.2,0.4c-0.1,0.1-0.2,0.3-0.2,0.4c-0.1,0.2-0.1,0.3-0.1,0.5l-1.3-0.7
+		c-0.1,0.3-0.2,0.7-0.2,1.1c0,0.4,0.1,0.8,0.2,1.2c0.2,0.4,0.4,0.7,0.6,1c0.3,0.3,0.6,0.4,1,0.3c0.6,0,1.1-0.3,1.4-0.6
+		c0.3-0.4,0.5-0.9,0.7-1.7c0.1-0.7,0.2-1.6,0.2-2.8c0-1.1,0-2.4,0-3.9c0-0.6-0.1-1.3-0.1-2C9.7,2.8,9.6,2.1,9.5,1.4
+		c-0.2,0-0.5,0-0.8,0c-0.3,0-0.6,0-0.8,0c-0.8,0-1.5,0-2.2,0c-0.7,0-1.5,0-2.2,0.2c-0.3,0.1-0.6,0.2-1,0.4C2.2,2.1,1.9,2.4,1.6,2.6
+		C1.4,2.9,1.2,3.2,1.1,3.6C1,3.9,1,4.3,1.1,4.6c0.1,0.5,0.3,0.8,0.4,0.9V5.4c0-0.4,0.1-0.8,0.4-1c0.3-0.2,0.6-0.3,0.9-0.3
+		c0.3,0,0.6,0.1,0.9,0.3C4,4.6,4.1,5,4.1,5.4c0,0.4-0.1,0.8-0.4,1c-0.3,0.2-0.6,0.3-1,0.3H2.7C1.9,6.7,1.3,6.5,0.9,6
+		C0.5,5.6,0.2,5.1,0.1,4.5C0,4,0,3.4,0.2,2.7c0.2-0.6,0.5-1.1,1-1.5c0.4-0.3,0.8-0.5,1.2-0.7c0.4-0.1,0.9-0.2,1.4-0.3
+		c0.5-0.1,0.9-0.1,1.4-0.1c0.5,0,0.9,0,1.4,0h1.5c0.6,0,1.1,0,1.6,0.1c0.5,0,1,0.1,1.5,0.1c0.5,0,1,0.1,1.5,0.1
+		C13.1,0.5,13.6,0.5,14.2,0.4z"/>
+	<path fill="#c3c3c3" d="M25.2,14.3c0,0.2,0.1,0.4,0.1,0.6c0,0.2,0.1,0.4,0.1,0.7c-1-0.1-2-0.2-3-0.1c-1.1,0.1-2.1,0.2-3,0.4
+		c0-0.2-0.1-0.4-0.1-0.5c0-0.2-0.1-0.4-0.1-0.5c0.2,0,0.5-0.1,0.7-0.1c0.2,0,0.4-0.1,0.6-0.1c-0.1-1.5-0.3-3.1-0.5-4.6
+		c-0.5,0.1-0.9,0.1-1.4,0.2c-0.5,0.1-0.9,0.1-1.4,0.2c-0.2,0.7-0.3,1.3-0.5,2c-0.2,0.7-0.3,1.3-0.5,2c0.2,0,0.4,0,0.6,0
+		c0.1,0,0.3,0,0.4,0.1c0,0.2,0,0.3,0,0.5c0,0.1,0,0.2,0,0.4c0,0.1,0,0.2-0.1,0.3H14v-1.2h1c0.2-0.5,0.3-1,0.4-1.5
+		c0.1-0.5,0.3-1,0.4-1.5c0.2-0.6,0.3-1.2,0.5-1.7c0.2-0.6,0.3-1.2,0.5-1.7c0.2-1.1,0.4-2.1,0.6-3.2c0.2-1.1,0.3-2.1,0.4-3.2
+		c-0.2,0-0.5,0-0.7,0c-0.2,0-0.4,0-0.7,0c0-0.2,0.1-0.4,0.1-0.6c0-0.2,0-0.4,0.1-0.6c0.9,0,1.9,0,2.9,0c1,0,2,0,2.9,0l0.2,1.2
+		c-0.2,0-0.3,0-0.5,0c-0.2,0-0.3,0-0.5,0c0.3,2.1,0.7,4.3,1,6.5c0.3,2.2,0.7,4.4,1,6.5H25.2z M17.5,9c0.4-0.1,0.7-0.1,1.1-0.2
+		c0.4-0.1,0.8-0.1,1.2-0.2c-0.2-1-0.3-2-0.5-2.9c-0.2-1-0.4-1.9-0.6-2.9c-0.2,1-0.4,2.1-0.5,3.1C17.9,6.9,17.7,8,17.5,9z"/>
+	<path fill="#c3c3c3" d="M36.7,10.4c-0.1,0-0.2,0-0.3,0c-0.1,0-0.2,0-0.3,0c0,0.6,0,1.2-0.2,1.9c-0.2,0.6-0.5,1.2-1,1.6
+		c-0.5,0.5-1,0.9-1.6,1.1c-0.6,0.3-1.3,0.4-2,0.5c-0.6,0.1-1.1,0.1-1.8,0c-0.6-0.1-1.1-0.4-1.6-0.7c-0.2-0.2-0.5-0.4-0.8-0.7
+		c-0.3-0.3-0.5-0.5-0.6-0.8c-0.3-0.5-0.5-1-0.6-1.5c-0.2-0.5-0.3-0.9-0.4-1.4c-0.1-0.5-0.2-1-0.2-1.5c0-0.5,0-1,0.1-1.6
+		c0.2-1,0.4-2,0.8-2.9c0.4-0.9,0.8-1.7,1.4-2.3c0.5-0.7,1.2-1.2,1.9-1.6C30.2,0.2,30.9,0,31.7,0c0.3,0,0.5,0,0.8,0.1
+		c0.3,0.1,0.5,0.2,0.7,0.4c0.3,0.3,0.7,0.7,1,1.2c0.3,0.5,0.6,1.2,0.7,1.9c0.1,0,0.2,0,0.3,0c0.1,0,0.2,0,0.3,0c0,0.1,0,0.2,0,0.3
+		c0,0.1,0,0.2,0,0.3L33,4.6c-0.3,0.1-0.5,0.1-0.6,0c-0.1,0-0.2-0.1-0.2-0.2c-0.1-0.1-0.1-0.2,0-0.3c0.1,0,0.2,0,0.2,0
+		c0.1,0,0.1,0,0.2,0c0.2-0.2,0.3-0.3,0.3-0.6c0-0.2,0-0.5,0-0.7c0-0.5-0.2-0.9-0.5-1.3c-0.2-0.2-0.3-0.3-0.4-0.4
+		C31.8,1,31.6,1,31.4,1.1c-0.2,0-0.4,0.2-0.6,0.4c-0.2,0.2-0.4,0.5-0.5,0.9C30,2.6,29.9,3,29.8,3.3c-0.1,0.3-0.2,0.5-0.2,0.7
+		c-0.6,2.6-0.7,5.3-0.2,8c0.1,0.3,0.2,0.7,0.3,1s0.3,0.6,0.5,0.9c0.2,0.3,0.5,0.5,0.8,0.7c0.3,0.2,0.6,0.2,1,0.1
+		c0.6-0.1,1-0.4,1.4-1c0.3-0.5,0.6-1.1,0.7-1.8c0.1-0.3,0.1-0.6,0.1-0.9v-0.5c-0.2,0-0.4,0-0.6-0.1c-0.1-0.1-0.2-0.2-0.2-0.3
+		c0-0.1,0-0.2,0.1-0.3c0.6,0,1.2,0,1.7,0c0.6,0,1.2,0,1.7,0c0,0.1,0,0.2-0.1,0.3C36.7,10.2,36.7,10.3,36.7,10.4z"/>
+	<path fill="#c3c3c3" d="M48,14.2c0.1,0.2,0.3,0.3,0.5,0.4c0.2,0.1,0.5,0.1,0.7,0c0.1,0.1,0.1,0.2,0.1,0.4c0,0.2-0.1,0.3-0.2,0.4
+		c-0.1,0.1-0.2,0.2-0.4,0.2c-0.2,0-0.3,0-0.4,0c-0.3,0-0.7,0-1,0c-0.3,0-0.7,0-1-0.1c-0.3-0.1-0.7-0.2-1-0.4
+		c-0.3-0.2-0.5-0.4-0.7-0.7c-0.2-0.3-0.3-0.6-0.3-1c0-0.3,0-0.7,0-1.1V9.9c0-0.1,0-0.3,0-0.4c0-0.2-0.1-0.3-0.2-0.5
+		c-0.1-0.2-0.3-0.3-0.4-0.4c-0.2-0.1-0.4-0.1-0.7-0.1c-0.1,0-0.2,0-0.5,0.1c-0.2,0.3-0.3,0.5-0.5,0.8c-0.2,0.3-0.3,0.5-0.5,0.7
+		c0,0.8,0,1.5-0.1,2.2c0,0.7-0.1,1.5-0.1,2.1h1.4v1.1c-0.5,0-0.9,0.1-1.3,0c-0.4,0-0.8,0-1.2-0.1c-0.4,0-0.8-0.1-1.2-0.1
+		c-0.4,0-0.8,0-1.3,0c-0.1,0-0.3,0-0.4,0c-0.1,0-0.2,0-0.3-0.1c-0.1,0-0.1-0.1-0.1-0.2c0-0.1-0.1-0.3-0.1-0.4c0-0.1,0-0.3,0-0.4
+		c0-0.1,0.1-0.2,0.1-0.2c0.2,0.1,0.4,0.2,0.6,0.1s0.4-0.2,0.5-0.4c0-0.1,0.1-0.3,0.1-0.7c0-0.4,0-0.9,0.1-1.6c0-0.6,0.1-1.3,0.1-2.1
+		c0-0.8,0-1.6,0.1-2.4c0-0.8,0-1.5,0.1-2.3c0-0.7,0.1-1.3,0.1-1.8c0-0.2,0-0.5,0-0.7c0-0.2-0.1-0.4-0.2-0.6
+		c-0.1-0.2-0.3-0.3-0.5-0.4c-0.2-0.1-0.4,0-0.6,0.1c0-0.2-0.1-0.5-0.1-0.7c0-0.2,0-0.4-0.1-0.7c1,0,2,0.1,3,0.1c0.9,0,1.9,0.1,3,0.1
+		c0,0.1,0,0.2,0,0.3c0,0.1,0,0.3,0.1,0.4c0,0.1,0,0.3,0,0.4c0,0.1,0,0.2-0.1,0.2c-0.1,0.1-0.2,0.1-0.3,0.1c-0.1,0-0.2,0-0.4-0.1
+		c-0.1-0.1-0.3-0.1-0.4-0.2c-0.1-0.1-0.3-0.1-0.3-0.1c-0.1,0.9-0.1,1.9-0.1,2.9c0,1-0.1,2-0.1,3.1c0.7-1.2,1.4-2.5,2-3.8
+		c0.2-0.3,0.3-0.6,0.4-0.9c0.1-0.3,0.3-0.6,0.5-0.9c0.2-0.3,0.4-0.5,0.7-0.7C45.4,1,45.7,0.9,46,0.8c0.3-0.1,0.7-0.1,1,0
+		c0.3,0.1,0.6,0.2,0.9,0.5c0.2,0.3,0.4,0.6,0.4,1c0,0.4,0.1,0.8,0,1.1c0,0.2,0,0.3,0,0.5c0,0.2-0.1,0.3-0.2,0.4
+		c-0.1,0.2-0.2,0.3-0.4,0.4c-0.2,0.1-0.4,0.1-0.5,0.2c-0.1,0-0.3,0.1-0.4,0.1c-0.1,0-0.3,0-0.4,0C46.2,4.7,46,4.6,46,4.4
+		c-0.1-0.2-0.1-0.4,0-0.5c0.1-0.2,0.2-0.3,0.3-0.3c0.1,0,0.2-0.1,0.4-0.1c0.2-0.1,0.3-0.2,0.3-0.3c0.1-0.2,0.1-0.3,0.1-0.5
+		C47.1,2.4,47,2.2,47,2c-0.1-0.2-0.2-0.3-0.3-0.3c-0.2,0-0.3,0-0.5,0.1C46,1.9,45.9,2,45.7,2.2c-0.2,0.2-0.3,0.4-0.4,0.6
+		C45.2,3,45,3.3,44.9,3.5c-0.1,0.3-0.3,0.6-0.4,0.8c-0.2,0.2-0.3,0.5-0.4,0.8c-0.4,0.9-0.8,1.7-1.2,2.5c0.3,0,0.6-0.1,1,0
+		c0.4,0,0.7,0,1,0c0.3,0,0.7,0.1,1,0.2c0.3,0.1,0.6,0.3,0.8,0.6c0.3,0.3,0.4,0.6,0.5,1c0.1,0.4,0.1,0.8,0.2,1.1l0.2,2.1
+		c0,0.2,0.1,0.5,0.1,0.7C47.7,13.7,47.8,14,48,14.2z"/>
+	<path fill="#c3c3c3" d="M71.7,13.9c0.2,0.2,0.4,0.4,0.7,0.5c0.3,0.1,0.5,0,0.8-0.1c0,0.2,0.1,0.3,0.1,0.6c0.1,0.2,0.1,0.4,0.1,0.6
+		c-0.3,0-0.7,0-1.1,0s-0.8,0-1.3,0.1c-0.4,0-0.9,0-1.3,0c-0.4,0-0.8,0-1,0c0-0.1,0-0.1,0-0.2c0-0.1,0.1-0.2,0.2-0.3
+		c0.1-0.1,0.2-0.2,0.4-0.3c0.2-0.1,0.3-0.1,0.6-0.1c0.1,0,0.1-0.2,0.1-0.7c0-0.4,0-1,0-1.6c0-0.6,0-1.2-0.1-1.9s0-1.1,0-1.5
+		c0-1,0-1.9,0-2.6c0-0.7,0.1-1.5,0.1-2.2c-0.6,1.3-1.1,2.7-1.6,4.1c-0.5,1.5-1,3-1.5,4.4c0,0,0.1,0.1,0.1,0.2c-0.2,0-0.4,0-0.7,0.1
+		c-0.3,0.1-0.5,0.1-0.7,0.1c-0.5-1.9-1.1-3.7-1.6-5.5c-0.5-1.8-1.1-3.6-1.6-5.5c-0.1,1-0.1,2-0.1,3c0,1.1-0.1,2.1-0.1,3.2
+		c0,1.1,0,2.1-0.1,3.2c0,1-0.1,2-0.1,3h1.4v1.1c-0.5,0-0.9,0.1-1.3,0c-0.4,0-0.8,0-1.2-0.1c-0.4,0-0.8-0.1-1.2-0.1
+		c-0.4,0-0.8,0-1.3,0c-0.1,0-0.3,0-0.4,0c-0.1,0-0.2,0-0.3-0.1c-0.1,0-0.1-0.1-0.1-0.2c0-0.1-0.1-0.3-0.1-0.4c0-0.1,0-0.3,0-0.4
+		c0-0.1,0.1-0.2,0.1-0.2c0.2,0.1,0.4,0.2,0.6,0.1s0.4-0.2,0.5-0.4c0-0.1,0.1-0.3,0.1-0.7c0-0.4,0-0.9,0.1-1.6c0-0.6,0.1-1.3,0.1-2.1
+		C59,8.8,59,8,59,7.2c0-0.8,0-1.5,0.1-2.3c0-0.7,0.1-1.3,0.1-1.8c0-0.2,0-0.5,0-0.7c0-0.2-0.1-0.4-0.2-0.6c-0.1-0.2-0.3-0.3-0.5-0.4
+		c-0.2-0.1-0.4,0-0.6,0.1c0-0.2-0.1-0.5-0.1-0.7c0-0.2,0-0.4-0.1-0.7c1,0,2,0.1,3,0.1c0.9,0,1.9,0.1,3,0.1c0,0.3-0.1,0.5-0.4,0.7
+		c0.3,1.3,0.6,2.6,1,3.9c0.4,1.3,0.8,2.6,1.2,3.9c0.2-0.6,0.4-1.3,0.6-1.9c0.2-0.6,0.4-1.2,0.6-1.8C67,4.6,67.2,4,67.5,3.4
+		c0.2-0.6,0.4-1.3,0.6-2c-0.1,0-0.3,0-0.4-0.1c-0.1,0-0.2,0-0.4-0.1c-0.1,0-0.1-0.1-0.1-0.3c0-0.1,0.1-0.2,0.1-0.3
+		c0.1-0.1,0.2-0.1,0.3-0.1c0.1,0,0.2,0,0.3,0c0.4,0,0.7,0,1,0s0.6,0,0.9,0c0.3,0,0.6,0,0.9,0c0.3,0,0.6,0,1,0c0.1,0,0.3,0,0.4,0
+		c0.1,0,0.3,0.1,0.4,0.2c0.1,0.1,0.2,0.2,0.2,0.4c0,0.2,0,0.3-0.2,0.3c-0.1-0.1-0.2-0.1-0.3-0.1c-0.1,0-0.2,0.1-0.3,0.1
+		c-0.2,0.4-0.3,0.8-0.4,1.3c-0.1,0.5-0.1,0.9-0.1,1.4c-0.2,2.8-0.2,5.6,0,8.4c0,0.3,0,0.5,0.1,0.7C71.4,13.5,71.5,13.7,71.7,13.9z"
+		/>
+	<path fill="#c3c3c3" d="M81.7,12c-0.1,0-0.1,0-0.2,0c-0.1,0-0.1,0-0.2,0c0,0.4,0,0.9-0.2,1.3c-0.1,0.4-0.4,0.8-0.7,1.1
+		c-0.3,0.3-0.7,0.6-1.1,0.8c-0.4,0.2-0.9,0.3-1.3,0.4c-0.4,0.1-0.8,0-1.2,0c-0.4-0.1-0.8-0.2-1.1-0.5c-0.2-0.1-0.3-0.3-0.5-0.5
+		c-0.2-0.2-0.3-0.4-0.4-0.6c-0.2-0.4-0.3-0.7-0.4-1c-0.1-0.3-0.2-0.6-0.3-1C74,11.7,74,11.4,74,11c0-0.3,0-0.7,0.1-1.1
+		c0.1-0.7,0.3-1.4,0.5-2c0.3-0.6,0.6-1.1,0.9-1.6s0.8-0.8,1.3-1.1c0.5-0.3,1-0.4,1.5-0.4c0.2,0,0.4,0,0.6,0.1
+		c0.2,0.1,0.3,0.1,0.5,0.3C79.6,5.4,79.8,5.6,80,6c0.2,0.4,0.4,0.8,0.5,1.3c0.1,0,0.1,0,0.2,0c0.1,0,0.1,0,0.2,0c0,0.1,0,0.1,0,0.2
+		c0,0.1,0,0.1,0,0.2L79.2,8c-0.2,0.1-0.3,0.1-0.4,0c-0.1,0-0.1-0.1-0.2-0.2c0-0.1,0-0.1,0-0.2c0.1,0,0.1,0,0.2,0c0,0,0.1,0,0.2,0
+		c0.1-0.1,0.2-0.2,0.2-0.4c0-0.2,0-0.3,0-0.5c0-0.3-0.1-0.6-0.3-0.9c-0.1-0.1-0.2-0.2-0.3-0.3c-0.1-0.1-0.2-0.1-0.4,0
+		c-0.1,0-0.3,0.1-0.4,0.3c-0.1,0.2-0.3,0.4-0.4,0.6c-0.1,0.2-0.2,0.4-0.3,0.6c-0.1,0.2-0.1,0.4-0.1,0.5c-0.4,1.8-0.5,3.6-0.1,5.5
+		c0.1,0.2,0.1,0.4,0.2,0.7c0.1,0.2,0.2,0.4,0.3,0.6c0.1,0.2,0.3,0.3,0.6,0.5c0.2,0.1,0.4,0.1,0.7,0.1c0.4-0.1,0.7-0.3,1-0.7
+		c0.2-0.4,0.4-0.8,0.5-1.2c0-0.2,0.1-0.4,0.1-0.6v-0.3c-0.2,0-0.3,0-0.4,0c-0.1,0-0.1-0.1-0.1-0.2c0-0.1,0-0.2,0.1-0.2
+		c0.4,0,0.8,0,1.2,0c0.4,0,0.8,0,1.2,0c0,0.1,0,0.1,0,0.2C81.8,11.8,81.8,11.9,81.7,12z"/>
+	<path fill="#c3c3c3" d="M83.5,14.2c0.2-4.3,0.3-8.5,0.2-12.8c-0.3,0-0.6,0-0.9,0c-0.3,0-0.6,0-0.9,0c0-0.2,0-0.3,0-0.5s0-0.3,0-0.5
+		c0.7,0,1.3,0,2-0.1c0.7,0,1.3,0,2-0.1c0.8-0.2,1.6-0.2,2.4-0.1c0.8,0.1,1.6,0.3,2.4,0.5c0.7,0.3,1.4,0.7,1.9,1.2
+		c0.5,0.5,0.9,1.1,1.1,1.8C94,4.9,94.1,6.1,94,7.4C94,8.6,93.8,9.8,93.7,11c0,0.4-0.1,0.8-0.2,1.2c-0.1,0.4-0.3,0.8-0.5,1.1
+		c-0.3,0.5-0.8,1-1.3,1.3c-0.5,0.3-1.1,0.5-1.7,0.6c-0.5,0.1-0.9,0.2-1.4,0.1c-0.5,0-0.9,0-1.4-0.1v0c-0.2,0-0.3,0-0.5,0
+		s-0.4,0-0.5,0l-0.1,0c0,0,0,0,0,0c-0.6,0-1.3,0-1.9,0c-0.6,0-1.3,0-1.9,0c-0.2-0.4-0.1-0.8,0.2-1.1c0.2-0.2,0.3-0.2,0.5-0.3
+		C83.2,14.1,83.4,14.1,83.5,14.2z M89.4,1.9c-0.4-0.3-0.8-0.5-1.3-0.6c-0.5-0.1-1-0.1-1.5-0.1c-0.3,4.5-0.2,9.1,0.4,13.6
+		c0.2,0,0.4,0,0.5-0.1c0.2,0,0.4-0.1,0.6-0.1c0.3-0.1,0.6-0.2,0.9-0.4c0.3-0.2,0.6-0.4,0.8-0.7c0.2-0.3,0.4-0.6,0.5-1
+		s0.2-0.7,0.2-1.1c0.4-2.1,0.4-4.2,0.2-6.3c-0.1-0.6-0.2-1.2-0.4-1.9C90.3,2.8,89.9,2.3,89.4,1.9z"/>
+	<path fill="#c3c3c3" d="M102.4,9.7c-0.6-0.1-1.3-0.1-2,0c-0.7,0.1-1.4,0.4-2,0.8l-0.2-1.4L99.1,9c0-0.4-0.1-0.7-0.1-1
+		c0-0.2-0.1-0.5-0.1-0.9c-0.3,0-0.6,0.1-0.9,0.1c-0.3,0-0.6,0.1-1,0.1c-0.2,0.7-0.3,1.3-0.4,1.8c-0.1,0.5-0.2,1.1-0.4,1.6l0.2-0.1
+		l0.7,0.6c-0.4,0.2-0.8,0.6-1.2,1.1c-0.4,0.5-0.7,1-0.9,1.5l-0.9-0.5c0-0.1,0.1-0.2,0.2-0.4c0.1-0.2,0.2-0.3,0.2-0.4
+		c0.1-0.2,0.2-0.5,0.3-1c0.1-0.4,0.2-0.9,0.4-1.3c0.1-0.5,0.2-0.9,0.3-1.3c0.1-0.4,0.2-0.7,0.2-0.9c0.1-0.4,0.2-0.8,0.3-1.2
+		c0.1-0.4,0.2-0.8,0.3-1.2c0.2-0.7,0.3-1.4,0.4-2.1c0.1-0.7,0.2-1.4,0.3-2.2c-0.1,0-0.2,0-0.3,0c-0.1,0-0.2,0-0.3,0l0.1-0.8l4-0.1
+		l0.1,0.8c-0.1,0-0.2,0-0.2,0c0,0-0.1,0-0.2,0c0.1,0.7,0.2,1.4,0.3,2c0.1,0.6,0.2,1.2,0.3,1.8c0.1,0.6,0.2,1.2,0.3,1.8
+		c0.1,0.6,0.2,1.3,0.4,2c0.2,0,0.3,0,0.3,0c0,0,0.1,0,0.3,0L102.4,9.7z M98.8,6.1c-0.1-0.7-0.2-1.3-0.3-2c-0.1-0.6-0.3-1.3-0.4-2
+		c-0.1,0.6-0.2,1.3-0.4,2.1c-0.1,0.7-0.3,1.5-0.5,2.2L98.8,6.1z"/>
+	<path fill="#c3c3c3" d="M124.9,20.1c0-0.3,0.1-0.6,0.3-0.8c0.2-0.2,0.4-0.3,0.7-0.4c0.3-0.1,0.5,0,0.8,0.1c0.3,0.1,0.5,0.3,0.6,0.5
+		c0.3,0.4,0.6,0.9,0.7,1.4c0.2,0.5,0.2,1,0.2,1.5c0,0.5-0.1,1-0.3,1.5c-0.2,0.5-0.4,1-0.7,1.4c-0.6,0.9-1.4,1.6-2.4,2
+		c-1,0.5-2,0.7-3,0.7c-1.5,0-2.8-0.3-3.9-1s-2.1-1.4-3-2.4c-0.9-1-1.8-2.1-2.5-3.2c-0.8-1.2-1.5-2.3-2.3-3.5c-1.1,1.2-2.4,2.2-3.9,3
+		c-1.5,0.8-3,1.1-4.5,1c-1.1,0-2.1-0.1-3-0.5c-0.9-0.3-1.6-0.8-2.2-1.4c-0.6-0.6-0.9-1.3-1.1-2.2c-0.2-0.8-0.1-1.7,0.2-2.7
+		c0.3-0.9,0.7-1.6,1.3-2.2c0.6-0.6,1.2-1.1,2-1.5c0.7-0.4,1.5-0.6,2.4-0.7c0.8-0.1,1.7,0,2.6,0.2c0-1.7,0-3.4,0-5c0-1.7,0-3.2,0-4.6
+		c-0.3,0-0.6,0-0.9,0c-0.3,0-0.6,0-0.9,0c0-0.2,0-0.3,0-0.5s0-0.3,0-0.5l3.7-0.1c0.8-0.2,1.6-0.2,2.4-0.1c0.8,0.1,1.6,0.3,2.4,0.5
+		c0.7,0.3,1.4,0.7,1.9,1.2c0.5,0.5,0.9,1.1,1.1,1.8c0.3,1.2,0.4,2.4,0.3,3.6c-0.1,1.2-0.2,2.5-0.4,3.7c-0.1,1-0.4,2-0.8,3
+		c-0.5,1-1,2-1.7,2.9c0.3,0.4,0.6,0.8,0.8,1.2c0.3,0.4,0.5,0.8,0.8,1.2c0.5,0.8,1.1,1.6,1.7,2.5c0.6,0.8,1.3,1.6,2,2.4
+		c0.7,0.7,1.5,1.3,2.4,1.8s1.8,0.7,2.9,0.8c1.1,0,2.1-0.2,3-0.7c0.9-0.5,1.6-1.2,2.1-2.2c0.2-0.4,0.3-0.8,0.4-1.3
+		c0.1-0.5,0-0.9-0.1-1.3c-0.2,0.1-0.4,0.2-0.6,0.2c-0.2,0-0.4,0-0.6-0.1c-0.2-0.1-0.4-0.2-0.5-0.4S124.9,20.4,124.9,20.1z M102.9,21
+		c1.5-0.4,2.8-1,3.7-1.8c0.9-0.8,1.7-1.7,2.3-2.8c-0.2-0.2-0.3-0.5-0.6-0.7c-0.6-0.7-1.2-1.4-1.9-1.9c0,0.6,0.1,1.2,0.1,1.8
+		c0,0.6,0.1,1.1,0.2,1.6h0v0.1c-0.5,0-0.9,0-1.3,0c-0.4,0-0.8,0-1.2,0c-0.3,0-0.6,0-0.9,0c-0.3,0-0.6,0-0.9,0
+		c-0.1-0.2-0.1-0.4,0-0.7c0-0.2,0.1-0.3,0.3-0.5c0.3-0.3,0.7-0.4,1.1-0.2l0.1-3.5c-0.5-0.2-1-0.3-1.5-0.3c-0.5,0-1.1,0-1.6,0.1
+		c-0.6,0.1-1.1,0.3-1.6,0.6c-0.5,0.3-0.9,0.7-1.3,1.1c-0.4,0.4-0.7,0.9-0.9,1.5c-0.2,0.5-0.3,1.1-0.3,1.6c0,0.7,0.2,1.3,0.6,1.8
+		c0.4,0.5,0.9,0.9,1.4,1.4c0.2,0.2,0.5,0.3,0.8,0.5c0.3,0.1,0.7,0.2,1.1,0.3c0.4,0.1,0.8,0.1,1.2,0.1
+		C102.1,21.1,102.5,21.1,102.9,21z M109.3,1.9c-0.4-0.3-0.8-0.5-1.2-0.6c-0.5-0.1-0.9-0.1-1.4-0.1c-0.1,1.7-0.2,3.4-0.3,5.3
+		c-0.1,1.9-0.1,3.7,0,5.6c0.6,0.4,1.2,0.8,1.7,1.4c0.5,0.5,1,1.1,1.5,1.6c0.2-0.6,0.4-1.2,0.6-1.9c0.2-0.6,0.3-1.2,0.3-1.7
+		c0.2-1.1,0.2-2.1,0.3-3.1c0-1,0-2.1-0.1-3.1c-0.1-0.6-0.2-1.2-0.4-1.9C110.1,2.8,109.8,2.3,109.3,1.9z"/>
+	<path fill="#c3c3c3" d="M116.5,1.2c-0.3,0-0.6,0-0.9,0c-0.3,0-0.6,0-0.9,0V0.4c0.5,0,0.9,0,1.2-0.1s0.7,0,1.1,0c0.4,0,0.7,0,1.1,0
+		s0.8,0,1.3-0.1c0.9,0,1.8,0,2.8-0.1c0.9,0,1.8,0,2.8-0.1c0,0.6,0,1.2,0,1.8c0,0.6,0,1.2,0,1.8c-0.2,0-0.3,0-0.5,0
+		c-0.2,0-0.3,0-0.5,0c-0.1,0-0.2,0-0.3,0c-0.1,0-0.1-0.1,0-0.1c0.1-0.2,0.1-0.4,0.1-0.6s0-0.4-0.1-0.6c-0.1-0.2-0.2-0.4-0.3-0.6
+		c-0.1-0.2-0.2-0.3-0.4-0.4c-0.2-0.1-0.4-0.2-0.6-0.2c-0.2,0-0.5,0-0.7,0c-0.3,0-0.5,0.1-0.8,0.1c-0.3,0.1-0.5,0.2-0.6,0.4
+		c-0.1,0.2-0.1,0.3-0.1,0.3c0,0.1,0,0.2,0,0.3c0,0.7-0.1,1.3-0.1,2c0,0.6-0.1,1.3-0.1,1.9c0,0.2,0,0.3,0,0.5c0,0.2,0,0.3,0,0.5
+		c0.6-0.2,1.2-0.3,1.9-0.4c0.6-0.1,1.2-0.3,1.9-0.4c0,0.1,0.1,0.2,0.1,0.3c0,0.1,0,0.3,0,0.4c0,0.2-0.1,0.3-0.1,0.4
+		c-0.1,0.1-0.1,0.2-0.1,0.3c-0.1,0.1-0.2,0.1-0.4,0.2c-0.1,0-0.3,0.1-0.4,0.1c-0.5,0.1-0.9,0.2-1.4,0.3c-0.5,0.1-0.9,0.1-1.4,0.2
+		c0,1-0.1,2-0.2,2.9c-0.1,1-0.1,1.9-0.2,2.9c0.8,0.2,1.5,0.3,2,0.1c0.6-0.2,1.2-0.5,1.9-1c0.2-0.1,0.2-0.3,0.2-0.5
+		c0-0.2,0-0.5,0-0.7c0-0.2,0.1-0.5,0.2-0.6c0.1-0.2,0.3-0.3,0.7-0.4c0.4,0,0.6,0.1,0.7,0.4c0.1,0.3,0.2,0.7,0.2,1.1
+		c0,0.5,0,0.9-0.1,1.4c-0.1,0.5-0.1,0.9,0,1.2c-0.5,0-1,0-1.4,0c-0.4,0-0.8,0-1.2,0.1c-0.4,0-0.8,0-1.2,0.1c-0.4,0-0.9,0-1.3,0
+		c-0.9,0-1.7,0-2.5,0.1c-0.7,0.1-1.6,0.1-2.4,0.1c-0.2-0.2-0.2-0.4-0.2-0.7c0-0.2,0.1-0.5,0.3-0.6c0.2-0.2,0.3-0.3,0.6-0.3
+		c0.2-0.1,0.5,0,0.7,0.1c0.1-2.1,0.2-4.3,0.1-6.5C116.3,5.5,116.3,3.4,116.5,1.2z"/>
+</g>
+</svg>
+
+            </a>
+        </p>
+	</footer>
+
+	<script>
+		var algolia_app_id      = 'FU55RWGNDN';
+		var algolia_search_key  = 'c41c5de31ca55044dbb0bde815d35121';
+				var version             = '5.3';
+			</script>
+
+	<script id="search_suggestion_template" type="text/template">
+	<div class="autocomplete-wrapper">
+		{{#_highlightResult.h1}}
+		<div class="h1">
+			{{{ _highlightResult.h1.value }}}
+		</div>
+		{{/_highlightResult.h1}}
+
+		<div class="sub-section">
+			{{#_highlightResult.h2}}
+			<div class="h2">
+				<span class="hash">#</span> {{{ _highlightResult.h2.value }}}
+			</div>
+			{{/_highlightResult.h2}}
+
+			{{#_highlightResult.h3}}
+			<div class="h3">
+				> {{{ _highlightResult.h3.value }}}
+			</div>
+			{{/_highlightResult.h3}}
+
+			{{#_highlightResult.h4}}
+			<div class="h4">
+				> {{{ _highlightResult.h4.value }}}
+			</div>
+			{{/_highlightResult.h4}}
+		</div>
+
+		{{#_highlightResult.content}}
+		<div class="content">
+			{{{ _highlightResult.content.value }}}
+		</div>
+		{{/_highlightResult.content}}
+	</div>
+</script>
+
+<script id="search_empty_template" type="text/template">
+	<div class="autocomplete-wrapper empty">
+		<div class="h2">We didn't find any result for "{{query}}". Sorry!</div>
+	</div>
+</script>
+
+<script id="search_footer_template" type="text/template">
+	<div class="footer">
+		<a target="_blank" href="https://www.algolia.com/referrals/5a08e6a4/join">
+			<img width="50" src="/docs/assets/img/algolia-logo.png">
+			<div class="powered">powered by</div>
+			<div style="clear: both"></div>
+		</a>
+	</div>
+</script>
+
+	<script src="../../build/assets/js/laravel-be3cb5d7de.js"></script>
+	<script src="../../assets/js/viewport-units-buggyfill.js"></script>
+
+	<script>window.viewportUnitsBuggyfill.init();</script>
+    <script>
+          ga('create', 'UA-53903425-7', 'auto');
+          ga('send', 'pageview');
+    </script>
+</body>
+</html>

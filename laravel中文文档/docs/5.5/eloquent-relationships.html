@@ -1,0 +1,1558 @@
+<!doctype html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<title>Eloquent：关联 | Laravel 5.5 中文文档
+</title>
+	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+	<meta name="author" content="Taylor Otwell">
+	<meta name="description" content="Eloquent：关联,简介,定义关联,一对一,一对多,一对多（反向）,多对多,远层一对多,多态关联,多对多多态关联,查询关联,关联方法 Vs. 动态属性,基于存在的关联查询,基于不存在的关联查询,关联数据计数,预加载,为预加载...
+">
+	<meta name="keywords" content="laravel,laravel中国,laravel中文,laravel框架中文,laravel文档,laravel框架中国,laravel中文文档">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+			<link rel="canonical" href="eloquent-relationships.html" />
+		<!--[if lte IE 9]>
+		<script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+	<![endif]-->
+	<link rel="stylesheet" href="../../build/assets/css/laravel-4bbf92d154.css">
+	<link rel="apple-touch-icon" href="../../favicon.png.jpeg">
+    <style>
+        .list-group-item img.media-object {
+            width: 20px;
+            border-radius: 2px;
+            margin-right: 4px;
+            display: inline-block;
+        }
+    </style>
+</head>
+<body class="docs language-php">
+
+	<span class="overlay"></span>
+
+	<nav class="main">
+		<a href="../../index.html" class="brand nav-block">
+			<svg version="1.1"
+	 xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:a="http://ns.adobe.com/AdobeSVGViewerExtensions/3.0/"
+	 x="0px" y="0px" width="84.1px" height="57.6px" viewBox="0 0 84.1 57.6" enable-background="new 0 0 84.1 57.6"
+	 xml:space="preserve">
+<defs>
+</defs>
+<path fill="#FB503B" d="M83.8,26.9c-0.6-0.6-8.3-10.3-9.6-11.9c-1.4-1.6-2-1.3-2.9-1.2s-10.6,1.8-11.7,1.9c-1.1,0.2-1.8,0.6-1.1,1.6
+	c0.6,0.9,7,9.9,8.4,12l-25.5,6.1L21.2,1.5c-0.8-1.2-1-1.6-2.8-1.5C16.6,0.1,2.5,1.3,1.5,1.3c-1,0.1-2.1,0.5-1.1,2.9
+	c1,2.4,17,36.8,17.4,37.8c0.4,1,1.6,2.6,4.3,2c2.8-0.7,12.4-3.2,17.7-4.6c2.8,5,8.4,15.2,9.5,16.7c1.4,2,2.4,1.6,4.5,1
+	c1.7-0.5,26.2-9.3,27.3-9.8c1.1-0.5,1.8-0.8,1-1.9c-0.6-0.8-7-9.5-10.4-14c2.3-0.6,10.6-2.8,11.5-3.1C84.2,28,84.4,27.5,83.8,26.9z
+	 M37.5,36.4c-0.3,0.1-14.6,3.5-15.3,3.7c-0.8,0.2-0.8,0.1-0.8-0.2C21.2,39.6,4.4,4.8,4.1,4.4c-0.2-0.4-0.2-0.8,0-0.8
+	c0.2,0,13.5-1.2,13.9-1.2c0.5,0,0.4,0.1,0.6,0.4c0,0,18.7,32.3,19,32.8C38,36.1,37.8,36.3,37.5,36.4z M77.7,43.9
+	c0.2,0.4,0.5,0.6-0.3,0.8c-0.7,0.3-24.1,8.2-24.6,8.4c-0.5,0.2-0.8,0.3-1.4-0.6s-8.2-14-8.2-14L68.1,32c0.6-0.2,0.8-0.3,1.2,0.3
+	C69.7,33,77.5,43.6,77.7,43.9z M79.3,26.3c-0.6,0.1-9.7,2.4-9.7,2.4l-7.5-10.2c-0.2-0.3-0.4-0.6,0.1-0.7c0.5-0.1,9-1.6,9.4-1.7
+	c0.4-0.1,0.7-0.2,1.2,0.5c0.5,0.6,6.9,8.8,7.2,9.1C80.3,26,79.9,26.2,79.3,26.3z"/>
+</svg>
+
+			<span>Laravel</span>
+		</a>
+
+        <div class="search nav-block">
+            <svg version="1.1"
+	 xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:a="http://ns.adobe.com/AdobeSVGViewerExtensions/3.0/"
+	 x="0px" y="0px" width="16px" height="16px" viewBox="0 0 16 16" enable-background="new 0 0 16 16" xml:space="preserve">
+<defs>
+</defs>
+<g>
+	<g>
+		<path fill="#A1A1A1" d="M5.8,11.7c-1.6,0-3-0.6-4.1-1.7S0,7.4,0,5.8s0.6-3,1.7-4.1C2.8,0.6,4.3,0,5.8,0s3,0.6,4.1,1.7
+			c2.3,2.3,2.3,6,0,8.3C8.9,11.1,7.4,11.7,5.8,11.7z M5.8,1C4.5,1,3.3,1.5,2.4,2.4C1.5,3.3,1,4.5,1,5.8s0.5,2.5,1.4,3.4
+			c0.9,0.9,2.1,1.4,3.4,1.4s2.5-0.5,3.4-1.4c1.9-1.9,1.9-5,0-6.9C8.4,1.5,7.1,1,5.8,1z"/>
+	</g>
+	<g>
+		<path fill="#A1A1A1" d="M15.5,16c-0.1,0-0.3,0-0.3-0.1L9.3,10c-0.2-0.2-0.2-0.5,0-0.7s0.5-0.2,0.7,0l5.9,5.9
+			c0.2,0.2,0.2,0.5,0,0.7C15.8,16,15.6,16,15.5,16z"/>
+	</g>
+</g>
+</svg>
+
+            <input placeholder="搜索文档" type="text" v-model="search" id="search-input" v-on:blur="reset" />
+        </div>
+
+		<ul class="main-nav" v-if="! search">
+			<li class="nav-docs"><a href="../5.4.html">文档</a></li>
+<li ><a href="https://laravel-china.org/news" class="no-pjax">Laravel 资讯</a></li>
+<li class="dropdown"><a href="https://laravel-china.org/">Laravel China 社区</a></li>
+<li class="nav-forge"><a href="https://laravel-china.org/categories/1">酷工作</a></li>
+<li class="nav-docs"><a href="http://lumen.laravel-china.org">Lumen</a></li>
+<li class="nav-forge"><a href="https://cs.laravel-china.org/">速查表</a></li>
+<li class="nav-forge"><a href="https://fsdhub.com/books/laravel-essential-training-5.5">《Laravel 入门教程》</a></li>
+		</ul>
+
+        			<div class="switcher">
+	<div class="dropdown">
+		<button class="btn dropdown-toggle btn-inverted" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-expanded="true">
+			<!--<span class="faint">v</span> -->
+			5.5
+			<span class="caret"></span>
+		</button>
+		<ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu1">
+							<li role="presentation">
+					<a role="menuitem" tabindex="-1" href="eloquent-relationships.html">5.5</a>
+				</li>
+							<li role="presentation">
+					<a role="menuitem" tabindex="-1" href="../5.4/eloquent-relationships.html">5.4</a>
+				</li>
+							<li role="presentation">
+					<a role="menuitem" tabindex="-1" href="../5.3/eloquent-relationships.html">5.3</a>
+				</li>
+							<li role="presentation">
+					<a role="menuitem" tabindex="-1" href="../5.2/eloquent-relationships.html">5.2</a>
+				</li>
+							<li role="presentation">
+					<a role="menuitem" tabindex="-1" href="../5.1/eloquent-relationships.html">5.1</a>
+				</li>
+					</ul>
+	</div>
+</div>
+		
+        <div class="responsive-sidebar-nav">
+			<a href="eloquent-relationships.html#" class="toggle-slide menu-link btn">&#9776;</a>
+		</div>
+	</nav>
+
+	<nav id="slide-menu" class="slide-menu" role="navigation">
+
+	<div class="brand">
+		<a href="../../index.html">
+			<img src="../../assets/img/laravel-logo-white.png" height="50">
+		</a>
+	</div>
+
+	<ul class="slide-main-nav">
+		<li><a href="../../index.html">Home</a></li>
+		<li class="nav-docs"><a href="../5.4.html">文档</a></li>
+<li ><a href="https://laravel-china.org/news" class="no-pjax">Laravel 资讯</a></li>
+<li class="dropdown"><a href="https://laravel-china.org/">Laravel China 社区</a></li>
+<li class="nav-forge"><a href="https://laravel-china.org/categories/1">酷工作</a></li>
+<li class="nav-docs"><a href="http://lumen.laravel-china.org">Lumen</a></li>
+<li class="nav-forge"><a href="https://cs.laravel-china.org/">速查表</a></li>
+<li class="nav-forge"><a href="https://fsdhub.com/books/laravel-essential-training-5.5">《Laravel 入门教程》</a></li>
+	</ul>
+
+	<div class="slide-docs-nav">
+		<h2>Documentation</h2>
+		<ul>
+<li>
+<h2>前言</h2>
+<ul>
+<li><a href="about.html">翻译说明</a></li>
+<li><a href="releases.html">发行说明</a></li>
+<li><a href="upgrade.html">升级说明</a></li>
+<li><a href="contributions.html">贡献导引</a></li>
+<li><a href="http://d.laravel-china.org/api/5.5">API 文档</a></li>
+</ul>
+</li>
+<li>
+<h2>入门指南</h2>
+<ul>
+<li><a href="installation.html">安装</a></li>
+<li><a href="configuration.html">配置信息</a></li>
+<li><a href="structure.html">文件夹结构</a></li>
+<li><a href="homestead.html">Homestead</a></li>
+<li><a href="valet.html">Valet</a></li>
+</ul>
+</li>
+<li>
+<h2>核心架构</h2>
+<ul>
+<li><a href="lifecycle.html">请求周期</a></li>
+<li><a href="container.html">服务容器</a></li>
+<li><a href="providers.html">服务提供者</a></li>
+<li><a href="facades.html">Facades</a></li>
+<li><a href="contracts.html">Contracts</a></li>
+</ul>
+</li>
+<li>
+<h2>基础功能</h2>
+<ul>
+<li><a href="routing.html">路由</a></li>
+<li><a href="middleware.html">中间件</a></li>
+<li><a href="csrf.html">CSRF 保护</a></li>
+<li><a href="controllers.html">控制器</a></li>
+<li><a href="requests.html">请求</a></li>
+<li><a href="responses.html">响应</a></li>
+<li><a href="views.html">视图</a></li>
+<li><a href="redirects.html">重定向</a></li>
+<li><a href="session.html">Session</a></li>
+<li><a href="validation.html">表单验证</a></li>
+<li><a href="errors.html">错误与日志</a></li>
+</ul>
+</li>
+<li>
+<h2>前端开发</h2>
+<ul>
+<li><a href="blade.html">Blade 模板</a></li>
+<li><a href="localization.html">本地化</a></li>
+<li><a href="frontend.html">前端指南</a></li>
+<li><a href="mix.html">编辑资源 Mix</a></li>
+</ul>
+</li>
+<li>
+<h2>安全相关</h2>
+<ul>
+<li><a href="authentication.html">用户认证</a></li>
+<li><a href="passport.html">API 认证</a></li>
+<li><a href="authorization.html">用户授权</a></li>
+<li><a href="encryption.html">加密解密</a></li>
+<li><a href="hashing.html">哈希</a></li>
+<li><a href="passwords.html">重置密码</a></li>
+</ul>
+</li>
+<li>
+<h2>综合话题</h2>
+<ul>
+<li><a href="artisan.html">Artisan 命令行</a></li>
+<li><a href="broadcasting.html">广播系统</a></li>
+<li><a href="cache.html">缓存系统</a></li>
+<li><a href="collections.html">集合</a></li>
+<li><a href="events.html">事件系统</a></li>
+<li><a href="filesystem.html">文件存储</a></li>
+<li><a href="helpers.html">辅助函数</a></li>
+<li><a href="mail.html">邮件发送</a></li>
+<li><a href="notifications.html">消息通知</a></li>
+<li><a href="packages.html">扩展包开发</a></li>
+<li><a href="queues.html">队列</a></li>
+<li><a href="scheduling.html">任务调度</a></li>
+</ul>
+</li>
+<li>
+<h2>数据库</h2>
+<ul>
+<li><a href="database.html">快速入门</a></li>
+<li><a href="queries.html">查询构造器</a></li>
+<li><a href="pagination.html">分页</a></li>
+<li><a href="migrations.html">数据库迁移</a></li>
+<li><a href="seeding.html">数据填充</a></li>
+<li><a href="redis.html">Redis</a></li>
+</ul>
+</li>
+<li>
+<h2>Eloquent ORM</h2>
+<ul>
+<li><a href="eloquent.html">快速入门</a></li>
+<li><a href="eloquent-relationships.html">模型关联</a></li>
+<li><a href="eloquent-collections.html">Eloquent 集合</a></li>
+<li><a href="eloquent-mutators.html">修改器</a></li>
+<li><a href="eloquent-resources.html">API 资源</a></li>
+<li><a href="eloquent-serialization.html">序列化</a></li>
+</ul>
+</li>
+<li>
+<h2>测试相关</h2>
+<ul>
+<li><a href="testing.html">快速入门</a></li>
+<li><a href="http-tests.html">HTTP 测试</a></li>
+<li><a href="dusk.html">浏览器测试 Dusk</a></li>
+<li><a href="database-testing.html">数据库测试</a></li>
+<li><a href="mocking.html">测试模拟器</a></li>
+</ul>
+</li>
+<li>
+<h2>官方扩展包</h2>
+<ul>
+<li><a href="billing.html">Cashier 交易工具包</a></li>
+<li><a href="envoy.html">Envoy 部署工具</a></li>
+<li><a href="horizon.html">Horizon</a></li>
+<li><a href="passport.html">Passport OAuth 认证</a></li>
+<li><a href="scout.html">Scout 全文搜索</a></li>
+<li><a href="socialite.html">Socialite 社会化登录</a></li>
+</ul>
+</li>
+</ul>
+	</div>
+
+</nav>
+
+<div class="docs-wrapper container">
+
+	<section class="sidebar">
+
+            <div class="header">
+              <a type="button" class="btn btn-primary btn-inverted btn-lg btn-block turnofflight"><i class="fa fa-lightbulb-o"></i> 夜间模式 </a>
+              <br>
+              <div class="versions text-center ">
+                <a class="doc-btn btn-inverted active" href="../5.5.html" title="Laravel 5.5 中文文档">C5.5</a>
+                <a class="doc-btn btn-inverted " href="../5.4.html" title="Laravel 5.4 中文文档">C5.4</a>
+                <a class="doc-btn btn-inverted " href="../5.1.html" title="Laravel 5.1 中文文档">C5.1</a>
+              </div>
+            </div>
+
+            <a href="https://laravel-china.org/topics/3383" target="_blank" rel="nofollow" title="" style="display: block;margin-bottom: 23px;">
+                <img src="https://dn-phphub.qbox.me/uploads/images/201612/10/1/k7wwMpJduq.jpg" style="width: 100%;border: 1px solid #d8d3d3;box-shadow: 0 0 30px #d4d4d4;-moz-box-shadow: 0 0 30px #ccc;-webkit-box-shadow: 0 0 30px #d4d4d4;margin-bottom: 30px;margin-top: 10px;border-radius: 4px;">
+            </a>
+
+            <small><a href="eloquent-relationships.html#" id="doc-expand" style="font-size: 9px; color: #525252;">▶</a></small>
+
+		<ul>
+<li>
+<h2>前言</h2>
+<ul>
+<li><a href="about.html">翻译说明</a></li>
+<li><a href="releases.html">发行说明</a></li>
+<li><a href="upgrade.html">升级说明</a></li>
+<li><a href="contributions.html">贡献导引</a></li>
+<li><a href="http://d.laravel-china.org/api/5.5">API 文档</a></li>
+</ul>
+</li>
+<li>
+<h2>入门指南</h2>
+<ul>
+<li><a href="installation.html">安装</a></li>
+<li><a href="configuration.html">配置信息</a></li>
+<li><a href="structure.html">文件夹结构</a></li>
+<li><a href="homestead.html">Homestead</a></li>
+<li><a href="valet.html">Valet</a></li>
+</ul>
+</li>
+<li>
+<h2>核心架构</h2>
+<ul>
+<li><a href="lifecycle.html">请求周期</a></li>
+<li><a href="container.html">服务容器</a></li>
+<li><a href="providers.html">服务提供者</a></li>
+<li><a href="facades.html">Facades</a></li>
+<li><a href="contracts.html">Contracts</a></li>
+</ul>
+</li>
+<li>
+<h2>基础功能</h2>
+<ul>
+<li><a href="routing.html">路由</a></li>
+<li><a href="middleware.html">中间件</a></li>
+<li><a href="csrf.html">CSRF 保护</a></li>
+<li><a href="controllers.html">控制器</a></li>
+<li><a href="requests.html">请求</a></li>
+<li><a href="responses.html">响应</a></li>
+<li><a href="views.html">视图</a></li>
+<li><a href="redirects.html">重定向</a></li>
+<li><a href="session.html">Session</a></li>
+<li><a href="validation.html">表单验证</a></li>
+<li><a href="errors.html">错误与日志</a></li>
+</ul>
+</li>
+<li>
+<h2>前端开发</h2>
+<ul>
+<li><a href="blade.html">Blade 模板</a></li>
+<li><a href="localization.html">本地化</a></li>
+<li><a href="frontend.html">前端指南</a></li>
+<li><a href="mix.html">编辑资源 Mix</a></li>
+</ul>
+</li>
+<li>
+<h2>安全相关</h2>
+<ul>
+<li><a href="authentication.html">用户认证</a></li>
+<li><a href="passport.html">API 认证</a></li>
+<li><a href="authorization.html">用户授权</a></li>
+<li><a href="encryption.html">加密解密</a></li>
+<li><a href="hashing.html">哈希</a></li>
+<li><a href="passwords.html">重置密码</a></li>
+</ul>
+</li>
+<li>
+<h2>综合话题</h2>
+<ul>
+<li><a href="artisan.html">Artisan 命令行</a></li>
+<li><a href="broadcasting.html">广播系统</a></li>
+<li><a href="cache.html">缓存系统</a></li>
+<li><a href="collections.html">集合</a></li>
+<li><a href="events.html">事件系统</a></li>
+<li><a href="filesystem.html">文件存储</a></li>
+<li><a href="helpers.html">辅助函数</a></li>
+<li><a href="mail.html">邮件发送</a></li>
+<li><a href="notifications.html">消息通知</a></li>
+<li><a href="packages.html">扩展包开发</a></li>
+<li><a href="queues.html">队列</a></li>
+<li><a href="scheduling.html">任务调度</a></li>
+</ul>
+</li>
+<li>
+<h2>数据库</h2>
+<ul>
+<li><a href="database.html">快速入门</a></li>
+<li><a href="queries.html">查询构造器</a></li>
+<li><a href="pagination.html">分页</a></li>
+<li><a href="migrations.html">数据库迁移</a></li>
+<li><a href="seeding.html">数据填充</a></li>
+<li><a href="redis.html">Redis</a></li>
+</ul>
+</li>
+<li>
+<h2>Eloquent ORM</h2>
+<ul>
+<li><a href="eloquent.html">快速入门</a></li>
+<li><a href="eloquent-relationships.html">模型关联</a></li>
+<li><a href="eloquent-collections.html">Eloquent 集合</a></li>
+<li><a href="eloquent-mutators.html">修改器</a></li>
+<li><a href="eloquent-resources.html">API 资源</a></li>
+<li><a href="eloquent-serialization.html">序列化</a></li>
+</ul>
+</li>
+<li>
+<h2>测试相关</h2>
+<ul>
+<li><a href="testing.html">快速入门</a></li>
+<li><a href="http-tests.html">HTTP 测试</a></li>
+<li><a href="dusk.html">浏览器测试 Dusk</a></li>
+<li><a href="database-testing.html">数据库测试</a></li>
+<li><a href="mocking.html">测试模拟器</a></li>
+</ul>
+</li>
+<li>
+<h2>官方扩展包</h2>
+<ul>
+<li><a href="billing.html">Cashier 交易工具包</a></li>
+<li><a href="envoy.html">Envoy 部署工具</a></li>
+<li><a href="horizon.html">Horizon</a></li>
+<li><a href="passport.html">Passport OAuth 认证</a></li>
+<li><a href="scout.html">Scout 全文搜索</a></li>
+<li><a href="socialite.html">Socialite 社会化登录</a></li>
+</ul>
+</li>
+</ul>
+
+		<hr>
+            <ul>
+              <li>社交账号</li>
+                <ul class="social-account">
+                  <li><a href="http://weibo.com/1837553744/profile?topnav=1&wvr=6&is_all=1">Summer 的微博</a></li>
+                  <li>新手 QQ 群：282196078</li>
+                </ul>
+
+            </ul>
+
+            <ul>
+              <li>
+              微信订阅号
+                <ul>
+                  <li>
+<img class="image-border popover-with-html" data-content="" src="https://dn-phphub.qbox.me/uploads/images/201708/06/1/4zgVR8dNCt.png" style="width: 148px;height: 148px;border:1px solid #ccc;padding:2px;border-radius:3px;margin-top:5px;" data-original-title="" title="">
+                  </li>
+                </ul>
+                </li>
+            </ul>
+
+            <ul>
+              <li>推荐资源
+              <ul class="list list-group resource-links">
+                    <li class="list-group-item ">
+                <a href="../../index.html" class="no-pjax" title="Laravel 中文文档">
+                    <img class="media-object inline-block " src="https://dn-phphub.qbox.me/uploads/banners/ql9XtosRhTe4v8HVC3TV.jpg">
+                    Laravel 中文文档
+                </a>
+            </li>
+                    <li class="list-group-item ">
+                <a href="https://lumen.laravel-china.org" class="no-pjax" title="Lumen 中文文档">
+                    <img class="media-object inline-block " src="https://dn-phphub.qbox.me/uploads/banners/bcMFkfsJZpetLgKFwWqY.jpg">
+                    Lumen 中文文档
+                </a>
+            </li>
+                    <li class="list-group-item ">
+                <a href="https://cs.laravel-china.org/" class="no-pjax" title="Laravel 速查表">
+                    <img class="media-object inline-block " src="https://dn-phphub.qbox.me/uploads/banners/cV55gsrH70qz6VdKr502.jpg">
+                    Laravel 速查表
+                </a>
+            </li>
+                    <li class="list-group-item ">
+                <a href="http://yousails.mikecrm.com/4Dh5uWU" class="no-pjax" title="Laravel 软件外包服务">
+                    <img class="media-object inline-block " src="https://dn-phphub.qbox.me/uploads/banners/v89tIQ6vjceA6g7JmrQB.png">
+                    Laravel 软件外包
+                </a>
+            </li>
+                    <li class="list-group-item ">
+                <a href="https://laravel-china.org/topics/3626" class="no-pjax" title="Laravel 远程工作 ">
+                    <img class="media-object inline-block " src="https://dn-phphub.qbox.me/uploads/banners/Xlq6s7wLxvX8FlTP4qZe.png">
+                    Laravel 远程工作
+                </a>
+            </li>
+                    <li class="list-group-item ">
+                <a href="https://laravel-china.github.io/php-the-right-way/" class="no-pjax" title="PHP 之道 - PHPer 必读">
+                    <img class="media-object inline-block " src="https://dn-phphub.qbox.me/uploads/banners/vA50AYuscu2RCMowq7ee.png">
+                    PHP 之道
+                </a>
+            </li>
+                    <li class="list-group-item ">
+                <a href="https://laravel-china.org/composer" class="no-pjax" title="Composer 中文全量镜像">
+                    <img class="media-object inline-block " src="https://dn-phphub.qbox.me/uploads/banners/KltcLb6leMa12dvTAxD7.png">
+                    Composer 镜像
+                </a>
+            </li>
+            </ul>
+              </li>
+            </ul>
+
+	</section>
+
+	
+
+	<article>
+
+		<div class="alert alert-warning" role="alert">
+			一小时同步一次，更多信息请查阅 <a href="https://laravel-china.org/topics/2095">文档导读</a>。
+			发现瑕疵？你也可以
+				<a href="https://github.com/laravel-china/laravel-docs/edit/5.5/eloquent-relationships.md"><i class="fa fa-pencil-square-o"></i> 改进本文</a>
+			。<a href="https://laravel-china.org/topics/4026" target="_blank"><i class="fa fa-cloud-download" aria-hidden="true"></i> 离线版本下载</a>
+		</div>
+
+		<div class="main-content">
+			<h1>Eloquent：关联</h1>
+<ul>
+<li><a href="eloquent-relationships.html#introduction">简介</a></li>
+<li><a href="eloquent-relationships.html#defining-relationships">定义关联</a>
+<ul>
+<li><a href="eloquent-relationships.html#one-to-one">一对一</a></li>
+<li><a href="eloquent-relationships.html#one-to-many">一对多</a></li>
+<li><a href="eloquent-relationships.html#one-to-many-inverse">一对多（反向）</a></li>
+<li><a href="eloquent-relationships.html#many-to-many">多对多</a></li>
+<li><a href="eloquent-relationships.html#has-many-through">远层一对多</a></li>
+<li><a href="eloquent-relationships.html#polymorphic-relations">多态关联</a></li>
+<li><a href="eloquent-relationships.html#many-to-many-polymorphic-relations">多对多多态关联</a></li>
+</ul></li>
+<li><a href="eloquent-relationships.html#querying-relations">查询关联</a>
+<ul>
+<li><a href="eloquent-relationships.html#relationship-methods-vs-dynamic-properties">关联方法 Vs. 动态属性</a></li>
+<li><a href="eloquent-relationships.html#querying-relationship-existence">基于存在的关联查询</a></li>
+<li><a href="eloquent-relationships.html#querying-relationship-absence">基于不存在的关联查询</a></li>
+<li><a href="eloquent-relationships.html#counting-related-models">关联数据计数</a></li>
+</ul></li>
+<li><a href="eloquent-relationships.html#eager-loading">预加载</a>
+<ul>
+<li><a href="eloquent-relationships.html#constraining-eager-loads">为预加载添加约束条件</a></li>
+<li><a href="eloquent-relationships.html#lazy-eager-loading">延迟预加载</a></li>
+</ul></li>
+<li><a href="eloquent-relationships.html#inserting-and-updating-related-models">插入 &amp; 更新关联模型</a>
+<ul>
+<li><a href="eloquent-relationships.html#the-save-method"><code>save</code> 方法</a></li>
+<li><a href="eloquent-relationships.html#the-create-method"><code>create</code> 方法</a></li>
+<li><a href="eloquent-relationships.html#updating-belongs-to-relationships">更新 <code>belongsTo</code> 关联</a></li>
+<li><a href="eloquent-relationships.html#updating-many-to-many-relationships">多对多关联</a></li>
+</ul></li>
+<li><a href="eloquent-relationships.html#touching-parent-timestamps">更新父级时间戳</a></li>
+</ul>
+<p><a name="introduction"></a></p>
+<h2>简介</h2>
+<p>数据库表通常相互关联。 例如，一篇博客文章可能有许多评论，或者一个订单对应一个下单用户。Eloquent 让这些关联的管理和使用变得简单，并支持多种类型的关联：</p>
+<ul>
+<li><a href="eloquent-relationships.html#one-to-one">一对一</a></li>
+<li><a href="eloquent-relationships.html#one-to-many">一对多</a></li>
+<li><a href="eloquent-relationships.html#many-to-many">多对多</a></li>
+<li><a href="eloquent-relationships.html#has-many-through">远层一对多</a></li>
+<li><a href="eloquent-relationships.html#polymorphic-relations">多态关联</a></li>
+<li><a href="eloquent-relationships.html#many-to-many-polymorphic-relations">多对多多态关联</a></li>
+</ul>
+<p><a name="defining-relationships"></a></p>
+<h2>定义关联</h2>
+<p>Eloquent 关联在 Eloquent 模型类中以方法的形式呈现。如同 Eloquent 模型本身，关联也可以作为强大的 <a href="queries.html">查询语句构造器</a> 使用，提供了强大的链式调用和查询功能。例如，我们可以在 <code>posts</code> 关联的链式调用中附加一个约束条件：</p>
+<pre><code>$user-&gt;posts()-&gt;where('active', 1)-&gt;get();</code></pre>
+<p>不过，在深入使用关联之前，让我们先学习如何定义每种关联类型。</p>
+<p><a name="one-to-one"></a></p>
+<h3>一对一</h3>
+<p>一对一关联是最基本的关联关系。例如，一个 <code>User</code> 模型可能关联一个 <code>Phone</code> 模型。为了定义这个关联，我们要在 <code>User</code> 模型中写一个 <code>phone</code> 方法，在<code>phone</code> 方法内部调用 <code>hasOne</code> 方法并返回其结果：</p>
+<pre><code>&lt;?php
+
+namespace App;
+
+use Illuminate\Database\Eloquent\Model;
+
+class User extends Model
+{
+    /**
+     * 获得与用户关联的电话记录。
+     */
+    public function phone()
+    {
+        return $this-&gt;hasOne('App\Phone');
+    }
+}</code></pre>
+<p><code>hasOne</code> 方法的第一个参数是关联模型的类名。关联关系定义好后，我们就可以使用 Eloquent 动态属性获得相关的记录。您可以像在访问模型中定义的属性一样，使用动态属性：</p>
+<pre><code>$phone = User::find(1)-&gt;phone;</code></pre>
+<p>Eloquent 会基于模型名决定外键名称。在当前场景中，Eloquent 假设 <code>Phone</code> 模型有一个 <code>user_id</code> 外键，如果外键名不是这个，可以通过给 <code>hasOne</code> 方法传递第二个参数覆盖默认使用的外键名： </p>
+<pre><code>return $this-&gt;hasOne('App\Phone', 'foreign_key');</code></pre>
+<p>此外，Eloquent 假定外键值是与父级 <code>id</code>（或自定义 <code>$primaryKey</code>）列的值相匹配的。 换句话说，Eloquent 将在 <code>Phone</code> 记录的 <code>user_id</code> 列中查找与用户表的 <code>id</code> 列相匹配的值。 如果您希望该关联使用 <code>id</code>以外的自定义键名，则可以给 <code>hasOne</code> 方法传递第三个参数：</p>
+<pre><code>return $this-&gt;hasOne('App\Phone', 'foreign_key', 'local_key');</code></pre>
+<h4>定义反向关联</h4>
+<p>我们已经能从 <code>User</code> 模型访问到 <code>Phone</code> 模型了。现在，再在 <code>Phone</code> 模型中定义一个关联，此关联能让我们访问到拥有此电话的 <code>User</code> 模型。这时，使用的是与 <code>hasOne</code> 方法对应的 <code>belongsTo</code> 方法：</p>
+<pre><code>&lt;?php
+
+namespace App;
+
+use Illuminate\Database\Eloquent\Model;
+
+class Phone extends Model
+{
+    /**
+     * 获得拥有此电话的用户。
+     */
+    public function user()
+    {
+        return $this-&gt;belongsTo('App\User');
+    }
+}</code></pre>
+<p>在上面的例子中，Eloquent 会尝试匹配 <code>Phone</code> 模型上的 <code>user_id</code> 至 <code>User</code> 模型上的 <code>id</code>。 它是通过检查关系方法的名称并使用 <code>_id</code>  作为后缀名来确定默认外键名称的。 但是，如果<code>Phone</code>模型的外键不是<code>user_id</code>，那么可以将自定义键名作为第二个参数传递给<code>belongsTo</code>方法：</p>
+<pre><code>/**
+ * 获得拥有此电话的用户。
+ */
+public function user()
+{
+    return $this-&gt;belongsTo('App\User', 'foreign_key');
+}</code></pre>
+<p>如果父级模型没有使用 <code>id</code> 作为主键，或者是希望用不同的字段来连接子级模型，则可以通过给 <code>belongsTo</code> 方法传递第三个参数的形式指定父级数据表的自定义键：</p>
+<pre><code>/**
+ * 获得拥有此电话的用户。
+ */
+public function user()
+{
+    return $this-&gt;belongsTo('App\User', 'foreign_key', 'other_key');
+}</code></pre>
+<p><a name="default-models"></a></p>
+<h4>默认模型</h4>
+<p><code>belongsTo</code> 关联允许定义默认模型，这适应于当关联结果返回的是 <code>null</code> 的情况。这种设计模式通常称为 <a href="https://en.wikipedia.org/wiki/Null_Object_pattern">空对象模式</a>，为您免去了额外的条件判断代码。在下面的例子中，<code>user</code> 关联如果没有找到文章的作者，就会返回一个空的 <code>App\User</code> 模型。</p>
+<pre><code>/**
+ * 获得此文章的作者。
+ */
+public function user()
+{
+    return $this-&gt;belongsTo('App\User')-&gt;withDefault();
+}</code></pre>
+<p>您也可以通过传递数组或者使用闭包的形式，填充默认模型的属性：</p>
+<pre><code>/**
+ * 获得此文章的作者。
+ */
+public function user()
+{
+    return $this-&gt;belongsTo('App\User')-&gt;withDefault([
+        'name' =&gt; '游客',
+    ]);
+}
+
+/**
+ * 获得此文章的作者。
+ */
+public function user()
+{
+    return $this-&gt;belongsTo('App\User')-&gt;withDefault(function ($user) {
+        $user-&gt;name = '游客';
+    });
+}</code></pre>
+<p><a name="one-to-many"></a></p>
+<h3>一对多</h3>
+<p>「一对多」关联用于定义单个模型拥有任意数量的其它关联模型。例如，一篇博客文章可能会有无限多条评论。就像其它的 Eloquent 关联一样，一对多关联的定义也是在 Eloquent 模型中写一个方法：</p>
+<pre><code>&lt;?php
+
+namespace App;
+
+use Illuminate\Database\Eloquent\Model;
+
+class Post extends Model
+{
+    /**
+     * 获得此博客文章的评论。
+     */
+    public function comments()
+    {
+        return $this-&gt;hasMany('App\Comment');
+    }
+}</code></pre>
+<p>记住，Eloquent 会自动确定 <code>Comment</code> 模型上正确的外键字段。按照约定，Eloquent 使用父级模型名的「snake case」形式、加上 <code>_id</code> 后缀名作为外键字段。对应到上面的场景，就是 Eloquent 假定 <code>Comment</code> 模型对应到 <code>Post</code> 模型上的那个外键字段是 <code>post_id</code>。</p>
+<p>关联关系定义好后，我们就可以通过访问 <code>comments</code> 属性获得评论集合。记住，因为 Eloquent 提供了「动态属性」，所以我们可以像在访问模型中定义的属性一样，访问关联方法：</p>
+<pre><code>$comments = App\Post::find(1)-&gt;comments;
+
+foreach ($comments as $comment) {
+    //
+}</code></pre>
+<p>当然，由于所有的关联还可以作为查询语句构造器使用，因此你可以使用链式调用的方式、在 <code>comments</code> 方法上添加额外的约束条件：</p>
+<pre><code>$comments = App\Post::find(1)-&gt;comments()-&gt;where('title', 'foo')-&gt;first();</code></pre>
+<p>形如 <code>hasOne</code> 方法，您也可以在使用 <code>hasMany</code> 方法的时候，通过传递额外参数来覆盖默认使用的外键与本地键。</p>
+<pre><code>return $this-&gt;hasMany('App\Comment', 'foreign_key');
+
+return $this-&gt;hasMany('App\Comment', 'foreign_key', 'local_key');</code></pre>
+<p><a name="one-to-many-inverse"></a></p>
+<h3>一对多（反向）</h3>
+<p>现在，我们已经能获得一篇文章的所有评论，接着再定义一个通过评论获得所属文章的关联。这个关联是 <code>hasMany</code> 关联的反向关联，在子级模型中使用 <code>belongsTo</code> 方法定义它：</p>
+<pre><code>&lt;?php
+
+namespace App;
+
+use Illuminate\Database\Eloquent\Model;
+
+class Comment extends Model
+{
+    /**
+     * 获得此评论所属的文章。
+     */
+    public function post()
+    {
+        return $this-&gt;belongsTo('App\Post');
+    }
+}</code></pre>
+<p>关联关系定义好后，我们就可以在 <code>Comment</code> 模型上使用 <code>post</code> 「动态属性」获得 <code>Post</code> 模型了。</p>
+<pre><code>$comment = App\Comment::find(1);
+
+echo $comment-&gt;post-&gt;title;</code></pre>
+<p>在上面的例子中，Eloquent 会尝试用 <code>Comment</code> 模型的 <code>post_id</code> 与 <code>Post</code> 模型的 <code>id</code> 进行匹配。默认外键名是 Eloquent 依据关联名、并在关联名后加上 <code>_id</code> 后缀确定的。当然，如果 <code>Comment</code> 模型的外键不是 <code>post_id</code>，那么可以将自定义键名作为第二个参数传递给<code>belongsTo</code>方法：</p>
+<pre><code>/**
+ * 获得此评论所属的文章。
+ */
+public function post()
+{
+    return $this-&gt;belongsTo('App\Post', 'foreign_key');
+}</code></pre>
+<p>如果父级模型没有使用 <code>id</code> 作为主键，或者是希望用不同的字段来连接子级模型，则可以通过给 <code>belongsTo</code>方法传递第三个参数的形式指定父级数据表的自定义键：</p>
+<pre><code>/**
+ * 获得此评论所属的文章。
+ */
+public function post()
+{
+    return $this-&gt;belongsTo('App\Post', 'foreign_key', 'other_key');
+}</code></pre>
+<p><a name="many-to-many"></a></p>
+<h3>多对多</h3>
+<p>多对多关联比 <code>hasOne</code> 和 <code>hasMany</code> 关联稍微复杂些。这种关联的一个例子就是具有许多角色的用户，而角色也被其他用户共享。例如，许多用户都可以有「管理员」角色。要定义这种关联，需要用到三个数据库表：<code>users</code>、<code>roles</code> 和 <code>role_user</code>。<code>role_user</code> 表是以相关联的两个模型数据表、依照字母顺序排列命名的，并且包含 <code>user_id</code> 和 <code>role_id</code> 字段。</p>
+<p>多对多关联是通过写一个方法定义的，在方法内部调用 <code>belongsToMany</code> 方法并返回其结果。例如，我们在 <code>User</code> 模型中定义一个 <code>roles</code> 方法：</p>
+<pre><code>&lt;?php
+
+namespace App;
+
+use Illuminate\Database\Eloquent\Model;
+
+class User extends Model
+{
+    /**
+     * 获得此用户的角色。
+     */
+    public function roles()
+    {
+        return $this-&gt;belongsToMany('App\Role');
+    }
+}</code></pre>
+<p>关联关系定义好后，我们就可以通过 <code>roles</code> 动态属性获得用户的角色了：</p>
+<pre><code>$user = App\User::find(1);
+
+foreach ($user-&gt;roles as $role) {
+    //
+}</code></pre>
+<p>当然，如同所有其它的关联类型，您可以调用 <code>roles</code> 方法，利用链式调用对查询语句添加约束条件：</p>
+<pre><code>$roles = App\User::find(1)-&gt;roles()-&gt;orderBy('name')-&gt;get();</code></pre>
+<p>如前所述，为了确定连接表表名，Eloquent 会按照字母顺序合并两个关联模型的名称。 当然，您可以自由地覆盖这个约定，通过给 <code>belongsToMany</code> 方法指定第二个参数实现：</p>
+<pre><code>return $this-&gt;belongsToMany('App\Role', 'role_user');</code></pre>
+<p>除了自定义连接表表名，您也可以通过给 <code>belongsToMany</code> 方法再次传递额外参数来自定义连接表里的键的字段名称。第三个参数是定义此关联的模型在连接表里的键名，第四个参数是另一个模型在连接表里的键名：</p>
+<pre><code>return $this-&gt;belongsToMany('App\Role', 'role_user', 'user_id', 'role_id');</code></pre>
+<h4>定义反向关联</h4>
+<p>定义多对多关联的反向关联，您只要在对方模型里再次调用 <code>belongsToMany</code> 方法就可以了。让我们接着以用户角色为例，在 <code>Role</code> 模型中定义一个 <code>users</code> 方法。</p>
+<pre><code>&lt;?php
+
+namespace App;
+
+use Illuminate\Database\Eloquent\Model;
+
+class Role extends Model
+{
+    /**
+     * 获得此角色下的用户。
+     */
+    public function users()
+    {
+        return $this-&gt;belongsToMany('App\User');
+    }
+}</code></pre>
+<p>如你所见，除了引入的模型变为 <code>App\User</code> 外，其它与在 <code>User</code> 模型中定义的完全一样。由于我们重用了 <code>belongsToMany</code> 方法，自定义连接表表名和自定义连接表里的键的字段名称在这里同样适用。</p>
+<h4>获得中间表字段</h4>
+<p>您已经学到，多对多关联需要有一个中间表支持，Eloquent 提供了一些有用的方法来和这张表进行交互。例如，假设我们的 <code>User</code> 对象关联了许多的 <code>Role</code> 对象。在获得这些关联对象后，可以使用模型的 <code>pivot</code> 属性访问中间表数据：</p>
+<pre><code>$user = App\User::find(1);
+
+foreach ($user-&gt;roles as $role) {
+    echo $role-&gt;pivot-&gt;created_at;
+}</code></pre>
+<p>需要注意的是，我们取得的每个 <code>Role</code> 模型对象，都会被自动赋予 <code>pivot</code> 属性，它代表中间表的一个模型对象，能像其它的 Eloquent 模型一样使用。</p>
+<p>默认情况下，<code>pivot</code> 对象只包含两个关联模型的键。如果中间表里还有额外字段，则必须在定义关联时明确指出：</p>
+<pre><code>return $this-&gt;belongsToMany('App\Role')-&gt;withPivot('column1', 'column2');</code></pre>
+<p>如果您想让中间表自动维护 <code>created_at</code> 和 <code>updated_at</code> 时间戳，那么在定义关联时加上 <code>withTimestamps</code> 方法即可。</p>
+<pre><code>return $this-&gt;belongsToMany('App\Role')-&gt;withTimestamps();</code></pre>
+<h4>通过中间表过滤关联数据</h4>
+<p>在定义关联时，您可以使用 <code>wherePivot</code> 和 <code>wherePivotIn</code> 方法过滤 <code>belongsToMany</code> 返回的结果：</p>
+<pre><code>return $this-&gt;belongsToMany('App\Role')-&gt;wherePivot('approved', 1);
+
+return $this-&gt;belongsToMany('App\Role')-&gt;wherePivotIn('priority', [1, 2]);</code></pre>
+<h4>定义自定义中间表模型</h4>
+<p>如果您想定义一个自定义模型来表示关联关系中的中间表，可以在定义关联时调用 <code>using</code> 方法。所有自定义中间表模型都必须扩展自 <code>Illuminate\Database\Eloquent\Relations\Pivot</code> 类。例如，
+我们在写 <code>Role</code> 模型的关联时，使用自定义中间表模型 <code>UserRole</code>：</p>
+<pre><code>&lt;?php
+
+namespace App;
+
+use Illuminate\Database\Eloquent\Model;
+
+class Role extends Model
+{
+    /**
+     * 获得此角色下的用户。
+     */
+    public function users()
+    {
+        return $this-&gt;belongsToMany('App\User')-&gt;using('App\UserRole');
+    }
+}</code></pre>
+<p>当定义 <code>UserRole</code> 模型时，我们要扩展自 <code>Pivot</code> 类：</p>
+<pre><code>&lt;?php
+
+namespace App;
+
+use Illuminate\Database\Eloquent\Relations\Pivot;
+
+class UserRole extends Pivot
+{
+    //
+}</code></pre>
+<p><a name="has-many-through"></a></p>
+<h3>远层一对多</h3>
+<p>「远层一对多」关联提供了方便、简短的方式通过中间的关联来获得远层的关联。例如，一个 <code>Country</code> 模型可以通过中间的 <code>User</code> 模型获得多个 <code>Post</code> 模型。在这个例子中，您可以轻易地收集给定国家的所有博客文章。让我们来看看定义这种关联所需的数据表：</p>
+<pre><code>countries
+    id - integer
+    name - string
+
+users
+    id - integer
+    country_id - integer
+    name - string
+
+posts
+    id - integer
+    user_id - integer
+    title - string</code></pre>
+<p>虽然 <code>posts</code> 表中不包含 <code>country_id</code> 字段，但 <code>hasManyThrough</code> 关联能让我们通过 <code>$country-&gt;posts</code> 访问到一个国家下所有的用户文章。为了完成这个查询，Eloquent 会先检查中间表 <code>users</code> 的 <code>country_id</code> 字段，找到所有匹配的用户 ID 后，使用这些 ID，在 <code>posts</code> 表中完成查找。 </p>
+<p>现在，我们已经知道了定义这种关联所需的数据表结构，接下来，让我们在 <code>Country</code> 模型中定义它：</p>
+<pre><code>&lt;?php
+
+namespace App;
+
+use Illuminate\Database\Eloquent\Model;
+
+class Country extends Model
+{
+    /**
+     * 获得某个国家下所有的用户文章。
+     */
+    public function posts()
+    {
+        return $this-&gt;hasManyThrough('App\Post', 'App\User');
+    }
+}</code></pre>
+<p><code>hasManyThrough</code> 方法的第一个参数是我们最终希望访问的模型名称，而第二个参数是中间模型的名称。</p>
+<p>当执行关联查询时，通常会使用 Eloquent 约定的外键名。如果您想要自定义关联的键，可以通过给 <code>hasManyThrough</code> 方法传递第三个和第四个参数实现，第三个参数表示中间模型的外键名，第四个参数表示最终模型的外键名。第五个参数表示本地键名，而第六个参数表示中间模型的本地键名：</p>
+<pre><code>class Country extends Model
+{
+    public function posts()
+    {
+        return $this-&gt;hasManyThrough(
+            'App\Post',
+            'App\User',
+            'country_id', // 用户表外键...
+            'user_id', // 文章表外键...
+            'id', // 国家表本地键...
+            'id' // 用户表本地键...
+        );
+    }
+}</code></pre>
+<p><a name="polymorphic-relations"></a></p>
+<h3>多态关联</h3>
+<h4>数据表结构</h4>
+<p>多态关联允许一个模型在单个关联上属于多个其他模型。例如，想象一下使用您应用的用户可以「评论」文章和视频。使用多态关联，您可以用一个 <code>comments</code> 表同时满足这两个使用场景。让我们来看看构建这种关联所需的数据表结构：</p>
+<pre><code>posts
+    id - integer
+    title - string
+    body - text
+
+videos
+    id - integer
+    title - string
+    url - string
+
+comments
+    id - integer
+    body - text
+    commentable_id - integer
+    commentable_type - string</code></pre>
+<p><code>comments</code> 表中有两个需要注意的重要字段 <code>commentable_id</code> 和 <code>commentable_type</code>。<code>commentable_id</code> 用来保存文章或者视频的 ID 值，而 <code>commentable_type</code> 用来保存所属模型的类名。<code>commentable_type</code> 是在我们访问 <code>commentable</code> 关联时， 让 ORM 确定所属的模型是哪个「类型」。</p>
+<h4>模型结构</h4>
+<p>接下来，我们来看看创建这种关联所需的模型定义：</p>
+<pre><code>&lt;?php
+
+namespace App;
+
+use Illuminate\Database\Eloquent\Model;
+
+class Comment extends Model
+{
+    /**
+     * 获得拥有此评论的模型。
+     */
+    public function commentable()
+    {
+        return $this-&gt;morphTo();
+    }
+}
+
+class Post extends Model
+{
+    /**
+     * 获得此文章的所有评论。
+     */
+    public function comments()
+    {
+        return $this-&gt;morphMany('App\Comment', 'commentable');
+    }
+}
+
+class Video extends Model
+{
+    /**
+     * 获得此视频的所有评论。
+     */
+    public function comments()
+    {
+        return $this-&gt;morphMany('App\Comment', 'commentable');
+    }
+}</code></pre>
+<h4>获取多态关联</h4>
+<p>一旦您的数据库表准备好、模型定义完成后，就可以通过模型来访问关联了。例如，我们只要简单地使用 <code>comments</code> 动态属性，就可以获得某篇文章下的所有评论：</p>
+<pre><code>$post = App\Post::find(1);
+
+foreach ($post-&gt;comments as $comment) {
+    //
+}</code></pre>
+<p>您也可以在多态模型上，通过访问调用了 <code>morphTo</code> 的关联方法获得多态关联的拥有者。在当前场景中，就是 <code>Comment</code> 模型的 <code>commentable</code> 方法。所以，我们可以使用动态属性来访问这个方法：</p>
+<pre><code>$comment = App\Comment::find(1);
+
+$commentable = $comment-&gt;commentable;</code></pre>
+<p><code>Comment</code> 模型的 <code>commentable</code> 关联会返回 <code>Post</code> 或者 <code>Video</code> 实例，这取决于评论所属的模型类型。</p>
+<h4>自定义多态关联的类型字段</h4>
+<p>默认，Laravel 会使用完全限定类名作为关联模型保存在多态模型上的类型字段值。比如，在上面的例子中，<code>Comment</code> 属于 <code>Post</code> 或者 <code>Video</code>，那么 <code>commentable_type</code>的默认值对应地就是 <code>App\Post</code> 和 <code>App\Video</code>。但是，您可能希望将数据库与程序内部结构解耦。那样的话，你可以定义一个「多态映射表」来指示 Eloquent 使用每个模型自定义类型字段名而不是类名：</p>
+<pre><code>use Illuminate\Database\Eloquent\Relations\Relation;
+
+Relation::morphMap([
+    'posts' =&gt; 'App\Post',
+    'videos' =&gt; 'App\Video',
+]);</code></pre>
+<p>您可以在 <code>AppServiceProvider</code> 中的 <code>boot</code> 函数中使用 <code>Relation::morphMap</code> 方法注册「多态映射表」，或者使用一个独立的服务提供者注册。</p>
+<p><a name="many-to-many-polymorphic-relations"></a></p>
+<h3>多对多多态关联</h3>
+<h4>数据表结构</h4>
+<p>除了传统的多态关联，您也可以定义「多对多」的多态关联。例如，<code>Post</code> 模型和 <code>Video</code> 模型可以共享一个多态关联至 <code>Tag</code> 模型。 使用多对多多态关联可以让您在文章和视频中共享唯一的标签列表。首先，我们来看看数据表结构：</p>
+<pre><code>posts
+    id - integer
+    name - string
+
+videos
+    id - integer
+    name - string
+
+tags
+    id - integer
+    name - string
+
+taggables
+    tag_id - integer
+    taggable_id - integer
+    taggable_type - string</code></pre>
+<h4>模型结构</h4>
+<p>接下来，我们准备在模型上定义关联关系。<code>Post</code> 和 <code>Video</code> 两个模型都有一个 <code>tags</code> 方法，方法内部都调用了 Eloquent 类自身的 <code>morphToMany</code> 方法：</p>
+<pre><code>&lt;?php
+
+namespace App;
+
+use Illuminate\Database\Eloquent\Model;
+
+class Post extends Model
+{
+    /**
+     * 获得此文章的所有标签。
+     */
+    public function tags()
+    {
+        return $this-&gt;morphToMany('App\Tag', 'taggable');
+    }
+}</code></pre>
+<h4>定义反向关联</h4>
+<p>接下里，在 <code>Tag</code> 模型中，您应该为每个关联模型定义一个方法。在这个例子里，我们要定义一个 <code>posts</code> 方法和一个 <code>videos</code> 方法：</p>
+<pre><code>&lt;?php
+
+namespace App;
+
+use Illuminate\Database\Eloquent\Model;
+
+class Tag extends Model
+{
+    /**
+     * 获得此标签下所有的文章。
+     */
+    public function posts()
+    {
+        return $this-&gt;morphedByMany('App\Post', 'taggable');
+    }
+
+    /**
+     *  获得此标签下所有的视频。
+     */
+    public function videos()
+    {
+        return $this-&gt;morphedByMany('App\Video', 'taggable');
+    }
+}</code></pre>
+<h4>获取关联</h4>
+<p>一旦您的数据库表准备好、模型定义完成后，就可以通过模型来访问关联了。例如，我们只要简单地使用 <code>tags</code> 动态属性，就可以获得某篇文章下的所有标签：</p>
+<pre><code>$post = App\Post::find(1);
+
+foreach ($post-&gt;tags as $tag) {
+    //
+}</code></pre>
+<p>您也可以在多态模型上，通过访问调用了 <code>morphedByMany</code> 的关联方法获得多态关联的拥有者。在当前场景中，就是 <code>Tag</code> 模型上的 <code>posts</code> 方法和 <code>videos</code> 方法。所以，我们可以使用动态属性来访问这两个方法：</p>
+<pre><code>$tag = App\Tag::find(1);
+
+foreach ($tag-&gt;videos as $video) {
+    //
+}</code></pre>
+<p><a name="querying-relations"></a></p>
+<h2>查询关联</h2>
+<p>由于所有类型的关联都通过方法定义，您可以调用这些方法来获取关联实例，而不需要实际运行关联的查询。此外，所有类型的关联都可以作为 <a href="queries.html">查询语句构造器</a> 使用，让你在向数据库执行 SQL 语句前，使用链式调用的方式添加约束条件。</p>
+<p>例如，假设一个博客系统，其中 <code>User</code> 模型有许多关联的 <code>Post</code> 模型：</p>
+<pre><code>&lt;?php
+
+namespace App;
+
+use Illuminate\Database\Eloquent\Model;
+
+class User extends Model
+{
+    /**
+     * 获得此用户所有的文章。
+     */
+    public function posts()
+    {
+        return $this-&gt;hasMany('App\Post');
+    }
+}</code></pre>
+<p>您也可以像这样在 <code>posts</code> 关联上添加额外约束条件：</p>
+<pre><code>$user = App\User::find(1);
+
+$user-&gt;posts()-&gt;where('active', 1)-&gt;get();</code></pre>
+<p>您可以在关联上使用任何 <a href="queries.html">查询语句构造器</a> 的方法，所以，欢迎查阅查询语句构造器的相关文档以便了解您可以使用哪些方法。</p>
+<p><a name="relationship-methods-vs-dynamic-properties"></a></p>
+<h3>关联方法 Vs. 动态属性</h3>
+<p>如果您不需要给 Eloquent 关联查询添加额外约束条件，你可以简单的像访问属性一样访问关联。例如，我们刚刚的 <code>User</code> 和 <code>Post</code> 模型例子中，我们可以这样访问所有用户的文章：</p>
+<pre><code>$user = App\User::find(1);
+
+foreach ($user-&gt;posts as $post) {
+    //
+}</code></pre>
+<p>动态属性是「懒加载」的，意味着它们的关联数据只在实际被访问时才被加载。因此，开发者经常使用 <a href="eloquent-relationships.html#eager-loading">预加载</a> 提前加载他们之后会用到的关联数据。预加载有效减少了 SQL 语句请求数，避免了重复执行一个模型关联加载数据、发送 SQL 请求带来的性能问题。</p>
+<p><a name="querying-relationship-existence"></a></p>
+<h3>基于存在的关联查询</h3>
+<p>当获取模型记录时，您可能希望根据存在的关联对结果进行限制。例如，您想获得至少有一条评论的所有博客文章。为了实现这个功能，您可以给 <code>has</code> 方法传递关联名称：</p>
+<pre><code>// 获得所有至少有一条评论的文章...
+$posts = App\Post::has('comments')-&gt;get();</code></pre>
+<p>您也可以指定一个运算符和数目，进一步自定义查询：</p>
+<pre><code>// 获得所有有三条或三条以上评论的文章...
+$posts = Post::has('comments', '&gt;=', 3)-&gt;get();</code></pre>
+<p>也可以使用「点」符号构造嵌套的的 <code>has</code> 语句。例如，您可以获得所有至少有一条获赞评论的文章：</p>
+<pre><code>// 获得所有至少有一条获赞评论的文章...
+$posts = Post::has('comments.votes')-&gt;get();</code></pre>
+<p>如果您需要更高级的用法，可以使用 <code>whereHas</code>和 <code>orWhereHas</code> 方法在 <code>has</code> 查询里设置「where」条件。此方法可以让你增加自定义条件至关联约束中，例如对评论内容进行检查：</p>
+<pre><code>// 获得所有至少有一条评论内容满足 foo% 条件的文章
+$posts = Post::whereHas('comments', function ($query) {
+    $query-&gt;where('content', 'like', 'foo%');
+})-&gt;get();</code></pre>
+<p><a name="querying-relationship-absence"></a></p>
+<h3>基于不存在的关联查询</h3>
+<p>当获取模型记录时，您可能希望根据不存在的关联对结果进行限制。例如，您想获得 <strong>没有</strong> 任何评论的所有博客文章。为了实现这个功能，您可以给 <code>doesntHave</code> 方法传递关联名称：</p>
+<pre><code>$posts = App\Post::doesntHave('comments')-&gt;get();</code></pre>
+<p>如果您需要更高级的用法，可以使用 <code>whereDoesntHave</code> 方法在 <code>doesntHave</code> 查询里设置「where」条件。此方法可以让你增加自定义条件至关联约束中，例如对评论内容进行检查：</p>
+<pre><code>$posts = Post::whereDoesntHave('comments', function ($query) {
+    $query-&gt;where('content', 'like', 'foo%');
+})-&gt;get();</code></pre>
+<p><a name="counting-related-models"></a></p>
+<h3>关联数据计数</h3>
+<p>如果您只想统计结果数而不需要加载实际数据，那么可以使用 <code>withCount</code> 方法，此方法会在您的结果集模型中添加一个 <code>{关联名}_count</code> 字段。例如：</p>
+<pre><code>$posts = App\Post::withCount('comments')-&gt;get();
+
+foreach ($posts as $post) {
+    echo $post-&gt;comments_count;
+}</code></pre>
+<p>您可以为多个关联数据「计数」，并为其查询添加约束条件：</p>
+<pre><code>$posts = Post::withCount(['votes', 'comments' =&gt; function ($query) {
+    $query-&gt;where('content', 'like', 'foo%');
+}])-&gt;get();
+
+echo $posts[0]-&gt;votes_count;
+echo $posts[0]-&gt;comments_count;</code></pre>
+<p>您也可以为关联数据计数结果起别名，允许在同一个关联上多次计数：</p>
+<pre><code>$posts = Post::withCount([
+    'comments',
+    'comments as pending_comments_count' =&gt; function ($query) {
+        $query-&gt;where('approved', false);
+    }
+])-&gt;get();
+
+echo $posts[0]-&gt;comments_count;
+
+echo $posts[0]-&gt;pending_comments_count;</code></pre>
+<p><a name="eager-loading"></a></p>
+<h2>预加载</h2>
+<p>当作为属性访问 Eloquent 关联时，关联数据是「懒加载」的。意味着在你第一次访问该属性时，才会加载关联数据。不过，是当你查询父模型时，Eloquent 可以「预加载」关联数据。预加载避免了 N + 1 查询问题。要说明 N + 1 查询问题，试想一个 <code>Book</code> 模型关联到 <code>Author</code> 模型：</p>
+<pre><code>&lt;?php
+
+namespace App;
+
+use Illuminate\Database\Eloquent\Model;
+
+class Book extends Model
+{
+    /**
+     * 获得此书的作者。
+     */
+    public function author()
+    {
+        return $this-&gt;belongsTo('App\Author');
+    }
+}</code></pre>
+<p>现在，让我们来获得所有书籍和作者数据：</p>
+<pre><code>$books = App\Book::all();
+
+foreach ($books as $book) {
+    echo $book-&gt;author-&gt;name;
+}</code></pre>
+<p>这个循环会运行一次查询取回所有数据表上的书籍数据，然后又运行一次查询获得每本书的作者数据。如果我们有 25 本书，则循环就会执行 26 次查询：1 次是获得所有书籍数据，另外 25 条查询用来获得每本书的作者数据。</p>
+<p>谢天谢地，我们使用预加载让整个查询减少到 2 次。这是通过指定关联给 <code>with</code> 方法办到的：</p>
+<pre><code>$books = App\Book::with('author')-&gt;get();
+
+foreach ($books as $book) {
+    echo $book-&gt;author-&gt;name;
+}</code></pre>
+<p>整个操作，只执行了两条查询：</p>
+<pre><code>select * from books
+
+select * from authors where id in (1, 2, 3, 4, 5, ...)</code></pre>
+<h4>预加载多个关联</h4>
+<p>有时，你需要在一次操作中预加载几个不同的关联。为了实现这个功能，只需在 <code>with</code> 方法上传递额外的参数即可：        </p>
+<pre><code>$books = App\Book::with(['author', 'publisher'])-&gt;get();</code></pre>
+<h4>嵌套预加载</h4>
+<p>预加载嵌套关联，可以使用「点」语法。例如，在一个 Eloquent 语句中，预加载所有书籍作者和这些作者的联系信息：</p>
+<pre><code>$books = App\Book::with('author.contacts')-&gt;get();</code></pre>
+<p><a name="constraining-eager-loads"></a></p>
+<h3>为预加载添加约束条件</h3>
+<p>有时，你可能希望在预加载关联数据的时候，为查询指定额外的约束条件。这有个例子：</p>
+<pre><code>$users = App\User::with(['posts' =&gt; function ($query) {
+    $query-&gt;where('title', 'like', '%first%');
+}])-&gt;get();</code></pre>
+<p>在这个例子中，Eloquent 只会预加载标题里包含 <code>first</code> 文本的文章。您也可以调用其它的 <a href="queries.html">查询语句构造器</a> 进一步自定义预加载约束条件：</p>
+<pre><code>$users = App\User::with(['posts' =&gt; function ($query) {
+    $query-&gt;orderBy('created_at', 'desc');
+}])-&gt;get();</code></pre>
+<p><a name="lazy-eager-loading"></a></p>
+<h3>延迟预加载</h3>
+<p>有时，您可能需要在获得父级模型后才去预加载关联数据。例如，当你需要来动态决定是否加载关联模型时，这可能很有帮助：</p>
+<pre><code>$books = App\Book::all();
+
+if ($someCondition) {
+    $books-&gt;load('author', 'publisher');
+}</code></pre>
+<p>如果您想设置预加载查询的额外约束条件，可以通过给 <code>load</code> 添加数组键的形式达到目的，数组值是接收查询实例的闭包：</p>
+<pre><code>$books-&gt;load(['author' =&gt; function ($query) {
+    $query-&gt;orderBy('published_date', 'asc');
+}]);</code></pre>
+<p><a name="inserting-and-updating-related-models"></a></p>
+<h2>插入 &amp; 更新关联模型</h2>
+<p><a name="the-save-method"></a></p>
+<h3><code>save</code> 方法</h3>
+<p>Eloquent 提供了便捷的方法来将新的模型增加至关联中。例如，也许你需要为一个 <code>Post</code> 模型插入一个新的 <code>Comment</code>。这是你无须为 <code>Comment</code> 手动设置 <code>posts</code> 属性，直接在关联上使用 <code>save</code> 方法插入 <code>Comment</code> 即可：</p>
+<pre><code>$comment = new App\Comment(['message' =&gt; '一条新的评论。']);
+
+$post = App\Post::find(1);
+
+$post-&gt;comments()-&gt;save($comment);</code></pre>
+<p>需要注意的是，我们没有使用动态属性形式访问 <code>comments</code> 关联。相反，我们调用了 <code>comments</code> 方法获得关联实例。<code>save</code> 方法会自动在新的 <code>Comment</code> 模型中添加正确的 <code>post_id</code>值。</p>
+<p>如果您需要保存多个关联模型，可以使用 <code>saveMany</code> 方法：</p>
+<pre><code>$post = App\Post::find(1);
+
+$post-&gt;comments()-&gt;saveMany([
+    new App\Comment(['message' =&gt; '一条新的评论。']),
+    new App\Comment(['message' =&gt; '另一条评论。']),
+]);</code></pre>
+<p><a name="the-create-method"></a></p>
+<h3><code>create</code> 方法</h3>
+<p>除了 <code>save</code> 和 <code>saveMany</code> 方法，您也可以使用 <code>create</code> 方法，它接收一个属性数组、创建模型并插入数据库。还有，<code>save</code> 和 <code>create</code> 的不同之处在于，<code>save</code> 接收的是一个完整的 Eloquent 模型实例，而 <code>create</code> 接收的是一个纯 PHP 数组：</p>
+<pre><code>$post = App\Post::find(1);
+
+$comment = $post-&gt;comments()-&gt;create([
+    'message' =&gt; '一条新的评论。',
+]);</code></pre>
+<blockquote>
+<p>{tip} 在使用 <code>create</code> 方法前，请确认您已经浏览了本文档的 <a href="eloquent.html#mass-assignment">批量赋值</a> 章节。</p>
+</blockquote>
+<p>您可以使用 <code>createMany</code> 方法保存多个关联模型：</p>
+<pre><code>$post = App\Post::find(1);
+
+$post-&gt;comments()-&gt;createMany([
+    [
+        'message' =&gt; '一条新的评论。',
+    ],
+    [
+        'message' =&gt; '另一条新的评论。',
+    ],
+]);</code></pre>
+<p><a name="updating-belongs-to-relationships"></a></p>
+<h3>更新 <code>belongsTo</code> 关联</h3>
+<p>当更新 <code>belongsTo</code> 关联时，可以使用 <code>associate</code> 方法。此方法会在子模型中设置外键：</p>
+<pre><code>$account = App\Account::find(10);
+
+$user-&gt;account()-&gt;associate($account);
+
+$user-&gt;save();</code></pre>
+<p>当删除 <code>belongsTo</code> 关联时，可以使用 <code>dissociate</code>方法。此方法会设置关联外键为 <code>null</code>： </p>
+<pre><code>$user-&gt;account()-&gt;dissociate();
+
+$user-&gt;save();</code></pre>
+<p><a name="updating-many-to-many-relationships"></a></p>
+<h3>多对多关联</h3>
+<h4>附加 / 移除</h4>
+<p>Eloquent 也提供了几个额外的辅助方法，让操作关联模型更加便捷。例如：我们假设一个用户可以拥有多个角色，并且每个角色都可以被多个用户共享。给某个用户附加一个角色是通过向中间表插入一条记录实现的，使用 <code>attach</code> 方法：</p>
+<pre><code>$user = App\User::find(1);
+
+$user-&gt;roles()-&gt;attach($roleId);</code></pre>
+<p>使用 <code>attach</code> 方法时，您也可以通过传递一个数组参数向中间表写入额外数据：</p>
+<pre><code>$user-&gt;roles()-&gt;attach($roleId, ['expires' =&gt; $expires]);</code></pre>
+<p>当然，有时也需要移除用户的角色。删除多对多关联记录，使用 <code>detach</code> 方法。<code>detach</code> 方法会移除掉正确的记录；当然，这两个模型数据依然保存在数据库中：</p>
+<pre><code>// 移除用户的一个角色...
+$user-&gt;roles()-&gt;detach($roleId);
+
+// 移除用户的所有角色...
+$user-&gt;roles()-&gt;detach();</code></pre>
+<p>为了方便，<code>attach</code> 和 <code>detach</code> 都允许传入 ID 数组：</p>
+<pre><code>$user = App\User::find(1);
+
+$user-&gt;roles()-&gt;detach([1, 2, 3]);
+
+$user-&gt;roles()-&gt;attach([
+    1 =&gt; ['expires' =&gt; $expires],
+    2 =&gt; ['expires' =&gt; $expires]
+]);</code></pre>
+<h4>同步关联</h4>
+<p>您也可以使用 <code>sync</code> 方法来构造多对多关联。<code>sync</code> 方法可以接收 ID 数组，向中间表插入对应关联数据记录。所有没放在数组里的 IDs 都会从中间表里移除。所以，这步操作完成后，只有在数组里的 IDs 会被保留在中间表中。</p>
+<pre><code>$user-&gt;roles()-&gt;sync([1, 2, 3]);</code></pre>
+<p>您可以通过 ID 传递其他额外的数据到中间表：</p>
+<pre><code>$user-&gt;roles()-&gt;sync([1 =&gt; ['expires' =&gt; true], 2, 3]);</code></pre>
+<p>如果您不想移除现有的 IDs，可以使用 <code>syncWithoutDetaching</code> 方法：</p>
+<pre><code>$user-&gt;roles()-&gt;syncWithoutDetaching([1, 2, 3]);</code></pre>
+<h4>切换关联</h4>
+<p>多对多关联也提供了一个 <code>toggle</code> 方法用于「切换」给定 IDs 的附加状态。如果给定 ID 已附加，就会被移除。同样的，如果给定 ID 已移除，就会被附加：</p>
+<pre><code>$user-&gt;roles()-&gt;toggle([1, 2, 3]);</code></pre>
+<h4>在中间表上保存额外数据</h4>
+<p>当处理多对多关联时，<code>save</code> 方法还可以使用第二个参数，它是一个属性数组，包含插入到中间表的额外字段数据。</p>
+<pre><code>App\User::find(1)-&gt;roles()-&gt;save($role, ['expires' =&gt; $expires]);</code></pre>
+<h4>更新中间表记录</h4>
+<p>如果您需要更新中间表中已存在的记录，可以使用 <code>updateExistingPivot</code> 方法。此方法接收中间记录的外键和一个属性数组进行更新：</p>
+<pre><code>$user = App\User::find(1);
+
+$user-&gt;roles()-&gt;updateExistingPivot($roleId, $attributes);</code></pre>
+<p><a name="touching-parent-timestamps"></a></p>
+<h2>更新父级时间戳</h2>
+<p>当一个模型 <code>belongsTo</code> 或者 <code>belongsToMany</code> 另一个模型，比如一个 <code>Comment</code> 属于一个 <code>Post</code>，有时更新子模型导致更新父模型时间戳非常有用。例如，当一个 <code>Comment</code> 模型更新时，您要自动「触发」父级 <code>Post</code> 模型的 <code>updated_at</code> 时间戳的更新，Eloquent 让它变得简单。只要在子模型加一个包含关联名称的 <code>touches</code> 属性即可：</p>
+<pre><code>&lt;?php
+
+namespace App;
+
+use Illuminate\Database\Eloquent\Model;
+
+class Comment extends Model
+{
+    /**
+     * 所有会被触发的关联。
+     *
+     * @var array
+     */
+    protected $touches = ['post'];
+
+    /**
+     * 获得此评论所属的文章。
+     */
+    public function post()
+    {
+        return $this-&gt;belongsTo('App\Post');
+    }
+}</code></pre>
+<p>现在，当你更新一个 <code>Comment</code> 时，对应父级 <code>Post</code> 模型的 <code>updated_at</code> 字段也会被同时更新，使其更方便得知何时让一个 <code>Post</code> 模型的缓存失效：</p>
+<pre><code>$comment = App\Comment::find(1);
+
+$comment-&gt;text = '编辑了这条评论！';
+
+$comment-&gt;save();</code></pre>
+<h2>译者署名</h2>
+<table>
+<thead>
+<tr>
+<th>用户名</th>
+<th>头像</th>
+<th>职能</th>
+<th>签名</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><a href="https://laravel-china.org/users/17319">@baooab</a></td>
+<td><img class="avatar-66 rm-style" src="https://dn-phphub.qbox.me/uploads/images/201708/11/17319/KbHzLBdgHs.png?imageView2/1/w/100/h/100"></td>
+<td>翻译</td>
+<td>我在 <a href="https://github.com/baooab/">这儿</a></td>
+</tr>
+</tbody>
+</table>
+<hr />
+<blockquote>
+<p>{note} 欢迎任何形式的转载，但请务必注明出处，尊重他人劳动共创开源社区。</p>
+<p>转载请注明：本文档由 Laravel China 社区 <a href="https://laravel-china.org">laravel-china.org</a> 组织翻译，详见 <a href="https://laravel-china.org/topics/5756/laravel-55-document-translation-call-come-and-join-the-translation">翻译召集帖</a>。</p>
+<p>文档永久地址： <a href="../../index.html">https://d.laravel-china.org</a></p>
+</blockquote>
+		</div>
+
+		<div class="main-footer" style="border-top:1px dashed rgba(0, 0, 0, 0.1);padding-top: 30px;margin-top:30px;margin-bottom: 20px;">
+			<div class="prev-next-wrap clearfix">
+
+									<a class="btn btn-primary pull-left btn-inverted" href="eloquent.html"><i class="fa fa-arrow-left"></i> 快速入门</a>
+				
+			    &nbsp;
+								    <a class="btn btn-primary pull-right btn-inverted" href="eloquent-collections.html">Eloquent 集合 <i class="fa fa-arrow-right"></i></a>
+							</div>
+		</div>
+
+	</article>
+</div>
+
+	<footer class="main">
+		<ul>
+			<li class="nav-docs"><a href="../5.4.html">文档</a></li>
+<li ><a href="https://laravel-china.org/news" class="no-pjax">Laravel 资讯</a></li>
+<li class="dropdown"><a href="https://laravel-china.org/">Laravel China 社区</a></li>
+<li class="nav-forge"><a href="https://laravel-china.org/categories/1">酷工作</a></li>
+<li class="nav-docs"><a href="http://lumen.laravel-china.org">Lumen</a></li>
+<li class="nav-forge"><a href="https://cs.laravel-china.org/">速查表</a></li>
+<li class="nav-forge"><a href="https://fsdhub.com/books/laravel-essential-training-5.5">《Laravel 入门教程》</a></li>
+		</ul>
+		<p>Laravel is a trademark of Taylor Otwell. Copyright &copy; Taylor Otwell.</p>
+            <div style="margin-top: 32px;">
+                <a href="https://www.upyun.com/" title="Composer 镜像赞助商">
+                    <img src="https://dn-phphub.qbox.me/uploads/banners/XPtLlZmIN1cQbLuDFEON.png" style="width: 200px;">
+                </a>
+            </div>
+            <p class="less-significant">
+            <a href="http://jackmcdade.com">
+                Designed by<br>
+                <svg version="1.1"
+	 xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:a="http://ns.adobe.com/AdobeSVGViewerExtensions/3.0/"
+	 x="0px" y="0px" width="128.2px" height="28px" viewBox="0 0 128.2 28" enable-background="new 0 0 128.2 28" xml:space="preserve"
+	>
+<defs>
+</defs>
+<g>
+	<path fill="#c3c3c3" d="M14.2,0.4c0,0.2,0,0.5,0,0.7c0,0.2,0,0.5,0,0.7l-1.4-0.3C12.9,3,13,4.5,13.1,6c0.1,1.5,0,3-0.1,4.5
+		c0,0.4-0.1,0.8-0.1,1.2c-0.1,0.4-0.1,0.8-0.3,1.2c-0.1,0.4-0.3,0.7-0.5,1.1c-0.2,0.3-0.5,0.6-0.9,0.9c-0.4,0.2-0.9,0.4-1.5,0.6
+		c-0.6,0.2-1.1,0.3-1.6,0.3c-0.6,0-1.2-0.1-1.6-0.3c-0.5-0.2-0.9-0.6-1.1-1c-0.3-0.5-0.5-1-0.6-1.6c-0.1-0.6-0.1-1.3,0-2.1
+		c0-0.2,0.1-0.5,0.2-0.7C4.9,9.9,5,9.7,5.1,9.5c0.1-0.2,0.2-0.4,0.3-0.6l1.1,0.4C6.7,9.3,7,9.4,7.3,9.5c0.3,0.1,0.5,0.1,0.6,0.2
+		c0,0.2,0,0.4-0.1,0.5c-0.1,0.2-0.1,0.3-0.2,0.4c-0.1,0.1-0.2,0.3-0.2,0.4c-0.1,0.2-0.1,0.3-0.1,0.5l-1.3-0.7
+		c-0.1,0.3-0.2,0.7-0.2,1.1c0,0.4,0.1,0.8,0.2,1.2c0.2,0.4,0.4,0.7,0.6,1c0.3,0.3,0.6,0.4,1,0.3c0.6,0,1.1-0.3,1.4-0.6
+		c0.3-0.4,0.5-0.9,0.7-1.7c0.1-0.7,0.2-1.6,0.2-2.8c0-1.1,0-2.4,0-3.9c0-0.6-0.1-1.3-0.1-2C9.7,2.8,9.6,2.1,9.5,1.4
+		c-0.2,0-0.5,0-0.8,0c-0.3,0-0.6,0-0.8,0c-0.8,0-1.5,0-2.2,0c-0.7,0-1.5,0-2.2,0.2c-0.3,0.1-0.6,0.2-1,0.4C2.2,2.1,1.9,2.4,1.6,2.6
+		C1.4,2.9,1.2,3.2,1.1,3.6C1,3.9,1,4.3,1.1,4.6c0.1,0.5,0.3,0.8,0.4,0.9V5.4c0-0.4,0.1-0.8,0.4-1c0.3-0.2,0.6-0.3,0.9-0.3
+		c0.3,0,0.6,0.1,0.9,0.3C4,4.6,4.1,5,4.1,5.4c0,0.4-0.1,0.8-0.4,1c-0.3,0.2-0.6,0.3-1,0.3H2.7C1.9,6.7,1.3,6.5,0.9,6
+		C0.5,5.6,0.2,5.1,0.1,4.5C0,4,0,3.4,0.2,2.7c0.2-0.6,0.5-1.1,1-1.5c0.4-0.3,0.8-0.5,1.2-0.7c0.4-0.1,0.9-0.2,1.4-0.3
+		c0.5-0.1,0.9-0.1,1.4-0.1c0.5,0,0.9,0,1.4,0h1.5c0.6,0,1.1,0,1.6,0.1c0.5,0,1,0.1,1.5,0.1c0.5,0,1,0.1,1.5,0.1
+		C13.1,0.5,13.6,0.5,14.2,0.4z"/>
+	<path fill="#c3c3c3" d="M25.2,14.3c0,0.2,0.1,0.4,0.1,0.6c0,0.2,0.1,0.4,0.1,0.7c-1-0.1-2-0.2-3-0.1c-1.1,0.1-2.1,0.2-3,0.4
+		c0-0.2-0.1-0.4-0.1-0.5c0-0.2-0.1-0.4-0.1-0.5c0.2,0,0.5-0.1,0.7-0.1c0.2,0,0.4-0.1,0.6-0.1c-0.1-1.5-0.3-3.1-0.5-4.6
+		c-0.5,0.1-0.9,0.1-1.4,0.2c-0.5,0.1-0.9,0.1-1.4,0.2c-0.2,0.7-0.3,1.3-0.5,2c-0.2,0.7-0.3,1.3-0.5,2c0.2,0,0.4,0,0.6,0
+		c0.1,0,0.3,0,0.4,0.1c0,0.2,0,0.3,0,0.5c0,0.1,0,0.2,0,0.4c0,0.1,0,0.2-0.1,0.3H14v-1.2h1c0.2-0.5,0.3-1,0.4-1.5
+		c0.1-0.5,0.3-1,0.4-1.5c0.2-0.6,0.3-1.2,0.5-1.7c0.2-0.6,0.3-1.2,0.5-1.7c0.2-1.1,0.4-2.1,0.6-3.2c0.2-1.1,0.3-2.1,0.4-3.2
+		c-0.2,0-0.5,0-0.7,0c-0.2,0-0.4,0-0.7,0c0-0.2,0.1-0.4,0.1-0.6c0-0.2,0-0.4,0.1-0.6c0.9,0,1.9,0,2.9,0c1,0,2,0,2.9,0l0.2,1.2
+		c-0.2,0-0.3,0-0.5,0c-0.2,0-0.3,0-0.5,0c0.3,2.1,0.7,4.3,1,6.5c0.3,2.2,0.7,4.4,1,6.5H25.2z M17.5,9c0.4-0.1,0.7-0.1,1.1-0.2
+		c0.4-0.1,0.8-0.1,1.2-0.2c-0.2-1-0.3-2-0.5-2.9c-0.2-1-0.4-1.9-0.6-2.9c-0.2,1-0.4,2.1-0.5,3.1C17.9,6.9,17.7,8,17.5,9z"/>
+	<path fill="#c3c3c3" d="M36.7,10.4c-0.1,0-0.2,0-0.3,0c-0.1,0-0.2,0-0.3,0c0,0.6,0,1.2-0.2,1.9c-0.2,0.6-0.5,1.2-1,1.6
+		c-0.5,0.5-1,0.9-1.6,1.1c-0.6,0.3-1.3,0.4-2,0.5c-0.6,0.1-1.1,0.1-1.8,0c-0.6-0.1-1.1-0.4-1.6-0.7c-0.2-0.2-0.5-0.4-0.8-0.7
+		c-0.3-0.3-0.5-0.5-0.6-0.8c-0.3-0.5-0.5-1-0.6-1.5c-0.2-0.5-0.3-0.9-0.4-1.4c-0.1-0.5-0.2-1-0.2-1.5c0-0.5,0-1,0.1-1.6
+		c0.2-1,0.4-2,0.8-2.9c0.4-0.9,0.8-1.7,1.4-2.3c0.5-0.7,1.2-1.2,1.9-1.6C30.2,0.2,30.9,0,31.7,0c0.3,0,0.5,0,0.8,0.1
+		c0.3,0.1,0.5,0.2,0.7,0.4c0.3,0.3,0.7,0.7,1,1.2c0.3,0.5,0.6,1.2,0.7,1.9c0.1,0,0.2,0,0.3,0c0.1,0,0.2,0,0.3,0c0,0.1,0,0.2,0,0.3
+		c0,0.1,0,0.2,0,0.3L33,4.6c-0.3,0.1-0.5,0.1-0.6,0c-0.1,0-0.2-0.1-0.2-0.2c-0.1-0.1-0.1-0.2,0-0.3c0.1,0,0.2,0,0.2,0
+		c0.1,0,0.1,0,0.2,0c0.2-0.2,0.3-0.3,0.3-0.6c0-0.2,0-0.5,0-0.7c0-0.5-0.2-0.9-0.5-1.3c-0.2-0.2-0.3-0.3-0.4-0.4
+		C31.8,1,31.6,1,31.4,1.1c-0.2,0-0.4,0.2-0.6,0.4c-0.2,0.2-0.4,0.5-0.5,0.9C30,2.6,29.9,3,29.8,3.3c-0.1,0.3-0.2,0.5-0.2,0.7
+		c-0.6,2.6-0.7,5.3-0.2,8c0.1,0.3,0.2,0.7,0.3,1s0.3,0.6,0.5,0.9c0.2,0.3,0.5,0.5,0.8,0.7c0.3,0.2,0.6,0.2,1,0.1
+		c0.6-0.1,1-0.4,1.4-1c0.3-0.5,0.6-1.1,0.7-1.8c0.1-0.3,0.1-0.6,0.1-0.9v-0.5c-0.2,0-0.4,0-0.6-0.1c-0.1-0.1-0.2-0.2-0.2-0.3
+		c0-0.1,0-0.2,0.1-0.3c0.6,0,1.2,0,1.7,0c0.6,0,1.2,0,1.7,0c0,0.1,0,0.2-0.1,0.3C36.7,10.2,36.7,10.3,36.7,10.4z"/>
+	<path fill="#c3c3c3" d="M48,14.2c0.1,0.2,0.3,0.3,0.5,0.4c0.2,0.1,0.5,0.1,0.7,0c0.1,0.1,0.1,0.2,0.1,0.4c0,0.2-0.1,0.3-0.2,0.4
+		c-0.1,0.1-0.2,0.2-0.4,0.2c-0.2,0-0.3,0-0.4,0c-0.3,0-0.7,0-1,0c-0.3,0-0.7,0-1-0.1c-0.3-0.1-0.7-0.2-1-0.4
+		c-0.3-0.2-0.5-0.4-0.7-0.7c-0.2-0.3-0.3-0.6-0.3-1c0-0.3,0-0.7,0-1.1V9.9c0-0.1,0-0.3,0-0.4c0-0.2-0.1-0.3-0.2-0.5
+		c-0.1-0.2-0.3-0.3-0.4-0.4c-0.2-0.1-0.4-0.1-0.7-0.1c-0.1,0-0.2,0-0.5,0.1c-0.2,0.3-0.3,0.5-0.5,0.8c-0.2,0.3-0.3,0.5-0.5,0.7
+		c0,0.8,0,1.5-0.1,2.2c0,0.7-0.1,1.5-0.1,2.1h1.4v1.1c-0.5,0-0.9,0.1-1.3,0c-0.4,0-0.8,0-1.2-0.1c-0.4,0-0.8-0.1-1.2-0.1
+		c-0.4,0-0.8,0-1.3,0c-0.1,0-0.3,0-0.4,0c-0.1,0-0.2,0-0.3-0.1c-0.1,0-0.1-0.1-0.1-0.2c0-0.1-0.1-0.3-0.1-0.4c0-0.1,0-0.3,0-0.4
+		c0-0.1,0.1-0.2,0.1-0.2c0.2,0.1,0.4,0.2,0.6,0.1s0.4-0.2,0.5-0.4c0-0.1,0.1-0.3,0.1-0.7c0-0.4,0-0.9,0.1-1.6c0-0.6,0.1-1.3,0.1-2.1
+		c0-0.8,0-1.6,0.1-2.4c0-0.8,0-1.5,0.1-2.3c0-0.7,0.1-1.3,0.1-1.8c0-0.2,0-0.5,0-0.7c0-0.2-0.1-0.4-0.2-0.6
+		c-0.1-0.2-0.3-0.3-0.5-0.4c-0.2-0.1-0.4,0-0.6,0.1c0-0.2-0.1-0.5-0.1-0.7c0-0.2,0-0.4-0.1-0.7c1,0,2,0.1,3,0.1c0.9,0,1.9,0.1,3,0.1
+		c0,0.1,0,0.2,0,0.3c0,0.1,0,0.3,0.1,0.4c0,0.1,0,0.3,0,0.4c0,0.1,0,0.2-0.1,0.2c-0.1,0.1-0.2,0.1-0.3,0.1c-0.1,0-0.2,0-0.4-0.1
+		c-0.1-0.1-0.3-0.1-0.4-0.2c-0.1-0.1-0.3-0.1-0.3-0.1c-0.1,0.9-0.1,1.9-0.1,2.9c0,1-0.1,2-0.1,3.1c0.7-1.2,1.4-2.5,2-3.8
+		c0.2-0.3,0.3-0.6,0.4-0.9c0.1-0.3,0.3-0.6,0.5-0.9c0.2-0.3,0.4-0.5,0.7-0.7C45.4,1,45.7,0.9,46,0.8c0.3-0.1,0.7-0.1,1,0
+		c0.3,0.1,0.6,0.2,0.9,0.5c0.2,0.3,0.4,0.6,0.4,1c0,0.4,0.1,0.8,0,1.1c0,0.2,0,0.3,0,0.5c0,0.2-0.1,0.3-0.2,0.4
+		c-0.1,0.2-0.2,0.3-0.4,0.4c-0.2,0.1-0.4,0.1-0.5,0.2c-0.1,0-0.3,0.1-0.4,0.1c-0.1,0-0.3,0-0.4,0C46.2,4.7,46,4.6,46,4.4
+		c-0.1-0.2-0.1-0.4,0-0.5c0.1-0.2,0.2-0.3,0.3-0.3c0.1,0,0.2-0.1,0.4-0.1c0.2-0.1,0.3-0.2,0.3-0.3c0.1-0.2,0.1-0.3,0.1-0.5
+		C47.1,2.4,47,2.2,47,2c-0.1-0.2-0.2-0.3-0.3-0.3c-0.2,0-0.3,0-0.5,0.1C46,1.9,45.9,2,45.7,2.2c-0.2,0.2-0.3,0.4-0.4,0.6
+		C45.2,3,45,3.3,44.9,3.5c-0.1,0.3-0.3,0.6-0.4,0.8c-0.2,0.2-0.3,0.5-0.4,0.8c-0.4,0.9-0.8,1.7-1.2,2.5c0.3,0,0.6-0.1,1,0
+		c0.4,0,0.7,0,1,0c0.3,0,0.7,0.1,1,0.2c0.3,0.1,0.6,0.3,0.8,0.6c0.3,0.3,0.4,0.6,0.5,1c0.1,0.4,0.1,0.8,0.2,1.1l0.2,2.1
+		c0,0.2,0.1,0.5,0.1,0.7C47.7,13.7,47.8,14,48,14.2z"/>
+	<path fill="#c3c3c3" d="M71.7,13.9c0.2,0.2,0.4,0.4,0.7,0.5c0.3,0.1,0.5,0,0.8-0.1c0,0.2,0.1,0.3,0.1,0.6c0.1,0.2,0.1,0.4,0.1,0.6
+		c-0.3,0-0.7,0-1.1,0s-0.8,0-1.3,0.1c-0.4,0-0.9,0-1.3,0c-0.4,0-0.8,0-1,0c0-0.1,0-0.1,0-0.2c0-0.1,0.1-0.2,0.2-0.3
+		c0.1-0.1,0.2-0.2,0.4-0.3c0.2-0.1,0.3-0.1,0.6-0.1c0.1,0,0.1-0.2,0.1-0.7c0-0.4,0-1,0-1.6c0-0.6,0-1.2-0.1-1.9s0-1.1,0-1.5
+		c0-1,0-1.9,0-2.6c0-0.7,0.1-1.5,0.1-2.2c-0.6,1.3-1.1,2.7-1.6,4.1c-0.5,1.5-1,3-1.5,4.4c0,0,0.1,0.1,0.1,0.2c-0.2,0-0.4,0-0.7,0.1
+		c-0.3,0.1-0.5,0.1-0.7,0.1c-0.5-1.9-1.1-3.7-1.6-5.5c-0.5-1.8-1.1-3.6-1.6-5.5c-0.1,1-0.1,2-0.1,3c0,1.1-0.1,2.1-0.1,3.2
+		c0,1.1,0,2.1-0.1,3.2c0,1-0.1,2-0.1,3h1.4v1.1c-0.5,0-0.9,0.1-1.3,0c-0.4,0-0.8,0-1.2-0.1c-0.4,0-0.8-0.1-1.2-0.1
+		c-0.4,0-0.8,0-1.3,0c-0.1,0-0.3,0-0.4,0c-0.1,0-0.2,0-0.3-0.1c-0.1,0-0.1-0.1-0.1-0.2c0-0.1-0.1-0.3-0.1-0.4c0-0.1,0-0.3,0-0.4
+		c0-0.1,0.1-0.2,0.1-0.2c0.2,0.1,0.4,0.2,0.6,0.1s0.4-0.2,0.5-0.4c0-0.1,0.1-0.3,0.1-0.7c0-0.4,0-0.9,0.1-1.6c0-0.6,0.1-1.3,0.1-2.1
+		C59,8.8,59,8,59,7.2c0-0.8,0-1.5,0.1-2.3c0-0.7,0.1-1.3,0.1-1.8c0-0.2,0-0.5,0-0.7c0-0.2-0.1-0.4-0.2-0.6c-0.1-0.2-0.3-0.3-0.5-0.4
+		c-0.2-0.1-0.4,0-0.6,0.1c0-0.2-0.1-0.5-0.1-0.7c0-0.2,0-0.4-0.1-0.7c1,0,2,0.1,3,0.1c0.9,0,1.9,0.1,3,0.1c0,0.3-0.1,0.5-0.4,0.7
+		c0.3,1.3,0.6,2.6,1,3.9c0.4,1.3,0.8,2.6,1.2,3.9c0.2-0.6,0.4-1.3,0.6-1.9c0.2-0.6,0.4-1.2,0.6-1.8C67,4.6,67.2,4,67.5,3.4
+		c0.2-0.6,0.4-1.3,0.6-2c-0.1,0-0.3,0-0.4-0.1c-0.1,0-0.2,0-0.4-0.1c-0.1,0-0.1-0.1-0.1-0.3c0-0.1,0.1-0.2,0.1-0.3
+		c0.1-0.1,0.2-0.1,0.3-0.1c0.1,0,0.2,0,0.3,0c0.4,0,0.7,0,1,0s0.6,0,0.9,0c0.3,0,0.6,0,0.9,0c0.3,0,0.6,0,1,0c0.1,0,0.3,0,0.4,0
+		c0.1,0,0.3,0.1,0.4,0.2c0.1,0.1,0.2,0.2,0.2,0.4c0,0.2,0,0.3-0.2,0.3c-0.1-0.1-0.2-0.1-0.3-0.1c-0.1,0-0.2,0.1-0.3,0.1
+		c-0.2,0.4-0.3,0.8-0.4,1.3c-0.1,0.5-0.1,0.9-0.1,1.4c-0.2,2.8-0.2,5.6,0,8.4c0,0.3,0,0.5,0.1,0.7C71.4,13.5,71.5,13.7,71.7,13.9z"
+		/>
+	<path fill="#c3c3c3" d="M81.7,12c-0.1,0-0.1,0-0.2,0c-0.1,0-0.1,0-0.2,0c0,0.4,0,0.9-0.2,1.3c-0.1,0.4-0.4,0.8-0.7,1.1
+		c-0.3,0.3-0.7,0.6-1.1,0.8c-0.4,0.2-0.9,0.3-1.3,0.4c-0.4,0.1-0.8,0-1.2,0c-0.4-0.1-0.8-0.2-1.1-0.5c-0.2-0.1-0.3-0.3-0.5-0.5
+		c-0.2-0.2-0.3-0.4-0.4-0.6c-0.2-0.4-0.3-0.7-0.4-1c-0.1-0.3-0.2-0.6-0.3-1C74,11.7,74,11.4,74,11c0-0.3,0-0.7,0.1-1.1
+		c0.1-0.7,0.3-1.4,0.5-2c0.3-0.6,0.6-1.1,0.9-1.6s0.8-0.8,1.3-1.1c0.5-0.3,1-0.4,1.5-0.4c0.2,0,0.4,0,0.6,0.1
+		c0.2,0.1,0.3,0.1,0.5,0.3C79.6,5.4,79.8,5.6,80,6c0.2,0.4,0.4,0.8,0.5,1.3c0.1,0,0.1,0,0.2,0c0.1,0,0.1,0,0.2,0c0,0.1,0,0.1,0,0.2
+		c0,0.1,0,0.1,0,0.2L79.2,8c-0.2,0.1-0.3,0.1-0.4,0c-0.1,0-0.1-0.1-0.2-0.2c0-0.1,0-0.1,0-0.2c0.1,0,0.1,0,0.2,0c0,0,0.1,0,0.2,0
+		c0.1-0.1,0.2-0.2,0.2-0.4c0-0.2,0-0.3,0-0.5c0-0.3-0.1-0.6-0.3-0.9c-0.1-0.1-0.2-0.2-0.3-0.3c-0.1-0.1-0.2-0.1-0.4,0
+		c-0.1,0-0.3,0.1-0.4,0.3c-0.1,0.2-0.3,0.4-0.4,0.6c-0.1,0.2-0.2,0.4-0.3,0.6c-0.1,0.2-0.1,0.4-0.1,0.5c-0.4,1.8-0.5,3.6-0.1,5.5
+		c0.1,0.2,0.1,0.4,0.2,0.7c0.1,0.2,0.2,0.4,0.3,0.6c0.1,0.2,0.3,0.3,0.6,0.5c0.2,0.1,0.4,0.1,0.7,0.1c0.4-0.1,0.7-0.3,1-0.7
+		c0.2-0.4,0.4-0.8,0.5-1.2c0-0.2,0.1-0.4,0.1-0.6v-0.3c-0.2,0-0.3,0-0.4,0c-0.1,0-0.1-0.1-0.1-0.2c0-0.1,0-0.2,0.1-0.2
+		c0.4,0,0.8,0,1.2,0c0.4,0,0.8,0,1.2,0c0,0.1,0,0.1,0,0.2C81.8,11.8,81.8,11.9,81.7,12z"/>
+	<path fill="#c3c3c3" d="M83.5,14.2c0.2-4.3,0.3-8.5,0.2-12.8c-0.3,0-0.6,0-0.9,0c-0.3,0-0.6,0-0.9,0c0-0.2,0-0.3,0-0.5s0-0.3,0-0.5
+		c0.7,0,1.3,0,2-0.1c0.7,0,1.3,0,2-0.1c0.8-0.2,1.6-0.2,2.4-0.1c0.8,0.1,1.6,0.3,2.4,0.5c0.7,0.3,1.4,0.7,1.9,1.2
+		c0.5,0.5,0.9,1.1,1.1,1.8C94,4.9,94.1,6.1,94,7.4C94,8.6,93.8,9.8,93.7,11c0,0.4-0.1,0.8-0.2,1.2c-0.1,0.4-0.3,0.8-0.5,1.1
+		c-0.3,0.5-0.8,1-1.3,1.3c-0.5,0.3-1.1,0.5-1.7,0.6c-0.5,0.1-0.9,0.2-1.4,0.1c-0.5,0-0.9,0-1.4-0.1v0c-0.2,0-0.3,0-0.5,0
+		s-0.4,0-0.5,0l-0.1,0c0,0,0,0,0,0c-0.6,0-1.3,0-1.9,0c-0.6,0-1.3,0-1.9,0c-0.2-0.4-0.1-0.8,0.2-1.1c0.2-0.2,0.3-0.2,0.5-0.3
+		C83.2,14.1,83.4,14.1,83.5,14.2z M89.4,1.9c-0.4-0.3-0.8-0.5-1.3-0.6c-0.5-0.1-1-0.1-1.5-0.1c-0.3,4.5-0.2,9.1,0.4,13.6
+		c0.2,0,0.4,0,0.5-0.1c0.2,0,0.4-0.1,0.6-0.1c0.3-0.1,0.6-0.2,0.9-0.4c0.3-0.2,0.6-0.4,0.8-0.7c0.2-0.3,0.4-0.6,0.5-1
+		s0.2-0.7,0.2-1.1c0.4-2.1,0.4-4.2,0.2-6.3c-0.1-0.6-0.2-1.2-0.4-1.9C90.3,2.8,89.9,2.3,89.4,1.9z"/>
+	<path fill="#c3c3c3" d="M102.4,9.7c-0.6-0.1-1.3-0.1-2,0c-0.7,0.1-1.4,0.4-2,0.8l-0.2-1.4L99.1,9c0-0.4-0.1-0.7-0.1-1
+		c0-0.2-0.1-0.5-0.1-0.9c-0.3,0-0.6,0.1-0.9,0.1c-0.3,0-0.6,0.1-1,0.1c-0.2,0.7-0.3,1.3-0.4,1.8c-0.1,0.5-0.2,1.1-0.4,1.6l0.2-0.1
+		l0.7,0.6c-0.4,0.2-0.8,0.6-1.2,1.1c-0.4,0.5-0.7,1-0.9,1.5l-0.9-0.5c0-0.1,0.1-0.2,0.2-0.4c0.1-0.2,0.2-0.3,0.2-0.4
+		c0.1-0.2,0.2-0.5,0.3-1c0.1-0.4,0.2-0.9,0.4-1.3c0.1-0.5,0.2-0.9,0.3-1.3c0.1-0.4,0.2-0.7,0.2-0.9c0.1-0.4,0.2-0.8,0.3-1.2
+		c0.1-0.4,0.2-0.8,0.3-1.2c0.2-0.7,0.3-1.4,0.4-2.1c0.1-0.7,0.2-1.4,0.3-2.2c-0.1,0-0.2,0-0.3,0c-0.1,0-0.2,0-0.3,0l0.1-0.8l4-0.1
+		l0.1,0.8c-0.1,0-0.2,0-0.2,0c0,0-0.1,0-0.2,0c0.1,0.7,0.2,1.4,0.3,2c0.1,0.6,0.2,1.2,0.3,1.8c0.1,0.6,0.2,1.2,0.3,1.8
+		c0.1,0.6,0.2,1.3,0.4,2c0.2,0,0.3,0,0.3,0c0,0,0.1,0,0.3,0L102.4,9.7z M98.8,6.1c-0.1-0.7-0.2-1.3-0.3-2c-0.1-0.6-0.3-1.3-0.4-2
+		c-0.1,0.6-0.2,1.3-0.4,2.1c-0.1,0.7-0.3,1.5-0.5,2.2L98.8,6.1z"/>
+	<path fill="#c3c3c3" d="M124.9,20.1c0-0.3,0.1-0.6,0.3-0.8c0.2-0.2,0.4-0.3,0.7-0.4c0.3-0.1,0.5,0,0.8,0.1c0.3,0.1,0.5,0.3,0.6,0.5
+		c0.3,0.4,0.6,0.9,0.7,1.4c0.2,0.5,0.2,1,0.2,1.5c0,0.5-0.1,1-0.3,1.5c-0.2,0.5-0.4,1-0.7,1.4c-0.6,0.9-1.4,1.6-2.4,2
+		c-1,0.5-2,0.7-3,0.7c-1.5,0-2.8-0.3-3.9-1s-2.1-1.4-3-2.4c-0.9-1-1.8-2.1-2.5-3.2c-0.8-1.2-1.5-2.3-2.3-3.5c-1.1,1.2-2.4,2.2-3.9,3
+		c-1.5,0.8-3,1.1-4.5,1c-1.1,0-2.1-0.1-3-0.5c-0.9-0.3-1.6-0.8-2.2-1.4c-0.6-0.6-0.9-1.3-1.1-2.2c-0.2-0.8-0.1-1.7,0.2-2.7
+		c0.3-0.9,0.7-1.6,1.3-2.2c0.6-0.6,1.2-1.1,2-1.5c0.7-0.4,1.5-0.6,2.4-0.7c0.8-0.1,1.7,0,2.6,0.2c0-1.7,0-3.4,0-5c0-1.7,0-3.2,0-4.6
+		c-0.3,0-0.6,0-0.9,0c-0.3,0-0.6,0-0.9,0c0-0.2,0-0.3,0-0.5s0-0.3,0-0.5l3.7-0.1c0.8-0.2,1.6-0.2,2.4-0.1c0.8,0.1,1.6,0.3,2.4,0.5
+		c0.7,0.3,1.4,0.7,1.9,1.2c0.5,0.5,0.9,1.1,1.1,1.8c0.3,1.2,0.4,2.4,0.3,3.6c-0.1,1.2-0.2,2.5-0.4,3.7c-0.1,1-0.4,2-0.8,3
+		c-0.5,1-1,2-1.7,2.9c0.3,0.4,0.6,0.8,0.8,1.2c0.3,0.4,0.5,0.8,0.8,1.2c0.5,0.8,1.1,1.6,1.7,2.5c0.6,0.8,1.3,1.6,2,2.4
+		c0.7,0.7,1.5,1.3,2.4,1.8s1.8,0.7,2.9,0.8c1.1,0,2.1-0.2,3-0.7c0.9-0.5,1.6-1.2,2.1-2.2c0.2-0.4,0.3-0.8,0.4-1.3
+		c0.1-0.5,0-0.9-0.1-1.3c-0.2,0.1-0.4,0.2-0.6,0.2c-0.2,0-0.4,0-0.6-0.1c-0.2-0.1-0.4-0.2-0.5-0.4S124.9,20.4,124.9,20.1z M102.9,21
+		c1.5-0.4,2.8-1,3.7-1.8c0.9-0.8,1.7-1.7,2.3-2.8c-0.2-0.2-0.3-0.5-0.6-0.7c-0.6-0.7-1.2-1.4-1.9-1.9c0,0.6,0.1,1.2,0.1,1.8
+		c0,0.6,0.1,1.1,0.2,1.6h0v0.1c-0.5,0-0.9,0-1.3,0c-0.4,0-0.8,0-1.2,0c-0.3,0-0.6,0-0.9,0c-0.3,0-0.6,0-0.9,0
+		c-0.1-0.2-0.1-0.4,0-0.7c0-0.2,0.1-0.3,0.3-0.5c0.3-0.3,0.7-0.4,1.1-0.2l0.1-3.5c-0.5-0.2-1-0.3-1.5-0.3c-0.5,0-1.1,0-1.6,0.1
+		c-0.6,0.1-1.1,0.3-1.6,0.6c-0.5,0.3-0.9,0.7-1.3,1.1c-0.4,0.4-0.7,0.9-0.9,1.5c-0.2,0.5-0.3,1.1-0.3,1.6c0,0.7,0.2,1.3,0.6,1.8
+		c0.4,0.5,0.9,0.9,1.4,1.4c0.2,0.2,0.5,0.3,0.8,0.5c0.3,0.1,0.7,0.2,1.1,0.3c0.4,0.1,0.8,0.1,1.2,0.1
+		C102.1,21.1,102.5,21.1,102.9,21z M109.3,1.9c-0.4-0.3-0.8-0.5-1.2-0.6c-0.5-0.1-0.9-0.1-1.4-0.1c-0.1,1.7-0.2,3.4-0.3,5.3
+		c-0.1,1.9-0.1,3.7,0,5.6c0.6,0.4,1.2,0.8,1.7,1.4c0.5,0.5,1,1.1,1.5,1.6c0.2-0.6,0.4-1.2,0.6-1.9c0.2-0.6,0.3-1.2,0.3-1.7
+		c0.2-1.1,0.2-2.1,0.3-3.1c0-1,0-2.1-0.1-3.1c-0.1-0.6-0.2-1.2-0.4-1.9C110.1,2.8,109.8,2.3,109.3,1.9z"/>
+	<path fill="#c3c3c3" d="M116.5,1.2c-0.3,0-0.6,0-0.9,0c-0.3,0-0.6,0-0.9,0V0.4c0.5,0,0.9,0,1.2-0.1s0.7,0,1.1,0c0.4,0,0.7,0,1.1,0
+		s0.8,0,1.3-0.1c0.9,0,1.8,0,2.8-0.1c0.9,0,1.8,0,2.8-0.1c0,0.6,0,1.2,0,1.8c0,0.6,0,1.2,0,1.8c-0.2,0-0.3,0-0.5,0
+		c-0.2,0-0.3,0-0.5,0c-0.1,0-0.2,0-0.3,0c-0.1,0-0.1-0.1,0-0.1c0.1-0.2,0.1-0.4,0.1-0.6s0-0.4-0.1-0.6c-0.1-0.2-0.2-0.4-0.3-0.6
+		c-0.1-0.2-0.2-0.3-0.4-0.4c-0.2-0.1-0.4-0.2-0.6-0.2c-0.2,0-0.5,0-0.7,0c-0.3,0-0.5,0.1-0.8,0.1c-0.3,0.1-0.5,0.2-0.6,0.4
+		c-0.1,0.2-0.1,0.3-0.1,0.3c0,0.1,0,0.2,0,0.3c0,0.7-0.1,1.3-0.1,2c0,0.6-0.1,1.3-0.1,1.9c0,0.2,0,0.3,0,0.5c0,0.2,0,0.3,0,0.5
+		c0.6-0.2,1.2-0.3,1.9-0.4c0.6-0.1,1.2-0.3,1.9-0.4c0,0.1,0.1,0.2,0.1,0.3c0,0.1,0,0.3,0,0.4c0,0.2-0.1,0.3-0.1,0.4
+		c-0.1,0.1-0.1,0.2-0.1,0.3c-0.1,0.1-0.2,0.1-0.4,0.2c-0.1,0-0.3,0.1-0.4,0.1c-0.5,0.1-0.9,0.2-1.4,0.3c-0.5,0.1-0.9,0.1-1.4,0.2
+		c0,1-0.1,2-0.2,2.9c-0.1,1-0.1,1.9-0.2,2.9c0.8,0.2,1.5,0.3,2,0.1c0.6-0.2,1.2-0.5,1.9-1c0.2-0.1,0.2-0.3,0.2-0.5
+		c0-0.2,0-0.5,0-0.7c0-0.2,0.1-0.5,0.2-0.6c0.1-0.2,0.3-0.3,0.7-0.4c0.4,0,0.6,0.1,0.7,0.4c0.1,0.3,0.2,0.7,0.2,1.1
+		c0,0.5,0,0.9-0.1,1.4c-0.1,0.5-0.1,0.9,0,1.2c-0.5,0-1,0-1.4,0c-0.4,0-0.8,0-1.2,0.1c-0.4,0-0.8,0-1.2,0.1c-0.4,0-0.9,0-1.3,0
+		c-0.9,0-1.7,0-2.5,0.1c-0.7,0.1-1.6,0.1-2.4,0.1c-0.2-0.2-0.2-0.4-0.2-0.7c0-0.2,0.1-0.5,0.3-0.6c0.2-0.2,0.3-0.3,0.6-0.3
+		c0.2-0.1,0.5,0,0.7,0.1c0.1-2.1,0.2-4.3,0.1-6.5C116.3,5.5,116.3,3.4,116.5,1.2z"/>
+</g>
+</svg>
+
+            </a>
+        </p>
+	</footer>
+
+	<script>
+		var algolia_app_id      = 'FU55RWGNDN';
+		var algolia_search_key  = 'c41c5de31ca55044dbb0bde815d35121';
+				var version             = '5.5';
+			</script>
+
+	<script id="search_suggestion_template" type="text/template">
+	<div class="autocomplete-wrapper">
+		{{#_highlightResult.h1}}
+		<div class="h1">
+			{{{ _highlightResult.h1.value }}}
+		</div>
+		{{/_highlightResult.h1}}
+
+		<div class="sub-section">
+			{{#_highlightResult.h2}}
+			<div class="h2">
+				<span class="hash">#</span> {{{ _highlightResult.h2.value }}}
+			</div>
+			{{/_highlightResult.h2}}
+
+			{{#_highlightResult.h3}}
+			<div class="h3">
+				> {{{ _highlightResult.h3.value }}}
+			</div>
+			{{/_highlightResult.h3}}
+
+			{{#_highlightResult.h4}}
+			<div class="h4">
+				> {{{ _highlightResult.h4.value }}}
+			</div>
+			{{/_highlightResult.h4}}
+		</div>
+
+		{{#_highlightResult.content}}
+		<div class="content">
+			{{{ _highlightResult.content.value }}}
+		</div>
+		{{/_highlightResult.content}}
+	</div>
+</script>
+
+<script id="search_empty_template" type="text/template">
+	<div class="autocomplete-wrapper empty">
+		<div class="h2">We didn't find any result for "{{query}}". Sorry!</div>
+	</div>
+</script>
+
+<script id="search_footer_template" type="text/template">
+	<div class="footer">
+		<a target="_blank" href="https://www.algolia.com/referrals/5a08e6a4/join">
+			<img width="50" src="/docs/assets/img/algolia-logo.png">
+			<div class="powered">powered by</div>
+			<div style="clear: both"></div>
+		</a>
+	</div>
+</script>
+
+	<script src="../../build/assets/js/laravel-be3cb5d7de.js"></script>
+	<script src="../../assets/js/viewport-units-buggyfill.js"></script>
+
+	<script>window.viewportUnitsBuggyfill.init();</script>
+    <script>
+          ga('create', 'UA-53903425-7', 'auto');
+          ga('send', 'pageview');
+    </script>
+</body>
+</html>

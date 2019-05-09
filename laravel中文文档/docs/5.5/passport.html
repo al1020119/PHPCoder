@@ -1,0 +1,1324 @@
+<!doctype html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<title>Laravel 的 API 认证系统 Passport | Laravel 5.5 中文文档
+</title>
+	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+	<meta name="author" content="Taylor Otwell">
+	<meta name="description" content="Laravel 的 API 认证系统 Passport,介绍,安装,前端快速上手,部署 Passport,配置,令牌的使用期限,发放访问令牌,管理客户端,请求令牌,刷新令牌,密码授权令牌,创建密码授权客户端,请求密码授权令牌,请求所有作用域,简化...
+">
+	<meta name="keywords" content="laravel,laravel中国,laravel中文,laravel框架中文,laravel文档,laravel框架中国,laravel中文文档">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+			<link rel="canonical" href="passport.html" />
+		<!--[if lte IE 9]>
+		<script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+	<![endif]-->
+	<link rel="stylesheet" href="../../build/assets/css/laravel-4bbf92d154.css">
+	<link rel="apple-touch-icon" href="../../favicon.png.jpeg">
+    <style>
+        .list-group-item img.media-object {
+            width: 20px;
+            border-radius: 2px;
+            margin-right: 4px;
+            display: inline-block;
+        }
+    </style>
+</head>
+<body class="docs language-php">
+
+	<span class="overlay"></span>
+
+	<nav class="main">
+		<a href="../../index.html" class="brand nav-block">
+			<svg version="1.1"
+	 xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:a="http://ns.adobe.com/AdobeSVGViewerExtensions/3.0/"
+	 x="0px" y="0px" width="84.1px" height="57.6px" viewBox="0 0 84.1 57.6" enable-background="new 0 0 84.1 57.6"
+	 xml:space="preserve">
+<defs>
+</defs>
+<path fill="#FB503B" d="M83.8,26.9c-0.6-0.6-8.3-10.3-9.6-11.9c-1.4-1.6-2-1.3-2.9-1.2s-10.6,1.8-11.7,1.9c-1.1,0.2-1.8,0.6-1.1,1.6
+	c0.6,0.9,7,9.9,8.4,12l-25.5,6.1L21.2,1.5c-0.8-1.2-1-1.6-2.8-1.5C16.6,0.1,2.5,1.3,1.5,1.3c-1,0.1-2.1,0.5-1.1,2.9
+	c1,2.4,17,36.8,17.4,37.8c0.4,1,1.6,2.6,4.3,2c2.8-0.7,12.4-3.2,17.7-4.6c2.8,5,8.4,15.2,9.5,16.7c1.4,2,2.4,1.6,4.5,1
+	c1.7-0.5,26.2-9.3,27.3-9.8c1.1-0.5,1.8-0.8,1-1.9c-0.6-0.8-7-9.5-10.4-14c2.3-0.6,10.6-2.8,11.5-3.1C84.2,28,84.4,27.5,83.8,26.9z
+	 M37.5,36.4c-0.3,0.1-14.6,3.5-15.3,3.7c-0.8,0.2-0.8,0.1-0.8-0.2C21.2,39.6,4.4,4.8,4.1,4.4c-0.2-0.4-0.2-0.8,0-0.8
+	c0.2,0,13.5-1.2,13.9-1.2c0.5,0,0.4,0.1,0.6,0.4c0,0,18.7,32.3,19,32.8C38,36.1,37.8,36.3,37.5,36.4z M77.7,43.9
+	c0.2,0.4,0.5,0.6-0.3,0.8c-0.7,0.3-24.1,8.2-24.6,8.4c-0.5,0.2-0.8,0.3-1.4-0.6s-8.2-14-8.2-14L68.1,32c0.6-0.2,0.8-0.3,1.2,0.3
+	C69.7,33,77.5,43.6,77.7,43.9z M79.3,26.3c-0.6,0.1-9.7,2.4-9.7,2.4l-7.5-10.2c-0.2-0.3-0.4-0.6,0.1-0.7c0.5-0.1,9-1.6,9.4-1.7
+	c0.4-0.1,0.7-0.2,1.2,0.5c0.5,0.6,6.9,8.8,7.2,9.1C80.3,26,79.9,26.2,79.3,26.3z"/>
+</svg>
+
+			<span>Laravel</span>
+		</a>
+
+        <div class="search nav-block">
+            <svg version="1.1"
+	 xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:a="http://ns.adobe.com/AdobeSVGViewerExtensions/3.0/"
+	 x="0px" y="0px" width="16px" height="16px" viewBox="0 0 16 16" enable-background="new 0 0 16 16" xml:space="preserve">
+<defs>
+</defs>
+<g>
+	<g>
+		<path fill="#A1A1A1" d="M5.8,11.7c-1.6,0-3-0.6-4.1-1.7S0,7.4,0,5.8s0.6-3,1.7-4.1C2.8,0.6,4.3,0,5.8,0s3,0.6,4.1,1.7
+			c2.3,2.3,2.3,6,0,8.3C8.9,11.1,7.4,11.7,5.8,11.7z M5.8,1C4.5,1,3.3,1.5,2.4,2.4C1.5,3.3,1,4.5,1,5.8s0.5,2.5,1.4,3.4
+			c0.9,0.9,2.1,1.4,3.4,1.4s2.5-0.5,3.4-1.4c1.9-1.9,1.9-5,0-6.9C8.4,1.5,7.1,1,5.8,1z"/>
+	</g>
+	<g>
+		<path fill="#A1A1A1" d="M15.5,16c-0.1,0-0.3,0-0.3-0.1L9.3,10c-0.2-0.2-0.2-0.5,0-0.7s0.5-0.2,0.7,0l5.9,5.9
+			c0.2,0.2,0.2,0.5,0,0.7C15.8,16,15.6,16,15.5,16z"/>
+	</g>
+</g>
+</svg>
+
+            <input placeholder="搜索文档" type="text" v-model="search" id="search-input" v-on:blur="reset" />
+        </div>
+
+		<ul class="main-nav" v-if="! search">
+			<li class="nav-docs"><a href="../5.4.html">文档</a></li>
+<li ><a href="https://laravel-china.org/news" class="no-pjax">Laravel 资讯</a></li>
+<li class="dropdown"><a href="https://laravel-china.org/">Laravel China 社区</a></li>
+<li class="nav-forge"><a href="https://laravel-china.org/categories/1">酷工作</a></li>
+<li class="nav-docs"><a href="http://lumen.laravel-china.org">Lumen</a></li>
+<li class="nav-forge"><a href="https://cs.laravel-china.org/">速查表</a></li>
+<li class="nav-forge"><a href="https://fsdhub.com/books/laravel-essential-training-5.5">《Laravel 入门教程》</a></li>
+		</ul>
+
+        			<div class="switcher">
+	<div class="dropdown">
+		<button class="btn dropdown-toggle btn-inverted" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-expanded="true">
+			<!--<span class="faint">v</span> -->
+			5.5
+			<span class="caret"></span>
+		</button>
+		<ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu1">
+							<li role="presentation">
+					<a role="menuitem" tabindex="-1" href="passport.html">5.5</a>
+				</li>
+							<li role="presentation">
+					<a role="menuitem" tabindex="-1" href="../5.4/passport.html">5.4</a>
+				</li>
+							<li role="presentation">
+					<a role="menuitem" tabindex="-1" href="../5.3/passport.html">5.3</a>
+				</li>
+							<li role="presentation">
+					<a role="menuitem" tabindex="-1" href="http://d.laravel-china.org/docs/5.2/passport">5.2</a>
+				</li>
+							<li role="presentation">
+					<a role="menuitem" tabindex="-1" href="http://d.laravel-china.org/docs/5.1/passport">5.1</a>
+				</li>
+					</ul>
+	</div>
+</div>
+		
+        <div class="responsive-sidebar-nav">
+			<a href="passport.html#" class="toggle-slide menu-link btn">&#9776;</a>
+		</div>
+	</nav>
+
+	<nav id="slide-menu" class="slide-menu" role="navigation">
+
+	<div class="brand">
+		<a href="../../index.html">
+			<img src="../../assets/img/laravel-logo-white.png" height="50">
+		</a>
+	</div>
+
+	<ul class="slide-main-nav">
+		<li><a href="../../index.html">Home</a></li>
+		<li class="nav-docs"><a href="../5.4.html">文档</a></li>
+<li ><a href="https://laravel-china.org/news" class="no-pjax">Laravel 资讯</a></li>
+<li class="dropdown"><a href="https://laravel-china.org/">Laravel China 社区</a></li>
+<li class="nav-forge"><a href="https://laravel-china.org/categories/1">酷工作</a></li>
+<li class="nav-docs"><a href="http://lumen.laravel-china.org">Lumen</a></li>
+<li class="nav-forge"><a href="https://cs.laravel-china.org/">速查表</a></li>
+<li class="nav-forge"><a href="https://fsdhub.com/books/laravel-essential-training-5.5">《Laravel 入门教程》</a></li>
+	</ul>
+
+	<div class="slide-docs-nav">
+		<h2>Documentation</h2>
+		<ul>
+<li>
+<h2>前言</h2>
+<ul>
+<li><a href="about.html">翻译说明</a></li>
+<li><a href="releases.html">发行说明</a></li>
+<li><a href="upgrade.html">升级说明</a></li>
+<li><a href="contributions.html">贡献导引</a></li>
+<li><a href="http://d.laravel-china.org/api/5.5">API 文档</a></li>
+</ul>
+</li>
+<li>
+<h2>入门指南</h2>
+<ul>
+<li><a href="installation.html">安装</a></li>
+<li><a href="configuration.html">配置信息</a></li>
+<li><a href="structure.html">文件夹结构</a></li>
+<li><a href="homestead.html">Homestead</a></li>
+<li><a href="valet.html">Valet</a></li>
+</ul>
+</li>
+<li>
+<h2>核心架构</h2>
+<ul>
+<li><a href="lifecycle.html">请求周期</a></li>
+<li><a href="container.html">服务容器</a></li>
+<li><a href="providers.html">服务提供者</a></li>
+<li><a href="facades.html">Facades</a></li>
+<li><a href="contracts.html">Contracts</a></li>
+</ul>
+</li>
+<li>
+<h2>基础功能</h2>
+<ul>
+<li><a href="routing.html">路由</a></li>
+<li><a href="middleware.html">中间件</a></li>
+<li><a href="csrf.html">CSRF 保护</a></li>
+<li><a href="controllers.html">控制器</a></li>
+<li><a href="requests.html">请求</a></li>
+<li><a href="responses.html">响应</a></li>
+<li><a href="views.html">视图</a></li>
+<li><a href="redirects.html">重定向</a></li>
+<li><a href="session.html">Session</a></li>
+<li><a href="validation.html">表单验证</a></li>
+<li><a href="errors.html">错误与日志</a></li>
+</ul>
+</li>
+<li>
+<h2>前端开发</h2>
+<ul>
+<li><a href="blade.html">Blade 模板</a></li>
+<li><a href="localization.html">本地化</a></li>
+<li><a href="frontend.html">前端指南</a></li>
+<li><a href="mix.html">编辑资源 Mix</a></li>
+</ul>
+</li>
+<li>
+<h2>安全相关</h2>
+<ul>
+<li><a href="authentication.html">用户认证</a></li>
+<li><a href="passport.html">API 认证</a></li>
+<li><a href="authorization.html">用户授权</a></li>
+<li><a href="encryption.html">加密解密</a></li>
+<li><a href="hashing.html">哈希</a></li>
+<li><a href="passwords.html">重置密码</a></li>
+</ul>
+</li>
+<li>
+<h2>综合话题</h2>
+<ul>
+<li><a href="artisan.html">Artisan 命令行</a></li>
+<li><a href="broadcasting.html">广播系统</a></li>
+<li><a href="cache.html">缓存系统</a></li>
+<li><a href="collections.html">集合</a></li>
+<li><a href="events.html">事件系统</a></li>
+<li><a href="filesystem.html">文件存储</a></li>
+<li><a href="helpers.html">辅助函数</a></li>
+<li><a href="mail.html">邮件发送</a></li>
+<li><a href="notifications.html">消息通知</a></li>
+<li><a href="packages.html">扩展包开发</a></li>
+<li><a href="queues.html">队列</a></li>
+<li><a href="scheduling.html">任务调度</a></li>
+</ul>
+</li>
+<li>
+<h2>数据库</h2>
+<ul>
+<li><a href="database.html">快速入门</a></li>
+<li><a href="queries.html">查询构造器</a></li>
+<li><a href="pagination.html">分页</a></li>
+<li><a href="migrations.html">数据库迁移</a></li>
+<li><a href="seeding.html">数据填充</a></li>
+<li><a href="redis.html">Redis</a></li>
+</ul>
+</li>
+<li>
+<h2>Eloquent ORM</h2>
+<ul>
+<li><a href="eloquent.html">快速入门</a></li>
+<li><a href="eloquent-relationships.html">模型关联</a></li>
+<li><a href="eloquent-collections.html">Eloquent 集合</a></li>
+<li><a href="eloquent-mutators.html">修改器</a></li>
+<li><a href="eloquent-resources.html">API 资源</a></li>
+<li><a href="eloquent-serialization.html">序列化</a></li>
+</ul>
+</li>
+<li>
+<h2>测试相关</h2>
+<ul>
+<li><a href="testing.html">快速入门</a></li>
+<li><a href="http-tests.html">HTTP 测试</a></li>
+<li><a href="dusk.html">浏览器测试 Dusk</a></li>
+<li><a href="database-testing.html">数据库测试</a></li>
+<li><a href="mocking.html">测试模拟器</a></li>
+</ul>
+</li>
+<li>
+<h2>官方扩展包</h2>
+<ul>
+<li><a href="billing.html">Cashier 交易工具包</a></li>
+<li><a href="envoy.html">Envoy 部署工具</a></li>
+<li><a href="horizon.html">Horizon</a></li>
+<li><a href="passport.html">Passport OAuth 认证</a></li>
+<li><a href="scout.html">Scout 全文搜索</a></li>
+<li><a href="socialite.html">Socialite 社会化登录</a></li>
+</ul>
+</li>
+</ul>
+	</div>
+
+</nav>
+
+<div class="docs-wrapper container">
+
+	<section class="sidebar">
+
+            <div class="header">
+              <a type="button" class="btn btn-primary btn-inverted btn-lg btn-block turnofflight"><i class="fa fa-lightbulb-o"></i> 夜间模式 </a>
+              <br>
+              <div class="versions text-center ">
+                <a class="doc-btn btn-inverted active" href="../5.5.html" title="Laravel 5.5 中文文档">C5.5</a>
+                <a class="doc-btn btn-inverted " href="../5.4.html" title="Laravel 5.4 中文文档">C5.4</a>
+                <a class="doc-btn btn-inverted " href="../5.1.html" title="Laravel 5.1 中文文档">C5.1</a>
+              </div>
+            </div>
+
+            <a href="https://laravel-china.org/topics/3383" target="_blank" rel="nofollow" title="" style="display: block;margin-bottom: 23px;">
+                <img src="https://dn-phphub.qbox.me/uploads/images/201612/10/1/k7wwMpJduq.jpg" style="width: 100%;border: 1px solid #d8d3d3;box-shadow: 0 0 30px #d4d4d4;-moz-box-shadow: 0 0 30px #ccc;-webkit-box-shadow: 0 0 30px #d4d4d4;margin-bottom: 30px;margin-top: 10px;border-radius: 4px;">
+            </a>
+
+            <small><a href="passport.html#" id="doc-expand" style="font-size: 9px; color: #525252;">▶</a></small>
+
+		<ul>
+<li>
+<h2>前言</h2>
+<ul>
+<li><a href="about.html">翻译说明</a></li>
+<li><a href="releases.html">发行说明</a></li>
+<li><a href="upgrade.html">升级说明</a></li>
+<li><a href="contributions.html">贡献导引</a></li>
+<li><a href="http://d.laravel-china.org/api/5.5">API 文档</a></li>
+</ul>
+</li>
+<li>
+<h2>入门指南</h2>
+<ul>
+<li><a href="installation.html">安装</a></li>
+<li><a href="configuration.html">配置信息</a></li>
+<li><a href="structure.html">文件夹结构</a></li>
+<li><a href="homestead.html">Homestead</a></li>
+<li><a href="valet.html">Valet</a></li>
+</ul>
+</li>
+<li>
+<h2>核心架构</h2>
+<ul>
+<li><a href="lifecycle.html">请求周期</a></li>
+<li><a href="container.html">服务容器</a></li>
+<li><a href="providers.html">服务提供者</a></li>
+<li><a href="facades.html">Facades</a></li>
+<li><a href="contracts.html">Contracts</a></li>
+</ul>
+</li>
+<li>
+<h2>基础功能</h2>
+<ul>
+<li><a href="routing.html">路由</a></li>
+<li><a href="middleware.html">中间件</a></li>
+<li><a href="csrf.html">CSRF 保护</a></li>
+<li><a href="controllers.html">控制器</a></li>
+<li><a href="requests.html">请求</a></li>
+<li><a href="responses.html">响应</a></li>
+<li><a href="views.html">视图</a></li>
+<li><a href="redirects.html">重定向</a></li>
+<li><a href="session.html">Session</a></li>
+<li><a href="validation.html">表单验证</a></li>
+<li><a href="errors.html">错误与日志</a></li>
+</ul>
+</li>
+<li>
+<h2>前端开发</h2>
+<ul>
+<li><a href="blade.html">Blade 模板</a></li>
+<li><a href="localization.html">本地化</a></li>
+<li><a href="frontend.html">前端指南</a></li>
+<li><a href="mix.html">编辑资源 Mix</a></li>
+</ul>
+</li>
+<li>
+<h2>安全相关</h2>
+<ul>
+<li><a href="authentication.html">用户认证</a></li>
+<li><a href="passport.html">API 认证</a></li>
+<li><a href="authorization.html">用户授权</a></li>
+<li><a href="encryption.html">加密解密</a></li>
+<li><a href="hashing.html">哈希</a></li>
+<li><a href="passwords.html">重置密码</a></li>
+</ul>
+</li>
+<li>
+<h2>综合话题</h2>
+<ul>
+<li><a href="artisan.html">Artisan 命令行</a></li>
+<li><a href="broadcasting.html">广播系统</a></li>
+<li><a href="cache.html">缓存系统</a></li>
+<li><a href="collections.html">集合</a></li>
+<li><a href="events.html">事件系统</a></li>
+<li><a href="filesystem.html">文件存储</a></li>
+<li><a href="helpers.html">辅助函数</a></li>
+<li><a href="mail.html">邮件发送</a></li>
+<li><a href="notifications.html">消息通知</a></li>
+<li><a href="packages.html">扩展包开发</a></li>
+<li><a href="queues.html">队列</a></li>
+<li><a href="scheduling.html">任务调度</a></li>
+</ul>
+</li>
+<li>
+<h2>数据库</h2>
+<ul>
+<li><a href="database.html">快速入门</a></li>
+<li><a href="queries.html">查询构造器</a></li>
+<li><a href="pagination.html">分页</a></li>
+<li><a href="migrations.html">数据库迁移</a></li>
+<li><a href="seeding.html">数据填充</a></li>
+<li><a href="redis.html">Redis</a></li>
+</ul>
+</li>
+<li>
+<h2>Eloquent ORM</h2>
+<ul>
+<li><a href="eloquent.html">快速入门</a></li>
+<li><a href="eloquent-relationships.html">模型关联</a></li>
+<li><a href="eloquent-collections.html">Eloquent 集合</a></li>
+<li><a href="eloquent-mutators.html">修改器</a></li>
+<li><a href="eloquent-resources.html">API 资源</a></li>
+<li><a href="eloquent-serialization.html">序列化</a></li>
+</ul>
+</li>
+<li>
+<h2>测试相关</h2>
+<ul>
+<li><a href="testing.html">快速入门</a></li>
+<li><a href="http-tests.html">HTTP 测试</a></li>
+<li><a href="dusk.html">浏览器测试 Dusk</a></li>
+<li><a href="database-testing.html">数据库测试</a></li>
+<li><a href="mocking.html">测试模拟器</a></li>
+</ul>
+</li>
+<li>
+<h2>官方扩展包</h2>
+<ul>
+<li><a href="billing.html">Cashier 交易工具包</a></li>
+<li><a href="envoy.html">Envoy 部署工具</a></li>
+<li><a href="horizon.html">Horizon</a></li>
+<li><a href="passport.html">Passport OAuth 认证</a></li>
+<li><a href="scout.html">Scout 全文搜索</a></li>
+<li><a href="socialite.html">Socialite 社会化登录</a></li>
+</ul>
+</li>
+</ul>
+
+		<hr>
+            <ul>
+              <li>社交账号</li>
+                <ul class="social-account">
+                  <li><a href="http://weibo.com/1837553744/profile?topnav=1&wvr=6&is_all=1">Summer 的微博</a></li>
+                  <li>新手 QQ 群：282196078</li>
+                </ul>
+
+            </ul>
+
+            <ul>
+              <li>
+              微信订阅号
+                <ul>
+                  <li>
+<img class="image-border popover-with-html" data-content="" src="https://dn-phphub.qbox.me/uploads/images/201708/06/1/4zgVR8dNCt.png" style="width: 148px;height: 148px;border:1px solid #ccc;padding:2px;border-radius:3px;margin-top:5px;" data-original-title="" title="">
+                  </li>
+                </ul>
+                </li>
+            </ul>
+
+            <ul>
+              <li>推荐资源
+              <ul class="list list-group resource-links">
+                    <li class="list-group-item ">
+                <a href="../../index.html" class="no-pjax" title="Laravel 中文文档">
+                    <img class="media-object inline-block " src="https://dn-phphub.qbox.me/uploads/banners/ql9XtosRhTe4v8HVC3TV.jpg">
+                    Laravel 中文文档
+                </a>
+            </li>
+                    <li class="list-group-item ">
+                <a href="https://lumen.laravel-china.org" class="no-pjax" title="Lumen 中文文档">
+                    <img class="media-object inline-block " src="https://dn-phphub.qbox.me/uploads/banners/bcMFkfsJZpetLgKFwWqY.jpg">
+                    Lumen 中文文档
+                </a>
+            </li>
+                    <li class="list-group-item ">
+                <a href="https://cs.laravel-china.org/" class="no-pjax" title="Laravel 速查表">
+                    <img class="media-object inline-block " src="https://dn-phphub.qbox.me/uploads/banners/cV55gsrH70qz6VdKr502.jpg">
+                    Laravel 速查表
+                </a>
+            </li>
+                    <li class="list-group-item ">
+                <a href="http://yousails.mikecrm.com/4Dh5uWU" class="no-pjax" title="Laravel 软件外包服务">
+                    <img class="media-object inline-block " src="https://dn-phphub.qbox.me/uploads/banners/v89tIQ6vjceA6g7JmrQB.png">
+                    Laravel 软件外包
+                </a>
+            </li>
+                    <li class="list-group-item ">
+                <a href="https://laravel-china.org/topics/3626" class="no-pjax" title="Laravel 远程工作 ">
+                    <img class="media-object inline-block " src="https://dn-phphub.qbox.me/uploads/banners/Xlq6s7wLxvX8FlTP4qZe.png">
+                    Laravel 远程工作
+                </a>
+            </li>
+                    <li class="list-group-item ">
+                <a href="https://laravel-china.github.io/php-the-right-way/" class="no-pjax" title="PHP 之道 - PHPer 必读">
+                    <img class="media-object inline-block " src="https://dn-phphub.qbox.me/uploads/banners/vA50AYuscu2RCMowq7ee.png">
+                    PHP 之道
+                </a>
+            </li>
+                    <li class="list-group-item ">
+                <a href="https://laravel-china.org/composer" class="no-pjax" title="Composer 中文全量镜像">
+                    <img class="media-object inline-block " src="https://dn-phphub.qbox.me/uploads/banners/KltcLb6leMa12dvTAxD7.png">
+                    Composer 镜像
+                </a>
+            </li>
+            </ul>
+              </li>
+            </ul>
+
+	</section>
+
+	
+
+	<article>
+
+		<div class="alert alert-warning" role="alert">
+			一小时同步一次，更多信息请查阅 <a href="https://laravel-china.org/topics/2095">文档导读</a>。
+			发现瑕疵？你也可以
+				<a href="https://github.com/laravel-china/laravel-docs/edit/5.5/passport.md"><i class="fa fa-pencil-square-o"></i> 改进本文</a>
+			。<a href="https://laravel-china.org/topics/4026" target="_blank"><i class="fa fa-cloud-download" aria-hidden="true"></i> 离线版本下载</a>
+		</div>
+
+		<div class="main-content">
+			<h1>Laravel 的 API 认证系统 Passport</h1>
+<ul>
+<li><a href="passport.html#introduction">介绍</a></li>
+<li><a href="passport.html#installation">安装</a>
+<ul>
+<li><a href="passport.html#frontend-quickstart">前端快速上手</a></li>
+<li><a href="passport.html#deploying-passport">部署 Passport</a></li>
+</ul></li>
+<li><a href="passport.html#configuration">配置</a>
+<ul>
+<li><a href="passport.html#token-lifetimes">令牌的使用期限</a></li>
+</ul></li>
+<li><a href="passport.html#issuing-access-tokens">发放访问令牌</a>
+<ul>
+<li><a href="passport.html#managing-clients">管理客户端</a></li>
+<li><a href="passport.html#requesting-tokens">请求令牌</a></li>
+<li><a href="passport.html#refreshing-tokens">刷新令牌</a></li>
+</ul></li>
+<li><a href="passport.html#password-grant-tokens">密码授权令牌</a>
+<ul>
+<li><a href="passport.html#creating-a-password-grant-client">创建密码授权客户端</a></li>
+<li><a href="passport.html#requesting-password-grant-tokens">请求密码授权令牌</a></li>
+<li><a href="passport.html#requesting-all-scopes">请求所有作用域</a></li>
+</ul></li>
+<li><a href="passport.html#implicit-grant-tokens">简化授权令牌</a></li>
+<li><a href="passport.html#client-credentials-grant-tokens">客户端授权令牌</a></li>
+<li><a href="passport.html#personal-access-tokens">私人访问令牌</a>
+<ul>
+<li><a href="passport.html#creating-a-personal-access-client">创建私人访问令牌的客户端</a></li>
+<li><a href="passport.html#managing-personal-access-tokens">管理私人访问令牌</a></li>
+</ul></li>
+<li><a href="passport.html#protecting-routes">路由保护</a>
+<ul>
+<li><a href="passport.html#via-middleware">通过中间件</a></li>
+<li><a href="passport.html#passing-the-access-token">传递访问令牌</a></li>
+</ul></li>
+<li><a href="passport.html#token-scopes">令牌作用域</a>
+<ul>
+<li><a href="passport.html#defining-scopes">定义作用域</a></li>
+<li><a href="passport.html#assigning-scopes-to-tokens">给令牌分派作用域</a></li>
+<li><a href="passport.html#checking-scopes">检查作用域</a></li>
+</ul></li>
+<li><a href="passport.html#consuming-your-api-with-javascript">使用 JavaScript 接入 API</a></li>
+<li><a href="passport.html#events">事件</a></li>
+<li><a href="passport.html#testing">测试</a></li>
+</ul>
+<p><a name="introduction"></a></p>
+<h2>介绍</h2>
+<p>在 Laravel 中，实现基于传统表单的登陆和授权已经非常简单，但是如何满足 API 场景下的授权需求呢？在 API 场景里通常通过令牌来实现用户授权，而非维护请求之间的 Session 状态。现在 Laravel 项目中可以使用 Passport 轻而易举地实现 API 授权过程，通过 Passport 可以在几分钟之内为你的应用程序添加完整的 OAuth2 服务端实现。 Passport 基于 <a href="https://github.com/thephpleague/oauth2-server">League OAuth2 server</a> 该项目的维护人是 <a href="https://github.com/alexbilbie">Alex Bilbie</a>。</p>
+<blockquote>
+<p>{note} 本文档假定你已熟悉 OAuth2 。如果你并不了解 OAuth2 ，阅读之前请先熟悉下 OAuth2 的常用术语和基本特征。</p>
+</blockquote>
+<p><a name="installation"></a></p>
+<h2>安装</h2>
+<p>使用 Composer 依赖包管理器安装 Passport ：</p>
+<pre><code>composer require laravel/passport</code></pre>
+<p>接下来，将 Passport 的服务提供者注册到配置文件 <code>config/app.php</code> 的 <code>providers</code> 数组中：</p>
+<pre><code>Laravel\Passport\PassportServiceProvider::class,</code></pre>
+<p>Passport 使用服务提供者注册内部的数据库迁移脚本目录，所以上一步完成后，你需要更新你的数据库结构。Passport 的迁移脚本会自动创建应用程序需要的客户端数据表和令牌数据表：</p>
+<pre><code>php artisan migrate</code></pre>
+<blockquote>
+<p>{note} 如果你不打算使用 Passport 的默认迁移，你应该在 <code>AppServiceProvider</code> 的 <code>register</code> 方法中调用 <code>Passport :: ignoreMigrations</code> 方法。 你可以导出这个默认迁移用 <code>php artisan vendor:publish --tag=passport-migrations</code> 命令。</p>
+</blockquote>
+<p>接下来，你需要运行 <code>passport:install</code> 命令来创建生成安全访问令牌时用到的加密密钥，同时，这条命令也会创建「私人访问」客户端和「密码授权」客户端：</p>
+<pre><code>php artisan passport:install</code></pre>
+<p>上面命令执行后，请将 <code>Laravel\Passport\HasApiTokens</code> Trait 添加到 <code>App\User</code> 模型中，这个 Trait 会给你的模型提供一些辅助函数，用于检查已认证用户的令牌和使用作用域：</p>
+<pre><code>&lt;?php
+
+namespace App;
+
+use Laravel\Passport\HasApiTokens;
+use Illuminate\Notifications\Notifiable;
+use Illuminate\Foundation\Auth\User as Authenticatable;
+
+class User extends Authenticatable
+{
+    use HasApiTokens, Notifiable;
+}</code></pre>
+<p>接下来，需要在 <code>AuthServiceProvider</code> 的 <code>boot</code> 方法中调用 <code>Passport::routes</code> 函数。这个函数会注册一些在访问令牌、客户端、私人访问令牌的发放和吊销过程中会用到的必要路由：</p>
+<pre><code>&lt;?php
+
+namespace App\Providers;
+
+use Laravel\Passport\Passport;
+use Illuminate\Support\Facades\Gate;
+use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvider;
+
+class AuthServiceProvider extends ServiceProvider
+{
+    /**
+     * The policy mappings for the application.
+     *
+     * @var array
+     */
+    protected $policies = [
+        'App\Model' =&gt; 'App\Policies\ModelPolicy',
+    ];
+
+    /**
+     * Register any authentication / authorization services.
+     *
+     * @return void
+     */
+    public function boot()
+    {
+        $this-&gt;registerPolicies();
+
+        Passport::routes();
+    }
+}</code></pre>
+<p>最后，需要将配置文件 <code>config/auth.php</code> 中 <code>api</code> 部分的授权保护项（ <code>driver</code> ）改为 <code>passport</code> 。此调整会让你的应用程序在接收到 API 的授权请求时使用 Passport 的 <code>TokenGuard</code> 来处理：</p>
+<pre><code>'guards' =&gt; [
+    'web' =&gt; [
+        'driver' =&gt; 'session',
+        'provider' =&gt; 'users',
+    ],
+
+    'api' =&gt; [
+        'driver' =&gt; 'passport',
+        'provider' =&gt; 'users',
+    ],
+],</code></pre>
+<p><a name="frontend-quickstart"></a></p>
+<h3>前端快速上手</h3>
+<blockquote>
+<p>{note} 如果想要使用 Passport 的 Vue 组件，那么你必须使用 <a href="https://vuejs.org">Vue</a> Javascript 框架，另外这些组件还用到了 Bootstrap CSS 框架。当然你也可以不使用上面的任何工具，但在实现你自己的前端部分时，Passport 的 Vue 组件仍旧有很高的参考价值。</p>
+</blockquote>
+<p>Passport 配备了一些可以让你的用户自行创建客户端和私人访问令牌的 JSON API。所以，你可以自己花时间来编写一些前端代码来使用这些 API。当然在 Passport 中也已经预制了一些 <a href="https://vuejs.org">Vue</a> 组件，你可以直接使用这些示例代码，也可以基于这些代码实现自己的前端部分。</p>
+<p>使用 Artisan 命令 <code>vendor:publish</code> 来发布 Passport 的 Vue 组件：</p>
+<pre><code>php artisan vendor:publish --tag=passport-components</code></pre>
+<p>已发布的组件将被放置在 <code>resources/assets/js/components</code> 目录中，可以在 <code>resources/assets/js/app.js</code> 文件中注册这些已发布的组件：</p>
+<pre><code>Vue.component(
+    'passport-clients',
+    require('./components/passport/Clients.vue')
+);
+
+Vue.component(
+    'passport-authorized-clients',
+    require('./components/passport/AuthorizedClients.vue')
+);
+
+Vue.component(
+    'passport-personal-access-tokens',
+    require('./components/passport/PersonalAccessTokens.vue')
+);</code></pre>
+<p>这些组件注册后，请保证运行 <code>npm run dev</code> 命令重新编译你的代码。一旦你重新编译了代码，你可以直接将这些组件直接放入应用程序的模板中，用于创建客户端和私人访问令牌：</p>
+<pre><code>&lt;passport-clients&gt;&lt;/passport-clients&gt;
+&lt;passport-authorized-clients&gt;&lt;/passport-authorized-clients&gt;
+&lt;passport-personal-access-tokens&gt;&lt;/passport-personal-access-tokens&gt;</code></pre>
+<p><a name="deploying-passport"></a></p>
+<h3>部署 Passport</h3>
+<p>第一次部署 Passport 到生产服务器时，可能会需要运行 <code>passport:keys</code> 命令。该命令生成 Passport 所需要的加密密钥，来产生访问令牌。这些生成的密钥往往不保存在源码控制中：</p>
+<pre><code>php artisan passport:keys</code></pre>
+<p><a name="configuration"></a></p>
+<h2>配置</h2>
+<p><a name="token-lifetimes"></a></p>
+<h3>令牌的有效期</h3>
+<p>默认情况下，Passport 发放的访问令牌是永久有效的，不需要刷新。但是如果你想给访问令牌配置一个短一些的有效期，那你就需要用到 <code>tokensExpireIn</code> 和 <code>refreshTokensExpireIn</code> 方法了，上述两个方法同样需要在 <code>AuthServiceProvider</code> 的 <code>boot</code> 方法中调用：</p>
+<pre><code>use Carbon\Carbon;
+
+/**
+ * Register any authentication / authorization services.
+ *
+ * @return void
+ */
+public function boot()
+{
+    $this-&gt;registerPolicies();
+
+    Passport::routes();
+
+    Passport::tokensExpireIn(Carbon::now()-&gt;addDays(15));
+
+    Passport::refreshTokensExpireIn(Carbon::now()-&gt;addDays(30));
+}</code></pre>
+<p><a name="issuing-access-tokens"></a></p>
+<h2>发放访问令牌</h2>
+<p>熟悉 OAuth2 的开发者一定知道， OAuth2 中必不可少的部分就是授权码。在获取授权码时，接入应用会重定向一个用户到你的服务端，用户可以选择允许或拒绝向这个客户端发放访问令牌。</p>
+<p><a name="managing-clients"></a></p>
+<h3>管理客户端</h3>
+<p>首先，接入应用如果想要与你应用的 API 进行交互，必须先在你的应用程序中注册一个「客户端」。一般来说，这个注册过程需要开发者提供两部分信息：接入应用名称和用户授权后的跳转链接。</p>
+<h4>命令 <code>passport:client</code></h4>
+<p>创建客户端最简单的方式是使用 Artisan 命令 <code>passport:client</code> ，你可以使用此命令创建自己的客户端，用于测试 OAuth2 的功能。在你执行 <code>client</code> 命令时，Passport 会提示输入更多关于你的客户端的信息，最终会提供给你生成的客户端的 ID 和 密钥：</p>
+<pre><code>php artisan passport:client</code></pre>
+<h4>JSON API</h4>
+<p>考虑到你的用户们并没有办法使用 <code>client</code> 命令，Passport 同时提供了用户创建客户端的 JSON API 。这样你就不用再花时间编码来实现客户端创建、更新和删除的相关控制器逻辑了。</p>
+<p>然而，你仍旧需要基于 Passport 的 JSON API 开发一套前端界面，方便你的用户管理他们授权的客户端。下面我们会列出所有用于管理客户端的 API，方便起见，我们使用 <a href="https://github.com/mzabriskie/axios">Axios</a> 展示对 API 的 HTTP 请求。</p>
+<blockquote>
+<p>{tip} 如果你不想自己重写整个客户端管理的前端界面，可以根据 <a href="passport.html#frontend-quickstart">前端快速上手</a> 在几分钟内组建一套功能完备的前端界面。</p>
+</blockquote>
+<h4><code>GET /oauth/clients</code></h4>
+<p>此接口会返回当前认证用户的所有客户端。主要用途是列出当前用户所有客户端，方便用户修改或删除：</p>
+<pre><code>axios.get('/oauth/clients')
+    .then(response =&gt; {
+        console.log(response.data);
+    });</code></pre>
+<h4><code>POST /oauth/clients</code></h4>
+<p>此接口用于用户创建新的客户端。它需要两部分数据：客户端的名称、客户端的 <code>redirect</code> 链接。当用户允许或拒绝授权请求后，用户都会被重定向到这个 <code>redirect</code> 链接。</p>
+<p>当客户端创建完成后，会生成此客户端的 ID 和密钥，客户端可以使用这两个值从你的应用程序请求访问令牌。此接口会返回新建客户端实例的信息：</p>
+<pre><code>const data = {
+    name: 'Client Name',
+    redirect: 'http://example.com/callback'
+};
+
+axios.post('/oauth/clients', data)
+    .then(response =&gt; {
+        console.log(response.data);
+    })
+    .catch (response =&gt; {
+        // List errors on response...
+    });</code></pre>
+<h4><code>PUT /oauth/clients/{client-id}</code></h4>
+<p>此接口用于更新客户端信息。它需要两部分数据：客户端的 <code>name</code> 和 <code>redirect</code> 链接。当用户允许或拒绝授权请求后，用户都会被重定向到这个 <code>redirect</code> 链接。此接口会返回被更新客户端实例的信息：</p>
+<pre><code>const data = {
+    name: 'New Client Name',
+    redirect: 'http://example.com/callback'
+};
+
+axios.put('/oauth/clients/' + clientId, data)
+    .then(response =&gt; {
+        console.log(response.data);
+    })
+    .catch (response =&gt; {
+        // List errors on response...
+    });</code></pre>
+<h4><code>DELETE /oauth/clients/{client-id}</code></h4>
+<p>此接口用于删除客户端：</p>
+<pre><code>axios.delete('/oauth/clients/' + clientId)
+    .then(response =&gt; {
+        //
+    });</code></pre>
+<p><a name="requesting-tokens"></a></p>
+<h3>请求令牌</h3>
+<h4>授权时的重定向</h4>
+<p>客户端创建之后，开发者会使用此客户端的 ID 和密钥向你的应用程序请求一个授权码和访问令牌。首先，接入应用会将用户重定向到你应用程序的 <code>/oauth/authorize</code> 路由上，示例如下：</p>
+<pre><code>Route::get('/redirect', function () {
+    $query = http_build_query([
+        'client_id' =&gt; 'client-id',
+        'redirect_uri' =&gt; 'http://example.com/callback',
+        'response_type' =&gt; 'code',
+        'scope' =&gt; '',
+    ]);
+
+    return redirect('http://your-app.com/oauth/authorize?'.$query);
+});</code></pre>
+<blockquote>
+<p>{tip} 注意，路由 <code>/oauth/authorize</code> 已经在 <code>Passport::routes</code> 方法中定</p>
+</blockquote>
+<h4>确认授权请求</h4>
+<p>接收到授权请求时，Passport 会显示默认的授权确认页面，用户可以允许或拒绝本次授权请求。用户确认后会被重定向回接入应用程序请求中指定的 <code>redirect_uri</code> 链接。<code>redirect_uri</code> 必须和客户端创建时提供的 <code>redirect</code> 完全一致。</p>
+<p>如果你想自定义授权确认页面，可以使用 Artisan 命令 <code>vendor:publish</code> 发布 Passport 的视图文件。发布后的视图文件存放路径为 <code>resources/views/vendor/passport</code> ：</p>
+<pre><code>php artisan vendor:publish --tag=passport-views</code></pre>
+<h4>将授权码转换为访问令牌</h4>
+<p>用户允许授权请求后，用户将会被重定向会接入应用程序，然后接入应用将通过 <code>POST</code> 请求向你的应用程序申请访问令牌，此次请求需要携带用户允许授权时产生的授权码。在下面的例子中，我们使用 Guzzle HTTP 库来实现这次 <code>POST</code> 请求：</p>
+<pre><code>Route::get('/callback', function (Request $request) {
+    $http = new GuzzleHttp\Client;
+
+    $response = $http-&gt;post('http://your-app.com/oauth/token', [
+        'form_params' =&gt; [
+            'grant_type' =&gt; 'authorization_code',
+            'client_id' =&gt; 'client-id',
+            'client_secret' =&gt; 'client-secret',
+            'redirect_uri' =&gt; 'http://example.com/callback',
+            'code' =&gt; $request-&gt;code,
+        ],
+    ]);
+
+    return json_decode((string) $response-&gt;getBody(), true);
+});</code></pre>
+<p>接口 <code>/oauth/token</code> 的 JSON 相应中会包含 <code>access_token</code> 、<code>refresh_token</code> 和 <code>expires_in</code> 属性。<code>expires_in</code> 的值即当前访问令牌的有效期（单位：秒）。</p>
+<blockquote>
+<p>{tip} 如上 <code>/oauth/authorize</code> 路由，<code>/oauth/token</code> 已经在 <code>Passport::routes</code> 方法中定义，所以无需再次定义。</p>
+</blockquote>
+<p><a name="refreshing-tokens"></a></p>
+<h3>刷新令牌</h3>
+<p>如果你的应用程序发放了短期访问令牌，用户需要刷新访问令牌时，需要提供与访问令牌同时发放的刷新令牌。在下面的例子中，我们使用 Guzzle HTTP 库来刷新令牌：</p>
+<pre><code>$http = new GuzzleHttp\Client;
+
+$response = $http-&gt;post('http://your-app.com/oauth/token', [
+    'form_params' =&gt; [
+        'grant_type' =&gt; 'refresh_token',
+        'refresh_token' =&gt; 'the-refresh-token',
+        'client_id' =&gt; 'client-id',
+        'client_secret' =&gt; 'client-secret',
+        'scope' =&gt; '',
+    ],
+]);
+
+return json_decode((string) $response-&gt;getBody(), true);</code></pre>
+<p>接口 <code>/oauth/token</code> 会返回一个 JSON 响应，会包含 <code>access_token</code> 、<code>refresh_token</code> 和 <code>expires_in</code> 属性。<code>expires_in</code> 属性值即当前访问令牌的有效时间（单位：秒）。</p>
+<p><a name="password-grant-tokens"></a></p>
+<h2>密码授权令牌</h2>
+<p>OAuth2 密码授权机制可以让自有应用基于邮箱地址（用户名）和密码获取访问令牌，自有应用比如你的手机客户端。这样就允许自由应用无需跳转步骤即可通过整个 OAuth2 的授权过程。</p>
+<p><a name="creating-a-password-grant-client"></a></p>
+<h3>创建密码授权客户端</h3>
+<p>如果想要通过密码授权机制来发布令牌，首先你需要创建一个密码授权客户端。你可以使用带有 <code>--password</code> 参数的 <code>passport:client</code> 命令。如果你已经运行了 <code>passport:install</code> 命令，那无需再单独运行此命令：</p>
+<pre><code>php artisan passport:client --password</code></pre>
+<p><a name="requesting-password-grant-tokens"></a></p>
+<h3>请求密码授权令牌</h3>
+<p>当你创建密码授权客户端后，你可以向 <code>/oauth/token</code> 接口发起 <code>POST</code> 请求来获取访问令牌，请求时需要带有用户的邮箱地址和密码信息。注意，该接口已经在 <code>Passport::routes</code> 方法中定义，所以无需再次手动定义。请求成功后，服务端返回的 JSON 响应数据中会带有 <code>access_token</code> 和 <code>refresh_token</code> 属性：</p>
+<pre><code>$http = new GuzzleHttp\Client;
+
+$response = $http-&gt;post('http://your-app.com/oauth/token', [
+    'form_params' =&gt; [
+        'grant_type' =&gt; 'password',
+        'client_id' =&gt; 'client-id',
+        'client_secret' =&gt; 'client-secret',
+        'username' =&gt; 'taylor@laravel.com',
+        'password' =&gt; 'my-password',
+        'scope' =&gt; '',
+    ],
+]);
+
+return json_decode((string) $response-&gt;getBody(), true);</code></pre>
+<blockquote>
+<p>{tip} 注意：访问令牌默认是永久有效的。但是如果需要你可以 <a href="passport.html#configuration">配置你应用程序的访问令牌有效时间</a>。</p>
+</blockquote>
+<p><a name="requesting-all-scopes"></a></p>
+<h3>请求所有作用域</h3>
+<p>使用密码授权机制时，你可以通过请求作用域 <code>*</code> 让你的令牌获取应用程序中定义的所有作用域。在处理使用此令牌发起的请求时，<code>can</code> 函数会始终返回 <code>true</code> ，这种作用域的授权最好只应用在使用 <code>password</code> 授权时发放的令牌中：</p>
+<pre><code>$response = $http-&gt;post('http://your-app.com/oauth/token', [
+    'form_params' =&gt; [
+        'grant_type' =&gt; 'password',
+        'client_id' =&gt; 'client-id',
+        'client_secret' =&gt; 'client-secret',
+        'username' =&gt; 'taylor@laravel.com',
+        'password' =&gt; 'my-password',
+        'scope' =&gt; '*',
+    ],
+]);</code></pre>
+<p><a name="implicit-grant-tokens"></a></p>
+<h2>简化授权令牌</h2>
+<p>简化授权和通过授权码授权相似; 区别是, 不需要通过授权码去获取令牌而是把令牌直接返回客户端. 主要用在无法安全存储证书场景中，这种授权在 JavaScript 和 移动应用 是最常用的. 开启授权, 在 <code>AuthServiceProvider</code> 中调用 <code>enableImplicitGrant</code> 方法:</p>
+<pre><code>/**
+ * Register any authentication / authorization services.
+ *
+ * @return void
+ */
+public function boot() 
+{
+    $this-&gt;registerPolicies();
+
+    Passport::routes();
+
+    Passport::enableImplicitGrant();
+}</code></pre>
+<p>调用上面方法开启授权后, 开发者可以通过自己的应用把 client ID 当做参数去请求一个令牌。在你的应用程序 <code>/oauth/authorize</code> 的接口中应该有一个重定向请求像下面这样:</p>
+<pre><code>Route::get('/redirect', function () {
+    $query = http_build_query([
+        'client_id' =&gt; 'client-id',
+        'redirect_uri' =&gt; 'http://example.com/callback',
+        'response_type' =&gt; 'token',
+        'scope' =&gt; '',
+    ]);
+
+    return redirect('http://your-app.com/oauth/authorize?'.$query);
+});</code></pre>
+<blockquote>
+<p>{tip} 记住, 这个 <code>/oauth/authorize</code> 接口已经定义在 <code>Passport::routes</code> 中，所以无需再次手动定义。</p>
+</blockquote>
+<p><a name="client-credentials-grant-tokens"></a></p>
+<h2>客户端证书授权令牌</h2>
+<p>客户端证书授权适用于机器对机器认证，例如，你可以在通过API执行脚本任务中使用此授权。要使用这种授权，你首先需要在 <code>app/Http/Kernel.php</code> 的 <code>$routeMiddleware</code> 变量中添加新的中间件：</p>
+<pre><code>use Laravel\Passport\Http\Middleware\CheckClientCredentials::class;
+
+protected $routeMiddleware = [
+    'client' =&gt; CheckClientCredentials::class,
+];</code></pre>
+<p>然后将这个中间件附加到路由中：</p>
+<pre><code>Route::get('/user', function(Request $request) {
+    ...
+})-&gt;middleware('client');</code></pre>
+<p>要获取令牌，向 <code>oauth/token</code> 接口发出请求:</p>
+<pre><code>$guzzle = new GuzzleHttp\Client;
+
+$response = $guzzle-&gt;post('http://your-app.com/oauth/token', [
+    'form_params' =&gt; [
+        'grant_type' =&gt; 'client_credentials',
+        'client_id' =&gt; 'client-id',
+        'client_secret' =&gt; 'client-secret',
+        'scope' =&gt; 'your-scope',
+    ],
+]);
+
+echo json_decode((string) $response-&gt;getBody(), true);</code></pre>
+<p><a name="personal-access-tokens"></a></p>
+<h2>私人访问令牌</h2>
+<p>有些时候你的用户可能想发布一个访问令牌自己使用，又不想经历通常的授权跳转流程，这时候如果能让用户在你的应用程序中自行发放访问令牌，在试验 API 接口或者在简单的授权演示中，是一个不错的解决方案。</p>
+<blockquote>
+<p>{note} 私人访问令牌总是永久有效的，<code>tokensExpireIn</code> 和 <code>refreshTokensExpireIn</code> 方法不会影响它的有效期。</p>
+</blockquote>
+<p><a name="creating-a-personal-access-client"></a></p>
+<h3>创建私人访问客户端</h3>
+<p>发布私人访问令牌之前，你需要先创建对应的客户端。你可以使用带 <code>--personal</code> 参数的 <code>passport:client</code> 命令来创建，如果你已经运行了 <code>passport:install</code> 命令，那无需再运行此命令：</p>
+<pre><code>php artisan passport:client --personal</code></pre>
+<p><a name="managing-personal-access-tokens"></a></p>
+<h3>管理私人访问令牌</h3>
+<p>创建私人访问客户端后，你可以使用 <code>User</code> 模型实例上的 <code>createToken</code> 方法来为给定用户发布令牌， <code>createToken</code> 方法的第一个参数为令牌名称，第二个参数（可选）是 <a href="passport.html#token-scopes">作用域</a> 列表：</p>
+<pre><code>$user = App\User::find(1);
+
+// Creating a token without scopes...
+$token = $user-&gt;createToken('Token Name')-&gt;accessToken;
+
+// Creating a token with scopes...
+$token = $user-&gt;createToken('My Token', ['place-orders'])-&gt;accessToken;</code></pre>
+<h4>JSON API</h4>
+<p>Passport 中也有用来管理私人访问令牌的 JSON API，你可以基于这些 API 开发一套前端操作界面供给用户管理自己的私人访问令牌。下面我们会列出所有管理私人访问令牌的 API。方便起见，我们使用 <a href="https://github.com/mzabriskie/axios">Axios</a> 展示对 API 的 HTTP 请求。</p>
+<blockquote>
+<p>{tip} 如果你不想自己重写整个私人访问令牌管理的前端界面，可以根据 <a href="passport.html#frontend-quickstart">前端快速上手</a> 在几分钟内组建一套功能完备的前端界面。</p>
+</blockquote>
+<h4><code>GET /oauth/scopes</code></h4>
+<p>此接口会返回应用程序中定义的所有 <a href="passport.html#scopes">作用域</a> 。你可以使用此接口将所有的作用域展示给用户，方便他们授权给需要的私人访问令牌：</p>
+<pre><code>axios.get('/oauth/scopes')
+    .then(response =&gt; {
+        console.log(response.data);
+    });</code></pre>
+<h4><code>GET /oauth/personal-access-tokens</code></h4>
+<p>此接口返回当前授权用户创建的所有私人访问令牌。主要用途是列出当前用户所有访问令牌，方便用户修改或删除：</p>
+<pre><code>axios.get('/oauth/personal-access-tokens')
+    .then(response =&gt; {
+        console.log(response.data);
+    });</code></pre>
+<h4><code>POST /oauth/personal-access-tokens</code></h4>
+<p>此接口用来创建私人访问令牌。需要提供两部分数据：令牌的名称（ <code>name</code> ） 作用域 （ <code>scopes</code> ）：</p>
+<pre><code>const data = {
+    name: 'Token Name',
+    scopes: []
+};
+
+axios.post('/oauth/personal-access-tokens', data)
+    .then(response =&gt; {
+        console.log(response.data.accessToken);
+    })
+    .catch (response =&gt; {
+        // List errors on response...
+    });</code></pre>
+<h4><code>DELETE /oauth/personal-access-tokens/{token-id}</code></h4>
+<p>此接口用于删除私人访问令牌：</p>
+<pre><code>axios.delete('/oauth/personal-access-tokens/' + tokenId);</code></pre>
+<p><a name="protecting-routes"></a></p>
+<h2>路由保护</h2>
+<p><a name="via-middleware"></a></p>
+<h3>通过中间件</h3>
+<p>Passport 包含一个 <a href="authentication.html#adding-custom-guards">验证保护机制</a> 可以验证请求中的的访问令牌。 前面i将 <code>api</code> 中的保护机制改为为 <code>passport</code> 后，你只要给需要验证访问令牌的路由添加 <code>auth:api</code> 中间件，该机制将发挥作用：</p>
+<pre><code>Route::get('/user', function () {
+    //
+})-&gt;middleware('auth:api');</code></pre>
+<p><a name="passing-the-access-token"></a></p>
+<h3>传递访问令牌</h3>
+<p>接入应用在调用 Passport 保护下的路由时，需要将访问令牌作为 <code>Bearer</code> 令牌放在请求头 <code>Authorization</code> 中。在下面的例子中，我们使用 Guzzle HTTP 库来实现这次 <code>POST</code> 请求：</p>
+<pre><code>$response = $client-&gt;request('GET', '/api/user', [
+    'headers' =&gt; [
+        'Accept' =&gt; 'application/json',
+        'Authorization' =&gt; 'Bearer '.$accessToken,
+    ],
+]);</code></pre>
+<p><a name="token-scopes"></a></p>
+<h2>令牌作用域</h2>
+<p><a name="defining-scopes"></a></p>
+<h3>定义作用域</h3>
+<p>当 API 客户端接入特定用户时，可以通过作用域来限定其访问权限。例如在你编写的电子商务应用中，一些接入应用可以获取订单的发货状态而不能创建订单。换言之，作用域能够让你的用户限制第三方应用的行为，从而保障自身的利益。</p>
+<p>你可以使用 <code>Passport::tokensCan</code> 方法来定义 API 的作用域，定义代码需要放置在 <code>AuthServiceProvider</code> 的 <code>boot</code> 方法中。<code>tokensCan</code> 方法接受一个包含作用域名称、描述的数组作为参数。作用域描述将会在授权确认页中直接展示给用户，你可以将其定义为任何你需要的内容：</p>
+<pre><code>use Laravel\Passport\Passport;
+
+Passport::tokensCan([
+    'place-orders' =&gt; 'Place orders',
+    'check-status' =&gt; 'Check order status',
+]);</code></pre>
+<p><a name="assigning-scopes-to-tokens"></a></p>
+<h3>给令牌分派作用域</h3>
+<h4>授权码机制</h4>
+<p>使用授权码机制申请访问令牌时，接入应用可以通过 <code>scope</code> 字符串参数指定他们需要的作用域。<code>scope</code> 包含多个作用域名称时，名称之间使用空格分隔：</p>
+<pre><code>Route::get('/redirect', function () {
+    $query = http_build_query([
+        'client_id' =&gt; 'client-id',
+        'redirect_uri' =&gt; 'http://example.com/callback',
+        'response_type' =&gt; 'code',
+        'scope' =&gt; 'place-orders check-status',
+    ]);
+
+    return redirect('http://your-app.com/oauth/authorize?'.$query);
+});</code></pre>
+<h4>私人访问令牌</h4>
+<p>使用 <code>User</code> 模型的 <code>createToken</code> 方法发放访问令牌时，你可以将需要的作用域数组作为第二个参数传给此方法：</p>
+<pre><code>$token = $user-&gt;createToken('My Token', ['place-orders'])-&gt;accessToken;</code></pre>
+<p><a name="checking-scopes"></a></p>
+<h3>检查作用域</h3>
+<p>Passport 包含两个检查作用域的中间件，通过访问令牌请求时将会使用这两个中间件来检查是否授予了特定作用域。使用之前，需要将下面的中间件添加到 <code>app/Http/Kernel.php</code> 文件的 <code>$routeMiddleware</code> 属性中：</p>
+<pre><code>'scopes' =&gt; \Laravel\Passport\Http\Middleware\CheckScopes::class,
+'scope' =&gt; \Laravel\Passport\Http\Middleware\CheckForAnyScope::class,</code></pre>
+<h4>检查所有作用域</h4>
+<p>路由可以使用 <code>scopes</code> 中间件来检查当前请求是否拥有指定的 <em>所有</em> 作用域：</p>
+<pre><code>Route::get('/orders', function () {
+    // Access token has both "check-status" and "place-orders" scopes...
+})-&gt;middleware('scopes:check-status,place-orders');</code></pre>
+<h4>检查任意作用域</h4>
+<p>路由可以使用 <code>scope</code> 中间件来检查当前请求是否拥有指定的 <em>任意</em> 作用域：</p>
+<pre><code>Route::get('/orders', function () {
+    // Access token has either "check-status" or "place-orders" scope...
+})-&gt;middleware('scope:check-status,place-orders');</code></pre>
+<h4>检查特定令牌实例的作用域</h4>
+<p>接入应用使用访问令牌通过你应用程序的验证后，你仍然可以使用当前授权 <code>User</code> 实例上的 <code>tokenCan</code> 方法来验证此令牌是否拥有指定的作用域：</p>
+<pre><code>use Illuminate\Http\Request;
+
+Route::get('/orders', function (Request $request) {
+    if ($request-&gt;user()-&gt;tokenCan('place-orders')) {
+        //
+    }
+});</code></pre>
+<p><a name="consuming-your-api-with-javascript"></a></p>
+<h2>使用 JavaScript 接入 API</h2>
+<p>在构建 API 时，如果能通过 JavaScript 应用接入自己的 API 将会给开发过程带来极大的便利。这样你可以与所用人一样使用你自己的应用程序的 API，同样的 API 可以被你自己的 web 应用、移动应用、第三方应用以及你发布到各个包管理平台的 SDK 共同使用。</p>
+<p>通常，在你通过 JavaScript 接入你的 API 时，每次请求你的应用程序时都需要手动传递访问令牌，然而，Passport 其中一个中间件可以帮你做这件事，你需要做的仅仅是将 <code>CreateFreshApiToken</code> 中间件添加到你的 <code>web</code> 中间件组中：</p>
+<pre><code>'web' =&gt; [
+    // Other middleware...
+    \Laravel\Passport\Http\Middleware\CreateFreshApiToken::class,
+],</code></pre>
+<p>Passport 的这个中间件将会在你所有的对外请求中添加一个 <code>laravel_token</code> cookie ，该 cookie 将包含一个加密后的 <a href="https://jwt.io/">JWT</a> ，Passport 可以根据此数据判断你 JavaScript 应用的授权状态。至此，你可以无需传递访问令牌直接请求应用程序的 API 了：</p>
+<pre><code>axios.get('/user')
+    .then(response =&gt; {
+        console.log(response.data);
+    });</code></pre>
+<p>当使用上面方法授权时，Axios 会自动带上 <code>X-CSRF-TOKEN</code> 请求头传递。另外，默认的 Laravel JavaScript 也会带上 <code>X-Requested-With</code> 请求头:</p>
+<pre><code>window.axios.defaults.headers.common = {
+    'X-Requested-With': 'XMLHttpRequest',
+};</code></pre>
+<blockquote>
+<p>{note} 如果你用了其他 JavaScript 框架，需要确保每次对外请求都会带有 <code>X-CSRF-TOKEN</code> 和 <code>X-Requested-With</code> 请求头。</p>
+</blockquote>
+<p><a name="events"></a></p>
+<h2>事件</h2>
+<p>Passport 在访问令牌和刷新令牌时触发事件。 你可以通过触发这些事件来修改或删除数据库中的其他访问令牌。 你可以在应用程序的 <code>EventServiceProvider</code> 中为这些事件附加监听器:</p>
+<pre><code class="language-php">/**
+ * The event listener mappings for the application.
+ *
+ * @var array
+ */
+protected $listen = [
+    'Laravel\Passport\Events\AccessTokenCreated' =&gt; [
+        'App\Listeners\RevokeOldTokens',
+    ],
+
+    'Laravel\Passport\Events\RefreshTokenCreated' =&gt; [
+        'App\Listeners\PruneOldTokens',
+    ],
+];</code></pre>
+<p><a name="testing"></a></p>
+<h2>测试</h2>
+<p>Passport 的 <code>actingAs</code> 方法可以用于指定当前认证的用户及其授权范围。 <code>actingAs</code> 方法第一个参数是一个对象，第二个参数是数组表示申请的授权范围:</p>
+<pre><code>public function testServerCreation()
+{
+    Passport::actingAs(
+        factory(User::class)-&gt;create(),
+        ['create-servers']
+    );
+
+    $response = $this-&gt;post('/api/create-server');
+
+    $response-&gt;assertStatus(200);
+}</code></pre>
+<h2>译者署名</h2>
+<table>
+<thead>
+<tr>
+<th>用户名</th>
+<th>头像</th>
+<th>职能</th>
+<th>签名</th>
+</tr>
+</thead>
+<tbody>
+</tbody>
+</table>
+<p>| <a href="https://github.com/kirisky">@Kirisky</a>  | <img class="avatar-66 rm-style" src="https://dn-phphub.qbox.me/uploads/avatars/18491_1503379318.jpeg?imageView2/1/w/100/h/100">  |  翻译  | 部分关键字翻译参考 <a href="https://github.com/KevinDiamen">@KevinDiamen</a>  |</p>
+<p>| Cloes  | <img class="avatar-66 rm-style" src="https://dn-phphub.qbox.me/uploads/avatars/6187_1477389867.jpg?imageView2/1/w/100/h/100">  |  翻译  |  我的<a href="https://github.com/cloes">github</a>  |</p>
+<hr />
+<blockquote>
+<p>{note} 欢迎任何形式的转载，但请务必注明出处，尊重他人劳动共创开源社区。</p>
+<p>转载请注明：本文档由 Laravel China 社区 <a href="https://laravel-china.org">laravel-china.org</a> 组织翻译，详见 <a href="https://laravel-china.org/topics/5756/laravel-55-document-translation-call-come-and-join-the-translation">翻译召集帖</a>。</p>
+<p>文档永久地址： <a href="../../index.html">https://d.laravel-china.org</a></p>
+</blockquote>
+		</div>
+
+		<div class="main-footer" style="border-top:1px dashed rgba(0, 0, 0, 0.1);padding-top: 30px;margin-top:30px;margin-bottom: 20px;">
+			<div class="prev-next-wrap clearfix">
+
+									<a class="btn btn-primary pull-left btn-inverted" href="authentication.html"><i class="fa fa-arrow-left"></i> 用户认证</a>
+				
+			    &nbsp;
+								    <a class="btn btn-primary pull-right btn-inverted" href="authorization.html">用户授权 <i class="fa fa-arrow-right"></i></a>
+							</div>
+		</div>
+
+	</article>
+</div>
+
+	<footer class="main">
+		<ul>
+			<li class="nav-docs"><a href="../5.4.html">文档</a></li>
+<li ><a href="https://laravel-china.org/news" class="no-pjax">Laravel 资讯</a></li>
+<li class="dropdown"><a href="https://laravel-china.org/">Laravel China 社区</a></li>
+<li class="nav-forge"><a href="https://laravel-china.org/categories/1">酷工作</a></li>
+<li class="nav-docs"><a href="http://lumen.laravel-china.org">Lumen</a></li>
+<li class="nav-forge"><a href="https://cs.laravel-china.org/">速查表</a></li>
+<li class="nav-forge"><a href="https://fsdhub.com/books/laravel-essential-training-5.5">《Laravel 入门教程》</a></li>
+		</ul>
+		<p>Laravel is a trademark of Taylor Otwell. Copyright &copy; Taylor Otwell.</p>
+            <div style="margin-top: 32px;">
+                <a href="https://www.upyun.com/" title="Composer 镜像赞助商">
+                    <img src="https://dn-phphub.qbox.me/uploads/banners/XPtLlZmIN1cQbLuDFEON.png" style="width: 200px;">
+                </a>
+            </div>
+            <p class="less-significant">
+            <a href="http://jackmcdade.com">
+                Designed by<br>
+                <svg version="1.1"
+	 xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:a="http://ns.adobe.com/AdobeSVGViewerExtensions/3.0/"
+	 x="0px" y="0px" width="128.2px" height="28px" viewBox="0 0 128.2 28" enable-background="new 0 0 128.2 28" xml:space="preserve"
+	>
+<defs>
+</defs>
+<g>
+	<path fill="#c3c3c3" d="M14.2,0.4c0,0.2,0,0.5,0,0.7c0,0.2,0,0.5,0,0.7l-1.4-0.3C12.9,3,13,4.5,13.1,6c0.1,1.5,0,3-0.1,4.5
+		c0,0.4-0.1,0.8-0.1,1.2c-0.1,0.4-0.1,0.8-0.3,1.2c-0.1,0.4-0.3,0.7-0.5,1.1c-0.2,0.3-0.5,0.6-0.9,0.9c-0.4,0.2-0.9,0.4-1.5,0.6
+		c-0.6,0.2-1.1,0.3-1.6,0.3c-0.6,0-1.2-0.1-1.6-0.3c-0.5-0.2-0.9-0.6-1.1-1c-0.3-0.5-0.5-1-0.6-1.6c-0.1-0.6-0.1-1.3,0-2.1
+		c0-0.2,0.1-0.5,0.2-0.7C4.9,9.9,5,9.7,5.1,9.5c0.1-0.2,0.2-0.4,0.3-0.6l1.1,0.4C6.7,9.3,7,9.4,7.3,9.5c0.3,0.1,0.5,0.1,0.6,0.2
+		c0,0.2,0,0.4-0.1,0.5c-0.1,0.2-0.1,0.3-0.2,0.4c-0.1,0.1-0.2,0.3-0.2,0.4c-0.1,0.2-0.1,0.3-0.1,0.5l-1.3-0.7
+		c-0.1,0.3-0.2,0.7-0.2,1.1c0,0.4,0.1,0.8,0.2,1.2c0.2,0.4,0.4,0.7,0.6,1c0.3,0.3,0.6,0.4,1,0.3c0.6,0,1.1-0.3,1.4-0.6
+		c0.3-0.4,0.5-0.9,0.7-1.7c0.1-0.7,0.2-1.6,0.2-2.8c0-1.1,0-2.4,0-3.9c0-0.6-0.1-1.3-0.1-2C9.7,2.8,9.6,2.1,9.5,1.4
+		c-0.2,0-0.5,0-0.8,0c-0.3,0-0.6,0-0.8,0c-0.8,0-1.5,0-2.2,0c-0.7,0-1.5,0-2.2,0.2c-0.3,0.1-0.6,0.2-1,0.4C2.2,2.1,1.9,2.4,1.6,2.6
+		C1.4,2.9,1.2,3.2,1.1,3.6C1,3.9,1,4.3,1.1,4.6c0.1,0.5,0.3,0.8,0.4,0.9V5.4c0-0.4,0.1-0.8,0.4-1c0.3-0.2,0.6-0.3,0.9-0.3
+		c0.3,0,0.6,0.1,0.9,0.3C4,4.6,4.1,5,4.1,5.4c0,0.4-0.1,0.8-0.4,1c-0.3,0.2-0.6,0.3-1,0.3H2.7C1.9,6.7,1.3,6.5,0.9,6
+		C0.5,5.6,0.2,5.1,0.1,4.5C0,4,0,3.4,0.2,2.7c0.2-0.6,0.5-1.1,1-1.5c0.4-0.3,0.8-0.5,1.2-0.7c0.4-0.1,0.9-0.2,1.4-0.3
+		c0.5-0.1,0.9-0.1,1.4-0.1c0.5,0,0.9,0,1.4,0h1.5c0.6,0,1.1,0,1.6,0.1c0.5,0,1,0.1,1.5,0.1c0.5,0,1,0.1,1.5,0.1
+		C13.1,0.5,13.6,0.5,14.2,0.4z"/>
+	<path fill="#c3c3c3" d="M25.2,14.3c0,0.2,0.1,0.4,0.1,0.6c0,0.2,0.1,0.4,0.1,0.7c-1-0.1-2-0.2-3-0.1c-1.1,0.1-2.1,0.2-3,0.4
+		c0-0.2-0.1-0.4-0.1-0.5c0-0.2-0.1-0.4-0.1-0.5c0.2,0,0.5-0.1,0.7-0.1c0.2,0,0.4-0.1,0.6-0.1c-0.1-1.5-0.3-3.1-0.5-4.6
+		c-0.5,0.1-0.9,0.1-1.4,0.2c-0.5,0.1-0.9,0.1-1.4,0.2c-0.2,0.7-0.3,1.3-0.5,2c-0.2,0.7-0.3,1.3-0.5,2c0.2,0,0.4,0,0.6,0
+		c0.1,0,0.3,0,0.4,0.1c0,0.2,0,0.3,0,0.5c0,0.1,0,0.2,0,0.4c0,0.1,0,0.2-0.1,0.3H14v-1.2h1c0.2-0.5,0.3-1,0.4-1.5
+		c0.1-0.5,0.3-1,0.4-1.5c0.2-0.6,0.3-1.2,0.5-1.7c0.2-0.6,0.3-1.2,0.5-1.7c0.2-1.1,0.4-2.1,0.6-3.2c0.2-1.1,0.3-2.1,0.4-3.2
+		c-0.2,0-0.5,0-0.7,0c-0.2,0-0.4,0-0.7,0c0-0.2,0.1-0.4,0.1-0.6c0-0.2,0-0.4,0.1-0.6c0.9,0,1.9,0,2.9,0c1,0,2,0,2.9,0l0.2,1.2
+		c-0.2,0-0.3,0-0.5,0c-0.2,0-0.3,0-0.5,0c0.3,2.1,0.7,4.3,1,6.5c0.3,2.2,0.7,4.4,1,6.5H25.2z M17.5,9c0.4-0.1,0.7-0.1,1.1-0.2
+		c0.4-0.1,0.8-0.1,1.2-0.2c-0.2-1-0.3-2-0.5-2.9c-0.2-1-0.4-1.9-0.6-2.9c-0.2,1-0.4,2.1-0.5,3.1C17.9,6.9,17.7,8,17.5,9z"/>
+	<path fill="#c3c3c3" d="M36.7,10.4c-0.1,0-0.2,0-0.3,0c-0.1,0-0.2,0-0.3,0c0,0.6,0,1.2-0.2,1.9c-0.2,0.6-0.5,1.2-1,1.6
+		c-0.5,0.5-1,0.9-1.6,1.1c-0.6,0.3-1.3,0.4-2,0.5c-0.6,0.1-1.1,0.1-1.8,0c-0.6-0.1-1.1-0.4-1.6-0.7c-0.2-0.2-0.5-0.4-0.8-0.7
+		c-0.3-0.3-0.5-0.5-0.6-0.8c-0.3-0.5-0.5-1-0.6-1.5c-0.2-0.5-0.3-0.9-0.4-1.4c-0.1-0.5-0.2-1-0.2-1.5c0-0.5,0-1,0.1-1.6
+		c0.2-1,0.4-2,0.8-2.9c0.4-0.9,0.8-1.7,1.4-2.3c0.5-0.7,1.2-1.2,1.9-1.6C30.2,0.2,30.9,0,31.7,0c0.3,0,0.5,0,0.8,0.1
+		c0.3,0.1,0.5,0.2,0.7,0.4c0.3,0.3,0.7,0.7,1,1.2c0.3,0.5,0.6,1.2,0.7,1.9c0.1,0,0.2,0,0.3,0c0.1,0,0.2,0,0.3,0c0,0.1,0,0.2,0,0.3
+		c0,0.1,0,0.2,0,0.3L33,4.6c-0.3,0.1-0.5,0.1-0.6,0c-0.1,0-0.2-0.1-0.2-0.2c-0.1-0.1-0.1-0.2,0-0.3c0.1,0,0.2,0,0.2,0
+		c0.1,0,0.1,0,0.2,0c0.2-0.2,0.3-0.3,0.3-0.6c0-0.2,0-0.5,0-0.7c0-0.5-0.2-0.9-0.5-1.3c-0.2-0.2-0.3-0.3-0.4-0.4
+		C31.8,1,31.6,1,31.4,1.1c-0.2,0-0.4,0.2-0.6,0.4c-0.2,0.2-0.4,0.5-0.5,0.9C30,2.6,29.9,3,29.8,3.3c-0.1,0.3-0.2,0.5-0.2,0.7
+		c-0.6,2.6-0.7,5.3-0.2,8c0.1,0.3,0.2,0.7,0.3,1s0.3,0.6,0.5,0.9c0.2,0.3,0.5,0.5,0.8,0.7c0.3,0.2,0.6,0.2,1,0.1
+		c0.6-0.1,1-0.4,1.4-1c0.3-0.5,0.6-1.1,0.7-1.8c0.1-0.3,0.1-0.6,0.1-0.9v-0.5c-0.2,0-0.4,0-0.6-0.1c-0.1-0.1-0.2-0.2-0.2-0.3
+		c0-0.1,0-0.2,0.1-0.3c0.6,0,1.2,0,1.7,0c0.6,0,1.2,0,1.7,0c0,0.1,0,0.2-0.1,0.3C36.7,10.2,36.7,10.3,36.7,10.4z"/>
+	<path fill="#c3c3c3" d="M48,14.2c0.1,0.2,0.3,0.3,0.5,0.4c0.2,0.1,0.5,0.1,0.7,0c0.1,0.1,0.1,0.2,0.1,0.4c0,0.2-0.1,0.3-0.2,0.4
+		c-0.1,0.1-0.2,0.2-0.4,0.2c-0.2,0-0.3,0-0.4,0c-0.3,0-0.7,0-1,0c-0.3,0-0.7,0-1-0.1c-0.3-0.1-0.7-0.2-1-0.4
+		c-0.3-0.2-0.5-0.4-0.7-0.7c-0.2-0.3-0.3-0.6-0.3-1c0-0.3,0-0.7,0-1.1V9.9c0-0.1,0-0.3,0-0.4c0-0.2-0.1-0.3-0.2-0.5
+		c-0.1-0.2-0.3-0.3-0.4-0.4c-0.2-0.1-0.4-0.1-0.7-0.1c-0.1,0-0.2,0-0.5,0.1c-0.2,0.3-0.3,0.5-0.5,0.8c-0.2,0.3-0.3,0.5-0.5,0.7
+		c0,0.8,0,1.5-0.1,2.2c0,0.7-0.1,1.5-0.1,2.1h1.4v1.1c-0.5,0-0.9,0.1-1.3,0c-0.4,0-0.8,0-1.2-0.1c-0.4,0-0.8-0.1-1.2-0.1
+		c-0.4,0-0.8,0-1.3,0c-0.1,0-0.3,0-0.4,0c-0.1,0-0.2,0-0.3-0.1c-0.1,0-0.1-0.1-0.1-0.2c0-0.1-0.1-0.3-0.1-0.4c0-0.1,0-0.3,0-0.4
+		c0-0.1,0.1-0.2,0.1-0.2c0.2,0.1,0.4,0.2,0.6,0.1s0.4-0.2,0.5-0.4c0-0.1,0.1-0.3,0.1-0.7c0-0.4,0-0.9,0.1-1.6c0-0.6,0.1-1.3,0.1-2.1
+		c0-0.8,0-1.6,0.1-2.4c0-0.8,0-1.5,0.1-2.3c0-0.7,0.1-1.3,0.1-1.8c0-0.2,0-0.5,0-0.7c0-0.2-0.1-0.4-0.2-0.6
+		c-0.1-0.2-0.3-0.3-0.5-0.4c-0.2-0.1-0.4,0-0.6,0.1c0-0.2-0.1-0.5-0.1-0.7c0-0.2,0-0.4-0.1-0.7c1,0,2,0.1,3,0.1c0.9,0,1.9,0.1,3,0.1
+		c0,0.1,0,0.2,0,0.3c0,0.1,0,0.3,0.1,0.4c0,0.1,0,0.3,0,0.4c0,0.1,0,0.2-0.1,0.2c-0.1,0.1-0.2,0.1-0.3,0.1c-0.1,0-0.2,0-0.4-0.1
+		c-0.1-0.1-0.3-0.1-0.4-0.2c-0.1-0.1-0.3-0.1-0.3-0.1c-0.1,0.9-0.1,1.9-0.1,2.9c0,1-0.1,2-0.1,3.1c0.7-1.2,1.4-2.5,2-3.8
+		c0.2-0.3,0.3-0.6,0.4-0.9c0.1-0.3,0.3-0.6,0.5-0.9c0.2-0.3,0.4-0.5,0.7-0.7C45.4,1,45.7,0.9,46,0.8c0.3-0.1,0.7-0.1,1,0
+		c0.3,0.1,0.6,0.2,0.9,0.5c0.2,0.3,0.4,0.6,0.4,1c0,0.4,0.1,0.8,0,1.1c0,0.2,0,0.3,0,0.5c0,0.2-0.1,0.3-0.2,0.4
+		c-0.1,0.2-0.2,0.3-0.4,0.4c-0.2,0.1-0.4,0.1-0.5,0.2c-0.1,0-0.3,0.1-0.4,0.1c-0.1,0-0.3,0-0.4,0C46.2,4.7,46,4.6,46,4.4
+		c-0.1-0.2-0.1-0.4,0-0.5c0.1-0.2,0.2-0.3,0.3-0.3c0.1,0,0.2-0.1,0.4-0.1c0.2-0.1,0.3-0.2,0.3-0.3c0.1-0.2,0.1-0.3,0.1-0.5
+		C47.1,2.4,47,2.2,47,2c-0.1-0.2-0.2-0.3-0.3-0.3c-0.2,0-0.3,0-0.5,0.1C46,1.9,45.9,2,45.7,2.2c-0.2,0.2-0.3,0.4-0.4,0.6
+		C45.2,3,45,3.3,44.9,3.5c-0.1,0.3-0.3,0.6-0.4,0.8c-0.2,0.2-0.3,0.5-0.4,0.8c-0.4,0.9-0.8,1.7-1.2,2.5c0.3,0,0.6-0.1,1,0
+		c0.4,0,0.7,0,1,0c0.3,0,0.7,0.1,1,0.2c0.3,0.1,0.6,0.3,0.8,0.6c0.3,0.3,0.4,0.6,0.5,1c0.1,0.4,0.1,0.8,0.2,1.1l0.2,2.1
+		c0,0.2,0.1,0.5,0.1,0.7C47.7,13.7,47.8,14,48,14.2z"/>
+	<path fill="#c3c3c3" d="M71.7,13.9c0.2,0.2,0.4,0.4,0.7,0.5c0.3,0.1,0.5,0,0.8-0.1c0,0.2,0.1,0.3,0.1,0.6c0.1,0.2,0.1,0.4,0.1,0.6
+		c-0.3,0-0.7,0-1.1,0s-0.8,0-1.3,0.1c-0.4,0-0.9,0-1.3,0c-0.4,0-0.8,0-1,0c0-0.1,0-0.1,0-0.2c0-0.1,0.1-0.2,0.2-0.3
+		c0.1-0.1,0.2-0.2,0.4-0.3c0.2-0.1,0.3-0.1,0.6-0.1c0.1,0,0.1-0.2,0.1-0.7c0-0.4,0-1,0-1.6c0-0.6,0-1.2-0.1-1.9s0-1.1,0-1.5
+		c0-1,0-1.9,0-2.6c0-0.7,0.1-1.5,0.1-2.2c-0.6,1.3-1.1,2.7-1.6,4.1c-0.5,1.5-1,3-1.5,4.4c0,0,0.1,0.1,0.1,0.2c-0.2,0-0.4,0-0.7,0.1
+		c-0.3,0.1-0.5,0.1-0.7,0.1c-0.5-1.9-1.1-3.7-1.6-5.5c-0.5-1.8-1.1-3.6-1.6-5.5c-0.1,1-0.1,2-0.1,3c0,1.1-0.1,2.1-0.1,3.2
+		c0,1.1,0,2.1-0.1,3.2c0,1-0.1,2-0.1,3h1.4v1.1c-0.5,0-0.9,0.1-1.3,0c-0.4,0-0.8,0-1.2-0.1c-0.4,0-0.8-0.1-1.2-0.1
+		c-0.4,0-0.8,0-1.3,0c-0.1,0-0.3,0-0.4,0c-0.1,0-0.2,0-0.3-0.1c-0.1,0-0.1-0.1-0.1-0.2c0-0.1-0.1-0.3-0.1-0.4c0-0.1,0-0.3,0-0.4
+		c0-0.1,0.1-0.2,0.1-0.2c0.2,0.1,0.4,0.2,0.6,0.1s0.4-0.2,0.5-0.4c0-0.1,0.1-0.3,0.1-0.7c0-0.4,0-0.9,0.1-1.6c0-0.6,0.1-1.3,0.1-2.1
+		C59,8.8,59,8,59,7.2c0-0.8,0-1.5,0.1-2.3c0-0.7,0.1-1.3,0.1-1.8c0-0.2,0-0.5,0-0.7c0-0.2-0.1-0.4-0.2-0.6c-0.1-0.2-0.3-0.3-0.5-0.4
+		c-0.2-0.1-0.4,0-0.6,0.1c0-0.2-0.1-0.5-0.1-0.7c0-0.2,0-0.4-0.1-0.7c1,0,2,0.1,3,0.1c0.9,0,1.9,0.1,3,0.1c0,0.3-0.1,0.5-0.4,0.7
+		c0.3,1.3,0.6,2.6,1,3.9c0.4,1.3,0.8,2.6,1.2,3.9c0.2-0.6,0.4-1.3,0.6-1.9c0.2-0.6,0.4-1.2,0.6-1.8C67,4.6,67.2,4,67.5,3.4
+		c0.2-0.6,0.4-1.3,0.6-2c-0.1,0-0.3,0-0.4-0.1c-0.1,0-0.2,0-0.4-0.1c-0.1,0-0.1-0.1-0.1-0.3c0-0.1,0.1-0.2,0.1-0.3
+		c0.1-0.1,0.2-0.1,0.3-0.1c0.1,0,0.2,0,0.3,0c0.4,0,0.7,0,1,0s0.6,0,0.9,0c0.3,0,0.6,0,0.9,0c0.3,0,0.6,0,1,0c0.1,0,0.3,0,0.4,0
+		c0.1,0,0.3,0.1,0.4,0.2c0.1,0.1,0.2,0.2,0.2,0.4c0,0.2,0,0.3-0.2,0.3c-0.1-0.1-0.2-0.1-0.3-0.1c-0.1,0-0.2,0.1-0.3,0.1
+		c-0.2,0.4-0.3,0.8-0.4,1.3c-0.1,0.5-0.1,0.9-0.1,1.4c-0.2,2.8-0.2,5.6,0,8.4c0,0.3,0,0.5,0.1,0.7C71.4,13.5,71.5,13.7,71.7,13.9z"
+		/>
+	<path fill="#c3c3c3" d="M81.7,12c-0.1,0-0.1,0-0.2,0c-0.1,0-0.1,0-0.2,0c0,0.4,0,0.9-0.2,1.3c-0.1,0.4-0.4,0.8-0.7,1.1
+		c-0.3,0.3-0.7,0.6-1.1,0.8c-0.4,0.2-0.9,0.3-1.3,0.4c-0.4,0.1-0.8,0-1.2,0c-0.4-0.1-0.8-0.2-1.1-0.5c-0.2-0.1-0.3-0.3-0.5-0.5
+		c-0.2-0.2-0.3-0.4-0.4-0.6c-0.2-0.4-0.3-0.7-0.4-1c-0.1-0.3-0.2-0.6-0.3-1C74,11.7,74,11.4,74,11c0-0.3,0-0.7,0.1-1.1
+		c0.1-0.7,0.3-1.4,0.5-2c0.3-0.6,0.6-1.1,0.9-1.6s0.8-0.8,1.3-1.1c0.5-0.3,1-0.4,1.5-0.4c0.2,0,0.4,0,0.6,0.1
+		c0.2,0.1,0.3,0.1,0.5,0.3C79.6,5.4,79.8,5.6,80,6c0.2,0.4,0.4,0.8,0.5,1.3c0.1,0,0.1,0,0.2,0c0.1,0,0.1,0,0.2,0c0,0.1,0,0.1,0,0.2
+		c0,0.1,0,0.1,0,0.2L79.2,8c-0.2,0.1-0.3,0.1-0.4,0c-0.1,0-0.1-0.1-0.2-0.2c0-0.1,0-0.1,0-0.2c0.1,0,0.1,0,0.2,0c0,0,0.1,0,0.2,0
+		c0.1-0.1,0.2-0.2,0.2-0.4c0-0.2,0-0.3,0-0.5c0-0.3-0.1-0.6-0.3-0.9c-0.1-0.1-0.2-0.2-0.3-0.3c-0.1-0.1-0.2-0.1-0.4,0
+		c-0.1,0-0.3,0.1-0.4,0.3c-0.1,0.2-0.3,0.4-0.4,0.6c-0.1,0.2-0.2,0.4-0.3,0.6c-0.1,0.2-0.1,0.4-0.1,0.5c-0.4,1.8-0.5,3.6-0.1,5.5
+		c0.1,0.2,0.1,0.4,0.2,0.7c0.1,0.2,0.2,0.4,0.3,0.6c0.1,0.2,0.3,0.3,0.6,0.5c0.2,0.1,0.4,0.1,0.7,0.1c0.4-0.1,0.7-0.3,1-0.7
+		c0.2-0.4,0.4-0.8,0.5-1.2c0-0.2,0.1-0.4,0.1-0.6v-0.3c-0.2,0-0.3,0-0.4,0c-0.1,0-0.1-0.1-0.1-0.2c0-0.1,0-0.2,0.1-0.2
+		c0.4,0,0.8,0,1.2,0c0.4,0,0.8,0,1.2,0c0,0.1,0,0.1,0,0.2C81.8,11.8,81.8,11.9,81.7,12z"/>
+	<path fill="#c3c3c3" d="M83.5,14.2c0.2-4.3,0.3-8.5,0.2-12.8c-0.3,0-0.6,0-0.9,0c-0.3,0-0.6,0-0.9,0c0-0.2,0-0.3,0-0.5s0-0.3,0-0.5
+		c0.7,0,1.3,0,2-0.1c0.7,0,1.3,0,2-0.1c0.8-0.2,1.6-0.2,2.4-0.1c0.8,0.1,1.6,0.3,2.4,0.5c0.7,0.3,1.4,0.7,1.9,1.2
+		c0.5,0.5,0.9,1.1,1.1,1.8C94,4.9,94.1,6.1,94,7.4C94,8.6,93.8,9.8,93.7,11c0,0.4-0.1,0.8-0.2,1.2c-0.1,0.4-0.3,0.8-0.5,1.1
+		c-0.3,0.5-0.8,1-1.3,1.3c-0.5,0.3-1.1,0.5-1.7,0.6c-0.5,0.1-0.9,0.2-1.4,0.1c-0.5,0-0.9,0-1.4-0.1v0c-0.2,0-0.3,0-0.5,0
+		s-0.4,0-0.5,0l-0.1,0c0,0,0,0,0,0c-0.6,0-1.3,0-1.9,0c-0.6,0-1.3,0-1.9,0c-0.2-0.4-0.1-0.8,0.2-1.1c0.2-0.2,0.3-0.2,0.5-0.3
+		C83.2,14.1,83.4,14.1,83.5,14.2z M89.4,1.9c-0.4-0.3-0.8-0.5-1.3-0.6c-0.5-0.1-1-0.1-1.5-0.1c-0.3,4.5-0.2,9.1,0.4,13.6
+		c0.2,0,0.4,0,0.5-0.1c0.2,0,0.4-0.1,0.6-0.1c0.3-0.1,0.6-0.2,0.9-0.4c0.3-0.2,0.6-0.4,0.8-0.7c0.2-0.3,0.4-0.6,0.5-1
+		s0.2-0.7,0.2-1.1c0.4-2.1,0.4-4.2,0.2-6.3c-0.1-0.6-0.2-1.2-0.4-1.9C90.3,2.8,89.9,2.3,89.4,1.9z"/>
+	<path fill="#c3c3c3" d="M102.4,9.7c-0.6-0.1-1.3-0.1-2,0c-0.7,0.1-1.4,0.4-2,0.8l-0.2-1.4L99.1,9c0-0.4-0.1-0.7-0.1-1
+		c0-0.2-0.1-0.5-0.1-0.9c-0.3,0-0.6,0.1-0.9,0.1c-0.3,0-0.6,0.1-1,0.1c-0.2,0.7-0.3,1.3-0.4,1.8c-0.1,0.5-0.2,1.1-0.4,1.6l0.2-0.1
+		l0.7,0.6c-0.4,0.2-0.8,0.6-1.2,1.1c-0.4,0.5-0.7,1-0.9,1.5l-0.9-0.5c0-0.1,0.1-0.2,0.2-0.4c0.1-0.2,0.2-0.3,0.2-0.4
+		c0.1-0.2,0.2-0.5,0.3-1c0.1-0.4,0.2-0.9,0.4-1.3c0.1-0.5,0.2-0.9,0.3-1.3c0.1-0.4,0.2-0.7,0.2-0.9c0.1-0.4,0.2-0.8,0.3-1.2
+		c0.1-0.4,0.2-0.8,0.3-1.2c0.2-0.7,0.3-1.4,0.4-2.1c0.1-0.7,0.2-1.4,0.3-2.2c-0.1,0-0.2,0-0.3,0c-0.1,0-0.2,0-0.3,0l0.1-0.8l4-0.1
+		l0.1,0.8c-0.1,0-0.2,0-0.2,0c0,0-0.1,0-0.2,0c0.1,0.7,0.2,1.4,0.3,2c0.1,0.6,0.2,1.2,0.3,1.8c0.1,0.6,0.2,1.2,0.3,1.8
+		c0.1,0.6,0.2,1.3,0.4,2c0.2,0,0.3,0,0.3,0c0,0,0.1,0,0.3,0L102.4,9.7z M98.8,6.1c-0.1-0.7-0.2-1.3-0.3-2c-0.1-0.6-0.3-1.3-0.4-2
+		c-0.1,0.6-0.2,1.3-0.4,2.1c-0.1,0.7-0.3,1.5-0.5,2.2L98.8,6.1z"/>
+	<path fill="#c3c3c3" d="M124.9,20.1c0-0.3,0.1-0.6,0.3-0.8c0.2-0.2,0.4-0.3,0.7-0.4c0.3-0.1,0.5,0,0.8,0.1c0.3,0.1,0.5,0.3,0.6,0.5
+		c0.3,0.4,0.6,0.9,0.7,1.4c0.2,0.5,0.2,1,0.2,1.5c0,0.5-0.1,1-0.3,1.5c-0.2,0.5-0.4,1-0.7,1.4c-0.6,0.9-1.4,1.6-2.4,2
+		c-1,0.5-2,0.7-3,0.7c-1.5,0-2.8-0.3-3.9-1s-2.1-1.4-3-2.4c-0.9-1-1.8-2.1-2.5-3.2c-0.8-1.2-1.5-2.3-2.3-3.5c-1.1,1.2-2.4,2.2-3.9,3
+		c-1.5,0.8-3,1.1-4.5,1c-1.1,0-2.1-0.1-3-0.5c-0.9-0.3-1.6-0.8-2.2-1.4c-0.6-0.6-0.9-1.3-1.1-2.2c-0.2-0.8-0.1-1.7,0.2-2.7
+		c0.3-0.9,0.7-1.6,1.3-2.2c0.6-0.6,1.2-1.1,2-1.5c0.7-0.4,1.5-0.6,2.4-0.7c0.8-0.1,1.7,0,2.6,0.2c0-1.7,0-3.4,0-5c0-1.7,0-3.2,0-4.6
+		c-0.3,0-0.6,0-0.9,0c-0.3,0-0.6,0-0.9,0c0-0.2,0-0.3,0-0.5s0-0.3,0-0.5l3.7-0.1c0.8-0.2,1.6-0.2,2.4-0.1c0.8,0.1,1.6,0.3,2.4,0.5
+		c0.7,0.3,1.4,0.7,1.9,1.2c0.5,0.5,0.9,1.1,1.1,1.8c0.3,1.2,0.4,2.4,0.3,3.6c-0.1,1.2-0.2,2.5-0.4,3.7c-0.1,1-0.4,2-0.8,3
+		c-0.5,1-1,2-1.7,2.9c0.3,0.4,0.6,0.8,0.8,1.2c0.3,0.4,0.5,0.8,0.8,1.2c0.5,0.8,1.1,1.6,1.7,2.5c0.6,0.8,1.3,1.6,2,2.4
+		c0.7,0.7,1.5,1.3,2.4,1.8s1.8,0.7,2.9,0.8c1.1,0,2.1-0.2,3-0.7c0.9-0.5,1.6-1.2,2.1-2.2c0.2-0.4,0.3-0.8,0.4-1.3
+		c0.1-0.5,0-0.9-0.1-1.3c-0.2,0.1-0.4,0.2-0.6,0.2c-0.2,0-0.4,0-0.6-0.1c-0.2-0.1-0.4-0.2-0.5-0.4S124.9,20.4,124.9,20.1z M102.9,21
+		c1.5-0.4,2.8-1,3.7-1.8c0.9-0.8,1.7-1.7,2.3-2.8c-0.2-0.2-0.3-0.5-0.6-0.7c-0.6-0.7-1.2-1.4-1.9-1.9c0,0.6,0.1,1.2,0.1,1.8
+		c0,0.6,0.1,1.1,0.2,1.6h0v0.1c-0.5,0-0.9,0-1.3,0c-0.4,0-0.8,0-1.2,0c-0.3,0-0.6,0-0.9,0c-0.3,0-0.6,0-0.9,0
+		c-0.1-0.2-0.1-0.4,0-0.7c0-0.2,0.1-0.3,0.3-0.5c0.3-0.3,0.7-0.4,1.1-0.2l0.1-3.5c-0.5-0.2-1-0.3-1.5-0.3c-0.5,0-1.1,0-1.6,0.1
+		c-0.6,0.1-1.1,0.3-1.6,0.6c-0.5,0.3-0.9,0.7-1.3,1.1c-0.4,0.4-0.7,0.9-0.9,1.5c-0.2,0.5-0.3,1.1-0.3,1.6c0,0.7,0.2,1.3,0.6,1.8
+		c0.4,0.5,0.9,0.9,1.4,1.4c0.2,0.2,0.5,0.3,0.8,0.5c0.3,0.1,0.7,0.2,1.1,0.3c0.4,0.1,0.8,0.1,1.2,0.1
+		C102.1,21.1,102.5,21.1,102.9,21z M109.3,1.9c-0.4-0.3-0.8-0.5-1.2-0.6c-0.5-0.1-0.9-0.1-1.4-0.1c-0.1,1.7-0.2,3.4-0.3,5.3
+		c-0.1,1.9-0.1,3.7,0,5.6c0.6,0.4,1.2,0.8,1.7,1.4c0.5,0.5,1,1.1,1.5,1.6c0.2-0.6,0.4-1.2,0.6-1.9c0.2-0.6,0.3-1.2,0.3-1.7
+		c0.2-1.1,0.2-2.1,0.3-3.1c0-1,0-2.1-0.1-3.1c-0.1-0.6-0.2-1.2-0.4-1.9C110.1,2.8,109.8,2.3,109.3,1.9z"/>
+	<path fill="#c3c3c3" d="M116.5,1.2c-0.3,0-0.6,0-0.9,0c-0.3,0-0.6,0-0.9,0V0.4c0.5,0,0.9,0,1.2-0.1s0.7,0,1.1,0c0.4,0,0.7,0,1.1,0
+		s0.8,0,1.3-0.1c0.9,0,1.8,0,2.8-0.1c0.9,0,1.8,0,2.8-0.1c0,0.6,0,1.2,0,1.8c0,0.6,0,1.2,0,1.8c-0.2,0-0.3,0-0.5,0
+		c-0.2,0-0.3,0-0.5,0c-0.1,0-0.2,0-0.3,0c-0.1,0-0.1-0.1,0-0.1c0.1-0.2,0.1-0.4,0.1-0.6s0-0.4-0.1-0.6c-0.1-0.2-0.2-0.4-0.3-0.6
+		c-0.1-0.2-0.2-0.3-0.4-0.4c-0.2-0.1-0.4-0.2-0.6-0.2c-0.2,0-0.5,0-0.7,0c-0.3,0-0.5,0.1-0.8,0.1c-0.3,0.1-0.5,0.2-0.6,0.4
+		c-0.1,0.2-0.1,0.3-0.1,0.3c0,0.1,0,0.2,0,0.3c0,0.7-0.1,1.3-0.1,2c0,0.6-0.1,1.3-0.1,1.9c0,0.2,0,0.3,0,0.5c0,0.2,0,0.3,0,0.5
+		c0.6-0.2,1.2-0.3,1.9-0.4c0.6-0.1,1.2-0.3,1.9-0.4c0,0.1,0.1,0.2,0.1,0.3c0,0.1,0,0.3,0,0.4c0,0.2-0.1,0.3-0.1,0.4
+		c-0.1,0.1-0.1,0.2-0.1,0.3c-0.1,0.1-0.2,0.1-0.4,0.2c-0.1,0-0.3,0.1-0.4,0.1c-0.5,0.1-0.9,0.2-1.4,0.3c-0.5,0.1-0.9,0.1-1.4,0.2
+		c0,1-0.1,2-0.2,2.9c-0.1,1-0.1,1.9-0.2,2.9c0.8,0.2,1.5,0.3,2,0.1c0.6-0.2,1.2-0.5,1.9-1c0.2-0.1,0.2-0.3,0.2-0.5
+		c0-0.2,0-0.5,0-0.7c0-0.2,0.1-0.5,0.2-0.6c0.1-0.2,0.3-0.3,0.7-0.4c0.4,0,0.6,0.1,0.7,0.4c0.1,0.3,0.2,0.7,0.2,1.1
+		c0,0.5,0,0.9-0.1,1.4c-0.1,0.5-0.1,0.9,0,1.2c-0.5,0-1,0-1.4,0c-0.4,0-0.8,0-1.2,0.1c-0.4,0-0.8,0-1.2,0.1c-0.4,0-0.9,0-1.3,0
+		c-0.9,0-1.7,0-2.5,0.1c-0.7,0.1-1.6,0.1-2.4,0.1c-0.2-0.2-0.2-0.4-0.2-0.7c0-0.2,0.1-0.5,0.3-0.6c0.2-0.2,0.3-0.3,0.6-0.3
+		c0.2-0.1,0.5,0,0.7,0.1c0.1-2.1,0.2-4.3,0.1-6.5C116.3,5.5,116.3,3.4,116.5,1.2z"/>
+</g>
+</svg>
+
+            </a>
+        </p>
+	</footer>
+
+	<script>
+		var algolia_app_id      = 'FU55RWGNDN';
+		var algolia_search_key  = 'c41c5de31ca55044dbb0bde815d35121';
+				var version             = '5.5';
+			</script>
+
+	<script id="search_suggestion_template" type="text/template">
+	<div class="autocomplete-wrapper">
+		{{#_highlightResult.h1}}
+		<div class="h1">
+			{{{ _highlightResult.h1.value }}}
+		</div>
+		{{/_highlightResult.h1}}
+
+		<div class="sub-section">
+			{{#_highlightResult.h2}}
+			<div class="h2">
+				<span class="hash">#</span> {{{ _highlightResult.h2.value }}}
+			</div>
+			{{/_highlightResult.h2}}
+
+			{{#_highlightResult.h3}}
+			<div class="h3">
+				> {{{ _highlightResult.h3.value }}}
+			</div>
+			{{/_highlightResult.h3}}
+
+			{{#_highlightResult.h4}}
+			<div class="h4">
+				> {{{ _highlightResult.h4.value }}}
+			</div>
+			{{/_highlightResult.h4}}
+		</div>
+
+		{{#_highlightResult.content}}
+		<div class="content">
+			{{{ _highlightResult.content.value }}}
+		</div>
+		{{/_highlightResult.content}}
+	</div>
+</script>
+
+<script id="search_empty_template" type="text/template">
+	<div class="autocomplete-wrapper empty">
+		<div class="h2">We didn't find any result for "{{query}}". Sorry!</div>
+	</div>
+</script>
+
+<script id="search_footer_template" type="text/template">
+	<div class="footer">
+		<a target="_blank" href="https://www.algolia.com/referrals/5a08e6a4/join">
+			<img width="50" src="/docs/assets/img/algolia-logo.png">
+			<div class="powered">powered by</div>
+			<div style="clear: both"></div>
+		</a>
+	</div>
+</script>
+
+	<script src="../../build/assets/js/laravel-be3cb5d7de.js"></script>
+	<script src="../../assets/js/viewport-units-buggyfill.js"></script>
+
+	<script>window.viewportUnitsBuggyfill.init();</script>
+    <script>
+          ga('create', 'UA-53903425-7', 'auto');
+          ga('send', 'pageview');
+    </script>
+</body>
+</html>
